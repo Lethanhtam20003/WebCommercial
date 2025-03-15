@@ -13,6 +13,7 @@ import java.util.Objects;
 public class BirthdayValidator implements ConstraintValidator<BirthdayConstraint, LocalDate> {
     int min;
 
+
     /**
      * hàm sử lý data có đúng hay ko
      *
@@ -21,6 +22,7 @@ public class BirthdayValidator implements ConstraintValidator<BirthdayConstraint
     @Override
     public void initialize(BirthdayConstraint constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
+
         this.min = constraintAnnotation.min();
     }
 
@@ -32,7 +34,7 @@ public class BirthdayValidator implements ConstraintValidator<BirthdayConstraint
     @Override
     public boolean isValid(LocalDate localDate, ConstraintValidatorContext constraintValidatorContext) {
         if (Objects.isNull(localDate)) {
-            return true;
+            return false;
         }
         long year = ChronoUnit.YEARS.between(localDate, LocalDate.now());
         return year >= this.min;

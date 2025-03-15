@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -26,6 +26,6 @@ public class Category {
     String name;
     String description;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    List<Product> products;
+    Set<Product> products;
 
 }

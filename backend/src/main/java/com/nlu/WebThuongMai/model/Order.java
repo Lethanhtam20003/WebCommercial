@@ -32,6 +32,7 @@ public class Order {
     User user;
     BigDecimal totalPrice;
     BigDecimal discountedPrice;
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     OrderStatus status = OrderStatus.PENDING;
     String note;

@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.text.ParseException;
 import java.util.Objects;
 
 @ControllerAdvice
@@ -50,6 +51,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = AccessDeniedException.class)
     public ResponseEntity<ApiResponse> handlingAppException(AccessDeniedException e) {
         ErrorCode code = ErrorCode.UNAUTHORIZED;
+        return ResponseEntity
+                .status(code.getHttpStatusCode())
+                .body(ApiResponse.builder()
+                        .code(code.getCode())
+                        .message(code.getMessage())
+                        .build());
+    }
+    @ExceptionHandler(value = ParseException.class)
+    public ResponseEntity<ApiResponse> handlingParseException(ParseException e) {
+        ErrorCode code = ErrorCode.TOKEN_INVALID;
         return ResponseEntity
                 .status(code.getHttpStatusCode())
                 .body(ApiResponse.builder()
