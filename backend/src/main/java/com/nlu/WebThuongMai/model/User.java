@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -46,9 +47,18 @@ public class User {
     Role role;
     String status;
 
+    @ManyToMany(fetch = FetchType.EAGER) //  Quan hệ 1 chiều: User có nhiều Coupon
+    @JoinTable(
+            name = "user_coupon",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "coupon_id")
+    )
+    Set<Coupon> coupons;
+
     @CreationTimestamp
     LocalDateTime created_at;
     LocalDateTime updated_at;
+
 
 
 }

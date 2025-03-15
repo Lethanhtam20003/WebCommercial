@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,17 +44,17 @@ public class UserService {
     PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse createUser(UserCreationRequest user) {
-        User u = userMapper.toUser(user);
+    public UserResponse createUser(UserCreationRequest request) {
+        User u = userMapper.toUser(request);
         if (userRepository.existsByUsername(u.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
         u.setRole(Role.USER);
-        u.setPassword(passwordEncoder.encode(user.getPassword()));
+        u.setPassword(passwordEncoder.encode(request.getPassword()));
 
         return userMapper.toUserResponse(userRepository.save(u));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')"  )
     public List<UserResponse> getUsers() {
         return userMapper.toUserResponseList(userRepository.findAll());
     }
@@ -61,7 +62,7 @@ public class UserService {
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse getUserById(String id) {
         return userMapper.toUserResponse(userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found")));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

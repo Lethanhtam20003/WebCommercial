@@ -164,3 +164,13 @@ ALTER TABLE reviews
 
 ALTER TABLE reviews
     ADD CONSTRAINT FK_REVIEWS_ON_USER FOREIGN KEY (user_id) REFERENCES users (user_id);
+CREATE TABLE inventories
+(
+    inventory_id VARCHAR(255) NOT NULL,
+    product_id   BIGINT       NOT NULL,
+    quantity     INTEGER      NOT NULL,
+    CONSTRAINT pk_inventories PRIMARY KEY (inventory_id)
+);
+
+ALTER TABLE inventories
+    ADD CONSTRAINT FK_INVENTORIES_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES products (product_id);

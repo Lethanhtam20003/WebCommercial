@@ -29,7 +29,7 @@ public class PurchaseOrder {
     @JoinColumn(name = "suppler_id", nullable = false)
     Supplier supplier;
     @CreationTimestamp
-    LocalDateTime orderDate;
+    LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
     PurchaseStatus status = PurchaseStatus.PENDING;
     BigDecimal totalPrice;
