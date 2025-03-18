@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class ScheduledTask {
     InvalidatedTokenService invalidatedTokenService;
 
-    @Scheduled(cron = "${schedules.Reset-invalidated_token}")
+    @Scheduled(cron = "${schedules.reset-invalidated-token}")
     public void resetInvalidatedToken() {
         invalidatedTokenService.resetInvalidatedToken();
     }

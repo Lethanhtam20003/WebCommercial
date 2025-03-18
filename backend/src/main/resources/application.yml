@@ -4,9 +4,9 @@ server:
     context-path: /api
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/data
-    username: myuser
-    password: myuser
+    url: ${DBMS_CONNECTION}
+    username: ${DBMS_CONNECTION_USERNAME}
+    password: ${DBMS_CONNECTION_PASSWORD}
     driver-class-name: org.postgresql.Driver
   #    hikari:
   #      maximum-pool-size: 10
@@ -21,8 +21,8 @@ spring:
 #      port: 6379
 
 jwt:
-  key: AaGpWmjmTnXtXbAR+Dkx/GTU5oV26NvIP/BWkm1btLZmm28hoUwBljJo6Cgy/X/4
+  key: ${JWT_KEY}
   valid-duration: 86400 # in second   1 day
   refreshable-duration: 604800 # in second  1 week
 schedules:
-  Reset-invalidated-token: "0 0 0 * * ?" # Chạy vào 00:00  mỗi ngày
+  reset-invalidated-token: "0 0 0 * * ?" # Chạy vào 00:00  mỗi ngày
