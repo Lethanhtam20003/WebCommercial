@@ -6,17 +6,15 @@ import com.nlu.WebThuongMai.dto.response.UserResponse;
 import com.nlu.WebThuongMai.enums.Role;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
-import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.mapper.UserMapper;
+import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +52,7 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(u));
     }
 
-    @PreAuthorize("hasRole('ADMIN')"  )
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUsers() {
         return userMapper.toUserResponseList(userRepository.findAll());
     }

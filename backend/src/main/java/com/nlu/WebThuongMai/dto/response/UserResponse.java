@@ -1,10 +1,8 @@
 package com.nlu.WebThuongMai.dto.response;
 
 import com.nlu.WebThuongMai.enums.Role;
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

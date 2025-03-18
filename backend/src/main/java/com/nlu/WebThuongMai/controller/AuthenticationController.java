@@ -4,6 +4,7 @@ import com.nimbusds.jose.JOSEException;
 import com.nlu.WebThuongMai.dto.request.AuthenticationRequest;
 import com.nlu.WebThuongMai.dto.request.IntrospectRequest;
 import com.nlu.WebThuongMai.dto.request.LogoutRequest;
+import com.nlu.WebThuongMai.dto.request.RefreshRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.IntrospectResponse;
@@ -24,16 +25,18 @@ import java.text.ParseException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
     AuthenticationService authenticationService;
+
     @PostMapping
-    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        var result = authenticationService.authenticated(request);
+    ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
+        var result = authenticationService.login(request);
         return ApiResponse.<AuthenticationResponse>builder()
                 .result(result)
                 .build();
     }
+
     @PostMapping("/logout")
     ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
-         authenticationService.logout(request);
+        authenticationService.logout(request);
         return ApiResponse.<Void>builder()
                 .build();
     }
@@ -42,6 +45,14 @@ public class AuthenticationController {
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
+                .result(result)
+                .build();
+    }
+
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
                 .result(result)
                 .build();
     }

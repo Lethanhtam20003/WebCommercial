@@ -58,6 +58,7 @@ public class GlobalExceptionHandler {
                         .message(code.getMessage())
                         .build());
     }
+
     @ExceptionHandler(value = ParseException.class)
     public ResponseEntity<ApiResponse> handlingParseException(ParseException e) {
         ErrorCode code = ErrorCode.TOKEN_INVALID;

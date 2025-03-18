@@ -3,7 +3,6 @@ package com.nlu.WebThuongMai.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;

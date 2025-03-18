@@ -1,7 +1,7 @@
 package com.nlu.WebThuongMai.model;
 
-import com.nlu.WebThuongMai.enums.Role;
 import com.nlu.WebThuongMai.enums.Gender;
+import com.nlu.WebThuongMai.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -58,7 +58,6 @@ public class User {
     @CreationTimestamp
     LocalDateTime created_at;
     LocalDateTime updated_at;
-
 
 
 }

@@ -4,14 +4,12 @@ import com.nlu.WebThuongMai.dto.request.UserCreationRequest;
 import com.nlu.WebThuongMai.dto.request.UserUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.UserResponse;
-import com.nlu.WebThuongMai.model.User;
+import com.nlu.WebThuongMai.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import com.nlu.WebThuongMai.service.UserService;
 
 import java.util.List;
 

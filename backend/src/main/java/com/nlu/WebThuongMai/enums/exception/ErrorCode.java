@@ -1,13 +1,15 @@
 package com.nlu.WebThuongMai.enums.exception;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 @AllArgsConstructor
 @Getter
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorCode {
     INVALID_KEY(1000, "Invalid message key", HttpStatus.BAD_REQUEST),
     USER_EXISTED(1001, "user existed", HttpStatus.BAD_REQUEST),

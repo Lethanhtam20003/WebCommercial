@@ -1,6 +1,5 @@
 package com.nlu.WebThuongMai.dto.request;
 
-import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.validator.BirthdayConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
