@@ -1,4 +1,3 @@
-
 CREATE TABLE categories
 (
     category_id BIGINT NOT NULL,
