@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,12 +45,17 @@ public class UserService {
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse createUser(UserCreationRequest request) {
         User u = userMapper.toUser(request);
-        if (userRepository.existsByUsername(u.getUsername()))
-            throw new AppException(ErrorCode.USER_EXISTED);
+
         u.setRole(Role.USER);
         u.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        return userMapper.toUserResponse(userRepository.save(u));
+        try {
+            u = userRepository.save(u);
+        }catch (DataIntegrityViolationException e){
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
+
+        return userMapper.toUserResponse(u);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

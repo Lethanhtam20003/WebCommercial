@@ -22,7 +22,7 @@ spring:
 
 jwt:
   key: AaGpWmjmTnXtXbAR+Dkx/GTU5oV26NvIP/BWkm1btLZmm28hoUwBljJo6Cgy/X/4
-  valid-duration: 3600 * 24 # in second
-  refreshable-duration: 3600*24*7 # in second
+  valid-duration: 86400 # in second   1 day
+  refreshable-duration: 604800 # in second  1 week
 schedules:
   Reset-invalidated-token: "0 0 0 * * ?" # Chạy vào 00:00  mỗi ngày
