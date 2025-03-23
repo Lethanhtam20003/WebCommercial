@@ -22,6 +22,8 @@ public enum ErrorCode {
     INVALID_BIRTHDAY(1008, "invalid birthday", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1009, "user not found", HttpStatus.NOT_FOUND),
     TOKEN_INVALID(10010, "token invalid", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_FOUND(10011, "product not found", HttpStatus.NOT_FOUND),
+
 
     UNCATEGORIZED_EXCEPTION(9998, "Uncategorized Exception", HttpStatus.INTERNAL_SERVER_ERROR);
 
