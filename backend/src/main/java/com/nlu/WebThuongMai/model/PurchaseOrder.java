@@ -31,6 +31,7 @@ public class PurchaseOrder {
     @CreationTimestamp
     LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     PurchaseStatus status = PurchaseStatus.PENDING;
     BigDecimal totalPrice;
 

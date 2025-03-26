@@ -4,14 +4,11 @@ import com.nlu.WebThuongMai.dto.request.UserCreationRequest;
 import com.nlu.WebThuongMai.dto.request.UserUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.UserResponse;
 import com.nlu.WebThuongMai.model.User;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
     User toUser(UserCreationRequest Request);
