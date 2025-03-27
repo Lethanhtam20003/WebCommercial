@@ -1,8 +1,8 @@
 package com.nlu.WebThuongMai.service;
 
-import com.nlu.WebThuongMai.dto.request.UserCreationRequest;
-import com.nlu.WebThuongMai.dto.request.UserUpdateRequest;
-import com.nlu.WebThuongMai.dto.response.UserResponse;
+import com.nlu.WebThuongMai.dto.request.userReq.UserCreationRequest;
+import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateRequest;
+import com.nlu.WebThuongMai.dto.response.userResp.UserResponse;
 import com.nlu.WebThuongMai.enums.Role;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
@@ -64,13 +64,13 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse getUserById(String id) {
-        return userMapper.toUserResponse(userRepository.findById(id)
+    public UserResponse getUserById(long userId) {
+        return userMapper.toUserResponse(userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse updateUser(String userId, UserUpdateRequest request) {
+    public UserResponse updateUser(long userId, UserUpdateRequest request) {
         User u = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         userMapper.toUser(u, request);
@@ -78,7 +78,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUser(String userId) {
+    public void deleteUser(long userId) {
         userRepository.deleteById(userId);
     }
 
