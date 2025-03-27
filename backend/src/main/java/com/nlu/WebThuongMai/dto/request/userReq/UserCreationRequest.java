@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto.request;
+package com.nlu.WebThuongMai.dto.request.userReq;
 
 import com.nlu.WebThuongMai.validator.BirthdayConstraint;
 import jakarta.validation.constraints.NotBlank;

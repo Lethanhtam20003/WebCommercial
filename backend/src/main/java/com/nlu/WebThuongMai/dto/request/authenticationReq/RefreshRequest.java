@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto.request;
+package com.nlu.WebThuongMai.dto.request.authenticationReq;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
