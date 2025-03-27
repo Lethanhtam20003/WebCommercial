@@ -1,7 +1,7 @@
 package com.nlu.WebThuongMai.configuration;
 
 import com.nimbusds.jose.JOSEException;
-import com.nlu.WebThuongMai.dto.request.IntrospectRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.service.AuthenticationService;

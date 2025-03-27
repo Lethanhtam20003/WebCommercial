@@ -1,13 +1,13 @@
 package com.nlu.WebThuongMai.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.nlu.WebThuongMai.dto.request.AuthenticationRequest;
-import com.nlu.WebThuongMai.dto.request.IntrospectRequest;
-import com.nlu.WebThuongMai.dto.request.LogoutRequest;
-import com.nlu.WebThuongMai.dto.request.RefreshRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.AuthenticationRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
-import com.nlu.WebThuongMai.dto.response.AuthenticationResponse;
-import com.nlu.WebThuongMai.dto.response.IntrospectResponse;
+import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
+import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
 import com.nlu.WebThuongMai.service.AuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
