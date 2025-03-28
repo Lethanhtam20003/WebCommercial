@@ -37,16 +37,13 @@
               }
             ],
             "styles": [
-              "src/theme.less",
-              "src/styles.scss",
-              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
-              "node_modules/ng-zorro-antd/style/index.min.css",
-              "node_modules/ng-zorro-antd/button/style/index.min.css"
+              "src/styles.scss"
+
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "node_modules"
+                "./node_modules"
               ]
             }
           },
@@ -105,10 +102,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
-              "node_modules/ng-zorro-antd/style/index.min.css",
-              "node_modules/ng-zorro-antd/button/style/index.min.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
