@@ -1,6 +1,7 @@
 package com.nlu.WebThuongMai.controller;
 
 import com.nlu.WebThuongMai.dto.request.productReq.CategoryRequest;
+import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.model.Product;
 import com.nlu.WebThuongMai.service.ProductService;
@@ -22,23 +23,23 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping()
-    ApiResponse<Page<Product>> getAllProduct(Pageable pageable){
-        return ApiResponse.<Page<Product>>builder()
+    ApiResponse<Page<ProductRequest>> getAllProduct(Pageable pageable){
+        return ApiResponse.<Page<ProductRequest>>builder()
                 .result(productService.getAllProduct(pageable))
                 .build();
 
     }
     @PostMapping("/id")
-    ApiResponse<Product> getProductById(@RequestBody IdRequest request){
-        return ApiResponse.<Product>builder()
-                .result(productService.getProductById(request))
+    ApiResponse<ProductRequest> getProductById(@RequestBody long productId){
+        return ApiResponse.<ProductRequest>builder()
+                .result(productService.getProductById(productId))
                 .build();
     }
 
     @PostMapping("/category")
-    ApiResponse<Page<Product>> getProductByCategory(@RequestBody CategoryRequest request){
-        return ApiResponse.<Page<Product>>builder()
-                .result(productService.getProductByCategory(request))
+    ApiResponse<Page<ProductRequest>> getProductByCategory(@RequestBody CategoryRequest request,Pageable pageable){
+        return ApiResponse.<Page<ProductRequest>>builder()
+                .result(productService.getProductByCategory(request,pageable))
                 .build();
     }
 

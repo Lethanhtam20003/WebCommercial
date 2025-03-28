@@ -1,8 +1,10 @@
 package com.nlu.WebThuongMai.service;
 
 import com.nlu.WebThuongMai.dto.request.productReq.CategoryRequest;
+import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
+import com.nlu.WebThuongMai.mapper.ProductMapper;
 import com.nlu.WebThuongMai.model.Product;
 import com.nlu.WebThuongMai.repository.ProductRepository;
 import lombok.AccessLevel;
@@ -20,20 +22,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
     ProductRepository productRepository;
+    ProductMapper productMapper;
 
-
-    public Page<Product> getAllProduct(Pageable pageable){
-        return productRepository.findAll(pageable);
+    public Page<ProductRequest> getAllProduct(Pageable pageable){
+        return productMapper.toPageProductRequest(productRepository.findAll(pageable));
     }
 
-    public Product getProductById(IdRequest request){
-        return productRepository.findById(request.getId())
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+    public ProductRequest getProductById(long request){
+        return productMapper.toProductRequest(productRepository.findById(request)
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND)));
     }
 
-    public Page<Product> getProductByCategory(CategoryRequest request){
-        return productRepository.findByCategory(request.getCategory(),
-                PageRequest.of(request.getPageNum(), request.getPageSize()));
+    public Page<ProductRequest> getProductByCategory(CategoryRequest request,Pageable pageable){
+        return productMapper.toPageProductRequest( productRepository.findByCategory(request.getCategory(),pageable));
     }
 
 }
