@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
  */
 public class PurchaseOrder {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchase_order_id")
     Long id;
     @ManyToOne

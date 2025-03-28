@@ -18,6 +18,7 @@ import lombok.experimental.FieldDefaults;
  */
 public class Inventory {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inventory_id")
     String id;
     @ManyToOne

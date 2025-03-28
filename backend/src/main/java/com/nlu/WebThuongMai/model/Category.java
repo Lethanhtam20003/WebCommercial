@@ -13,7 +13,6 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PACKAGE)
 
-
 @Entity
 @Table(name = "categories")
 /**
@@ -21,6 +20,7 @@ import java.util.Set;
  */
 public class Category {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     Long id;
     String name;

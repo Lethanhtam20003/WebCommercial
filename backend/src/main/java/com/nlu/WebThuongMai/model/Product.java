@@ -20,12 +20,11 @@ import java.util.List;
  */
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     Long id;
     @Column(nullable = false)
     String name;
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    List<ProductImage> image;
     String price;
     String description;
     String status;
