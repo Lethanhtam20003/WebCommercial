@@ -2,11 +2,19 @@
 @use "tailwindcss";
 @use "primeicons/primeicons.css";
 
-/* Đảm bảo input bên trong chiếm toàn bộ chiều rộng */
-p-password div{
-  width: 100% !important;
+p-floatlabel {
+  input:focus {
+    border: 1px solid #cbd5e1 !important;
+  }
+
+  p-password,
   input {
-    width: 100% !important;
+    div {
+      width: 100% !important;
+
+      input {
+        width: 100% !important;
+      }
+    }
   }
 }
-
