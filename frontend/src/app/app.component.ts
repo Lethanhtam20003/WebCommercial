@@ -7,7 +7,6 @@ import {LoginPages} from './pages/login.pages';
   selector: 'app-root',
   imports: [ButtonModule, LoginPages,],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'frontend';

@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
-import {LoginComponents} from '../../components/login.components';
+import {LoginComponent} from '../../components/login.components';
 
 @Component({
   selector: 'login',
-  imports: [LoginComponents],
+  imports: [LoginComponent],
   template: `
     <login-component/>
   `,
