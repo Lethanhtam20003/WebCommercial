@@ -1,4 +1,0 @@
-#E9762B: Orange
-#FF7F50: Coral
-#cbd5e1: grey
-#FF4500: Orange Red
