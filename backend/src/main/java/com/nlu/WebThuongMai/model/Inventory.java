@@ -20,7 +20,7 @@ public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inventory_id")
-    String id;
+    long id;
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     Product product;

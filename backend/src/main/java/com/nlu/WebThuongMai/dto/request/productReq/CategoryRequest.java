@@ -2,6 +2,7 @@ package com.nlu.WebThuongMai.dto.request.productReq;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -9,6 +10,4 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryRequest {
     String category;
-    int pageNum;
-    int PageSize;
 }

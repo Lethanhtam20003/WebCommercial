@@ -1,8 +1,6 @@
 package com.nlu.WebThuongMai.repository;
 
-import com.nlu.WebThuongMai.model.Category;
 import com.nlu.WebThuongMai.model.Product;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
