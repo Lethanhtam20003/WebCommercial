@@ -29,12 +29,24 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              },
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
+
             ],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./node_modules"
+              ]
+            }
           },
           "configurations": {
             "production": {
@@ -88,7 +100,8 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
