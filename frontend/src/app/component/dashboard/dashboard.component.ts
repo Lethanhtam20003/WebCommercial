@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [ RouterModule],
   template: ` 
     <p>
       dashboard works!
