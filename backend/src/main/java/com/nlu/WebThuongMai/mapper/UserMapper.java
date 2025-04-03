@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.mapper;
 
+import com.nlu.WebThuongMai.dto.UserFacebook;
 import com.nlu.WebThuongMai.dto.request.userReq.UserCreationRequest;
 import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.userResp.UserResponse;
@@ -26,6 +27,14 @@ public interface UserMapper {
 
     List<UserResponse> toUserResponseList(List<User> users);
 
+    @Mapping(target = "id", ignore = true) // Bỏ qua ID
+    @Mapping(target = "authProvider", constant = "FACEBOOK")
+    @Mapping(target = "authProviderId", source = "id")
+    @Mapping(target = "username", source = "name")
+    @Mapping(target = "fullName", source = "name")
+    @Mapping(target = "avatar", source = "picture.data.url")
+    @Mapping(target = "role", constant = "USER")
+    User userFacebookToUser(UserFacebook userFacebook);
 
     // Xử lý bỏ qua cả null và chuỗi rỗng
     default String mapString(String value) {

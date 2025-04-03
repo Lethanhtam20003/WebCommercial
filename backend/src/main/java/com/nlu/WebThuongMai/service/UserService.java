@@ -51,7 +51,7 @@ public class UserService {
 
         try {
             u = userRepository.save(u);
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
 
