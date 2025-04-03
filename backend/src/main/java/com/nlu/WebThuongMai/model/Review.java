@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
  */
 public class Review {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
     Long id;
     String content;

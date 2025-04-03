@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
  */
 public class PurchaseOrder {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchase_order_id")
     Long id;
     @ManyToOne
@@ -31,6 +32,7 @@ public class PurchaseOrder {
     @CreationTimestamp
     LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     PurchaseStatus status = PurchaseStatus.PENDING;
     BigDecimal totalPrice;
 

@@ -21,7 +21,10 @@ public enum ErrorCode {
     UNAUTHORIZED(1007, "you do not have permission", HttpStatus.FORBIDDEN),
     INVALID_BIRTHDAY(1008, "invalid birthday", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1009, "user not found", HttpStatus.NOT_FOUND),
-    TOKEN_INVALID(10010, "token invalid", HttpStatus.BAD_REQUEST),
+    TOKEN_INVALID(1010, "token invalid", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_FOUND(1011, "product not found", HttpStatus.NOT_FOUND),
+    ACCOUNT_FACEBOOK_NOT_EXISTED(1012, "account facebook not existed", HttpStatus.NOT_FOUND),
+    INVALID_ACCESS_TOKEN(1013, "invalid access token", HttpStatus.BAD_REQUEST),
 
     UNCATEGORIZED_EXCEPTION(9998, "Uncategorized Exception", HttpStatus.INTERNAL_SERVER_ERROR);
 

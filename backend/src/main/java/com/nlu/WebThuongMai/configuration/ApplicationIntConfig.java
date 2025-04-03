@@ -27,6 +27,7 @@ public class ApplicationIntConfig {
                 userRepository.save(User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
+                        .email("tam1442k3@gmail.com")
                         .role(role)
                         .build());
                 log.warn("admin user was created with default password: admin, please change it!");

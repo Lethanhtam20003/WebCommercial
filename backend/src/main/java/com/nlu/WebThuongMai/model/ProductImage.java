@@ -18,12 +18,11 @@ import lombok.experimental.FieldDefaults;
  */
 public class ProductImage {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_image_id")
     Long id;
     String name;
     String image;
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    Product product;
+    long productId;
 
 }

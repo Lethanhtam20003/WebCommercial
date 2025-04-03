@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto.request;
+package com.nlu.WebThuongMai.dto.request.productReq;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationRequest {
-    String username;
-    String password;
+public class CategoryRequest {
+    String category;
 }

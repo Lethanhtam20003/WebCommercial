@@ -1,17 +1,18 @@
 package com.nlu.WebThuongMai.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.nlu.WebThuongMai.dto.request.AuthenticationRequest;
-import com.nlu.WebThuongMai.dto.request.IntrospectRequest;
-import com.nlu.WebThuongMai.dto.request.LogoutRequest;
-import com.nlu.WebThuongMai.dto.request.RefreshRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.*;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
-import com.nlu.WebThuongMai.dto.response.AuthenticationResponse;
-import com.nlu.WebThuongMai.dto.response.IntrospectResponse;
+import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
+import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
+import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.service.AuthenticationService;
+import com.nlu.WebThuongMai.service.FacebookService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
     AuthenticationService authenticationService;
+    OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
+    FacebookService facebookService;
 
     @PostMapping
     ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
@@ -57,4 +61,14 @@ public class AuthenticationController {
                 .build();
     }
 
+    @PostMapping("/facebook")
+    public ApiResponse<AuthenticationResponse> loginWithFacebook(@RequestBody FacebookRequest request) {
+        User user = facebookService.verify(request.getAccessToken());
+        var result = authenticationService.loginFacebook(user);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
+                .build();
+
+
+    }
 }

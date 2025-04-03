@@ -20,6 +20,7 @@ import java.math.BigDecimal;
  */
 public class PurchaseOrderItem {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchase_order_item_id")
     Long id;
     @ManyToOne

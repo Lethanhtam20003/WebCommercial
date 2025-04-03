@@ -1,9 +1,6 @@
 package com.nlu.WebThuongMai.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,6 +21,7 @@ import java.time.LocalDateTime;
  */
 public class Coupon {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coupon_id")
     Long id;
     @Column(unique = true, nullable = false)
