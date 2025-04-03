@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto.response;
+package com.nlu.WebThuongMai.dto.response.userResp;
 
 import com.nlu.WebThuongMai.enums.Role;
 import lombok.*;

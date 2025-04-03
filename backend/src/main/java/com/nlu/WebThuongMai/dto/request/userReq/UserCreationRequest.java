@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto.request;
+package com.nlu.WebThuongMai.dto.request.userReq;
 
 import com.nlu.WebThuongMai.validator.BirthdayConstraint;
 import jakarta.validation.constraints.NotBlank;
@@ -34,15 +34,17 @@ public class UserCreationRequest {
     @Size(min = 8, max = 32, message = "PASSWORD_SIZE_INVALID")
     @NotBlank
     String password;
-    String firstName;
-    String lastName;
+
+    String fullName;
     @BirthdayConstraint(min = 18, message = "INVALID_BIRTHDAY")
     LocalDate birthday;
     String avatar;
     String gender;
+
     @NotBlank
     String email;
     String phone;
     String address;
+
     String status;
 }

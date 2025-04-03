@@ -1,9 +1,9 @@
 package com.nlu.WebThuongMai.controller;
 
-import com.nlu.WebThuongMai.dto.request.UserCreationRequest;
-import com.nlu.WebThuongMai.dto.request.UserUpdateRequest;
+import com.nlu.WebThuongMai.dto.request.userReq.UserCreationRequest;
+import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
-import com.nlu.WebThuongMai.dto.response.UserResponse;
+import com.nlu.WebThuongMai.dto.response.userResp.UserResponse;
 import com.nlu.WebThuongMai.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -36,20 +36,20 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    ApiResponse<UserResponse> getUserById(@PathVariable String userId) {
+    ApiResponse<UserResponse> getUserById(@PathVariable long userId) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getUserById(userId)).build();
     }
 
     @PutMapping("/{userId}")
-    ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
+    ApiResponse<UserResponse> updateUser(@PathVariable long userId, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();
     }
 
     @DeleteMapping("/{userId}")
-    ApiResponse<Boolean> deleteUser(@PathVariable String userId) {
+    ApiResponse<Boolean> deleteUser(@PathVariable long userId) {
         userService.deleteUser(userId);
         return ApiResponse.<Boolean>builder()
                 .message("user has been deleted")

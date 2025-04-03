@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto.response;
+package com.nlu.WebThuongMai.dto.request.authenticationReq;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +8,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class IntrospectResponse {
-    boolean valid;
+public class LogoutRequest {
+    String token;
 }

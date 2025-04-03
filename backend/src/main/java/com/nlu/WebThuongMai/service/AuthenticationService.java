@@ -5,12 +5,12 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.nlu.WebThuongMai.dto.request.AuthenticationRequest;
-import com.nlu.WebThuongMai.dto.request.IntrospectRequest;
-import com.nlu.WebThuongMai.dto.request.LogoutRequest;
-import com.nlu.WebThuongMai.dto.request.RefreshRequest;
-import com.nlu.WebThuongMai.dto.response.AuthenticationResponse;
-import com.nlu.WebThuongMai.dto.response.IntrospectResponse;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.AuthenticationRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
+import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
+import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.model.InvalidatedToken;
@@ -81,7 +81,7 @@ public class AuthenticationService {
      */
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
         try {
-            var signToken = verifyToken(request.getToken(),true);
+            var signToken = verifyToken(request.getToken(), true);
 
             String jwtId = signToken.getJWTClaimsSet().getJWTID();
             Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
@@ -104,7 +104,7 @@ public class AuthenticationService {
         var token = request.getToken();
         boolean isValid = true;
         try {
-            verifyToken(token,false);
+            verifyToken(token, false);
         } catch (AppException e) {
             isValid = false;
         }
@@ -126,7 +126,7 @@ public class AuthenticationService {
                 .subject(user.getUsername())
                 .issuer("WebCommercial")
                 .issueTime(new Date())
-                .expirationTime(new Date(Instant.now().plus(VALID_DURATION,ChronoUnit.SECONDS).toEpochMilli())) // het han sau 1 h
+                .expirationTime(new Date(Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli())) // het han sau 1 h
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", user.getRole())
                 .build();
@@ -149,12 +149,12 @@ public class AuthenticationService {
      * @throws JOSEException
      * @throws ParseException
      */
-    private SignedJWT verifyToken(String token , boolean isRefresh) throws JOSEException, ParseException {
+    private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(TOKEN_KEY);
         SignedJWT signedJWT = SignedJWT.parse(token);
-        Date expiryTime =(isRefresh)
+        Date expiryTime = (isRefresh)
                 ? new Date(signedJWT.getJWTClaimsSet().getIssueTime().toInstant().plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli())
-                :signedJWT.getJWTClaimsSet().getExpirationTime();
+                : signedJWT.getJWTClaimsSet().getExpirationTime();
         var verifiedJWT = signedJWT.verify(verifier);
         if (!(verifiedJWT && expiryTime.after(new Date())))
             throw new AppException(ErrorCode.UNAUTHORIZED);
@@ -164,7 +164,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse refreshToken(@NotNull RefreshRequest request) throws JOSEException, ParseException {
-        var signedJWT = verifyToken(request.getToken(),true);
+        var signedJWT = verifyToken(request.getToken(), true);
         // cancel current token
         var jwtId = signedJWT.getJWTClaimsSet().getJWTID();
         var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
@@ -176,6 +176,13 @@ public class AuthenticationService {
         // generate new token
         var username = signedJWT.getJWTClaimsSet().getSubject();
         User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        var token = generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(token)
+                .build();
+    }
+
+    public AuthenticationResponse loginFacebook(User user) {
         var token = generateToken(user);
         return AuthenticationResponse.builder()
                 .token(token)
