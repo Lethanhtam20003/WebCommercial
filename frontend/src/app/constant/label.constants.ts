@@ -1,4 +1,4 @@
-export class Label {
+export class LabelConstants {
 	public static readonly logIn: string = 'Đăng nhập';
   public static readonly register: string = 'Đăng ký';
   public static readonly forgotPassword: string = 'Quên mật khẩu';
