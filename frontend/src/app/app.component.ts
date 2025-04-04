@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { FooterComponent } from './component/footer/footer.component';
-import { HeaderComponent } from './component/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 
 @Component({
@@ -13,7 +13,7 @@ import { SocialLoginModule } from '@abacritt/angularx-social-login';
    <router-outlet></router-outlet>
    <app-footer></app-footer>
   `,
-  styleUrls: ['./app.component.scss']
+  styles: ``
 })
 export class AppComponent {
   title = 'frontend';
