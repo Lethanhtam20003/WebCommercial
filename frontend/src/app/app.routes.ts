@@ -1,18 +1,22 @@
 import { Routes } from '@angular/router';
 import {LoginComponent} from './components/login.components';
 import {Label} from './constant/label';
-import { DashboardComponent } from './component/dashboard/dashboard.component';
-
-const label: Label=new Label();
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import {RegisterComponent} from './components/register.components';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'log-in',
     component: LoginComponent,
-    title: label.logIn,
+    title: Label.logInPage,
   },
   {
-    path:'dashboard',
+    path: 'register',
+    component: RegisterComponent,
+    title: Label.registerPage,
+  },
+  {
+    path:'',
     component:DashboardComponent,
     title:"Dashboard",
   }
