@@ -5,14 +5,24 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
-import { Label } from '../constant/label';
-import { ErrorMessage } from '../constant/error.message';
+import { LabelConstants } from '../constant/label.constants';
+import { ErrorMessageConstants } from '../constant/error-message.constants';
 import { NgClass } from '@angular/common';
+import {RouteLink} from '../constant/route-link';
+import {RouterLink} from '@angular/router';
 
 @Component({
 	selector: selectorName.registerComponent,
 	standalone: true,
-	imports: [Button, FloatLabel, FormsModule, InputText, Password, NgClass],
+	imports: [
+		Button,
+		FloatLabel,
+		FormsModule,
+		InputText,
+		Password,
+		NgClass,
+		RouterLink,
+	],
 	template: `
 		<div
 			class="h-screen flex items-start justify-center pt-10 bg-white max-w-full"
@@ -72,12 +82,11 @@ import { NgClass } from '@angular/common';
 							<small class="block mt-1 text-sm text-red-500 pl-1"
 								>{{ ErrorMessage.pleaseEnterEmail }}
 							</small>
-						}
-            <!-- @else if (email.) {
-							<small class="block mt-1 text-sm text-red-500 pl-1"
-								>{{ ErrorMessage.usernameHasAtLeast3Characters }}
+						} @else if (!isValidEmail(email)) {
+							<small class="block mt-1 text-sm text-red-500 pl-1">
+								{{ ErrorMessage.emailIsNotValid }}
 							</small>
-						} -->
+						}
 					</div>
 					<div class="flex flex-col justify-center pb-5">
 						<p-floatlabel variant="on" class="w-full">
@@ -95,8 +104,9 @@ import { NgClass } from '@angular/common';
 							<label
 								[ngClass]="{ 'text-black': passwordIsFocused }"
 								for="{{ passwordInputId }}"
-								>{{ Label.password }}</label
 							>
+								{{ Label.password }}
+							</label>
 						</p-floatlabel>
 						@if (password == null || password == '') {
 							<small class="block mt-1 text-sm text-red-500 pl-3"
@@ -147,7 +157,9 @@ import { NgClass } from '@angular/common';
 					</div>
 					<div class="card flex flex-row gap-1 pt-2">
 						<p class="text-center text-sm">{{ Label.ifUHaveAnAccount }}</p>
-            <p class="text-center text-sm text">{{Label.returnToLogin}}</p>
+            <a routerLink="/{{RouteLink.loginRoute}}" class="text-center text-sm text-[#0096FF]">
+              {{ Label.returnToLogin }}
+            </a>
 					</div>
 				</div>
 			</form>
@@ -162,6 +174,9 @@ import { NgClass } from '@angular/common';
 		/* 1. Mobile (sm) styles */
 		@media (min-width: 320px) and (max-width: 640px) {
 			::ng-deep {
+        .p-password {
+          height: 44.1px !important;
+        }
 				p-button {
 					.p-button-icon-only {
 						width: 25px;
@@ -186,11 +201,17 @@ import { NgClass } from '@angular/common';
 					font-size: 25px;
 
 					div {
+            display: flex;
+            flex-direction: column;
 						width: 200px;
 
-						p {
+						p,a {
 							font-size: 10px;
 						}
+
+            a{
+              color: #0096FF;
+            }
 					}
 
 					.p-floatlabel,
@@ -317,6 +338,15 @@ export class RegisterComponent {
 		}
 	}
 
-	protected readonly Label = Label;
-	protected readonly ErrorMessage = ErrorMessage;
+	/*
+	 * @description: validate email format
+	 * */
+	isValidEmail(email: string): boolean {
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return emailRegex.test(email);
+	}
+
+	protected readonly Label = LabelConstants;
+	protected readonly ErrorMessage = ErrorMessageConstants;
+	protected readonly RouteLink = RouteLink;
 }
