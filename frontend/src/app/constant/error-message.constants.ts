@@ -1,7 +1,7 @@
 export class ErrorMessageConstants {
   static readonly pleaseEnterUsername: string='Vui lòng nhập tài khoản';
   static readonly pleaseEnterPassword: string='Vui lòng nhập mật khẩu';
-  static readonly pleaseEnterConfirmPassword: string='Vui lòng nhập lại mật khẩu';
+  // static readonly pleaseEnterConfirmPassword: string='Vui lòng nhập lại mật khẩu';
   static readonly pleaseEnterEmail: string='Vui lòng nhập email';
   static readonly usernameHasAtLeast3Characters: string='Tài khoản phải có ít nhất 3 ký tự';
   static readonly passwordHasAtLeast8CharactersAndSmallerThan30: string='Mật khẩu phải có ít nhất 8 ký tự và phải có nhỏ hơn 30 ký tự';

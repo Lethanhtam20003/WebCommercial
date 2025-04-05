@@ -330,11 +330,11 @@ export class RegisterComponent {
 		if (field === 'username') {
 			this.usernameIsFocused = isFocused;
 		} else if (field === 'email') {
-			this.passwordIsFocused = isFocused;
+			this.emailIsFocused = isFocused;
 		} else if (field === 'password') {
 			this.passwordIsFocused = isFocused;
 		} else if (field === 'retypePassword') {
-			this.passwordIsFocused = isFocused;
+			this.retypePasswordIsFocused = isFocused;
 		}
 	}
 
