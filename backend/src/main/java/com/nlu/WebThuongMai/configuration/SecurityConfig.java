@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.configuration;
 
+import com.nlu.WebThuongMai.service.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
@@ -30,10 +30,14 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS = {
-            "v1/auth", "v1/auth/*", "v1/products", "v1/products/*",
+            "/v1/auth", "/v1/auth/*", "/v1/products", "/v1/products/*","/v1/oauth2","/v1/oauth2/*"
     };
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
+    @Autowired
+    private Oauth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,13 +52,22 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 );
         http
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+                                .userService(customOAuth2UserService)
+                        )
+                        .successHandler(oAuth2SuccessHandler)
+                );
+        http
                 .csrf(AbstractHttpConfigurer::disable);
 
+//      cấu hình cho phép frontend truy cập các api
         http
                 .cors((cors -> cors.configurationSource(corsConfigurationSource())))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Stateless session
         return http.build();
     }
+
 
     /**
      * cấu hình là prefix từ SCOPE_ thành ROLE_ để sử dụng @EnableMethodSecurity
@@ -87,13 +100,6 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
-    }
-
-    @Bean
-    public WebClient webClient() {
-        return WebClient.builder()
-                .baseUrl("https://graph.facebook.com")
-                .build();
     }
 
 }
