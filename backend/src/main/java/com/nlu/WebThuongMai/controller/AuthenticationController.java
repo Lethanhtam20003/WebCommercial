@@ -1,13 +1,14 @@
 package com.nlu.WebThuongMai.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.nlu.WebThuongMai.dto.request.authenticationReq.*;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.AuthenticationRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
-import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.service.AuthenticationService;
-import com.nlu.WebThuongMai.service.FacebookService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,7 +29,6 @@ import java.text.ParseException;
 public class AuthenticationController {
     AuthenticationService authenticationService;
     OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
-    FacebookService facebookService;
 
     @PostMapping
     ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
@@ -61,14 +61,5 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("/facebook")
-    public ApiResponse<AuthenticationResponse> loginWithFacebook(@RequestBody FacebookRequest request) {
-        User user = facebookService.verify(request.getAccessToken());
-        var result = authenticationService.loginFacebook(user);
-        return ApiResponse.<AuthenticationResponse>builder()
-                .result(result)
-                .build();
 
-
-    }
 }

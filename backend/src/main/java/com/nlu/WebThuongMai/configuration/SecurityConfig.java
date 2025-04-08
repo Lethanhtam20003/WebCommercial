@@ -30,7 +30,7 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS = {
-            "/v1/auth", "/v1/auth/*", "/v1/products", "/v1/products/*","/v1/oauth2","/v1/oauth2/*"
+            "/v1/auth", "/v1/auth/*", "/v1/products", "/v1/products/*", "/v1/oauth2", "/v1/oauth2/*"
     };
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
