@@ -51,4 +51,33 @@ Dự án này là một hệ thống **Web bán hàng thể thao** với kiến 
 ## 🚀 Sẵn sàng để triển khai!
 
 Hệ thống được thiết kế để dễ dàng mở rộng, tích hợp và triển khai trong môi trường thực tế.
+--- 
+quy trình chuẩn để thực hiện OAuth2 login (bao gồm Facebook, Google, v.v.) theo chuẩn Spring Security:
 
+## Frontend:
+
+-Gửi người dùng đến endpoint đăng nhập của nhà cung cấp OAuth2 (ví dụ: Facebook, Google).
+
+-Redirect người dùng đến URL đăng nhập của Facebook/Google, nơi họ sẽ nhập thông tin đăng nhập và cấp quyền cho ứng dụng.
+
+Backend:
+
+-Sau khi người dùng đăng nhập thành công, nhà cung cấp OAuth2 (Facebook/Google) sẽ redirect lại về backend của bạn
+ với một mã authorization code.
+
+-Backend nhận mã này và gửi yêu cầu đến nhà cung cấp OAuth2 để trao đổi mã authorization code lấy access token.
+
+-Backend sử dụng access token để lấy thông tin người dùng từ nhà cung cấp OAuth2.
+
+-Backend kiểm tra, xác thực và xử lý thông tin người dùng (ví dụ: tạo mới tài khoản, đăng nhập người dùng).
+
+-Backend trả về thông tin người dùng cho frontend hoặc tạo một phiên làm việc (session) để duy trì trạng thái
+đăng nhập của người dùng.
+
+## Frontend:
+
+-Sau khi backend xử lý và xác thực thông tin người dùng, frontend có thể nhận thông tin người dùng (như tên, email)
+từ backend và hiển thị cho người dùng.
+
+-Frontend sẽ lưu thông tin đăng nhập (thông qua session hoặc JWT token) để người dùng không phải đăng nhập lại mỗi
+lần truy cập.
