@@ -1,10 +1,13 @@
 import { Routes } from '@angular/router';
-import {LoginComponent} from './components/login.components';
-import {Label} from './constant/label';
-import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { Oauth2RedirectComponent } from './components/oauth2_redirect.component';
 import { AuthGuard } from './core/auth.guard';
-const label: Label=new Label();
+
+import { LoginComponent } from './components/login.components';
+import { LabelConstants } from './constant/label.constants';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RegisterComponent } from './components/register.components';
+import { RouteLink } from './constant/route-link';
+
 
 export const routes: Routes = [
   {
@@ -18,6 +21,16 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     title:"Dashboard",
   },
+	{
+		path: RouteLink.registerRoute,
+		component: RegisterComponent,
+		title: LabelConstants.registerPage,
+	},
+	{
+		path: RouteLink.loginRoute,
+		component: LoginComponent,
+		title: LabelConstants.logInPage,
+	},
   {
     path: 'oauth2-redirect',
     component: Oauth2RedirectComponent,
