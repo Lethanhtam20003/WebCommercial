@@ -7,7 +7,8 @@ import { providePrimeNG } from 'primeng/config';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { SocialAuthServiceConfig, FacebookLoginProvider } from '@abacritt/angularx-social-login';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { AuthInterceptor } from './core/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -43,5 +44,11 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
+    provideHttpClient(withInterceptorsFromDi()),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass : AuthInterceptor,
+      multi: true,
+    }
   ]
 };

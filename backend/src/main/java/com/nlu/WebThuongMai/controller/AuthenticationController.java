@@ -6,6 +6,7 @@ import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
+import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticatedResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
 import com.nlu.WebThuongMai.service.AuthenticationService;
@@ -13,11 +14,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -58,8 +59,13 @@ public class AuthenticationController {
         var result = authenticationService.refreshToken(request);
         return ApiResponse.<AuthenticationResponse>builder()
                 .result(result)
+                 .build();
+    }
+    @GetMapping("/check-auth")
+    public ApiResponse<IntrospectResponse> checkAuth(@CookieValue(name="accessToken") String token) throws ParseException, JOSEException {
+        var res = authenticationService.introspect(IntrospectRequest.builder().token(token).build());
+        return  ApiResponse.<IntrospectResponse>builder()
+                .result(res)
                 .build();
     }
-
-
 }

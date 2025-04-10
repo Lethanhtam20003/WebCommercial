@@ -149,7 +149,7 @@ public class AuthenticationService {
      * @throws JOSEException
      * @throws ParseException
      */
-    private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
+    public SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(TOKEN_KEY);
         SignedJWT signedJWT = SignedJWT.parse(token);
         Date expiryTime = (isRefresh)
