@@ -8,8 +8,8 @@ import { Password } from 'primeng/password';
 import { LabelConstants } from '../constant/label.constants';
 import { ErrorMessageConstants } from '../constant/error-message.constants';
 import { NgClass } from '@angular/common';
-import {RouteLink} from '../constant/route-link';
-import {RouterLink} from '@angular/router';
+import { RouteLink } from '../constant/route-link';
+import { RouterLink } from '@angular/router';
 
 @Component({
 	selector: selectorName.registerComponent,
@@ -157,9 +157,12 @@ import {RouterLink} from '@angular/router';
 					</div>
 					<div class="card flex flex-row gap-1 pt-2">
 						<p class="text-center text-sm">{{ Label.ifUHaveAnAccount }}</p>
-            <a routerLink="/{{RouteLink.loginRoute}}" class="text-center text-sm text-[#0096FF]">
-              {{ Label.returnToLogin }}
-            </a>
+						<a
+							routerLink="/{{ RouteLink.loginRoute }}"
+							class="text-center text-sm text-[#0096FF]"
+						>
+							{{ Label.returnToLogin }}
+						</a>
 					</div>
 				</div>
 			</form>
@@ -174,9 +177,9 @@ import {RouterLink} from '@angular/router';
 		/* 1. Mobile (sm) styles */
 		@media (min-width: 320px) and (max-width: 640px) {
 			::ng-deep {
-        .p-password {
-          height: 44.1px !important;
-        }
+				.p-password {
+					height: 44.1px !important;
+				}
 				p-button {
 					.p-button-icon-only {
 						width: 25px;
@@ -194,6 +197,7 @@ import {RouterLink} from '@angular/router';
 					}
 				}
 			}
+
 			form {
 				width: 280px;
 
@@ -201,17 +205,18 @@ import {RouterLink} from '@angular/router';
 					font-size: 25px;
 
 					div {
-            display: flex;
-            flex-direction: column;
+						display: flex;
+						flex-direction: column;
 						width: 200px;
 
-						p,a {
+						p,
+						a {
 							font-size: 10px;
 						}
 
-            a{
-              color: #0096FF;
-            }
+						a {
+							color: #0096ff;
+						}
 					}
 
 					.p-floatlabel,
