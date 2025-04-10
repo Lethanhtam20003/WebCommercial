@@ -3,10 +3,8 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { RouteLink } from '../constant/route-link';
 
-@Injectable({
-  providedIn: 'root',
-})
 interface IntrospectResponse {
   valid: boolean;
 }
@@ -14,6 +12,10 @@ interface IntrospectResponse {
 interface ApiResponse<T> {
   result: T;
 }
+
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthGuard implements CanActivate {
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -27,12 +29,12 @@ export class AuthGuard implements CanActivate {
           
           return true;
         } else {
-          this.router.navigate(['/']);
+          this.router.navigate([RouteLink.homeRoute]);
           return false;
         }
       }),
       catchError(() => {
-        this.router.navigate(['/']);
+        this.router.navigate([RouteLink.homeRoute]);
         return of(false);
       })
     );

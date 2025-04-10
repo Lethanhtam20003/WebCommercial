@@ -1,14 +1,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { selectorName } from '../constant/selectorName';
+import { selectorName } from '../../constant/selectorName';
 import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
 import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
-import { LabelConstants } from '../constant/label.constants';
-import { ErrorMessageConstants } from '../constant/error-message.constants';
+import { LabelConstants } from '../../constant/label.constants';
+import { ErrorMessageConstants } from '../../constant/error-message.constants';
 import { NgClass } from '@angular/common';
-import { RouteLink } from '../constant/route-link';
+import { RouteLink } from '../../constant/route-link';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -168,116 +168,7 @@ import { RouterLink } from '@angular/router';
 			</form>
 		</div>
 	`,
-	styles: `
-		::ng-deep .p-button:hover {
-			background-color: #ff4500 !important;
-			border-color: #ff4500 !important;
-		}
-
-		/* 1. Mobile (sm) styles */
-		@media (min-width: 320px) and (max-width: 640px) {
-			::ng-deep {
-				.p-password {
-					height: 44.1px !important;
-				}
-				p-button {
-					.p-button-icon-only {
-						width: 25px;
-						height: 25px;
-
-						span {
-							font-size: 18px;
-						}
-					}
-
-					button {
-						span {
-							font-size: 10px;
-						}
-					}
-				}
-			}
-
-			form {
-				width: 280px;
-
-				div {
-					font-size: 25px;
-
-					div {
-						display: flex;
-						flex-direction: column;
-						width: 200px;
-
-						p,
-						a {
-							font-size: 10px;
-						}
-
-						a {
-							color: #0096ff;
-						}
-					}
-
-					.p-floatlabel,
-					small {
-						font-size: 10px;
-						width: 200px;
-
-						input {
-							font-size: 15px;
-						}
-
-						label {
-							font-size: 10px;
-						}
-					}
-				}
-			}
-		}
-
-		/* 2. Mobile (sm) styles */
-		@media (max-width: 640px) {
-			.p-floatlabel {
-				font-size: 0.875rem;
-			}
-			.p-button {
-				width: 100%;
-			}
-		}
-
-		/* 3. Tablet (md) styles */
-		@media (min-width: 640px) and (max-width: 1024px) {
-			.p-floatlabel {
-				font-size: 1rem;
-			}
-			.p-button {
-				width: auto;
-			}
-		}
-
-		/* 4. Desktop (lg) styles */
-		@media (min-width: 1024px) {
-			.p-floatlabel {
-				font-size: 1.125rem;
-			}
-			.p-button {
-				width: auto;
-			}
-			::ng-deep {
-				p-button {
-					.p-button-icon-only {
-						width: 45px;
-						height: 45px;
-
-						span {
-							font-size: 35px;
-						}
-					}
-				}
-			}
-		}
-	`,
+	styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
 	/*

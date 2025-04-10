@@ -41,8 +41,11 @@ public class Oauth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String id = oAuth2User.getAttribute("id");
+
         User user = userRepository.findUserByAuthProviderId(id);
+
         String token = authenticationService.generateToken(user);
+
         String userInfo = new ObjectMapper().writeValueAsString(Map.of(
                 "username", user.getUsername(),
                 "role", user.getRole()
@@ -54,12 +57,14 @@ public class Oauth2SuccessHandler implements AuthenticationSuccessHandler {
                 .path("/")
                 .maxAge(Duration.ofDays(1))
                 .build();
+
         ResponseCookie userInfoCookie = ResponseCookie.from("userInfo", URLEncoder.encode(userInfo, StandardCharsets.UTF_8))
                 .httpOnly(true)
                 .secure(false)
                 .path("/")
                 .maxAge(Duration.ofDays(1))
                 .build();
+
         response.setHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
         response.addHeader(HttpHeaders.SET_COOKIE, userInfoCookie.toString());
 

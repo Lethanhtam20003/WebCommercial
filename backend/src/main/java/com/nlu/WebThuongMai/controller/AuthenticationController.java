@@ -6,7 +6,6 @@ import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
-import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticatedResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
 import com.nlu.WebThuongMai.service.AuthenticationService;

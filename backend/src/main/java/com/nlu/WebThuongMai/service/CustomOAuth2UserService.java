@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.service;
 
+import com.nlu.WebThuongMai.enums.AuthProvider;
 import com.nlu.WebThuongMai.enums.Role;
 import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.repository.UserRepository;
@@ -29,13 +30,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
         String avata = oAuth2User.getAttribute("avatar");
-
+        if (id == null) {
+            throw new RuntimeException("provider_id is missing from OAuth2 response");
+        }
+        long providerId = Long.parseLong(id);
         // Lưu hoặc cập nhật người dùng
         User user = userRepository.findUserByAuthProviderId(id);
         if (user == null) {
             userRepository.save(User.builder()
                     .username(name)
                     .email(email)
+                    .authProvider(AuthProvider.FACEBOOK)
+                    .authProviderId(providerId)
                     .role(Role.USER)
                     .avatar(avata)
                     .build());

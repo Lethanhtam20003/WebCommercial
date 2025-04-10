@@ -3,13 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { FloatLabel } from 'primeng/floatlabel';
 import { InputText } from 'primeng/inputtext';
-import { LabelConstants } from '../constant/label.constants';
-import { ErrorMessageConstants } from '../constant/error-message.constants';
+import { LabelConstants } from '../../constant/label.constants';
+import { ErrorMessageConstants } from '../../constant/error-message.constants';
 import { ButtonModule } from 'primeng/button';
 import { NgClass } from '@angular/common';
-import {RouteLink} from '../constant/route-link';
+import {RouteLink} from '../../constant/route-link';
 import {RouterLink} from '@angular/router';
-import {selectorName} from '../constant/selectorName';
+import {selectorName} from '../../constant/selectorName';
 
 @Component({
 	selector: selectorName.loginComponent,
@@ -115,7 +115,7 @@ import {selectorName} from '../constant/selectorName';
             <div
               class="card flex flex-row gap-2 w-full justify-center items-center"
             >
-              <p-button
+              <p-button (onClick)="loginWithFacebook()"
                 severity="info"
                 [rounded]="true"
                 icon="pi pi-facebook"
@@ -130,118 +130,8 @@ import {selectorName} from '../constant/selectorName';
         </div>
       </form>
     </div>
-  `,
-	styles: `
-    ::ng-deep .p-button:hover {
-      background-color: #ff4500 !important;
-      border-color: #ff4500 !important;
-    }
-
-    /* 1. Mobile (sm) styles */
-    @media (min-width: 320px) and (max-width: 640px) {
-      ::ng-deep {
-          .p-password {
-            height: 44.1px !important;
-          }
-
-        p-button {
-          .p-button-icon-only {
-            width: 25px;
-            height: 25px;
-
-            span {
-              font-size: 18px;
-            }
-          }
-
-          button {
-            width: 100%;
-            height: 100%;
-
-            span {
-              font-size: 10px;
-            }
-          }
-        }
-      }
-      form {
-        width: 280px;
-
-        div {
-          font-size: 25px;
-
-          div {
-            width: 200px;
-
-            p, a {
-              font-size: 10px;
-            }
-
-            a {
-              width: 80px;
-              height: 40px;
-            }
-          }
-
-          .p-floatlabel,
-          small {
-            font-size: 10px;
-            width: 200px;
-
-            input {
-              font-size: 15px;
-            }
-
-            label {
-              font-size: 10px;
-            }
-          }
-        }
-      }
-    }
-
-    /* 2. Mobile (sm) styles */
-    @media (max-width: 640px) {
-      .p-floatlabel {
-        font-size: 0.875rem;
-      }
-      .p-button {
-        width: 100%;
-      }
-    }
-
-    /* 3. Tablet (md) styles */
-    @media (min-width: 640px) and (max-width: 1024px) {
-      .p-floatlabel {
-        font-size: 1rem;
-      }
-      .p-button {
-        width: auto;
-      }
-    }
-
-    /* 4. Desktop (lg) styles */
-    @media (min-width: 1024px) {
-      .p-floatlabel {
-        font-size: 1.125rem;
-      }
-      .p-button {
-        width: auto;
-      }
-      ::ng-deep {
-        p-button {
-          .p-button-icon-only {
-            width: 45px;
-            height: 45px;
-
-            span {
-              font-size: 35px;
-            }
-          }
-        }
-      }
-    }
-  `,
+  `, 
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
 	/*
@@ -292,4 +182,8 @@ export class LoginComponent {
 	protected readonly Label = LabelConstants;
 	protected readonly ErrorMessage = ErrorMessageConstants;
 	protected readonly RouteLink = RouteLink;
+  loginWithFacebook(): void {
+    window.location.href = 'http://localhost:8080/api/oauth2/authorization/facebook';
+  }
+
 }

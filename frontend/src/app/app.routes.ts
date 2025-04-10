@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { Oauth2RedirectComponent } from './components/oauth2_redirect.component';
+import { Oauth2RedirectComponent } from './components/redirect/oauth2_redirect.component';
 import { AuthGuard } from './core/auth.guard';
 
-import { LoginComponent } from './components/login.components';
+import { LoginComponent } from './components/login/login.component';
 import { LabelConstants } from './constant/label.constants';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { RegisterComponent } from './components/register.components';
+import { RegisterComponent } from './components/register/register.component';
 import { RouteLink } from './constant/route-link';
 
 
@@ -32,8 +32,8 @@ export const routes: Routes = [
 		title: LabelConstants.logInPage,
 	},
   {
-    path: 'oauth2-redirect',
+    path: RouteLink.oauth2RedirectRoute,
     component: Oauth2RedirectComponent,
-    title: 'Đang xử lý đăng nhập...',
+    title: LabelConstants.ProcessingLogin,
   }
 ];
