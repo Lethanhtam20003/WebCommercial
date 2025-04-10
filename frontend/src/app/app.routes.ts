@@ -1,19 +1,24 @@
 import { Routes } from '@angular/router';
-import {LoginComponent} from './components/login.components';
-import {Label} from './constant/label';
-import { DashboardComponent } from './component/dashboard/dashboard.component';
-
-const label: Label=new Label();
+import { LoginComponent } from './components/login.components';
+import { LabelConstants } from './constant/label.constants';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RegisterComponent } from './components/register.components';
+import { RouteLink } from './constant/route-link';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: LoginComponent,
-    title: label.logIn,
-  },
-  {
-    path:'dashboard',
-    component:DashboardComponent,
-    title:"Dashboard",
-  }
+	{
+		path: '',
+		component: DashboardComponent,
+		title: 'Dashboard',
+	},
+	{
+		path: RouteLink.registerRoute,
+		component: RegisterComponent,
+		title: LabelConstants.registerPage,
+	},
+	{
+		path: RouteLink.loginRoute,
+		component: LoginComponent,
+		title: LabelConstants.logInPage,
+	},
 ];
