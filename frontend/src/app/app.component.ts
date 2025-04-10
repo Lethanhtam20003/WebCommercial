@@ -7,6 +7,7 @@ import { RouteLink } from './constant/route-link';
 import {NgIf} from '@angular/common';
 
 @Component({
+
 	selector: 'app-root',
 	imports: [
 		RouterOutlet,

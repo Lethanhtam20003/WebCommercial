@@ -120,7 +120,7 @@ public class AuthenticationService {
      * @param user
      * @return token
      */
-    private String generateToken(@NotNull User user) {
+    public String generateToken(@NotNull User user) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
@@ -149,7 +149,7 @@ public class AuthenticationService {
      * @throws JOSEException
      * @throws ParseException
      */
-    private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
+    public SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(TOKEN_KEY);
         SignedJWT signedJWT = SignedJWT.parse(token);
         Date expiryTime = (isRefresh)
@@ -182,10 +182,5 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse loginFacebook(User user) {
-        var token = generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(token)
-                .build();
-    }
+
 }

@@ -1,22 +1,24 @@
 package com.nlu.WebThuongMai.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.nlu.WebThuongMai.dto.request.authenticationReq.*;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.AuthenticationRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
+import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticatedResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
-import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.service.AuthenticationService;
-import com.nlu.WebThuongMai.service.FacebookService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -28,7 +30,6 @@ import java.text.ParseException;
 public class AuthenticationController {
     AuthenticationService authenticationService;
     OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
-    FacebookService facebookService;
 
     @PostMapping
     ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
@@ -58,17 +59,13 @@ public class AuthenticationController {
         var result = authenticationService.refreshToken(request);
         return ApiResponse.<AuthenticationResponse>builder()
                 .result(result)
-                .build();
+                 .build();
     }
-
-    @PostMapping("/facebook")
-    public ApiResponse<AuthenticationResponse> loginWithFacebook(@RequestBody FacebookRequest request) {
-        User user = facebookService.verify(request.getAccessToken());
-        var result = authenticationService.loginFacebook(user);
-        return ApiResponse.<AuthenticationResponse>builder()
-                .result(result)
+    @GetMapping("/check-auth")
+    public ApiResponse<IntrospectResponse> checkAuth(@CookieValue(name="accessToken") String token) throws ParseException, JOSEException {
+        var res = authenticationService.introspect(IntrospectRequest.builder().token(token).build());
+        return  ApiResponse.<IntrospectResponse>builder()
+                .result(res)
                 .build();
-
-
     }
 }
