@@ -13,12 +13,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -35,31 +40,29 @@ public class Oauth2SuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-
         String id = oAuth2User.getAttribute("id");
-
         User user = userRepository.findUserByAuthProviderId(id);
         String token = authenticationService.generateToken(user);
+        String userInfo = new ObjectMapper().writeValueAsString(Map.of(
+                "username", user.getUsername(),
+                "role", user.getRole()
+        ));
 
-        String script = """
-                    <script>
-                        window.opener.postMessage(%s, '%s');
-                        window.close();
-                    </script>
-                """.formatted(
-                new ObjectMapper().writeValueAsString(
-                        ApiResponse.builder()
-                                .message("Login success!")
-                                .result(Map.of(
-                                        "token", token
-                                ))
-                                .build()
-                ),
-                frontendUrl
-        );
+        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", token)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(Duration.ofDays(1))
+                .build();
+        ResponseCookie userInfoCookie = ResponseCookie.from("userInfo", URLEncoder.encode(userInfo, StandardCharsets.UTF_8))
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(Duration.ofDays(1))
+                .build();
+        response.setHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, userInfoCookie.toString());
 
-        response.setContentType("text/html");
-        response.getWriter().write(script);
-//        response.sendRedirect(frontendUrl+"/oauth2-redirect?data=" + encoded);
+        response.sendRedirect("http://localhost:4200/oauth2-redirect");
     }
 }
