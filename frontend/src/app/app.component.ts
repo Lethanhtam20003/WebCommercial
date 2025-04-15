@@ -19,9 +19,10 @@ import {NgIf} from '@angular/common';
 	template: `
 		<app-header *ngIf="showHeaderFooter"></app-header>
 		<router-outlet></router-outlet>
-		<app-footer *ngIf="showHeaderFooter"></app-footer>
+		<footer *ngIf="showHeaderFooter"></footer>
 	`,
-	styles: ``,
+	styles: `
+  `,
 })
 export class AppComponent implements OnInit {
 	title = 'frontend';
