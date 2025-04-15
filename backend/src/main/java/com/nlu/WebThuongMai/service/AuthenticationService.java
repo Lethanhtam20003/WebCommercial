@@ -9,6 +9,7 @@ import com.nlu.WebThuongMai.dto.request.authenticationReq.AuthenticationRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
+import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticatedResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
@@ -24,6 +25,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -182,5 +184,13 @@ public class AuthenticationService {
                 .build();
     }
 
-
+    public AuthenticatedResponse isAuthenticated() {
+        var context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
+        return AuthenticatedResponse.builder()
+                .isAuth(user != null)
+                .build();
+    }
 }
