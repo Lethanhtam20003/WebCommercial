@@ -8,8 +8,9 @@ import { ErrorMessageConstants } from '../../constant/error-message.constants';
 import { ButtonModule } from 'primeng/button';
 import { NgClass } from '@angular/common';
 import {RouteLink} from '../../constant/route-link';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {selectorName} from '../../constant/selectorName';
+import { URL_API } from '../../constant/url-api.constants';
 
 @Component({
 	selector: selectorName.loginComponent,
@@ -134,6 +135,7 @@ import {selectorName} from '../../constant/selectorName';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
+  constructor(private router: Router) {}
 	/*
 	 * @description: value for username and password in input
 	 * */
@@ -182,25 +184,24 @@ export class LoginComponent {
 	protected readonly Label = LabelConstants;
 	protected readonly ErrorMessage = ErrorMessageConstants;
 	protected readonly RouteLink = RouteLink;
-  // loginWithFacebook(): void {
-  //   window.location.href = 'http://localhost:8080/api/login/facebook';
-  // }
+
+
   loginWithFacebook() {
     const popup = window.open(
-      'http://localhost:8080/api/oauth2/authorization/facebook',
+      URL_API.facebookLogin,
       '_blank',
       'width=500,height=600'
     );
   
     const messageListener = (event: MessageEvent) => {
       alert(event.origin);
-      if (event.origin !== 'http://localhost:8080') return;
+      if (event.origin !== URL_API.originUrl) return;
   
       const token = event.data.token;
       if (token) {
         localStorage.setItem('access_token', token);
       }
-      window.removeEventListener('message', messageListener);
+      this.router.navigate(['/']);
     };
   
     window.addEventListener('message', messageListener);
