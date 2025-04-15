@@ -1,32 +1,31 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { RouteLink } from './constant/route-link';
-import {NgIf} from '@angular/common';
+import { NgIf } from '@angular/common';
+import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
 	selector: 'app-root',
 	imports: [
 		RouterOutlet,
 		HeaderComponent,
-		FooterComponent,
 		SocialLoginModule,
 		NgIf,
+		FooterComponent,
 	],
 	standalone: true,
 	template: `
 		<app-header *ngIf="showHeaderFooter"></app-header>
 		<router-outlet></router-outlet>
-		<footer *ngIf="showHeaderFooter"></footer>
+    <app-footer></app-footer>
 	`,
-	styles: `
-  `,
+	styles: ``,
 })
 export class AppComponent implements OnInit {
-	title = 'frontend';
-	showHeaderFooter = true;
+	title: string = 'frontend';
+	showHeaderFooter: boolean = true;
 
 	/*
 	 * list of routes that don't need header and footer
@@ -47,11 +46,9 @@ export class AppComponent implements OnInit {
 		this.router.events.subscribe(event => {
 			if (event instanceof NavigationEnd) {
 				const currentUrl = event.urlAfterRedirects;
-				console.log(currentUrl);
 				this.showHeaderFooter = !this.dontNeedHeaderFooterPages.some(route =>
-					currentUrl.startsWith('/'+route)
+					currentUrl.startsWith('/' + route)
 				);
-				console.log(this.showHeaderFooter);
 			}
 		});
 	}

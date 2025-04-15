@@ -9,10 +9,9 @@ import { ButtonModule } from 'primeng/button';
 import { NgClass } from '@angular/common';
 import {RouteLink} from '../constant/route-link';
 import {RouterLink} from '@angular/router';
-import {selectorName} from '../constant/selectorName';
 
 @Component({
-	selector: selectorName.loginComponent,
+	selector: 'login-component',
 	standalone: true,
 	imports: [
 		FormsModule,

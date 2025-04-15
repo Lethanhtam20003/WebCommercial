@@ -1,13 +1,12 @@
 import { RouteLink } from './../../constant/route-link';
 import { LabelConstants } from './../../constant/label.constants';
-import { Component, OnInit } from '@angular/core';
-import { selectorName } from '../../constant/selectorName';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Image } from 'primeng/image';
 import { NgIf } from '@angular/common';
 
 @Component({
-	selector: selectorName.headerTopBar,
+	selector: 'header-top-bar',
 	imports: [RouterModule, Image, NgIf],
 	template: `
 		<div class="bg-white text-sm">
@@ -70,18 +69,9 @@ import { NgIf } from '@angular/common';
 	`,
 	styles: ``,
 })
-export class HeaderTopbarComponent implements OnInit {
-	ngOnInit(): void {
-		this.logo = 'assets/images/shop/logo2.png';
-		this.Label = LabelConstants;
-		this.router = RouteLink;
-		const loginStatus = localStorage.getItem('isLoggin');
-		this.isLoggin = loginStatus === 'true';
-    console.log(this.Label.description);
-	}
-	isLoggin: boolean = false;
-	logo!: string;
-
-	Label: typeof LabelConstants = LabelConstants;
-	router: typeof RouteLink = RouteLink;
+export class HeaderTopbarComponent {
+	isLoggin: boolean = localStorage.getItem('isLoggin') === 'true';
+	logo: string = 'assets/images/shop/logo2.png';
+	protected Label: typeof LabelConstants = LabelConstants;
+	protected router: typeof RouteLink = RouteLink;
 }
