@@ -182,8 +182,28 @@ export class LoginComponent {
 	protected readonly Label = LabelConstants;
 	protected readonly ErrorMessage = ErrorMessageConstants;
 	protected readonly RouteLink = RouteLink;
-  loginWithFacebook(): void {
-    window.location.href = 'http://localhost:8080/api/oauth2/authorization/facebook';
+  // loginWithFacebook(): void {
+  //   window.location.href = 'http://localhost:8080/api/login/facebook';
+  // }
+  loginWithFacebook() {
+    const popup = window.open(
+      'http://localhost:8080/api/oauth2/authorization/facebook',
+      '_blank',
+      'width=500,height=600'
+    );
+  
+    const messageListener = (event: MessageEvent) => {
+      alert(event.origin);
+      if (event.origin !== 'http://localhost:8080') return;
+  
+      const token = event.data.token;
+      if (token) {
+        localStorage.setItem('access_token', token);
+      }
+      window.removeEventListener('message', messageListener);
+    };
+  
+    window.addEventListener('message', messageListener);
   }
 
 }
