@@ -1,0 +1,79 @@
+<div class="h-screen flex items-start justify-center pt-10 bg-white max-w-full">
+	<form class="bg-white border border-gray-200 drop-shadow-2xl p-10">
+		<div class="flex justify-center font-bold pb-10 text-[30px]">
+			{{ Label.logIn }}
+		</div>
+		<div class="card flex justify-center flex-col w-100">
+			<div class="flex flex-col justify-center pb-5">
+				<p-floatlabel variant="on">
+					<input
+						#usernameInput
+						pInputText
+						pSize="large"
+						class="w-full"
+						[id]="usernameInputId"
+						[(ngModel)]="username"
+						autocomplete="on"
+						[name]="usernameInputId"
+					/>
+					<label
+						for="{{ usernameInputId }}"
+						>{{ Label.username }}</label
+					>
+				</p-floatlabel>
+				@if (username == null || username == '') {
+				<small class="block mt-1 text-sm text-red-500 pl-1"
+					>{{ ErrorMessage.pleaseEnterUsername }}
+				</small>
+				} @else if (username.length < 3) {
+				<small class="block mt-1 text-sm text-red-500 pl-1"
+					>{{ ErrorMessage.usernameHasAtLeast3Characters }}
+				</small>
+				}
+			</div>
+			<div class="flex flex-col justify-center">
+				<p-floatlabel variant="on" class="w-full">
+					<p-password
+						[(ngModel)]="password"
+						class="w-full"
+						size="large"
+						[toggleMask]="true"
+						[feedback]="false"
+						inputId="on_label"
+						name="{{ passwordInputId }}"
+					/>
+					<label
+						for="{{ passwordInputId }}"
+						>{{ Label.password }}</label
+					>
+				</p-floatlabel>
+				@if (password == null || password == '') {
+				<small class="block mt-1 text-sm text-red-500 pl-3"
+					>{{ ErrorMessage.pleaseEnterPassword }}
+				</small>
+				} @else if (password.length < 8 || password.length> 30) {
+				<small class="block mt-1 text-sm text-red-500 pl-3"
+					>{{ ErrorMessage.passwordHasAtLeast8CharactersAndSmallerThan30 }}
+				</small>
+				}
+			</div>
+			<div class="card flex gap-4 pt-4">
+				<p-button [id]="loginButtonId" label="{{ Label.logIn }}" />
+				<p-button
+					[id]="registerButtonId"
+					routerLink="/{{ RouteLink.registerRoute }}"
+					label="{{ Label.register }}"
+				/>
+			</div>
+			<div class="card flex flex-col gap-2 pt-2">
+				<p class="text-center text-sm">{{ Label.loginWithOther }}</p>
+				<div
+					class="card flex flex-row gap-2 w-full justify-center items-center"
+				>
+					<p-button severity="info" [rounded]="true" icon="pi pi-facebook" />
+					<p-button severity="success" [rounded]="true" icon="pi pi-google" />
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
