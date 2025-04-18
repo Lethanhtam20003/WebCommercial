@@ -1,20 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
-@use "tailwindcss";
-@use "primeicons/primeicons.css";
+@use 'tailwindcss';
+@use 'primeicons/primeicons.css';
 
-p-floatlabel {
-  input:focus {
-    border: 1px solid #cbd5e1 !important;
-  }
+:root {
+	--primary-color: #141d22;
+	/* Màu chủ đạo */
+	--primary-text-color: #ffffff;
+	/* Màu chữ trên nền chủ đạo */
+	--accent-color: #ff4500;
+	/* Màu nhấn */
+	--accent-text-color: #ffffff;
+	/* Màu chữ trên nền nhấn */
+	--surface-color: #ffffff;
+	/* Màu nền giao diện */
+	--surface-text-color: #141d22;
+	/* Màu chữ trên nền giao diện */
+	--background-color: #ffffff;
+	--background-text-color: #141d22;
+	--facebook-logo-color: #1877f2;
+	--google-green-color: #34a853;
+}
 
-  p-password,
-  input {
-    div {
-      width: 100% !important;
+::ng-deep {
+	// p-floatlabel {
+	// 	input:focus {
+	//     border-color: var(--primary-color);
+	// 	}
 
-      input {
-        width: 100% !important;
-      }
-    }
-  }
+	// 	p-password,
+	// 	input {
+	// 		div {
+	// 			width: 100% !important;
+
+	// 			input {
+	// 				width: 100% !important;
+	// 			}
+	// 		}
+	// 	}
+	// }
+	.p-floatlabel {
+    .p-inputtext {
+      border-color: var(--primary-color);
+		}
+		.p-inputtext:hover {
+			border-color: var(--primary-color);
+		}
+	}
 }
