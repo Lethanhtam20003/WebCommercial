@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login.components';
+import { LoginComponent } from './components/login/login.components';
 import { LabelConstants } from './constant/label.constants';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { RegisterComponent } from './components/register.components';
 import { RouteLink } from './constant/route-link';
+import { RegisterComponent } from './components/register/register.components';
 
 export const routes: Routes = [
 	{
