@@ -2,17 +2,17 @@ export class LabelConstants {
 	public static readonly logIn: string = 'Đăng nhập';
 	public static readonly logOut: string = 'Đăng xuất';
 	public static readonly register: string = 'Đăng ký';
-	// public static readonly forgotPassword: string = 'Quên mật khẩu';
+	public static readonly forgotPassword: string = 'Quên mật khẩu';
 	public static readonly username: string = 'Tên đăng nhập';
 	static readonly password: string = 'Mật khẩu';
-	// static readonly confirmPassword: string = 'Xác nhận mật khẩu';
+	static readonly confirmPassword: string = 'Xác nhận mật khẩu';
 	static readonly email: string = 'Email';
-	// static readonly phone: string = 'Số điện thoại';
+	static readonly phone: string = 'Số điện thoại';
 	static readonly loginWithOther: string =
 		'Hoặc là bạn có thể đăng nhập bằng các tài khoản khác';
 	public static readonly logInPage: string = 'Đăng nhập';
 	public static readonly registerPage: string = 'Đăng ký';
-	// public static readonly forgotPasswordPage: string = 'Quên mật khẩu';
+	public static readonly forgotPasswordPage: string = 'Quên mật khẩu';
 	public static readonly returnToLogin: string = 'trở về trang đăng nhập';
 	public static readonly retypePassword: string = 'Nhập lại mật khẩu';
 	public static readonly ifUHaveAnAccount: string =
@@ -44,4 +44,6 @@ export class LabelConstants {
 	public static readonly description: string =
 		'Fire Knight Sport là cửa hàng chuyên về bán dụng cụ thể thao như cầu lông, đá banh, bóng chuyền, tenis, bóng bàn các loại.';
   public static readonly userProfile: string = 'Hồ sơ cá nhân';
+  public static readonly searchMethod: string = 'Tìm kiếm theo';
+  public static readonly searchProductHere: string = 'Tìm kiếm sản phẩm ở đây';
 }
