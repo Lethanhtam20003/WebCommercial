@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
 	private dontNeedHeaderFooterPages: string[] = [
 		RouteLink.loginRoute,
 		RouteLink.registerRoute,
-		RouteLink.dashboardRoute,
+		// RouteLink.dashboardRoute,
 		RouteLink.forgotPasswordRoute,
 		RouteLink.profileRoute,
 		RouteLink.resetPasswordRoute,

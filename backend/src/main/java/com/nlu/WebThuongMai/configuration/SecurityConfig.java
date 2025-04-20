@@ -24,15 +24,26 @@ import java.util.List;
 
 import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
 
+/**
+ * Cấu hình bảo mật cho ứng dụng
+ * Bao gồm cấu hình CORS, JWT, OAuth2, và các endpoint công khai
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 public class SecurityConfig {
-
+    /**
+     * Danh sách các endpoint công khai không yêu cầu xác thực
+     */
     private final String[] PUBLIC_ENDPOINTS = {
-            "/v1/auth", "/v1/auth/*", "/v1/products", "/v1/products/*", "/v1/oauth2", "/v1/oauth2/*"
+            "/v1/auth", "/v1/auth/*",
+            "/v1/products", "/v1/products/*",
+            "/v1/oauth2", "/v1/oauth2/*",
+            "/login/facebook", "/oauth2/authorization/facebook",
+            "/v3/api-docs"
     };
+
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
     @Autowired
@@ -42,42 +53,54 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtFilter;
 
+    /**
+     * Cấu hình chuỗi bộ lọc bảo mật
+     * @param http Đối tượng HttpSecurity để cấu hình
+     * @return SecurityFilterChain đã được cấu hình
+     * @throws Exception Nếu có lỗi trong quá trình cấu hình
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                //      Tắt CSRF nếu không cần thiết
+                .csrf(AbstractHttpConfigurer::disable)
+//      cấu hình cho phép frontend truy cập các api
+                .cors((cors -> cors.configurationSource(corsConfigurationSource())))
+//         Stateless session
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);
-        http
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.decoder(customJwtDecoder)
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-                );
-        http
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                // Cấu hình xử lý khi người dùng không có quyền truy cập
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // Trả về lỗi 403 nếu không có quyền
+                )
+//              cấu hình login
                 .oauth2Login(oauth2Login -> oauth2Login
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
                                 .userService(customOAuth2UserService)
                         )
                         .successHandler(oAuth2SuccessHandler)
+                )
+//              dùng để xác thực token JWT được gửi từ client
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.decoder(customJwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 );
-        http
-                .csrf(AbstractHttpConfigurer::disable);
-
-//      cấu hình cho phép frontend truy cập các api
-        http
-                .cors((cors -> cors.configurationSource(corsConfigurationSource())))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Stateless session
         return http.build();
     }
 
 
     /**
-     * cấu hình là prefix từ SCOPE_ thành ROLE_ để sử dụng @EnableMethodSecurity
-     * dùng @PreAuthorize("hasRole('ADMIN')") sẽ tiện lợi hơn
+     * Cấu hình chuyển đổi JWT Authentication
+     * Chuyển đổi prefix từ SCOPE_ thành ROLE_ để sử dụng với @EnableMethodSecurity
+     * Cho phép sử dụng @PreAuthorize("hasRole('ADMIN')") một cách thuận tiện
      *
-     * @return JwtAuthenticationConverter
+     * @return JwtAuthenticationConverter đã được cấu hình
      */
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
@@ -88,22 +111,34 @@ public class SecurityConfig {
         return jwtAuthenticationConverter;
     }
 
+    /**
+     * Cấu hình CORS (Cross-Origin Resource Sharing)
+     * Cho phép frontend truy cập các API của backend
+     *
+     * @return CorsConfigurationSource đã được cấu hình
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:4200")); // Cho phép Angular truy cập
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true); // Hỗ trợ gửi cookies nếu cần
+        configuration.setAllowCredentials(true); // Hỗ trợ gửi cookies
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
+    /**
+     * Cấu hình mã hóa mật khẩu
+     * Sử dụng BCrypt với độ mạnh là 10
+     *
+     * @return PasswordEncoder để mã hóa mật khẩu
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
+        return new BCryptPasswordEncoder(12);
     }
 
 }

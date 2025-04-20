@@ -15,4 +15,8 @@ export class LabelConstants {
   public static readonly returnToLogin: string = 'trở về trang đăng nhập';
   public static readonly retypePassword: string = 'Nhập lại mật khẩu';
   public static readonly ifUHaveAnAccount: string = 'Nếu bạn đã có tài khoản, bạn có thể';
+  public static readonly or: string = 'hoặc';
+  public static readonly signInWithGoogle: string = 'Đăng nhập bằng Google';
+  public static readonly signInWithFacebook: string = 'Đăng nhập bằng Facebook';
+  public static readonly ProcessingLogin  : string = 'Đăng nhập bằng Github';
 }

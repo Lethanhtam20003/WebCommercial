@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   imports: [
   ],
   template: `
+  add min admin page content here
   `,
   styleUrl: './admin.component.scss'
 })

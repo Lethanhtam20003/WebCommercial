@@ -22,6 +22,11 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
     ProductService productService;
 
+    /**
+     * Lấy danh sách tất cả sản phẩm có phân trang
+     * @param pageable Thông tin phân trang (số trang, số lượng mỗi trang)
+     * @return Danh sách sản phẩm được phân trang
+     */
     @GetMapping()
     ApiResponse<Page<ProductRequest>> getAllProduct(Pageable pageable) {
         return ApiResponse.<Page<ProductRequest>>builder()
@@ -30,6 +35,11 @@ public class ProductController {
 
     }
 
+    /**
+     * Lấy thông tin sản phẩm theo ID
+     * @param productId ID của sản phẩm cần tìm
+     * @return Thông tin chi tiết của sản phẩm
+     */
     @PostMapping("/id")
     ApiResponse<ProductRequest> getProductById(@RequestBody long productId) {
         return ApiResponse.<ProductRequest>builder()
@@ -37,6 +47,12 @@ public class ProductController {
                 .build();
     }
 
+    /**
+     * Lấy danh sách sản phẩm theo danh mục có phân trang
+     * @param request Thông tin danh mục cần tìm
+     * @param pageable Thông tin phân trang (số trang, số lượng mỗi trang)
+     * @return Danh sách sản phẩm theo danh mục được phân trang
+     */
     @PostMapping("/category")
     ApiResponse<Page<ProductRequest>> getProductByCategory(@RequestBody CategoryRequest request, Pageable pageable) {
         return ApiResponse.<Page<ProductRequest>>builder()

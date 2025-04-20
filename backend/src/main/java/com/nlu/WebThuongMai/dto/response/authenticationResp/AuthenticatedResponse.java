@@ -3,12 +3,12 @@ package com.nlu.WebThuongMai.dto.response.authenticationResp;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @Builder
-public class FacebookResponse {
-    String id;
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class AuthenticatedResponse {
+    boolean isAuth;
+
 }
