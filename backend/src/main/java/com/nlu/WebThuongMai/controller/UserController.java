@@ -21,6 +21,11 @@ import java.util.List;
 public class UserController {
     UserService userService;
 
+    /**
+     * Tạo mới một người dùng
+     * @param request Thông tin người dùng cần tạo
+     * @return Thông tin người dùng đã được tạo
+     */
     @PostMapping()
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
@@ -28,6 +33,10 @@ public class UserController {
                 .build();
     }
 
+    /**
+     * Lấy danh sách tất cả người dùng
+     * @return Danh sách thông tin của tất cả người dùng
+     */
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers() {
         return ApiResponse.<List<UserResponse>>builder()
@@ -35,12 +44,23 @@ public class UserController {
                 .build();
     }
 
+    /**
+     * Lấy thông tin người dùng theo ID
+     * @param userId ID của người dùng cần tìm
+     * @return Thông tin của người dùng tương ứng
+     */
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUserById(@PathVariable long userId) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getUserById(userId)).build();
     }
 
+    /**
+     * Cập nhật thông tin người dùng
+     * @param userId ID của người dùng cần cập nhật
+     * @param request Thông tin cần cập nhật
+     * @return Thông tin người dùng sau khi cập nhật
+     */
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateUser(@PathVariable long userId, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
@@ -48,6 +68,11 @@ public class UserController {
                 .build();
     }
 
+    /**
+     * Xóa người dùng theo ID
+     * @param userId ID của người dùng cần xóa
+     * @return Kết quả xóa người dùng
+     */
     @DeleteMapping("/{userId}")
     ApiResponse<Boolean> deleteUser(@PathVariable long userId) {
         userService.deleteUser(userId);
@@ -57,11 +82,14 @@ public class UserController {
                 .build();
     }
 
+    /**
+     * Lấy thông tin của người dùng hiện tại
+     * @return Thông tin của người dùng đang đăng nhập
+     */
     @GetMapping("/myInfo")
     ApiResponse<UserResponse> getMyInf() {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getMyInf())
                 .build();
     }
-
 }

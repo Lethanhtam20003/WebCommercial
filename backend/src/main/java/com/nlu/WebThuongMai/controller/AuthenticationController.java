@@ -28,6 +28,11 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
     OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
 
+    /**
+     * Đăng nhập vào hệ thống
+     * @param request Thông tin đăng nhập (username/password)
+     * @return Token xác thực và thông tin người dùng
+     */
     @PostMapping
     ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.login(request);
@@ -36,6 +41,13 @@ public class AuthenticationController {
                 .build();
     }
 
+    /**
+     * Đăng xuất khỏi hệ thống
+     * @param request Thông tin token cần hủy
+     * @return Không có dữ liệu trả về
+     * @throws ParseException Nếu có lỗi khi xử lý token
+     * @throws JOSEException Nếu có lỗi liên quan đến JWT
+     */
     @PostMapping("/logout")
     ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
         authenticationService.logout(request);
@@ -43,6 +55,13 @@ public class AuthenticationController {
                 .build();
     }
 
+    /**
+     * Kiểm tra thông tin token
+     * @param request Token cần kiểm tra
+     * @return Thông tin về tính hợp lệ của token
+     * @throws ParseException Nếu có lỗi khi xử lý token
+     * @throws JOSEException Nếu có lỗi liên quan đến JWT
+     */
     @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
         var result = authenticationService.introspect(request);
@@ -51,6 +70,13 @@ public class AuthenticationController {
                 .build();
     }
 
+    /**
+     * Làm mới token xác thực
+     * @param request Refresh token
+     * @return Token xác thực mới
+     * @throws ParseException Nếu có lỗi khi xử lý token
+     * @throws JOSEException Nếu có lỗi liên quan đến JWT
+     */
     @PostMapping("/refresh")
     ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
         var result = authenticationService.refreshToken(request);
@@ -59,6 +85,12 @@ public class AuthenticationController {
                 .build();
     }
 
+    /**
+     * Kiểm tra trạng thái xác thực của người dùng hiện tại
+     * @return Thông tin về trạng thái xác thực
+     * @throws ParseException Nếu có lỗi khi xử lý token
+     * @throws JOSEException Nếu có lỗi liên quan đến JWT
+     */
     @GetMapping("/check-auth")
     public ApiResponse<AuthenticatedResponse> checkAuth() throws ParseException, JOSEException {
         var res = authenticationService.isAuthenticated();

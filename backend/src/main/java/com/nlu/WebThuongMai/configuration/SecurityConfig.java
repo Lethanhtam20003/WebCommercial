@@ -24,17 +24,26 @@ import java.util.List;
 
 import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
 
+/**
+ * Cấu hình bảo mật cho ứng dụng
+ * Bao gồm cấu hình CORS, JWT, OAuth2, và các endpoint công khai
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 public class SecurityConfig {
+    /**
+     * Danh sách các endpoint công khai không yêu cầu xác thực
+     */
     private final String[] PUBLIC_ENDPOINTS = {
             "/v1/auth", "/v1/auth/*",
             "/v1/products", "/v1/products/*",
             "/v1/oauth2", "/v1/oauth2/*",
             "/login/facebook", "/oauth2/authorization/facebook",
+            "/v3/api-docs"
     };
+
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
     @Autowired
@@ -44,6 +53,12 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtFilter;
 
+    /**
+     * Cấu hình chuỗi bộ lọc bảo mật
+     * @param http Đối tượng HttpSecurity để cấu hình
+     * @return SecurityFilterChain đã được cấu hình
+     * @throws Exception Nếu có lỗi trong quá trình cấu hình
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -81,10 +96,11 @@ public class SecurityConfig {
 
 
     /**
-     * cấu hình là prefix từ SCOPE_ thành ROLE_ để sử dụng @EnableMethodSecurity
-     * dùng @PreAuthorize("hasRole('ADMIN')") sẽ tiện lợi hơn
+     * Cấu hình chuyển đổi JWT Authentication
+     * Chuyển đổi prefix từ SCOPE_ thành ROLE_ để sử dụng với @EnableMethodSecurity
+     * Cho phép sử dụng @PreAuthorize("hasRole('ADMIN')") một cách thuận tiện
      *
-     * @return JwtAuthenticationConverter
+     * @return JwtAuthenticationConverter đã được cấu hình
      */
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
@@ -95,6 +111,12 @@ public class SecurityConfig {
         return jwtAuthenticationConverter;
     }
 
+    /**
+     * Cấu hình CORS (Cross-Origin Resource Sharing)
+     * Cho phép frontend truy cập các API của backend
+     *
+     * @return CorsConfigurationSource đã được cấu hình
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -108,6 +130,12 @@ public class SecurityConfig {
         return source;
     }
 
+    /**
+     * Cấu hình mã hóa mật khẩu
+     * Sử dụng BCrypt với độ mạnh là 10
+     *
+     * @return PasswordEncoder để mã hóa mật khẩu
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);

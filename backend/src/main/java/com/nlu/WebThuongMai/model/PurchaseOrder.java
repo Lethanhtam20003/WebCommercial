@@ -9,6 +9,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Entity đại diện cho đơn đặt hàng từ nhà cung cấp
+ * Quản lý việc nhập hàng vào kho từ các nhà cung cấp
+ */
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,22 +22,39 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "purchase_orders")
-/**
- * đơn hàng nhập vào kho
- */
 public class PurchaseOrder {
+    /**
+     * ID của đơn đặt hàng, tự động tăng
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchase_order_id")
     Long id;
+
+    /**
+     * Nhà cung cấp của đơn hàng
+     * Quan hệ nhiều-một với bảng Supplier
+     */
     @ManyToOne
     @JoinColumn(name = "suppler_id", nullable = false)
     Supplier supplier;
+
+    /**
+     * Thời điểm tạo đơn đặt hàng, tự động cập nhật
+     */
     @CreationTimestamp
     LocalDateTime createdAt;
+
+    /**
+     * Trạng thái của đơn đặt hàng
+     * Mặc định là PENDING (chờ xử lý)
+     */
     @Enumerated(EnumType.STRING)
     @Builder.Default
     PurchaseStatus status = PurchaseStatus.PENDING;
-    BigDecimal totalPrice;
 
+    /**
+     * Tổng giá trị của đơn đặt hàng
+     */
+    BigDecimal totalPrice;
 }
