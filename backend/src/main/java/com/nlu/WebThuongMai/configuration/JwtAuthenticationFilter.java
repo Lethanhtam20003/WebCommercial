@@ -27,8 +27,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private AuthenticationService authenticationService;
 
-    @Value("${jwt.key}")
-    private String TOKEN_KEY;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
