@@ -15,10 +15,16 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   loginWithFacebook() {
+    // Tính toán vị trí để popup hiển thị giữa màn hình
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+
     const popup = window.open(
       URL_API.facebookLogin,
       '_blank',
-      'width=500,height=600'
+      `width=${width},height=${height},left=${left},top=${top}`
     );
   }
 

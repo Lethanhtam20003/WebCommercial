@@ -71,14 +71,14 @@ import { AuthService } from '../../service/auth.service';
                 size="large"
                 [toggleMask]="true"
                 [feedback]="false"
-                inputId="on_label"
+                [inputId]="passwordInputId"
                 name="{{ passwordInputId }}"
                 (onFocus)="setFocus('password', true)"
                 (onBlur)="setFocus('password', false)"
               />
               <label
                 [ngClass]="{ 'text-black': passwordIsFocused }"
-                for="{{ passwordInputId }}"
+                [for]="passwordInputId"
               >{{ Label.password }}</label
               >
             </p-floatlabel>
@@ -192,7 +192,7 @@ export class LoginComponent {
   }
 
   loginWithFacebook() {
-    this.authService.loginWithFacebook    
+    this.authService.loginWithFacebook()    
   }
 
 }
