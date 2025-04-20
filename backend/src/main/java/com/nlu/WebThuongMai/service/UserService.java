@@ -69,7 +69,7 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') and hasRole('USER')")
     public UserResponse updateUser(long userId, UserUpdateRequest request) {
         User u = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -82,6 +82,7 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    @PreAuthorize("hasRole('USER')")
     public UserResponse getMyInf() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
