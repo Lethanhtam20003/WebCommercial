@@ -10,10 +10,28 @@ import { URL_API } from '../constant/url-api.constants';
   providedIn: 'root',
 })
 export class AuthService {
-  
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
   constructor(private http: HttpClient) {}
 
+  loginWithFacebook() {
+    const popup = window.open(
+      URL_API.facebookLogin,
+      '_blank',
+      'width=500,height=600'
+    );
+  }
+
   checkauth(){
+    if(this.isLoggedIn$) {
+      this.isLoggedIn$.subscribe((res) => {
+        if(res) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
     const token = localStorage.getItem('access_token');
     if (!token) {
       return false;
@@ -36,6 +54,7 @@ export class AuthService {
       })
     );
   }
+
   refreshToken() {
     const access_token = localStorage.getItem('access_token');
     if (access_token) {

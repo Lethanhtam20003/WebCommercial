@@ -13,6 +13,7 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router,private auth: AuthService) {}
 
   canActivate(): Observable<boolean> {
+    
     return (this.auth.checkauth() || of(false)).pipe(
       map((res) => {
         if (res) {

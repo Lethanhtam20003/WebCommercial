@@ -11,6 +11,8 @@ import {RouteLink} from '../../constant/route-link';
 import {Router, RouterLink} from '@angular/router';
 import {selectorName} from '../../constant/selectorName';
 import { URL_API } from '../../constant/url-api.constants';
+import { PopupMessageService } from '../../service/popup-message.service';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
 	selector: selectorName.loginComponent,
@@ -135,7 +137,7 @@ import { URL_API } from '../../constant/url-api.constants';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router,private popupMessageService: PopupMessageService, private authService: AuthService) {}
 	/*
 	 * @description: value for username and password in input
 	 * */
@@ -185,26 +187,12 @@ export class LoginComponent {
 	protected readonly ErrorMessage = ErrorMessageConstants;
 	protected readonly RouteLink = RouteLink;
 
+  ngOnInit() {
+    this.popupMessageService.listenForToken();    
+  }
 
   loginWithFacebook() {
-    const popup = window.open(
-      URL_API.facebookLogin,
-      '_blank',
-      'width=500,height=600'
-    );
-  
-    const messageListener = (event: MessageEvent) => {
-      alert(event.origin);
-      if (event.origin !== URL_API.originUrl) return;
-  
-      const token = event.data.token;
-      if (token) {
-        localStorage.setItem('access_token', token);
-      }
-      this.router.navigate(['/']);
-    };
-  
-    window.addEventListener('message', messageListener);
+    this.authService.loginWithFacebook    
   }
 
 }
