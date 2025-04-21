@@ -5,17 +5,16 @@ import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { SocialAuthServiceConfig, FacebookLoginProvider } from '@abacritt/angularx-social-login';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideAnimations(),
-    provideHttpClient(),
+    provideAnimationsAsync(),
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
@@ -23,14 +22,13 @@ export const appConfig: ApplicationConfig = {
         providers: [
           {
             id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider('1336955447356626', {
+            provider: new FacebookLoginProvider(environment.facebookAppId, {
               scope: 'email,public_profile',
             }),
           },
         ],
       } as SocialAuthServiceConfig,
     },
-    provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: Aura,
@@ -47,7 +45,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     {
       provide: HTTP_INTERCEPTORS,
-      useClass : AuthInterceptor,
+      useClass: AuthInterceptor,
       multi: true,
     }
   ]
