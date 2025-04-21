@@ -3,16 +3,16 @@ import { FormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { FloatLabel } from 'primeng/floatlabel';
 import { InputText } from 'primeng/inputtext';
-import { LabelConstants } from '../../constant/label.constants';
-import { ErrorMessageConstants } from '../../constant/error-message.constants';
+import { LabelConstants } from '../../../shared/constant/label.constants';
+import { ErrorMessageConstants } from '../../../shared/constant/error-message.constants';
 import { ButtonModule } from 'primeng/button';
 import { NgClass } from '@angular/common';
-import {RouteLink} from '../../constant/route-link';
+import {RouteLink} from '../../../shared/constant/route-link';
 import {Router, RouterLink} from '@angular/router';
-import {selectorName} from '../../constant/selectorName';
-import { URL_API } from '../../constant/url-api.constants';
-import { PopupMessageService } from '../../service/popup-message.service';
-import { AuthService } from '../../service/auth.service';
+import {selectorName} from '../../../shared/constant/selectorName';
+import { URL_API } from '../../../shared/constant/url-api.constants';
+import { PopupMessageService } from '../../../core/service/popup-message.service';
+import { AuthService } from '../../../core/service/auth.service';
 
 @Component({
 	selector: selectorName.loginComponent,

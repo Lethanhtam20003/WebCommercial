@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { URL_API } from '../constant/url-api.constants';
+import { URL_API } from '../../shared/constant/url-api.constants';
 import {  Router } from '@angular/router'; 
 import { NgZone } from '@angular/core';
 

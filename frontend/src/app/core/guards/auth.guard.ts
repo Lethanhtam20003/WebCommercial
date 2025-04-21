@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, UrlTree } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-import { RouteLink } from '../constant/route-link';
 import { AuthService } from '../service/auth.service';
-
+import { RouteLink } from '../../shared/constant/route-link';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
   constructor(private router: Router,private auth: AuthService) {}
@@ -29,5 +28,4 @@ export class AuthGuard implements CanActivate {
       })
     );
   }
- 
 }

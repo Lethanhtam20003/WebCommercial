@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../models/api-response.model';
 import { AuthenticationResponse } from '../models/authentication-response.model';
 import { authenticatedResponse } from '../models/authenticated_response.model';
-import { URL_API } from '../constant/url-api.constants';
+import { URL_API } from '../../shared/constant/url-api.constants';
 @Injectable({
   providedIn: 'root',
 })
