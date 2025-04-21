@@ -1,20 +1,57 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, map, of, switchMap } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../models/api-response.model';
 import { AuthenticationResponse } from '../models/authentication-response.model';
 import { authenticatedResponse } from '../models/authenticated_response.model';
-import { URL_API } from '../../shared/constant/url-api.constants';
+import { URL_API } from '../constants/url-api.constants';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly TOKEN_KEY = 'access_token';
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
-  constructor(private http: HttpClient) {}
 
-  loginWithFacebook() {
+  constructor(private http: HttpClient) {
+    // Kiểm tra trạng thái đăng nhập khi service được khởi tạo
+    this.checkInitialAuthState();
+  }
+
+  /**
+   * Kiểm tra trạng thái đăng nhập ban đầu
+   * @private
+   */
+  private checkInitialAuthState(): void {
+    const token = this.getStoredToken();
+    if (token) {
+      this.checkauth().subscribe();
+    }
+  }
+
+  /**
+   * Lấy token từ localStorage
+   * @private
+   */
+  private getStoredToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  /**
+   * Cập nhật trạng thái đăng nhập
+   * @param status - Trạng thái đăng nhập mới
+   * @private
+   */
+  private updateLoginStatus(status: boolean): void {
+    this.isLoggedInSubject.next(status);
+  }
+
+  /**
+   * Đăng nhập bằng Facebook
+   */
+  loginWithFacebook(): void {
     // Tính toán vị trí để popup hiển thị giữa màn hình
     const width = 500;
     const height = 600;
@@ -28,53 +65,71 @@ export class AuthService {
     );
   }
 
-  checkauth(){
-    if(this.isLoggedIn$) {
-      this.isLoggedIn$.subscribe((res) => {
-        if(res) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-    }
-    const token = localStorage.getItem('access_token');
+  /**
+   * Kiểm tra xác thực người dùng
+   * @returns Observable<boolean>
+   */
+  checkauth(): Observable<boolean> {
+    const token = this.getStoredToken();
     if (!token) {
-      return false;
+      this.updateLoginStatus(false);
+      return of(false);
     }
-    return this.http.get<ApiResponse<authenticatedResponse>>(
-      URL_API.checkAuthUrl)
-    .pipe(
-      map((res) => {
-        if (res.code == 200) {
-          if(!res.result.auth) {
-            return this.refreshToken();
+
+    return this.http.get<ApiResponse<authenticatedResponse>>(URL_API.checkAuthUrl)
+      .pipe(
+        switchMap(res => {
+          const isAuthenticated = res.code === 200;
+          if (isAuthenticated && !res.result.auth) {
+            return this.handleTokenRefresh();
           }
-          return true;
+          this.updateLoginStatus(isAuthenticated);
+          return of(isAuthenticated);
+        }),
+        catchError(() => {
+          this.updateLoginStatus(false);
+          return of(false);
+        })
+      );
+  }
+
+  /**
+   * Xử lý làm mới token
+   * @returns Observable<boolean>
+   * @private
+   */
+  private handleTokenRefresh(): Observable<boolean> {
+    const token = this.getStoredToken();
+    if (!token) {
+      return of(false);
+    }
+
+    return this.http.post<ApiResponse<AuthenticationResponse>>(
+      URL_API.refreshTokenUrl,
+      { token }
+    ).pipe(
+      map(res => {
+        const isSuccess = res.code === 200;
+        if (isSuccess) {
+          localStorage.setItem(this.TOKEN_KEY, res.result.access_token);
+          this.updateLoginStatus(true);
         } else {
-          return false;
+          this.updateLoginStatus(false);
         }
+        return isSuccess;
       }),
-      catchError(() => {  
+      catchError(() => {
+        this.updateLoginStatus(false);
         return of(false);
       })
     );
   }
 
-  refreshToken() {
-    const access_token = localStorage.getItem('access_token');
-    if (access_token) {
-      this.http.post<ApiResponse<AuthenticationResponse>>(
-        URL_API.refreshTokenUrl,
-        { token: access_token }
-      ).subscribe((res) => {
-        if(res.code == 200) {
-          localStorage.setItem('access_token', res.result.access_token);
-          return true;
-        } else {
-          return false;
-        }
-      });
-    }
+  /**
+   * Đăng xuất
+   */
+  logout(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+    this.updateLoginStatus(false);
   }
 }
