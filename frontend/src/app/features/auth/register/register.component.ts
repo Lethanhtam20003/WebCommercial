@@ -1,14 +1,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { selectorName } from '../../../shared/constant/selectorName';
+import { selectorName } from '../../../core/constants/selectorName';
 import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
 import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
-import { LabelConstants } from '../../../shared/constant/label.constants';
-import { ErrorMessageConstants } from '../../../shared/constant/error-message.constants';
+import { LabelConstants } from '../../../core/constants/label.constants';
+import { ErrorMessageConstants } from '../../../core/constants/error-message.constants';
 import { NgClass } from '@angular/common';
-import { RouteLink } from '../../../shared/constant/route-link';
+import { RouteLink } from '../../../core/constants/route-link';
 import { RouterLink } from '@angular/router';
 
 @Component({

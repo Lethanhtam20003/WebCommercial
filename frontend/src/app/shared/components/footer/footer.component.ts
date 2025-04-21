@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
-import {RouteLink} from '../../constant/route-link';
+import {RouteLink} from '../../../core/constants/route-link';
 
 @Component({
 	selector: 'app-footer',

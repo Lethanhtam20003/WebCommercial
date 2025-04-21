@@ -3,7 +3,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
-import { RouteLink } from './shared/constant/route-link';
+import { RouteLink } from './core/constants/route-link';
 import {NgIf} from '@angular/common';
 
 @Component({
