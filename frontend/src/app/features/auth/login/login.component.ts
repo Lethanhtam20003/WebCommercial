@@ -137,6 +137,8 @@ import { AuthService } from '../../../core/service/auth.service';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
+  private cleanup: (() => void) | null = null;
+
   constructor(private router: Router,private popupMessageService: PopupMessageService, private authService: AuthService) {}
 	/*
 	 * @description: value for username and password in input
@@ -188,9 +190,16 @@ export class LoginComponent {
 	protected readonly RouteLink = RouteLink;
 
   ngOnInit() {
-    this.popupMessageService.listenForToken();    
+    // Bắt đầu lắng nghe token
+    this.cleanup = this.popupMessageService.listenForToken();
   }
 
+  ngOnDestroy() {
+    // Dọn dẹp listener khi component bị hủy
+    if (this.cleanup) {
+      this.cleanup();
+    }
+  }
   loginWithFacebook() {
     this.authService.loginWithFacebook()    
   }
