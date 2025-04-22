@@ -109,7 +109,7 @@ public class UserService {
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse updateUser(long userId, UserUpdateRequest request) {
         User u = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         userMapper.toUser(u, request);
         return userMapper.toUserResponse(userRepository.save(u));
     }

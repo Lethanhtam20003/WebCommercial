@@ -219,7 +219,7 @@ public class AuthenticationService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
         return AuthenticatedResponse.builder()
-                .isAuth(user != null)
+                .isAuth(true)
                 .build();
     }
 }
