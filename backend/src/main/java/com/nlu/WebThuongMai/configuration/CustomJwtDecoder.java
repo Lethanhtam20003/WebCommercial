@@ -35,9 +35,9 @@ public class CustomJwtDecoder implements JwtDecoder {
         try {
             var response = authenticationService.introspect(IntrospectRequest.builder().token(token).build());
             if (!response.isValid())
-                throw new AppException(ErrorCode.UNAUTHORIZED);
+                throw new AppException(ErrorCode.TOKEN_INVALID);
         } catch (JOSEException | ParseException e) {
-            throw new RuntimeException(e);
+            throw new AppException(ErrorCode.TOKEN_INVALID);
         }
         if (Objects.isNull(jwtDecoder)) {
             SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "HS512");
