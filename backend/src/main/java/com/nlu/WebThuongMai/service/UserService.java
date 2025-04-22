@@ -106,7 +106,7 @@ public class UserService {
      * @return UserResponse chứa thông tin đã được cập nhật
      * @throws RuntimeException nếu không tìm thấy người dùng với ID tương ứng
      */
-    @PreAuthorize("hasRole('ADMIN') and hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse updateUser(long userId, UserUpdateRequest request) {
         User u = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));

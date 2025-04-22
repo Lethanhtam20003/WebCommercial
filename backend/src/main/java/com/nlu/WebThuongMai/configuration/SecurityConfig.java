@@ -40,9 +40,7 @@ public class SecurityConfig {
             "/v1/auth", "/v1/auth/*",
             "/v1/products", "/v1/products/*",
             "/v1/oauth2", "/v1/oauth2/*",
-            "/login/facebook", "/oauth2/authorization/facebook",
-            "/v3/api-docs"
-    };
+            "/login/facebook", "/oauth2/authorization/facebook"};
 
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
