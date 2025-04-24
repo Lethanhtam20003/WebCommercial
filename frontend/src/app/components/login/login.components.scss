@@ -1,127 +1,162 @@
 ::ng-deep {
+	#logInButton .p-button,
+	#registerButton .p-button {
+		background-color: var(--primary-color);
+		color: var(--primary-text-color);
+		border-color: var(--primary-color);
+	}
 
-  #logInButton .p-button,
-  #registerButton .p-button {
-    background-color: var(--primary-color);
-    color: var(--primary-text-color);
+	#logInButton .p-button:hover,
+	#registerButton .p-button:hover {
+		background-color: var(--accent-color);
+		border-color: var(--accent-color) !important;
+		color: var(--accent-text-color);
+	}
+	.p-floatlabel {
+		#passwordInputId {
+			.p-password {
+				width: 100% !important;
+				.p-inputtext {
+					width: 100% !important;
+				}
+			}
+		}
+		label {
+			color: var(--primary-color);
+		}
+	}
+	.p-floatlabel.active {
     border-color: var(--primary-color);
-  }
+		.p-inputtext {
+			border-color: var(--primary-color);
+		}
+	}
 
-  #logInButton .p-button:hover,
-  #registerButton .p-button:hover {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color) !important;
-    color: var(--accent-text-color);
-  }
-}
+	// p-floatlabel {
+	// 	input:focus {
+	//     border-color: var(--primary-color);
+	// 	}
 
-/* 1. Mobile (sm) styles */
-@media (min-width: 320px) and (max-width: 640px) {
-  ::ng-deep {
-    .p-password {
-      height: 44.1px !important;
-    }
+	// 	p-password,
+	// 	input {
+	// 		div {
+	// 			width: 100% !important;
 
-    p-button {
-      .p-button-icon-only {
-        width: 25px;
-        height: 25px;
+	// 			input {
+	// 				width: 100% !important;
+	// 			}
+	// 		}
+	// 	}
+	// }
 
-        span {
-          font-size: 18px;
-        }
-      }
+	/* 1. Mobile (sm) styles */
+	@media (min-width: 320px) and (max-width: 640px) {
+		::ng-deep {
+			.p-password {
+				height: 44.1px !important;
+			}
 
-      button {
-        width: 100%;
-        height: 100%;
+			p-button {
+				.p-button-icon-only {
+					width: 25px;
+					height: 25px;
 
-        span {
-          font-size: 10px;
-        }
-      }
-    }
-  }
+					span {
+						font-size: 18px;
+					}
+				}
 
-  form {
-    width: 280px;
+				button {
+					width: 100%;
+					height: 100%;
 
-    div {
-      font-size: 25px;
+					span {
+						font-size: 10px;
+					}
+				}
+			}
+		}
 
-      div {
-        width: 200px;
+		form {
+			width: 280px;
 
-        p,
-        a {
-          font-size: 10px;
-        }
+			div {
+				font-size: 25px;
 
-        a {
-          width: 80px;
-          height: 40px;
-        }
-      }
+				div {
+					width: 200px;
 
-      .p-floatlabel,
-      small {
-        font-size: 10px;
-        width: 200px;
+					p,
+					a {
+						font-size: 10px;
+					}
 
-        input {
-          font-size: 15px;
-        }
+					a {
+						width: 80px;
+						height: 40px;
+					}
+				}
 
-        label {
-          font-size: 10px;
-        }
-      }
-    }
-  }
-}
+				.p-floatlabel,
+				small {
+					font-size: 10px;
+					width: 200px;
 
-/* 2. Mobile (sm) styles */
-@media (max-width: 640px) {
-  .p-floatlabel {
-    font-size: 0.875rem;
-  }
+					input {
+						font-size: 15px;
+					}
 
-  .p-button {
-    width: 100%;
-  }
-}
+					label {
+						font-size: 10px;
+					}
+				}
+			}
+		}
+	}
 
-/* 3. Tablet (md) styles */
-@media (min-width: 640px) and (max-width: 1024px) {
-  .p-floatlabel {
-    font-size: 1rem;
-  }
+	/* 2. Mobile (sm) styles */
+	@media (max-width: 640px) {
+		.p-floatlabel {
+			font-size: 0.875rem;
+		}
 
-  .p-button {
-    width: auto;
-  }
-}
+		.p-button {
+			width: 100%;
+		}
+	}
 
-/* 4. Desktop (lg) styles */
-@media (min-width: 1024px) {
-  .p-floatlabel {
-    font-size: 1.125rem;
-  }
+	/* 3. Tablet (md) styles */
+	@media (min-width: 640px) and (max-width: 1024px) {
+		.p-floatlabel {
+			font-size: 1rem;
+		}
 
-  .p-button {
-    width: auto;
-  }
+		.p-button {
+			width: auto;
+		}
+	}
 
-  ::ng-deep {
-    p-button {
-      .p-button-icon-only {
-        width: 45px;
-        height: 45px;
+	/* 4. Desktop (lg) styles */
+	@media (min-width: 1024px) {
+		.p-floatlabel {
+			font-size: 1.125rem;
+		}
 
-        span {
-          font-size: 35px;
-        }
-      }
-    }
-  }
+		.p-button {
+			width: auto;
+		}
+
+		::ng-deep {
+			p-button {
+				.p-button-icon-only {
+					width: 45px;
+					height: 45px;
+
+					span {
+						font-size: 35px;
+					}
+				}
+			}
+		}
+	}
 }

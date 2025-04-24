@@ -20,9 +20,10 @@ import { RouterLink } from '@angular/router';
 		InputText,
 		ButtonModule,
 		RouterLink,
+    NgClass
 	],
 	templateUrl: './login.components.html',
-	styleUrls: ['./login.components.scss', '../../../styles.scss'],
+	styleUrls: ['./login.components.scss'],
 })
 export class LoginComponent {
 	/*
@@ -33,17 +34,42 @@ export class LoginComponent {
 
 	/*
 	 * @description: id for username and password input
-	 * */
+	 * @var:
+	 *  */
 	readonly usernameInputId: string = 'username';
 	readonly passwordInputId: string = 'password';
-  readonly registerButtonId: string = 'registerButton';
-  readonly loginButtonId: string = 'logInButton';
-
+	readonly registerButtonId: string = 'registerButton';
+	readonly loginButtonId: string = 'logInButton';
+	readonly passwordInputField: string = 'passwordInputId';
 	/*
 	 * @description: state for username and password input
 	 * */
 	usernameIsFocused: boolean = false;
 	passwordIsFocused: boolean = false;
+	/*
+	 * @description: set focus for username input
+	 * */
+	@ViewChild('usernameInput') usernameInput!: ElementRef;
+	ngAfterViewInit() {
+		if (this.usernameInput) {
+			this.usernameInput.nativeElement.addEventListener('focus', () => {
+				this.setFocus('username', true);
+			});
+			this.usernameInput.nativeElement.addEventListener('blur', () => {
+				this.setFocus('username', false);
+			});
+		}
+	}
+	/*
+	 * @description: event handler set focus for input
+	 * */
+	setFocus(field: string, isFocused: boolean) {
+		if (field === 'username') {
+			this.usernameIsFocused = isFocused;
+		} else if (field === 'password') {
+			this.passwordIsFocused = isFocused;
+		}
+	}
 
 	protected readonly Label = LabelConstants;
 	protected readonly ErrorMessage = ErrorMessageConstants;
