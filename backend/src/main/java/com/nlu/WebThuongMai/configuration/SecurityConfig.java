@@ -60,13 +60,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //      Tắt CSRF nếu không cần thiết
-                .csrf(AbstractHttpConfigurer::disable)
-//      cấu hình cho phép frontend truy cập các api
-                .cors((cors -> cors.configurationSource(corsConfigurationSource())))
-//         Stateless session
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
@@ -81,8 +74,7 @@ public class SecurityConfig {
                         .jwt(jwt -> jwt.decoder(customJwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                         .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-                           
-                );
+                )
 ////              cấu hình login
 //                .oauth2Login(oauth2Login -> oauth2Login
 //                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
@@ -90,6 +82,13 @@ public class SecurityConfig {
 //                        )
 //                        .successHandler(oAuth2SuccessHandler)
 //                );
+        //      Tắt CSRF nếu không cần thiết
+                .csrf(AbstractHttpConfigurer::disable)
+                //      cấu hình cho phép frontend truy cập các api
+                .cors((cors -> cors.configurationSource(corsConfigurationSource())))
+                //         Stateless session
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 

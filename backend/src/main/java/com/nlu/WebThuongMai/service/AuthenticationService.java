@@ -73,7 +73,7 @@ public class AuthenticationService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!authenticated)
-            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+            throw new AppException(ErrorCode.PASSWORD_NOT_CORRECT);
         var token = generateToken(user);
         return AuthenticationResponse.builder()
                 .token(token)

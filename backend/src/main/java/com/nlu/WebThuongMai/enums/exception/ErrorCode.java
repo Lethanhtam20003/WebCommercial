@@ -25,6 +25,8 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND(1011, "product not found", HttpStatus.NOT_FOUND),
     ACCOUNT_FACEBOOK_NOT_EXISTED(1012, "account facebook not existed", HttpStatus.NOT_FOUND),
     INVALID_ACCESS_TOKEN(1013, "invalid access token", HttpStatus.BAD_REQUEST),
+    PASSWORD_INVALID(1014, "password invalid", HttpStatus.BAD_REQUEST),
+    PASSWORD_NOT_CORRECT(1015, "password not correct", HttpStatus.BAD_REQUEST),
 
     UNCATEGORIZED_EXCEPTION(9998, "Uncategorized Exception", HttpStatus.INTERNAL_SERVER_ERROR);
 
