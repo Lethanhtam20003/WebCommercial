@@ -11,6 +11,8 @@ import { Observable } from 'rxjs';
 export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (req.headers.has('skipAuth')) {
+      req.headers.delete('skipAuth');
+      console.log('intercepter:',req);
       return next.handle(req);
     }
     const token = localStorage.getItem('access_token');

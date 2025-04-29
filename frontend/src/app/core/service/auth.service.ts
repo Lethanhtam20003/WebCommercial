@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, of, switchMap } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, take, tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { ApiResponse } from '../models/api-response.model';
 import { AuthenticationResponse } from '../models/authentication-response.model';
 import { IntrospectResponse } from '../models/introspect_response.model';
 import { URL_API } from '../constants/url-api.constants';
+import { LabelConstants } from '../constants/label.constants';
+import { ErrorMessageConstants } from '../constants/error-message.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +19,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
     // Kiểm tra trạng thái đăng nhập khi service được khởi tạo
-    this.checkInitialAuthState();
+    // this.checkInitialAuthState();
   }
 
   /**
@@ -52,11 +54,11 @@ export class AuthService {
    * Kiểm tra xác thực người dùng
    * @returns Observable<boolean>
    */
-  verifyAuthentication(): Observable<boolean> {
+  verifyAuthentication(): Observable<boolean> { 
     return this.isLoggedIn$.pipe(
+      take(1), // 👈 chỉ nhận 1 giá trị duy nhất
       switchMap(isLoggedIn => {
         if (isLoggedIn) {
-          console.log('isloggin',isLoggedIn)
           return of(true); // Đã đăng nhập, không cần kiểm tra lại
         } else {
           // Return false if not logged in
@@ -86,15 +88,15 @@ export class AuthService {
     .pipe(
       switchMap(res => {
         if(res.code === 200){
-          return of(false);
+          const isAuthenticated = res.result.isValid ;
+          this.updateLoginStatus(isAuthenticated);
+          return of(true);
         }
-        const isAuthenticated = res.result.isValid ;
         // if (isAuthenticated && !res.result.isValid) {
         //   return this.handleTokenRefresh();
         // }
         
-        this.updateLoginStatus(isAuthenticated);
-        return of(isAuthenticated);
+        return of(false);
       }),
       catchError(() => {
         this.updateLoginStatus(false);
@@ -155,6 +157,7 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<ApiResponse<AuthenticationResponse>> {
+    
     const body = {
       username,
       password
@@ -162,22 +165,28 @@ export class AuthService {
 
     return this.http.post<ApiResponse<AuthenticationResponse>>(
       URL_API.loginUrl,
-      body
+      body,{
+      headers : new HttpHeaders().set('skipAuth', 'true'),
+      }
     ).pipe(
       tap(res => {
         if (res.code === 200) {
           localStorage.setItem(this.TOKEN_KEY, res.result.token);
           this.updateLoginStatus(true);
-        } else {
-          this.updateLoginStatus(false);
-        }
+        } 
       }),
-      catchError(() => {
+      catchError((error: HttpErrorResponse) => {
         this.updateLoginStatus(false);
+        let errorMessage = ErrorMessageConstants.UnknownErrorOccurred;
+        if(error.error.message === 'user not existed') {  
+          errorMessage = ErrorMessageConstants.userNotExisted;
+        }if(          error.error.message === 'password not correct') {
+          errorMessage = ErrorMessageConstants.passwordNotCorrect;
+        }
         return of({
-          code: 500,
-          message: 'Đăng nhập thất bại',
-          result: { token: '' } as AuthenticationResponse
+          code: error.error.code,
+          message: errorMessage,
+          result: {token: '' } as AuthenticationResponse
         });
       })
     );
@@ -191,3 +200,5 @@ export class AuthService {
     this.updateLoginStatus(false);
   }
 }
+
+

@@ -94,7 +94,17 @@ constructor(private router: Router,
   ngOnsubmit() {
     // Xử lý sự kiện khi người dùng nhấn nút đăng nhập
     this.authService.login(this.username, this.password).subscribe(
-      
+	  (res) => {
+		if( res.code === 200) {
+		  this.alertService.success('Đăng nhập thành công!');
+		  this.router.navigate([this.returnUrl]);
+		} else {
+			this.alertService.warning(res.message || 'Unknown error occurred.');
+		}
+	  },
+	  (error: any) => {
+		this.alertService.warning('Đăng nhập thất bại!');
+	  }
     );
   }
 
