@@ -6,7 +6,6 @@ import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
-import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticatedResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
 import com.nlu.WebThuongMai.service.AuthenticationService;
@@ -33,7 +32,7 @@ public class AuthenticationController {
      * @param request Thông tin đăng nhập (username/password)
      * @return Token xác thực và thông tin người dùng
      */
-    @PostMapping
+    @PostMapping("/login")
     ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.login(request);
         return ApiResponse.<AuthenticationResponse>builder()
@@ -62,7 +61,7 @@ public class AuthenticationController {
      * @throws ParseException Nếu có lỗi khi xử lý token
      * @throws JOSEException Nếu có lỗi liên quan đến JWT
      */
-    @PostMapping("/introspect")
+        @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
@@ -85,17 +84,5 @@ public class AuthenticationController {
                 .build();
     }
 
-    /**
-     * Kiểm tra trạng thái xác thực của người dùng hiện tại
-     * @return Thông tin về trạng thái xác thực
-     * @throws ParseException Nếu có lỗi khi xử lý token
-     * @throws JOSEException Nếu có lỗi liên quan đến JWT
-     */
-    @GetMapping("/check-auth")
-    public ApiResponse<AuthenticatedResponse> checkAuth() throws ParseException, JOSEException {
-        var res = authenticationService.isAuthenticated();
-        return ApiResponse.<AuthenticatedResponse>builder()
-                .result(res)
-                .build();
-    }
+
 }

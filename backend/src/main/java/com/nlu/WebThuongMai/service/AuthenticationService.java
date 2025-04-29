@@ -9,7 +9,6 @@ import com.nlu.WebThuongMai.dto.request.authenticationReq.AuthenticationRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
-import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticatedResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
@@ -25,7 +24,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -204,22 +202,6 @@ public class AuthenticationService {
         var token = generateToken(user);
         return AuthenticationResponse.builder()
                 .token(token)
-                .build();
-    }
-
-    /**
-     * Kiểm tra trạng thái xác thực của người dùng hiện tại
-     * 
-     * @return AuthenticatedResponse cho biết người dùng đã được xác thực hay chưa
-     * @throws AppException nếu không tìm thấy thông tin người dùng
-     */
-    public AuthenticatedResponse isAuthenticated() {
-        var context = SecurityContextHolder.getContext();
-        String username = context.getAuthentication().getName();
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
-        return AuthenticatedResponse.builder()
-                .isAuth(true)
                 .build();
     }
 }

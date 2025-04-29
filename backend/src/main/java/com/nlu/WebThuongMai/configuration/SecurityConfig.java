@@ -71,23 +71,25 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated())
-//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                // Cấu hình xử lý khi người dùng không có quyền truy cập
-               .exceptionHandling(exceptionHandling -> exceptionHandling
-                       .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // Trả về lỗi 403 nếu không có quyền
-               )
+//               .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+//                // Cấu hình xử lý khi người dùng không có quyền truy cập
+//               .exceptionHandling(exceptionHandling -> exceptionHandling
+//                       .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // Trả về lỗi 403 nếu không có quyền
+//               )
 //              dùng để xác thực token JWT được gửi từ client
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.decoder(customJwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                )
-//              cấu hình login
-                .oauth2Login(oauth2Login -> oauth2Login
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(customOAuth2UserService)
-                        )
-                        .successHandler(oAuth2SuccessHandler)
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                           
                 );
+////              cấu hình login
+//                .oauth2Login(oauth2Login -> oauth2Login
+//                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+//                                .userService(customOAuth2UserService)
+//                        )
+//                        .successHandler(oAuth2SuccessHandler)
+//                );
         return http.build();
     }
 

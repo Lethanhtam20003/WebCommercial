@@ -8,11 +8,11 @@ import { ErrorMessageConstants } from '../../../core/constants/error-message.con
 import { ButtonModule } from 'primeng/button';
 import { NgClass } from '@angular/common';
 import {RouteLink} from '../../../core/constants/route-link';
-import {Router, RouterLink} from '@angular/router';
+import {Router, RouterLink, ActivatedRoute} from '@angular/router';
 import {selectorName} from '../../../core/constants/selectorName';
-import { URL_API } from '../../../core/constants/url-api.constants';
 import { PopupMessageService } from '../../../core/service/popup-message.service';
 import { AuthService } from '../../../core/service/auth.service';
+import { AlertService } from '../../../core/service/alert.service';
 
 @Component({
 	selector: selectorName.loginComponent,
@@ -26,120 +26,17 @@ import { AuthService } from '../../../core/service/auth.service';
 		NgClass,
 		RouterLink,
 	],
-	template: `
-    <div
-      class="h-screen flex items-start justify-center pt-10 bg-white max-w-full"
-    >
-      <form class="bg-white border border-gray-200 drop-shadow-2xl p-10">
-        <div class=" flex justify-center font-bold pb-10 text-[30px]">
-          {{ Label.logIn }}
-        </div>
-        <div class="card flex justify-center flex-col w-100">
-          <div class="flex flex-col justify-center pb-5">
-            <p-floatlabel variant="on">
-              <input
-                #usernameInput
-                pInputText
-                pSize="large"
-                class="w-full"
-                id="{{ usernameInputId }}"
-                [(ngModel)]="username"
-                autocomplete="on"
-                name="{{ usernameInputId }}"
-              />
-              <label
-                [ngClass]="{ '!text-black': usernameIsFocused }"
-                for="{{ usernameInputId }}"
-              >{{ Label.username }}</label
-              >
-            </p-floatlabel>
-            @if (username == null || username == '') {
-              <small class="block mt-1 text-sm text-red-500 pl-1"
-              >{{ ErrorMessage.pleaseEnterUsername }}
-              </small>
-            } @else if (username.length < 3) {
-              <small class="block mt-1 text-sm text-red-500 pl-1"
-              >{{ ErrorMessage.usernameHasAtLeast3Characters }}
-              </small>
-            }
-          </div>
-          <div class="flex flex-col justify-center">
-            <p-floatlabel variant="on" class="w-full">
-              <p-password
-                [(ngModel)]="password"
-                class="w-full"
-                size="large"
-                [toggleMask]="true"
-                [feedback]="false"
-                [inputId]="passwordInputId"
-                name="{{ passwordInputId }}"
-                (onFocus)="setFocus('password', true)"
-                (onBlur)="setFocus('password', false)"
-              />
-              <label
-                [ngClass]="{ 'text-black': passwordIsFocused }"
-                [for]="passwordInputId"
-              >{{ Label.password }}</label
-              >
-            </p-floatlabel>
-            @if (password == null || password == '') {
-              <small class="block mt-1 text-sm text-red-500 pl-3"
-              >{{ ErrorMessage.pleaseEnterPassword }}
-              </small>
-            } @else if (password.length < 8 || password.length > 30) {
-              <small class="block mt-1 text-sm text-red-500 pl-3"
-              >{{
-                  ErrorMessage.passwordHasAtLeast8CharactersAndSmallerThan30
-                }}
-              </small>
-            }
-          </div>
-          <div class="card flex gap-4 pt-4">
-            <p-button
-              label="{{ Label.logIn }}"
-              [style]="{
-								'background-color': '#141d22',
-								'border-color': '#141d22',
-								'border-radius': '0px',
-							}"
-            />
-            <p-button
-              routerLink="/{{ RouteLink.registerRoute }}"
-              label="{{ Label.register }}"
-              [style]="{
-								'background-color': '#141d22',
-								'border-color': '#141d22',
-								'border-radius': '0px',
-							}"
-            />
-          </div>
-          <div class="card flex flex-col gap-2 pt-2">
-            <p class="text-center text-sm">{{ Label.loginWithOther }}</p>
-            <div
-              class="card flex flex-row gap-2 w-full justify-center items-center"
-            >
-              <p-button (onClick)="loginWithFacebook()"
-                severity="info"
-                [rounded]="true"
-                icon="pi pi-facebook"
-              />
-              <p-button
-                severity="success"
-                [rounded]="true"
-                icon="pi pi-google"
-              />
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  `, 
+	templateUrl: './login.component.html', 
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   private cleanup: (() => void) | null = null;
-
-  constructor(private router: Router,private popupMessageService: PopupMessageService, private authService: AuthService) {}
+  returnUrl: string = '/';
+constructor(private router: Router,
+	private popupMessageService: PopupMessageService,
+	private authService: AuthService,
+	private alertService: AlertService,
+	private route: ActivatedRoute) {}
 	/*
 	 * @description: value for username and password in input
 	 * */
@@ -176,7 +73,7 @@ export class LoginComponent {
 
 	/*
 	 * @description: event handler set focus for input
-	 * */
+	 * */ 
 	setFocus(field: string, isFocused: boolean) {
 		if (field === 'username') {
 			this.usernameIsFocused = isFocused;
@@ -192,6 +89,13 @@ export class LoginComponent {
   ngOnInit() {
     // Bắt đầu lắng nghe token
     this.cleanup = this.popupMessageService.listenForToken();
+    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+  }
+  ngOnsubmit() {
+    // Xử lý sự kiện khi người dùng nhấn nút đăng nhập
+    this.authService.login(this.username, this.password).subscribe(
+      
+    );
   }
 
   ngOnDestroy() {
@@ -203,5 +107,5 @@ export class LoginComponent {
   loginWithFacebook() {
     this.authService.loginWithFacebook()    
   }
-
+  
 }

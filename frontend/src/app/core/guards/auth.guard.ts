@@ -43,7 +43,7 @@ export class AuthGuard implements CanActivate {
    * @returns Observable<boolean>
    */
   private checkAuthentication(): Observable<boolean> {
-    return this.authService.checkauth().pipe(
+    return this.authService.verifyAuthentication().pipe(
       map(isAuthenticated => {
         if (isAuthenticated) {
           return true;

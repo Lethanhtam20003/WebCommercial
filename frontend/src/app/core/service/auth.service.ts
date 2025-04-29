@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, of, switchMap } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiResponse } from '../models/api-response.model';
 import { AuthenticationResponse } from '../models/authentication-response.model';
-import { authenticatedResponse } from '../models/authenticated_response.model';
+import { IntrospectResponse } from '../models/introspect_response.model';
 import { URL_API } from '../constants/url-api.constants';
 
 @Injectable({
@@ -27,7 +27,7 @@ export class AuthService {
   private checkInitialAuthState(): void {
     const token = this.getStoredToken();
     if (token) {
-      this.checkauth().subscribe();
+      this.verifyAuthentication().subscribe();
     }
   }
 
@@ -49,6 +49,95 @@ export class AuthService {
   }
 
   /**
+   * Kiểm tra xác thực người dùng
+   * @returns Observable<boolean>
+   */
+  verifyAuthentication(): Observable<boolean> {
+    return this.isLoggedIn$.pipe(
+      switchMap(isLoggedIn => {
+        if (isLoggedIn) {
+          console.log('isloggin',isLoggedIn)
+          return of(true); // Đã đăng nhập, không cần kiểm tra lại
+        } else {
+          // Return false if not logged in
+          return this.validateToken();
+        }
+      })
+    );
+  }
+
+  validateToken(): Observable<boolean> {
+    // Kiểm tra xem token có tồn tại không
+    const token = this.getStoredToken();
+    if (!token) {
+      this.updateLoginStatus(false);
+      return of(false);
+    }
+
+    const body = {
+      token: token
+    };
+
+    return this.http.post<ApiResponse<IntrospectResponse>>(
+      URL_API.introspect, 
+      body, {
+        headers : new HttpHeaders().set('skipAuth', 'true'),
+    })
+    .pipe(
+      switchMap(res => {
+        if(res.code === 200){
+          return of(false);
+        }
+        const isAuthenticated = res.result.isValid ;
+        // if (isAuthenticated && !res.result.isValid) {
+        //   return this.handleTokenRefresh();
+        // }
+        
+        this.updateLoginStatus(isAuthenticated);
+        return of(isAuthenticated);
+      }),
+      catchError(() => {
+        this.updateLoginStatus(false);
+        return of(false);
+      })
+    );
+  }
+
+  
+
+  /**
+   * Xử lý làm mới token
+   * @returns Observable<boolean>
+   * @private
+   */
+  // private handleTokenRefresh(): Observable<boolean> {
+  //   const token = this.getStoredToken();
+  //   if (!token) {
+  //     return of(false);
+  //   }
+
+  //   return this.http.post<ApiResponse<AuthenticationResponse>>(
+  //     URL_API.refreshTokenUrl,
+  //     { token }
+  //   ).pipe(
+  //     map(res => {
+  //       const isSuccess = res.code === 200;
+  //       if (isSuccess) {
+  //         localStorage.setItem(this.TOKEN_KEY, res.result.access_token);
+  //         this.updateLoginStatus(true);
+  //       } else {
+  //         this.updateLoginStatus(false);
+  //       }
+  //       return isSuccess;
+  //     }),
+  //     catchError(() => {
+  //       this.updateLoginStatus(false);
+  //       return of(false);
+  //     })
+  //   );
+  // }
+
+  /**
    * Đăng nhập bằng Facebook
    */
   loginWithFacebook(): void {
@@ -65,62 +154,31 @@ export class AuthService {
     );
   }
 
-  /**
-   * Kiểm tra xác thực người dùng
-   * @returns Observable<boolean>
-   */
-  checkauth(): Observable<boolean> {
-    const token = this.getStoredToken();
-    if (!token) {
-      this.updateLoginStatus(false);
-      return of(false);
-    }
-
-    return this.http.get<ApiResponse<authenticatedResponse>>(URL_API.checkAuthUrl)
-      .pipe(
-        switchMap(res => {
-          const isAuthenticated = res.code === 200;
-          if (isAuthenticated && !res.result.auth) {
-            return this.handleTokenRefresh();
-          }
-          this.updateLoginStatus(isAuthenticated);
-          return of(isAuthenticated);
-        }),
-        catchError(() => {
-          this.updateLoginStatus(false);
-          return of(false);
-        })
-      );
-  }
-
-  /**
-   * Xử lý làm mới token
-   * @returns Observable<boolean>
-   * @private
-   */
-  private handleTokenRefresh(): Observable<boolean> {
-    const token = this.getStoredToken();
-    if (!token) {
-      return of(false);
-    }
+  login(username: string, password: string): Observable<ApiResponse<AuthenticationResponse>> {
+    const body = {
+      username,
+      password
+    };
 
     return this.http.post<ApiResponse<AuthenticationResponse>>(
-      URL_API.refreshTokenUrl,
-      { token }
+      URL_API.loginUrl,
+      body
     ).pipe(
-      map(res => {
-        const isSuccess = res.code === 200;
-        if (isSuccess) {
-          localStorage.setItem(this.TOKEN_KEY, res.result.access_token);
+      tap(res => {
+        if (res.code === 200) {
+          localStorage.setItem(this.TOKEN_KEY, res.result.token);
           this.updateLoginStatus(true);
         } else {
           this.updateLoginStatus(false);
         }
-        return isSuccess;
       }),
       catchError(() => {
         this.updateLoginStatus(false);
-        return of(false);
+        return of({
+          code: 500,
+          message: 'Đăng nhập thất bại',
+          result: { token: '' } as AuthenticationResponse
+        });
       })
     );
   }
