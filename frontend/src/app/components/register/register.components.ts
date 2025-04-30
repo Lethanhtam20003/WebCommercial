@@ -1,10 +1,16 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
-import { FormsModule } from '@angular/forms';
+import {
+	FormControl,
+	FormGroup,
+	FormsModule,
+	ReactiveFormsModule,
+	Validators,
+} from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LabelConstants } from '../../constant/label.constants';
 import { ErrorMessageConstants } from '../../constant/error-message.constants';
@@ -14,26 +20,18 @@ import { RouteLink } from '../../constant/route-link';
 	selector: 'register-component',
 	standalone: true,
 	imports: [
-		Button,
-		FloatLabel,
-		FormsModule,
-		InputText,
-		Password,
-		NgClass,
-		RouterLink,
+    CommonModule,
+    ReactiveFormsModule,
+    Button,
+    FloatLabel,
+    InputText,
+    Password,
+    RouterLink,
 	],
 	templateUrl: './register.components.html',
 	styleUrls: ['./register.components.scss', '../../../styles.scss'],
 })
-export class RegisterComponent {
-	/*
-	 * @description: value for username and password in input
-	 * */
-	username: string = '';
-	password: string = '';
-	retypePassword: string = '';
-	email: string = '';
-
+export class RegisterComponent implements OnInit {
 	/*
 	 * @description: id for username and password input
 	 * */
@@ -42,59 +40,31 @@ export class RegisterComponent {
 	readonly retypePasswordInputId: string = 'retypePassword';
 	readonly emailInputId: string = 'email';
 
-	/*
-	 * @description: state for username and password input
-	 * */
-	usernameIsFocused: boolean = false;
-	passwordIsFocused: boolean = false;
-	retypePasswordIsFocused: boolean = false;
-	emailIsFocused: boolean = false;
-
-	/*
-	 * @description: set focus for username input
-	 * */
-	@ViewChild('usernameInput') usernameInput!: ElementRef;
-	@ViewChild('emailInput') emailInput!: ElementRef;
-	ngAfterViewInit() {
-		if (this.usernameInput) {
-			this.usernameInput.nativeElement.addEventListener('focus', () => {
-				this.setFocus('username', true);
-			});
-			this.usernameInput.nativeElement.addEventListener('blur', () => {
-				this.setFocus('username', false);
-			});
-		}
-		if (this.emailInput) {
-			this.emailInput.nativeElement.addEventListener('focus', () => {
-				this.setFocus('email', true);
-			});
-			this.emailInput.nativeElement.addEventListener('blur', () => {
-				this.setFocus('email', false);
-			});
-		}
+	/**
+	 * @description: initial data when the component is initial
+	 */
+	registerForm!: FormGroup;
+	ngOnInit(): void {
+		this.registerForm = new FormGroup({
+			username: new FormControl<string>('', [
+				Validators.required,
+				Validators.minLength(3),
+			]),
+			email: new FormControl('', [Validators.required, Validators.email]),
+			password: new FormControl('', [
+				Validators.required,
+				Validators.minLength(8),
+				Validators.maxLength(30),
+			]),
+			retypePassword: new FormControl('', [Validators.required]),
+		});
 	}
 
-	/*
-	 * @description: event handler set focus for input
-	 * */
-	setFocus(field: string, isFocused: boolean) {
-		if (field === 'username') {
-			this.usernameIsFocused = isFocused;
-		} else if (field === 'email') {
-			this.emailIsFocused = isFocused;
-		} else if (field === 'password') {
-			this.passwordIsFocused = isFocused;
-		} else if (field === 'retypePassword') {
-			this.retypePasswordIsFocused = isFocused;
-		}
-	}
-
-	/*
-	 * @description: validate email format
-	 * */
-	isValidEmail(email: string): boolean {
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return emailRegex.test(email);
+	get passwordMismatch(): boolean {
+		return (
+			this.registerForm.get('password')?.value !==
+			this.registerForm.get('retypePassword')?.value
+		);
 	}
 
 	protected readonly Label = LabelConstants;

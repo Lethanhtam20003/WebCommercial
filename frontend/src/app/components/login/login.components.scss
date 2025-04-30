@@ -1,17 +1,4 @@
 ::ng-deep {
-	#logInButton .p-button,
-	#registerButton .p-button {
-		background-color: var(--primary-color);
-		color: var(--primary-text-color);
-		border-color: var(--primary-color);
-	}
-
-	#logInButton .p-button:hover,
-	#registerButton .p-button:hover {
-		background-color: var(--accent-color);
-		border-color: var(--accent-color) !important;
-		color: var(--accent-text-color);
-	}
 	.p-floatlabel {
 		#passwordInputId {
 			.p-password {
@@ -25,30 +12,6 @@
 			color: var(--primary-color);
 		}
 	}
-	.p-floatlabel.active {
-    border-color: var(--primary-color);
-		.p-inputtext {
-			border-color: var(--primary-color);
-		}
-	}
-
-	// p-floatlabel {
-	// 	input:focus {
-	//     border-color: var(--primary-color);
-	// 	}
-
-	// 	p-password,
-	// 	input {
-	// 		div {
-	// 			width: 100% !important;
-
-	// 			input {
-	// 				width: 100% !important;
-	// 			}
-	// 		}
-	// 	}
-	// }
-
 	/* 1. Mobile (sm) styles */
 	@media (min-width: 320px) and (max-width: 640px) {
 		::ng-deep {

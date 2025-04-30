@@ -1,119 +1,112 @@
 <div class="h-screen flex items-start justify-center pt-10 bg-white max-w-full">
-	<form class="bg-white border border-gray-200 drop-shadow-2xl p-10">
+	<form
+		class="bg-white border border-gray-200 drop-shadow-2xl p-10"
+		[formGroup]="registerForm"
+	>
 		<div class="flex justify-center font-bold pb-10 text-[30px]">
 			{{ Label.register }}
 		</div>
 		<div class="card flex justify-center flex-col w-100">
+			<!-- Username -->
 			<div class="flex flex-col justify-center pb-5">
 				<p-floatlabel variant="on">
 					<input
-						#usernameInput
 						pInputText
 						pSize="large"
 						class="w-full"
-						id="{{ usernameInputId }}"
-						[(ngModel)]="username"
+						[id]="usernameInputId"
 						autocomplete="on"
-						name="{{ usernameInputId }}"
+						formControlName="username"
 					/>
-					<label
-						[ngClass]="{ '!text-black': usernameIsFocused }"
-						for="{{ usernameInputId }}"
-						>{{ Label.username }}</label
-					>
+					<label [for]="usernameInputId">{{ Label.username }}</label>
 				</p-floatlabel>
-				@if (username == null || username == '') {
-				<small class="block mt-1 text-sm text-red-500 pl-1"
+				<small
+					class="block mt-1 text-sm text-red-500 pl-1"
+					*ngIf="registerForm.get('username')?.hasError('required') &&
+            registerForm.get('username')?.touched"
 					>{{ ErrorMessage.pleaseEnterUsername }}
 				</small>
-				} @else if (username.length < 3) {
-				<small class="block mt-1 text-sm text-red-500 pl-1"
+				<small
+					class="block mt-1 text-sm text-red-500 pl-1"
+					*ngIf="registerForm.get('username')?.hasError('minlength') &&
+            registerForm.get('username')?.touched"
 					>{{ ErrorMessage.usernameHasAtLeast3Characters }}
 				</small>
-				}
 			</div>
+			<!-- Email -->
 			<div class="flex flex-col justify-center pb-5">
 				<p-floatlabel variant="on">
 					<input
-						#emailInput
 						pInputText
 						pSize="large"
 						class="w-full"
-						id="{{ emailInputId }}"
-						[(ngModel)]="email"
+						[id]="emailInputId"
 						autocomplete="on"
-						name="{{ emailInputId }}"
+						formControlName="email"
 					/>
-					<label
-						[ngClass]="{ '!text-black': emailIsFocused }"
-						for="{{ emailInputId }}"
-						>{{ Label.email }}</label
-					>
+					<label for="emailInputId">{{ Label.email }}</label>
 				</p-floatlabel>
-				@if (email == null || email == '') {
-				<small class="block mt-1 text-sm text-red-500 pl-1"
+				<small
+					class="block mt-1 text-sm text-red-500 pl-1"
+					*ngIf="registerForm.get('email')?.hasError('required') &&
+            registerForm.get('email')?.touched"
 					>{{ ErrorMessage.pleaseEnterEmail }}
 				</small>
-				} @else if (!isValidEmail(email)) {
-				<small class="block mt-1 text-sm text-red-500 pl-1">
+				<small
+					class="block mt-1 text-sm text-red-500 pl-1"
+					*ngIf="registerForm.get('email')?.hasError('email') &&
+            registerForm.get('email')?.touched"
+				>
 					{{ ErrorMessage.emailIsNotValid }}
 				</small>
-				}
 			</div>
+			<!-- Password -->
 			<div class="flex flex-col justify-center pb-5">
 				<p-floatlabel variant="on" class="w-full">
 					<p-password
-						[(ngModel)]="password"
-						class="w-full"
 						size="large"
 						[toggleMask]="true"
 						[feedback]="false"
-						inputId="on_label"
-						name="{{ passwordInputId }}"
-						(onFocus)="setFocus('password', true)"
-						(onBlur)="setFocus('password', false)"
+						inputId="password"
+						formControlName="password"
 					/>
-					<label
-						[ngClass]="{ 'text-black': passwordIsFocused }"
-						for="{{ passwordInputId }}"
-					>
-						{{ Label.password }}
-					</label>
+					<label [for]="passwordInputId"> {{ Label.password }} </label>
 				</p-floatlabel>
-				@if (password == null || password == '') {
-				<small class="block mt-1 text-sm text-red-500 pl-3"
+				<small
+					class="block mt-1 text-sm text-red-500 pl-3"
+					*ngIf="registerForm.get('password')?.hasError('required') &&
+            registerForm.get('password')?.touched"
 					>{{ ErrorMessage.pleaseEnterPassword }}
 				</small>
-				} @else if (password.length < 8 || password.length> 30) {
-				<small class="block mt-1 text-sm text-red-500 pl-3"
+				<small
+					class="block mt-1 text-sm text-red-500 pl-3"
+					*ngIf="(registerForm.get('password')?.hasError('minlength') ||
+            registerForm.get('password')?.hasError('maxlength')) &&
+            registerForm.get('password')?.touched"
 					>{{ ErrorMessage.passwordHasAtLeast8CharactersAndSmallerThan30 }}
 				</small>
-				}
 			</div>
+      <!-- Retype password -->
 			<div class="flex flex-col justify-center">
 				<p-floatlabel variant="on" class="w-full">
 					<p-password
-						[(ngModel)]="retypePassword"
 						class="w-full"
 						size="large"
 						[toggleMask]="true"
 						[feedback]="false"
-						inputId="on_label"
-						name="{{ retypePasswordInputId }}"
-						(onFocus)="setFocus('retypePassword', true)"
-						(onBlur)="setFocus('retypePassword', false)"
+						inputId="retypePassword"
+						formArrayName="retypePassword"
 					/>
-					<label
-						[ngClass]="{ 'text-black': retypePasswordIsFocused }"
-						for="{{ retypePasswordInputId }}"
+					<label [for]="retypePasswordInputId"
 						>{{ Label.retypePassword }}</label
 					>
 				</p-floatlabel>
-				@if (password.trim() !== retypePassword.trim()) {
-				<small class="block mt-1 text-sm text-red-500 pl-3"
+				<small
+					class="block mt-1 text-sm text-red-500 pl-3"
+					*ngIf="passwordMismatch &&
+            registerForm.get('retypePassword')?.touched"
 					>{{ ErrorMessage.retypePasswordMustBeSame }}
 				</small>
-				}
 			</div>
 			<div class="card flex gap-4 pt-4">
 				<p-button label="{{ Label.register }}" id="registerButton" />

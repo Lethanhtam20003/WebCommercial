@@ -1,14 +1,20 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { PasswordModule } from 'primeng/password';
-import { FloatLabel } from 'primeng/floatlabel';
-import { InputText } from 'primeng/inputtext';
-import { LabelConstants } from '../../constant/label.constants';
-import { ErrorMessageConstants } from '../../constant/error-message.constants';
-import { ButtonModule } from 'primeng/button';
-import { NgClass } from '@angular/common';
-import { RouteLink } from '../../constant/route-link';
+import { CommonModule, NgClass } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { FloatLabel } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { ErrorMessageConstants } from '../../constant/error-message.constants';
+import { LabelConstants } from '../../constant/label.constants';
+import { RouteLink } from '../../constant/route-link';
 
 @Component({
 	selector: 'login-component',
@@ -17,58 +23,41 @@ import { RouterLink } from '@angular/router';
 		FormsModule,
 		PasswordModule,
 		FloatLabel,
-		InputText,
 		ButtonModule,
 		RouterLink,
-    NgClass
+		InputTextModule,
+		ReactiveFormsModule,
+    CommonModule,
 	],
 	templateUrl: './login.components.html',
 	styleUrls: ['./login.components.scss'],
 })
-export class LoginComponent {
-	/*
-	 * @description: value for username and password in input
-	 * */
-	username: string = '';
-	password: string = '';
-
-	/*
+export class LoginComponent implements OnInit {
+	/**
 	 * @description: id for username and password input
-	 * @var:
-	 *  */
+	 */
 	readonly usernameInputId: string = 'username';
 	readonly passwordInputId: string = 'password';
 	readonly registerButtonId: string = 'registerButton';
 	readonly loginButtonId: string = 'logInButton';
 	readonly passwordInputField: string = 'passwordInputId';
-	/*
-	 * @description: state for username and password input
-	 * */
-	usernameIsFocused: boolean = false;
-	passwordIsFocused: boolean = false;
-	/*
-	 * @description: set focus for username input
-	 * */
-	@ViewChild('usernameInput') usernameInput!: ElementRef;
-	ngAfterViewInit() {
-		if (this.usernameInput) {
-			this.usernameInput.nativeElement.addEventListener('focus', () => {
-				this.setFocus('username', true);
-			});
-			this.usernameInput.nativeElement.addEventListener('blur', () => {
-				this.setFocus('username', false);
-			});
-		}
-	}
-	/*
-	 * @description: event handler set focus for input
-	 * */
-	setFocus(field: string, isFocused: boolean) {
-		if (field === 'username') {
-			this.usernameIsFocused = isFocused;
-		} else if (field === 'password') {
-			this.passwordIsFocused = isFocused;
-		}
+
+	/**
+	 * @description: initial data when the component is initial
+	 */
+	loginFormGroup!: FormGroup;
+	ngOnInit(): void {
+		this.loginFormGroup = new FormGroup({
+			username: new FormControl<string>('', [
+				Validators.required,
+				Validators.minLength(3),
+			]),
+			password: new FormControl<string>('', [
+				Validators.required,
+				Validators.minLength(8),
+				Validators.maxLength(30),
+			]),
+		});
 	}
 
 	protected readonly Label = LabelConstants;
