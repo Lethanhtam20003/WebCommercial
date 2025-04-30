@@ -19,6 +19,12 @@
 	--background-text-color: #141d22;
 	--facebook-logo-color: #1877f2;
 	--google-green-color: #34a853;
+  --p-inputtext-focus-ring-color: var(--primary-color);
+  --p-button-primary-background: var(--primary-color);
+  --p-button-primary-color: var(--primary-text-color);
+  --p-button-primary-border-color: var(--primary-color);
+  --p-button-primary-hover-background: var(--accent-color);
+  --p-button-primary-hover-border-color: var(--accent-color);
 }
 
 ::ng-deep {
