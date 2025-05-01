@@ -44,6 +44,7 @@ export class LabelConstants {
 	public static readonly description: string =
 		'Fire Knight Sport là cửa hàng chuyên về bán dụng cụ thể thao như cầu lông, đá banh, bóng chuyền, tenis, bóng bàn các loại.';
   public static readonly userProfile: string = 'Hồ sơ cá nhân';
-  public static readonly searchMethod: string = 'Tìm kiếm theo';
-  public static readonly searchProductHere: string = 'Tìm kiếm sản phẩm ở đây';
+  public static readonly searchProduct: string = 'Tìm kiếm sản phẩm';
+  public static readonly logInWithGoogle: string = 'Đăng nhập bằng google';
+  public static readonly signUpWithGoogle: string = 'Đăng ký bằng google';
 }
