@@ -2,10 +2,13 @@
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
     transition: transform 0.3s;
+    position: relative;
+    overflow: hidden;
   }
   
   .product-card:hover {
     transform: scale(1.03);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
   
   .hover-overlay {
@@ -16,10 +19,61 @@
     height: 100%;
     background-color: rgba(255, 255, 255, 0.9);
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    z-index: 10;
+    padding: 15px;
   }
   
   .product-card:hover .hover-overlay {
     opacity: 1;
+    visibility: visible;
+  }
+  
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  
+  .bi {
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    padding: 10px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    margin: 0 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .bi:hover {
+    color: #0d6efd;
+    transform: translateY(-3px);
+    background-color: #ffffff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .hover-overlay .d-flex {
+    margin: 15px 0;
+    width: 100%;
+  }
+  
+  .hover-overlay button {
+    transition: all 0.3s ease;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  
+  .hover-overlay button:hover {
+    background-color: #212529;
+    color: white;
+    transform: translateY(-2px);
   }
   

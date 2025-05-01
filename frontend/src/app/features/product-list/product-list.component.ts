@@ -64,5 +64,39 @@ export class ProductListComponent implements OnInit {
     },
   ];
   
+  /**
+   * Thêm sản phẩm vào giỏ hàng
+   * @param product Sản phẩm được chọn
+   */
+  addToCart(product: any): void {
+    console.log('Đã thêm vào giỏ hàng:', product.name);
+    // Thêm logic xử lý thêm vào giỏ hàng ở đây
+  }
 
+  /**
+   * Xem chi tiết sản phẩm
+   * @param product Sản phẩm được chọn
+   */
+  viewProductDetails(product: any): void {
+    console.log('Xem chi tiết sản phẩm:', product.name);
+    // Thêm logic điều hướng đến trang chi tiết sản phẩm
+  }
+
+  /**
+   * Thêm sản phẩm vào danh sách yêu thích
+   * @param product Sản phẩm được chọn
+   */
+  addToWishlist(product: any): void {
+    console.log('Đã thêm vào danh sách yêu thích:', product.name);
+    // Thêm logic xử lý thêm vào danh sách yêu thích
+  }
+
+  /**
+   * So sánh sản phẩm
+   * @param product Sản phẩm được chọn
+   */
+  compareProduct(product: any): void {
+    console.log('Đã thêm vào danh sách so sánh:', product.name);
+    // Thêm logic xử lý so sánh sản phẩm
+  }
 }
