@@ -40,9 +40,7 @@ public class SecurityConfig {
             "/v1/auth", "/v1/auth/*",
             "/v1/products", "/v1/products/*",
             "/v1/oauth2", "/v1/oauth2/*",
-            "/login/facebook", "/oauth2/authorization/facebook",
-            "/v3/api-docs"
-    };
+            "/login/facebook", "/oauth2/authorization/facebook"};
 
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
@@ -62,35 +60,35 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //      Tắt CSRF nếu không cần thiết
-                .csrf(AbstractHttpConfigurer::disable)
-//      cấu hình cho phép frontend truy cập các api
-                .cors((cors -> cors.configurationSource(corsConfigurationSource())))
-//         Stateless session
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                // Cấu hình xử lý khi người dùng không có quyền truy cập
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // Trả về lỗi 403 nếu không có quyền
-                )
-//              cấu hình login
-                .oauth2Login(oauth2Login -> oauth2Login
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(customOAuth2UserService)
-                        )
-                        .successHandler(oAuth2SuccessHandler)
-                )
+//               .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+//                // Cấu hình xử lý khi người dùng không có quyền truy cập
+//               .exceptionHandling(exceptionHandling -> exceptionHandling
+//                       .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // Trả về lỗi 403 nếu không có quyền
+//               )
 //              dùng để xác thực token JWT được gửi từ client
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.decoder(customJwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                         .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-                );
+                )
+////              cấu hình login
+//                .oauth2Login(oauth2Login -> oauth2Login
+//                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+//                                .userService(customOAuth2UserService)
+//                        )
+//                        .successHandler(oAuth2SuccessHandler)
+//                );
+        //      Tắt CSRF nếu không cần thiết
+                .csrf(AbstractHttpConfigurer::disable)
+                //      cấu hình cho phép frontend truy cập các api
+                .cors((cors -> cors.configurationSource(corsConfigurationSource())))
+                //         Stateless session
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 

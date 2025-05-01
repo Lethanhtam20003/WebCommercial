@@ -56,7 +56,7 @@ public class UserService {
      * @return UserResponse chứa thông tin của người dùng đã được tạo
      * @throws AppException nếu username đã tồn tại trong hệ thống
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse createUser(UserCreationRequest request) {
         User u = userMapper.toUser(request);
 
@@ -78,7 +78,7 @@ public class UserService {
      *
      * @return List<UserResponse> Danh sách thông tin của tất cả người dùng
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserResponse> getUsers() {
         return userMapper.toUserResponseList(userRepository.findAll());
     }
@@ -91,7 +91,7 @@ public class UserService {
      * @return UserResponse chứa thông tin của người dùng
      * @throws AppException nếu không tìm thấy người dùng với ID tương ứng
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse getUserById(long userId) {
         return userMapper.toUserResponse(userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
@@ -106,10 +106,10 @@ public class UserService {
      * @return UserResponse chứa thông tin đã được cập nhật
      * @throws RuntimeException nếu không tìm thấy người dùng với ID tương ứng
      */
-    @PreAuthorize("hasRole('ADMIN') and hasRole('USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse updateUser(long userId, UserUpdateRequest request) {
         User u = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         userMapper.toUser(u, request);
         return userMapper.toUserResponse(userRepository.save(u));
     }
@@ -120,7 +120,7 @@ public class UserService {
      *
      * @param userId ID của người dùng cần xóa
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(long userId) {
         userRepository.deleteById(userId);
     }
@@ -132,7 +132,7 @@ public class UserService {
      * @return UserResponse chứa thông tin của người dùng hiện tại
      * @throws AppException nếu không tìm thấy thông tin người dùng trong hệ thống
      */
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public UserResponse getMyInf() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();

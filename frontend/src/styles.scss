@@ -1,12 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 @use "tailwindcss";
 @use "primeicons/primeicons.css";
+// Import Bootstrap's source Sass files for customization
+@use "bootstrap/scss/bootstrap";
 
 p-floatlabel {
   input:focus {
     border: 1px solid #cbd5e1 !important;
   }
-
   p-password,
   input {
     div {
@@ -16,5 +17,9 @@ p-floatlabel {
         width: 100% !important;
       }
     }
+  }
+  .responsive-logo {
+    width: 120px;
+    height: 34px;
   }
 }
