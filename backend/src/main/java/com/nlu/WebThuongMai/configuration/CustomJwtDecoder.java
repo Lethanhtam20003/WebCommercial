@@ -38,11 +38,9 @@ public class CustomJwtDecoder implements JwtDecoder {
             var response = authenticationService.introspect(IntrospectRequest.builder().token(token).build());
             if (!response.isValid()){
                 throw new BadCredentialsException("Token không hợp lệ");
-//                throw new AppException(ErrorCode.TOKEN_INVALID);
             }
         } catch (JOSEException | ParseException e) {
             throw new BadCredentialsException("Token không hợp lệ");
-//            throw new AppException(ErrorCode.TOKEN_INVALID);
         }
         if (Objects.isNull(jwtDecoder)) {
             SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "HS512");
@@ -51,7 +49,7 @@ public class CustomJwtDecoder implements JwtDecoder {
                     .macAlgorithm(MacAlgorithm.HS512)
                     .build();
         }
-
+        log.info("token hợp lệ ");
         return jwtDecoder.decode(token);
     }
 }
