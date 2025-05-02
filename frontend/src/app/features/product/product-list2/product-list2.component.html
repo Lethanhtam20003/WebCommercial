@@ -1,0 +1,39 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-4">Product List</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Title On Sale -->
+      <div class="text-center">
+        <h2 class="text-xl font-bold text-black">On Sale</h2>
+        <div class="w-20 h-1 bg-danger mx-auto mt-1"></div>
+      </div>
+
+      <!-- Title Best Seller -->
+      <div class="text-center">
+        <h2 class="text-xl font-bold text-black">Best Seller</h2>
+        <div class="w-20 h-1 bg-danger mx-auto mt-1"></div>
+      </div>
+
+      <!-- Title Top Viewed -->
+      <div class="text-center">
+        <h2 class="text-xl font-bold text-black">Top Viewed</h2>
+        <div class="w-20 h-1 bg-danger mx-auto mt-1"></div>
+      </div>
+    <!-- Product Card -->
+    <div *ngFor="let product of products" class="product-card bg-white rounded-lg shadow-md overflow-hidden mx-5 mt-2">
+      <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-48 object-cover">
+      <div class="p-4">
+        <h3 class="text-xl font-semibold mb-2">{{ product.name }}</h3>
+        <p class="text-gray-600 mb-2">{{ product.description }}</p>
+        <div class="flex justify-between items-center">
+          <span class="product-price text-lg font-bold ">${{ product.price.toFixed(2) }}</span>
+          <button 
+            class="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark"
+            (click)="addToCart(product)"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
