@@ -48,7 +48,7 @@ const protectedRoutes: Routes = [
     loadComponent: () => import('./shared/components/dashboard/dashboard.component')
       .then(m => m.DashboardComponent),
     title: 'Dashboard',
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     data: {
       showHeader: true,
       showFooter: true,

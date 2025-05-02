@@ -18,11 +18,9 @@
           <img [src]="product.imageUrl" class="card-img-top p-3" alt="...">
            <!-- Hover overlay -->
           <div class="hover-overlay">
-            <button class="btn btn-outline-dark btn-sm mb-3" (click)="addToCart(product)">ADD TO CART</button>
-            <div class="d-flex justify-content-center gap-2 mb-3">
-              <i class="bi bi-eye cursor-pointer" (click)="viewProductDetails(product)" title="Xem chi tiết"></i>
+            <div class="d-flex justify-content-center gap-2 ">
+              <i class="bi bi-cart btn-outline-dark btn-sm " (click)="addToCart(product)"></i>
               <i class="bi bi-heart cursor-pointer" (click)="addToWishlist(product)" title="Yêu thích"></i>
-              <i class="bi bi-bar-chart cursor-pointer" (click)="compareProduct(product)" title="So sánh"></i>
             </div>
           </div>
           <span *ngIf="product.label" class="position-absolute top-0 end-0 badge bg-{{ product.labelColor }} m-2 text-uppercase">
