@@ -3,36 +3,48 @@ import { NgIf } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { RouteLink } from '../../../core/constants/route-link';
+import { LabelConstants } from '../../../core/constants/label.constants';
+import {
+	FormBuilder,
+	FormGroup,
+	FormsModule,
+	ReactiveFormsModule,
+} from '@angular/forms';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [RouterModule],
-  template: `
-    <header class="bg-white shadow">
-      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold">My Application</h1>
-        <nav class="space-x-4">
-          <a routerLink="/" class="text-gray-700 hover:text-gray-900">
-            <i class="bi bi-house-door me-1"></i>Home
-          </a>
-          <a routerLink="/about" class="text-gray-700 hover:text-gray-900">
-            <i class="bi bi-info-circle me-1"></i>About
-          </a>
-          <a routerLink="/contact" class="text-gray-700 hover:text-gray-900">
-            <i class="bi bi-envelope me-1"></i>Contact
-          </a>
-          <a routerLink="/cart" class="text-gray-700 hover:text-gray-900">
-            <i class="bi bi-cart fs-5"></i>
-          </a>
-        </nav>
-      </div>
-    </header>  
-  `,
-  styleUrl: './header.component.scss'
+	selector: 'app-header',
+	standalone: true,
+	imports: [RouterModule, FormsModule, ReactiveFormsModule],
+	templateUrl: './header.component.html',
+	styleUrls: ['./header.component.scss', './header.scss'],
 })
 export class HeaderComponent {
-  constructor( private http: HttpClient, private router: Router) {}
+	constructor(
+		private fb: FormBuilder,
+		private http: HttpClient,
+		private router: Router
+	) {}
+
+	logo2: string = 'assets/images/shop/logo2.png';
+	searchForm!: FormGroup;
+	ngOnInit(): void {
+		this.searchForm = this.fb.group({
+			searchInput: [''],
+		});
+	}
+
+	/**
+	 * @description: navigation while in home page, or else reload the page if stay in home page
+	 */
+	goHome() {
+		if (this.router.url === this.route.homeRoute || this.router.url === '/') {
+			location.reload();
+		} else {
+			this.router.navigate([this.route.homeRoute]);
+		}
+	}
+
+	protected readonly route = RouteLink;
+	protected readonly label = LabelConstants;
 }
-
-

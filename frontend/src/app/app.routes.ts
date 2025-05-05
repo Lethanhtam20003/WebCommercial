@@ -7,36 +7,42 @@ import { RouteLink } from './core/constants/route-link';
  * Định nghĩa các route cho module Auth
  */
 const authRoutes: Routes = [
-  {
-    path: RouteLink.loginRoute,
-    loadComponent: () => import('./features/auth/login/login.component')
-      .then(m => m.LoginComponent),
-    title: LabelConstants.logInPage,
-    data: {
-      showHeader: false,
-      showFooter: false
-    }
-  },
-  {
-    path: RouteLink.registerRoute,
-    loadComponent: () => import('./features/auth/register/register.component')
-      .then(m => m.RegisterComponent),
-    title: LabelConstants.registerPage,
-    data: {
-      showHeader: false,
-      showFooter: false
-    }
-  },
-  {
-    path: RouteLink.oauth2RedirectRoute,
-    loadComponent: () => import('./shared/components/redirect/oauth2_redirect.component')
-      .then(m => m.Oauth2RedirectComponent),
-    title: LabelConstants.ProcessingLogin,
-    data: {
-      showHeader: false,
-      showFooter: false
-    }
-  }
+	{
+		path: RouteLink.loginRoute,
+		loadComponent: () =>
+			import('./features/auth/login/login.component').then(
+				m => m.LoginComponent
+			),
+		title: LabelConstants.logInPage,
+		data: {
+			showHeader: false,
+			showFooter: false,
+		},
+	},
+	{
+		path: RouteLink.registerRoute,
+		loadComponent: () =>
+			import('./features/auth/register/register.component').then(
+				m => m.RegisterComponent
+			),
+		title: LabelConstants.registerPage,
+		data: {
+			showHeader: false,
+			showFooter: false,
+		},
+	},
+	{
+		path: RouteLink.oauth2RedirectRoute,
+		loadComponent: () =>
+			import('./shared/components/redirect/oauth2_redirect.component').then(
+				m => m.Oauth2RedirectComponent
+			),
+		title: LabelConstants.ProcessingLogin,
+		data: {
+			showHeader: false,
+			showFooter: false,
+		},
+	},
 ];
 
 /**
@@ -61,21 +67,23 @@ const protectedRoutes: Routes = [
  * Routes chính của ứng dụng
  */
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
-  },
-  ...authRoutes,
-  ...protectedRoutes,
-  {
-    path: '**',
-    loadComponent: () => import('./shared/components/error/not-found/not-found.component')
-      .then(m => m.NotFoundComponent),
-    title: 'Page Not Found',
-    data: {
-      showHeader: true,
-      showFooter: true
-    }
-  }
+	{
+		path: '',
+		redirectTo: 'dashboard',
+		pathMatch: 'full',
+	},
+	...authRoutes,
+	...protectedRoutes,
+	{
+		path: '**',
+		loadComponent: () =>
+			import('./shared/components/error/not-found/not-found.component').then(
+				m => m.NotFoundComponent
+			),
+		title: 'Page Not Found',
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+	},
 ];

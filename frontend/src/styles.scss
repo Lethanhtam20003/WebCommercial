@@ -1,26 +1,56 @@
-/* You can add global styles to this file, and also import other style files */
-@use "tailwindcss";
-@use "primeicons/primeicons.css";
+@use 'tailwindcss';
 @use "bootstrap-icons/font/bootstrap-icons.css";
-// Import Bootstrap's source Sass files for customization
-@use "bootstrap/scss/bootstrap";
+@use 'primeicons/primeicons.css';
+@use 'bootstrap/scss/bootstrap';
+
+:root {
+	--primary-color: #141d22;
+	/* Màu chủ đạo */
+	--primary-text-color: #ffffff;
+	/* Màu chữ trên nền chủ đạo */
+	--accent-color: #ff4500;
+	/* Màu nhấn */
+	--accent-text-color: #ffffff;
+	/* Màu chữ trên nền nhấn */
+	--surface-color: #ffffff;
+	/* Màu nền giao diện */
+	--surface-text-color: #141d22;
+	/* Màu chữ trên nền giao diện */
+	--background-color: #ffffff;
+	--background-text-color: #141d22;
+	--facebook-logo-color: #1877f2;
+	--google-green-color: #34a853;
+	--p-inputtext-focus-ring-color: var(--primary-color);
+	--p-button-primary-background: var(--primary-color);
+	--p-button-primary-color: var(--primary-text-color);
+	--p-button-primary-border-color: var(--primary-color);
+	--p-button-primary-hover-background: var(--accent-color);
+	--p-button-primary-hover-border-color: var(--accent-color);
+}
 
 p-floatlabel {
-  input:focus {
-    border: 1px solid #cbd5e1 !important;
-  }
-  p-password,
-  input {
-    div {
-      width: 100% !important;
+	input:focus {
+		border: 1px solid #cbd5e1 !important;
+	}
+	p-password,
+	input {
+		div {
+			width: 100% !important;
 
-      input {
-        width: 100% !important;
-      }
-    }
-  }
-  .responsive-logo {
-    width: 120px;
-    height: 34px;
-  }
+			input {
+				width: 100% !important;
+				input.p-inputtext {
+					width: 100% !important;
+				}
+			}
+		}
+	}
+}
+
+ul {
+	padding: 0;
+}
+.responsive-logo {
+	width: 120px;
+	height: 34px;
 }
