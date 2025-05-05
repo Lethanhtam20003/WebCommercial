@@ -1,8 +1,8 @@
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { RouteLink } from './../../constant/route-link';
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
+	FormBuilder,
 	FormControl,
 	FormGroup,
 	FormsModule,
@@ -63,13 +63,27 @@ export class HeaderComponent implements OnInit {
 	/**
 	 * @var logo2: logo for clicking it to turn to home page
 	 */
-  constructor(private fb:FormBuilder){}
+	constructor(
+		private fb: FormBuilder,
+		private router: Router
+	) {}
 	logo2: string = 'assets/images/shop/logo2.png';
 	searchForm!: FormGroup;
 	ngOnInit(): void {
 		this.searchForm = this.fb.group({
-      searchInput: ['']
-    });
+			searchInput: [''],
+		});
+	}
+
+  /**
+   * @description: navigation while in home page, or else reload the page if stay in home page
+   */
+	goHome() {
+		if (this.router.url === this.route.homeRoute || this.router.url === '/') {
+			location.reload();
+		} else {
+			this.router.navigate([this.route.homeRoute]);
+		}
 	}
 
 	protected readonly route = RouteLink;

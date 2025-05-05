@@ -41,7 +41,7 @@
 </svg>
 
 <main>
-	<header class="p-3 bg-dark text-white">
+	<header class="p-3 text-white">
 		<div class="container">
 			<div
 				class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
@@ -50,42 +50,63 @@
 					href="/"
 					class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
 				>
-					<svg
-						class="bi me-2"
-						width="40"
-						height="32"
-						role="img"
-						aria-label="Bootstrap"
-					>
-						<use xlink:href="#bootstrap" />
-					</svg>
+					<img [src]="logo2" alt="" class="w-30" />
 				</a>
 
 				<ul
 					class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
 				>
-					<li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
-					<li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-					<li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-					<li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-					<li><a href="#" class="nav-link px-2 text-white">About</a></li>
+					<li>
+						<a href="#" class="nav-link px-2 text-secondary" (click)="goHome()">{{
+							label.home
+						}}</a>
+					</li>
+					<li>
+						<a href="#" class="nav-link px-2 text-white">{{
+							label.newProduct
+						}}</a>
+					</li>
+					<li>
+						<a href="#" class="nav-link px-2 text-white">{{ label.sport }}</a>
+					</li>
+					<li>
+						<a href="#" class="nav-link px-2 text-white">{{
+							label.badminton
+						}}</a>
+					</li>
+					<li>
+						<a href="#" class="nav-link px-2 text-white">{{
+							label.pickleball
+						}}</a>
+					</li>
 				</ul>
 
-				<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" [formGroup]="searchForm">
+				<form
+					class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
+					[formGroup]="searchForm"
+				>
 					<input
 						type="search"
 						class="form-control form-control-dark text-white"
-            [placeholder]="label.searchProduct"
-            formControlName="searchInput"
+						[placeholder]="label.searchProduct"
+						formControlName="searchInput"
 						aria-label="Search"
 					/>
 				</form>
 
 				<div class="text-end">
-					<button type="button" class="btn btn-outline-light me-2" [routerLink]="route.loginRoute">
+					<button
+						type="button"
+						class="btn btn-outline-light me-2"
+						[routerLink]="route.loginRoute"
+					>
 						{{ label.logIn }}
 					</button>
-					<button type="button" class="btn btn-primary" [routerLink]="route.registerRoute">
+					<button
+						type="button"
+						class="btn btn-primary"
+						[routerLink]="route.registerRoute"
+					>
 						{{ label.register }}
 					</button>
 				</div>

@@ -47,4 +47,10 @@ export class LabelConstants {
   public static readonly searchProduct: string = 'Tìm kiếm sản phẩm';
   public static readonly logInWithGoogle: string = 'Đăng nhập bằng google';
   public static readonly signUpWithGoogle: string = 'Đăng ký bằng google';
+  public static readonly home: string = 'Trang chủ';
+  public static readonly newProduct: string = 'Hàng mới';
+  public static readonly sport: string = 'Môn thể thao';
+  public static readonly badminton: string = 'Cầu lông';
+  public static readonly pickleball: string = 'Pickle ball';
+
 }
