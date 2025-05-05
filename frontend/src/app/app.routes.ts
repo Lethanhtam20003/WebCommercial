@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.components';
-import { RegisterComponent } from './components/register/register.components';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LabelConstants } from './core/constants/label.constants';
 import { RouteLink } from './core/constants/route-link';
@@ -58,7 +56,7 @@ const protectedRoutes: Routes = [
 				m => m.DashboardComponent
 			),
 		title: 'Dashboard',
-		canActivate: [AuthGuard],
+		// canActivate: [AuthGuard],
 		data: {
 			showHeader: true,
 			showFooter: true,

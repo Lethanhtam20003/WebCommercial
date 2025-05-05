@@ -7,7 +7,7 @@ import { LabelConstants } from '../../../core/constants/label.constants';
 	selector: 'app-footer',
 	templateUrl: './footer.component.html',
 	styleUrl: 'footer.component.scss',
-	imports: [NgOptimizedImage],
+	// imports: [NgOptimizedImage],
 	standalone: true,
 })
 export class FooterComponent {
