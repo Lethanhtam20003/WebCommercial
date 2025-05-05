@@ -1,14 +1,16 @@
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import Aura from '@primeng/themes/aura';
+import Material from '@primeng/themes/material';
+import Lara from '@primeng/themes/lara';
+import Nora from '@primeng/themes/nora';
 
 import { routes } from './app.routes';
-import { providePrimeNG } from 'primeng/config';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SocialAuthServiceConfig, FacebookLoginProvider } from '@abacritt/angularx-social-login';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
-import { environment } from '../environments/environment';
+import { providePrimeNG } from 'primeng/config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,14 +21,14 @@ export const appConfig: ApplicationConfig = {
       provide: 'SocialAuthServiceConfig',
       useValue: {
         autoLogin: false,
-        providers: [
-          {
-            id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider(environment.facebookAppId, {
-              scope: 'email,public_profile',
-            }),
-          },
-        ],
+        // providers: [
+        //   {
+        //     id: FacebookLoginProvider.PROVIDER_ID,
+        //     provider: new FacebookLoginProvider(environment.facebookAppId, {
+        //       scope: 'email,public_profile',
+        //     }),
+        //   },
+        // ],
       } as SocialAuthServiceConfig,
     },
     providePrimeNG({

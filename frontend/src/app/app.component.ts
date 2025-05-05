@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { FooterComponent } from './shared/components/footer/footer.component';
-import { HeaderComponent } from './shared/components/header/header.component';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
-import { RouteLink } from './core/constants/route-link';
 import {NgIf} from '@angular/common';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { RouteLink } from './core/constants/route-link';
+import { HeaderComponent } from './shared/components/header/header.component';
 
 @Component({
 
@@ -12,21 +12,21 @@ import {NgIf} from '@angular/common';
 	imports: [
 		RouterOutlet,
 		HeaderComponent,
-		FooterComponent,
 		SocialLoginModule,
 		NgIf,
+		FooterComponent,
 	],
 	standalone: true,
 	template: `
 		<app-header *ngIf="showHeaderFooter"></app-header>
 		<router-outlet></router-outlet>
-		<app-footer *ngIf="showHeaderFooter"></app-footer>
+    <app-footer></app-footer>
 	`,
 	styles: ``,
 })
 export class AppComponent implements OnInit {
-	title = 'frontend';
-	showHeaderFooter = true;
+	title: string = 'frontend';
+	showHeaderFooter: boolean = true;
 
 	/*
 	 * list of routes that don't need header and footer
@@ -47,11 +47,9 @@ export class AppComponent implements OnInit {
 		this.router.events.subscribe(event => {
 			if (event instanceof NavigationEnd) {
 				const currentUrl = event.urlAfterRedirects;
-				console.log(currentUrl);
 				this.showHeaderFooter = !this.dontNeedHeaderFooterPages.some(route =>
-					currentUrl.startsWith('/'+route)
+					currentUrl.startsWith('/' + route)
 				);
-				console.log(this.showHeaderFooter);
 			}
 		});
 	}

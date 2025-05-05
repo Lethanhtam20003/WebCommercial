@@ -1,5 +1,4 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { selectorName } from '../../../core/constants/selectorName';
 import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +11,7 @@ import { RouteLink } from '../../../core/constants/route-link';
 import { RouterLink } from '@angular/router';
 
 @Component({
-	selector: selectorName.registerComponent,
+	selector: 'register-component',
 	standalone: true,
 	imports: [
 		Button,
