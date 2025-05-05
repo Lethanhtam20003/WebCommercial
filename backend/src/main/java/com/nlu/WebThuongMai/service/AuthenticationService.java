@@ -34,6 +34,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * Service xử lý các chức năng liên quan đến xác thực người dùng
+ * Bao gồm đăng nhập, đăng xuất, kiểm tra token, làm mới token
+ * Sử dụng JWT (JSON Web Token) để xác thực
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -55,8 +60,11 @@ public class AuthenticationService {
     long REFRESHABLE_DURATION;
 
     /**
-     * @param request (username , password)
-     * @return is authenticated
+     * Xác thực người dùng và tạo token JWT
+     * 
+     * @param request Chứa thông tin đăng nhập (username, password)
+     * @return AuthenticationResponse chứa token JWT nếu xác thực thành công
+     * @throws AppException nếu thông tin đăng nhập không hợp lệ
      */
     public AuthenticationResponse login(@NotNull AuthenticationRequest request) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -65,7 +73,7 @@ public class AuthenticationService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!authenticated)
-            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+            throw new AppException(ErrorCode.PASSWORD_NOT_CORRECT);
         var token = generateToken(user);
         return AuthenticationResponse.builder()
                 .token(token)
@@ -73,11 +81,12 @@ public class AuthenticationService {
     }
 
     /**
-     * save token to invalidatedToken table
-     *
-     * @param request token
-     * @throws ParseException
-     * @throws JOSEException
+     * Đăng xuất người dùng bằng cách vô hiệu hóa token
+     * Token bị vô hiệu hóa sẽ được lưu vào bảng invalidatedToken
+     * 
+     * @param request Chứa token cần vô hiệu hóa
+     * @throws ParseException nếu không thể parse token
+     * @throws JOSEException nếu có lỗi xử lý JWT
      */
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
         try {
@@ -95,10 +104,12 @@ public class AuthenticationService {
     }
 
     /**
-     * check token
-     *
-     * @param request
-     * @return IntrospectResponse isValid
+     * Kiểm tra tính hợp lệ của token
+     * 
+     * @param request Chứa token cần kiểm tra
+     * @return IntrospectResponse cho biết token có hợp lệ hay không
+     * @throws JOSEException nếu có lỗi xử lý JWT
+     * @throws ParseException nếu không thể parse token
      */
     public IntrospectResponse introspect(@NotNull IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
@@ -114,13 +125,14 @@ public class AuthenticationService {
     }
 
     /**
-     * create a token.
-     * Algorithm HS512,
-     *
-     * @param user
-     * @return token
+     * Tạo token JWT mới cho người dùng
+     * Token chứa thông tin username, role và thời gian hết hạn
+     * Sử dụng thuật toán HS512 để ký token
+     * 
+     * @param user Thông tin người dùng để tạo token
+     * @return Token JWT dạng chuỗi
      */
-    private String generateToken(@NotNull User user) {
+    public String generateToken(@NotNull User user) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
@@ -142,14 +154,16 @@ public class AuthenticationService {
     }
 
     /**
-     * verify Token
-     *
-     * @param token
-     * @return SignedJWT
-     * @throws JOSEException
-     * @throws ParseException
+     * Xác thực và kiểm tra tính hợp lệ của token
+     * 
+     * @param token Token cần xác thực
+     * @param isRefresh True nếu đang kiểm tra để refresh token
+     * @return SignedJWT đã được xác thực
+     * @throws JOSEException nếu có lỗi xử lý JWT
+     * @throws ParseException nếu không thể parse token
+     * @throws AppException nếu token không hợp lệ hoặc đã hết hạn
      */
-    private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
+    public SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(TOKEN_KEY);
         SignedJWT signedJWT = SignedJWT.parse(token);
         Date expiryTime = (isRefresh)
@@ -163,6 +177,15 @@ public class AuthenticationService {
         return signedJWT;
     }
 
+    /**
+     * Làm mới token JWT
+     * Vô hiệu hóa token cũ và tạo token mới
+     * 
+     * @param request Chứa token cần làm mới
+     * @return AuthenticationResponse chứa token mới
+     * @throws JOSEException nếu có lỗi xử lý JWT
+     * @throws ParseException nếu không thể parse token
+     */
     public AuthenticationResponse refreshToken(@NotNull RefreshRequest request) throws JOSEException, ParseException {
         var signedJWT = verifyToken(request.getToken(), true);
         // cancel current token
@@ -176,13 +199,6 @@ public class AuthenticationService {
         // generate new token
         var username = signedJWT.getJWTClaimsSet().getSubject();
         User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        var token = generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(token)
-                .build();
-    }
-
-    public AuthenticationResponse loginFacebook(User user) {
         var token = generateToken(user);
         return AuthenticationResponse.builder()
                 .token(token)

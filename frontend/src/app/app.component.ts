@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
-import { RouteLink } from './constant/route-link';
-import { NgIf } from '@angular/common';
-import { FooterComponent } from './components/footer/footer.component';
+import {NgIf} from '@angular/common';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { RouteLink } from './core/constants/route-link';
 
 @Component({
+
 	selector: 'app-root',
 	imports: [
 		RouterOutlet,
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit {
 	private dontNeedHeaderFooterPages: string[] = [
 		RouteLink.loginRoute,
 		RouteLink.registerRoute,
-		RouteLink.dashboardRoute,
+		// RouteLink.dashboardRoute,
 		RouteLink.forgotPasswordRoute,
 		RouteLink.profileRoute,
 		RouteLink.resetPasswordRoute,

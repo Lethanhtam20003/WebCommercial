@@ -14,7 +14,7 @@ import java.util.Objects;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException e) {
+    public ResponseEntity<ApiResponse<?>> handlingRuntimeException(RuntimeException e) {
         return ResponseEntity.badRequest().body(ApiResponse.builder()
                 .code(9999)
                 .message(e.getMessage())
@@ -39,17 +39,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = AppException.class)
-    public ResponseEntity<ApiResponse> handlingAppException(AppException e) {
+    public ResponseEntity<ApiResponse<?>> handlingAppException(AppException e) {
         return ResponseEntity
-                .status(e.errorCode.getHttpStatusCode())
+                .status(e.getErrorCode().getHttpStatusCode())
                 .body(ApiResponse.builder()
-                        .code(e.errorCode.getCode())
-                        .message(e.errorCode.getMessage())
+                        .code(e.getErrorCode().getCode())
+                        .message(e.getErrorCode().getMessage())
                         .build());
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
-    public ResponseEntity<ApiResponse> handlingAppException(AccessDeniedException e) {
+    public ResponseEntity<ApiResponse<?>> handlingAccessDeniedException(AccessDeniedException e) {
         ErrorCode code = ErrorCode.UNAUTHORIZED;
         return ResponseEntity
                 .status(code.getHttpStatusCode())
@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = ParseException.class)
-    public ResponseEntity<ApiResponse> handlingParseException(ParseException e) {
+    public ResponseEntity<ApiResponse<?>> handlingParseException(ParseException e) {
         ErrorCode code = ErrorCode.TOKEN_INVALID;
         return ResponseEntity
                 .status(code.getHttpStatusCode())

@@ -1,6 +1,6 @@
 @use 'tailwindcss';
 @use 'primeicons/primeicons.css';
-@use "bootstrap/scss/bootstrap";
+@use 'bootstrap/scss/bootstrap';
 
 :root {
 	--primary-color: #141d22;
@@ -19,36 +19,37 @@
 	--background-text-color: #141d22;
 	--facebook-logo-color: #1877f2;
 	--google-green-color: #34a853;
-  --p-inputtext-focus-ring-color: var(--primary-color);
-  --p-button-primary-background: var(--primary-color);
-  --p-button-primary-color: var(--primary-text-color);
-  --p-button-primary-border-color: var(--primary-color);
-  --p-button-primary-hover-background: var(--accent-color);
-  --p-button-primary-hover-border-color: var(--accent-color);
+	--p-inputtext-focus-ring-color: var(--primary-color);
+	--p-button-primary-background: var(--primary-color);
+	--p-button-primary-color: var(--primary-text-color);
+	--p-button-primary-border-color: var(--primary-color);
+	--p-button-primary-hover-background: var(--accent-color);
+	--p-button-primary-hover-border-color: var(--accent-color);
 }
 
-::ng-deep {
-	.p-floatlabel {
-		.p-inputtext {
-			border-color: var(--primary-color);
+p-floatlabel {
+	input:focus {
+		border: 1px solid #cbd5e1 !important;
+	}
+	p-password,
+	input {
+		div {
+			width: 100% !important;
+
+			input {
+				width: 100% !important;
+				input.p-inputtext {
+					width: 100% !important;
+				}
+			}
 		}
-		.p-inputtext:focus {
-			border-color: var(--primary-color) !important;
-		}
-		label {
-			color: var(--primary-color);
-		}
-    p-password{
-      div.p-password{
-        width: 100% !important;
-        input.p-inputtext{
-          width: 100% !important;
-        }
-      }
-    }
 	}
 }
 
 ul {
-  padding: 0;
+	padding: 0;
+}
+.responsive-logo {
+	width: 120px;
+	height: 34px;
 }

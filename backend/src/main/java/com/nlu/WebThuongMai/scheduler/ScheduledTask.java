@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.configuration;
+package com.nlu.WebThuongMai.scheduler;
 
 import com.nlu.WebThuongMai.service.InvalidatedTokenService;
 import lombok.AccessLevel;

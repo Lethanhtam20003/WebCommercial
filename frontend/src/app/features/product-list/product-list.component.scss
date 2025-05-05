@@ -1,0 +1,25 @@
+.product-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    transition: transform 0.3s;
+  }
+  
+  .product-card:hover {
+    transform: scale(1.03);
+  }
+  
+  .hover-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .product-card:hover .hover-overlay {
+    opacity: 1;
+  }
+  

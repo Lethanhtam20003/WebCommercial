@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
-import { RouteLink } from '../../constant/route-link';
-import { LabelConstants } from '../../constant/label.constants';
+import { RouteLink } from '../../../core/constants/route-link';
+import { LabelConstants } from '../../../core/constants/label.constants';
 
 @Component({
 	selector: 'app-footer',

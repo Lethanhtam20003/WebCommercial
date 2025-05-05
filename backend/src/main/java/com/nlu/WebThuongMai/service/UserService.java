@@ -21,6 +21,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service xử lý các chức năng liên quan đến người dùng.
+ * Bao gồm các thao tác CRUD (Create, Read, Update, Delete) cho người dùng,
+ * cũng như các chức năng quản lý thông tin cá nhân.
+ * Class này sử dụng Spring Security để phân quyền truy cập các method.
+ */
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -42,7 +48,15 @@ public class UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    /**
+     * Tạo mới một người dùng trong hệ thống.
+     * Method này chỉ có thể được gọi bởi ADMIN.
+     *
+     * @param request Đối tượng chứa thông tin người dùng cần tạo
+     * @return UserResponse chứa thông tin của người dùng đã được tạo
+     * @throws AppException nếu username đã tồn tại trong hệ thống
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse createUser(UserCreationRequest request) {
         User u = userMapper.toUser(request);
 
@@ -58,34 +72,72 @@ public class UserService {
         return userMapper.toUserResponse(u);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    /**
+     * Lấy danh sách tất cả người dùng trong hệ thống.
+     * Method này chỉ có thể được gọi bởi ADMIN.
+     *
+     * @return List<UserResponse> Danh sách thông tin của tất cả người dùng
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserResponse> getUsers() {
         return userMapper.toUserResponseList(userRepository.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    /**
+     * Lấy thông tin của một người dùng theo ID.
+     * Method này chỉ có thể được gọi bởi ADMIN.
+     *
+     * @param userId ID của người dùng cần tìm
+     * @return UserResponse chứa thông tin của người dùng
+     * @throws AppException nếu không tìm thấy người dùng với ID tương ứng
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse getUserById(long userId) {
         return userMapper.toUserResponse(userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    /**
+     * Cập nhật thông tin của một người dùng.
+     * Method này có thể được gọi bởi ADMIN hoặc chính người dùng đó.
+     *
+     * @param userId ID của người dùng cần cập nhật
+     * @param request Đối tượng chứa thông tin cần cập nhật
+     * @return UserResponse chứa thông tin đã được cập nhật
+     * @throws RuntimeException nếu không tìm thấy người dùng với ID tương ứng
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse updateUser(long userId, UserUpdateRequest request) {
         User u = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         userMapper.toUser(u, request);
         return userMapper.toUserResponse(userRepository.save(u));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    /**
+     * Xóa một người dùng khỏi hệ thống.
+     * Method này chỉ có thể được gọi bởi ADMIN.
+     *
+     * @param userId ID của người dùng cần xóa
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(long userId) {
         userRepository.deleteById(userId);
     }
 
+    /**
+     * Lấy thông tin của người dùng hiện tại đang đăng nhập.
+     * Method này chỉ có thể được gọi bởi USER đã đăng nhập.
+     *
+     * @return UserResponse chứa thông tin của người dùng hiện tại
+     * @throws AppException nếu không tìm thấy thông tin người dùng trong hệ thống
+     */
+    @PreAuthorize("hasAuthority('USER')")
     public UserResponse getMyInf() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return userMapper.toUserResponse(user);
     }
 

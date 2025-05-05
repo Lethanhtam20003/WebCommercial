@@ -53,4 +53,9 @@ export class LabelConstants {
   public static readonly badminton: string = 'Cầu lông';
   public static readonly pickleball: string = 'Pickle ball';
 
+  // public static readonly forgotPasswordPage: string = 'Quên mật khẩu';
+  public static readonly or: string = 'hoặc';
+  public static readonly signInWithGoogle: string = 'Đăng nhập bằng Google';
+  public static readonly signInWithFacebook: string = 'Đăng nhập bằng Facebook';
+  public static readonly ProcessingLogin  : string = 'Đăng nhập bằng Github';
 }

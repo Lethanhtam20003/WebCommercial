@@ -4,19 +4,45 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+/**
+ * DTO đại diện cho thông tin người dùng từ Facebook
+ * Được sử dụng để map dữ liệu trả về từ Facebook API
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class UserFacebook {
+    /**
+     * ID của người dùng Facebook
+     */
     long id;
+
+    /**
+     * Tên đầy đủ của người dùng
+     */
     String name;
+
+    /**
+     * Địa chỉ email của người dùng
+     */
     String email;
+
+    /**
+     * Thông tin ảnh đại diện của người dùng
+     */
     Picture picture;
 
+    /**
+     * Class đại diện cho thông tin ảnh đại diện
+     * Được sử dụng để map với cấu trúc JSON của Facebook API
+     */
     public static class Picture {
 
+        /**
+         * Dữ liệu chi tiết của ảnh
+         */
         @JsonProperty("data")
         private Data data;
 
@@ -29,9 +55,14 @@ public class UserFacebook {
             this.data = data;
         }
 
-        // Inner class Data để ánh xạ trường "data"
+        /**
+         * Class chứa thông tin URL của ảnh đại diện
+         */
         public static class Data {
 
+            /**
+             * URL của ảnh đại diện
+             */
             private String url;
 
             // Getter và Setter cho trường "url"
