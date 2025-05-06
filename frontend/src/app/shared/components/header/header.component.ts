@@ -26,7 +26,7 @@ export class HeaderComponent {
 		private router: Router
 	) {}
 
-	logo2: string = 'assets/images/shop/logo2.png';
+	logo: string = 'assets/images/shop/logo.png';
 	searchForm!: FormGroup;
 	ngOnInit(): void {
 		this.searchForm = this.fb.group({

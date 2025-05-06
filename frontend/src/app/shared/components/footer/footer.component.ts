@@ -11,7 +11,7 @@ import { LabelConstants } from '../../../core/constants/label.constants';
 	standalone: true,
 })
 export class FooterComponent {
-	logo2: string = 'assets/images/shop/logo2.png';
+	logo: string = 'assets/images/shop/logo.png';
 	protected readonly RouteLink = RouteLink;
 	protected readonly Label = LabelConstants;
 }
