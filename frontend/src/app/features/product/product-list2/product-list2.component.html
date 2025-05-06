@@ -1,33 +1,33 @@
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-4">Product List</h1>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="container px-4 py-4">
+  <h1 class="fs-2 fw-bold mb-3">Product List</h1>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
       <!-- Title On Sale -->
       <div class="text-center">
-        <h2 class="text-xl font-bold text-black">On Sale</h2>
-        <div class="w-20 h-1 bg-danger mx-auto mt-1"></div>
+        <h2 class="fs-3 fw-bold text-dark">On Sale</h2>
+        <div class="w-25 h-2 bg-danger mx-auto mt-1"></div>
       </div>
 
       <!-- Title Best Seller -->
       <div class="text-center">
-        <h2 class="text-xl font-bold text-black">Best Seller</h2>
-        <div class="w-20 h-1 bg-danger mx-auto mt-1"></div>
+        <h2 class="fs-3 fw-bold text-dark">Best Seller</h2>
+        <div class="w-25 h-2 bg-danger mx-auto mt-1"></div>
       </div>
 
       <!-- Title Top Viewed -->
       <div class="text-center">
-        <h2 class="text-xl font-bold text-black">Top Viewed</h2>
-        <div class="w-20 h-1 bg-danger mx-auto mt-1"></div>
+        <h2 class="fs-3 fw-bold text-dark">Top Viewed</h2>
+        <div class="w-25 h-2 bg-danger mx-auto mt-1"></div>
       </div>
     <!-- Product Card -->
-    <div *ngFor="let product of products" class="product-card bg-white rounded-lg shadow-md overflow-hidden mx-5 mt-2">
-      <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-48 object-cover">
-      <div class="p-4">
-        <h3 class="text-xl font-semibold mb-2">{{ product.name }}</h3>
-        <p class="text-gray-600 mb-2">{{ product.description }}</p>
-        <div class="flex justify-between items-center">
-          <span class="product-price text-lg font-bold ">${{ product.price.toFixed(2) }}</span>
+    <div *ngFor="let product of products" class="product-card bg-white rounded shadow-sm overflow-hidden mx-2 mt-2">
+      <img [src]="product.imageUrl" [alt]="product.name" class="w-100 h-auto object-fit-cover">
+      <div class="p-3">
+        <h3 class="fs-4 fw-semibold mb-2">{{ product.name }}</h3>
+        <p class="text-secondary mb-2">{{ product.description }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="product-price fs-5 fw-bold">${{ product.price.toFixed(2) }}</span>
           <button 
-            class="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark"
+            class="btn btn-primary"
             (click)="addToCart(product)"
           >
             Add to Cart
