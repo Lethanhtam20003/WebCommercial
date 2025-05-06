@@ -24,74 +24,74 @@ import { RouterLink } from '@angular/router';
 	],
 	template: `
 		<div
-			class="h-screen flex items-start justify-center pt-10 bg-white max-w-full"
+			class="vh-100 d-flex align-items-start justify-content-center pt-4 bg-white w-100"
 		>
-			<form class="bg-white border border-gray-200 drop-shadow-2xl p-10">
-				<div class=" flex justify-center font-bold pb-10 text-[30px]">
+			<form class="bg-white border border-light shadow p-4">
+				<div class="d-flex justify-content-center fw-bold pb-4 fs-3">
 					{{ Label.register }}
 				</div>
-				<div class="card flex justify-center flex-col w-100">
-					<div class="flex flex-col justify-center pb-5">
+				<div class="card d-flex justify-content-center flex-column w-100">
+					<div class="d-flex flex-column justify-content-center pb-3">
 						<p-floatlabel variant="on">
 							<input
 								#usernameInput
 								pInputText
 								pSize="large"
-								class="w-full"
+								class="w-100"
 								id="{{ usernameInputId }}"
 								[(ngModel)]="username"
 								autocomplete="on"
 								name="{{ usernameInputId }}"
 							/>
 							<label
-								[ngClass]="{ '!text-black': usernameIsFocused }"
+								[ngClass]="{ 'text-dark': usernameIsFocused }"
 								for="{{ usernameInputId }}"
 								>{{ Label.username }}</label
 							>
 						</p-floatlabel>
 						@if (username == null || username == '') {
-							<small class="block mt-1 text-sm text-red-500 pl-1"
+							<small class="d-block mt-1 fs-6 text-danger ps-1"
 								>{{ ErrorMessage.pleaseEnterUsername }}
 							</small>
 						} @else if (username.length < 3) {
-							<small class="block mt-1 text-sm text-red-500 pl-1"
+							<small class="d-block mt-1 fs-6 text-danger ps-1"
 								>{{ ErrorMessage.usernameHasAtLeast3Characters }}
 							</small>
 						}
 					</div>
-					<div class="flex flex-col justify-center pb-5">
+					<div class="d-flex flex-column justify-content-center pb-3">
 						<p-floatlabel variant="on">
 							<input
 								#emailInput
 								pInputText
 								pSize="large"
-								class="w-full"
+								class="w-100"
 								id="{{ emailInputId }}"
 								[(ngModel)]="email"
 								autocomplete="on"
 								name="{{ emailInputId }}"
 							/>
 							<label
-								[ngClass]="{ '!text-black': emailIsFocused }"
+								[ngClass]="{ 'text-dark': emailIsFocused }"
 								for="{{ emailInputId }}"
 								>{{ Label.email }}</label
 							>
 						</p-floatlabel>
 						@if (email == null || email == '') {
-							<small class="block mt-1 text-sm text-red-500 pl-1"
+							<small class="d-block mt-1 fs-6 text-danger ps-1"
 								>{{ ErrorMessage.pleaseEnterEmail }}
 							</small>
 						} @else if (!isValidEmail(email)) {
-							<small class="block mt-1 text-sm text-red-500 pl-1">
+							<small class="d-block mt-1 fs-6 text-danger ps-1">
 								{{ ErrorMessage.emailIsNotValid }}
 							</small>
 						}
 					</div>
-					<div class="flex flex-col justify-center pb-5">
-						<p-floatlabel variant="on" class="w-full">
+					<div class="d-flex flex-column justify-content-center pb-3">
+						<p-floatlabel variant="on" class="w-100">
 							<p-password
 								[(ngModel)]="password"
-								class="w-full"
+								class="w-100"
 								size="large"
 								[toggleMask]="true"
 								[feedback]="false"
@@ -101,29 +101,29 @@ import { RouterLink } from '@angular/router';
 								(onBlur)="setFocus('password', false)"
 							/>
 							<label
-								[ngClass]="{ 'text-black': passwordIsFocused }"
+								[ngClass]="{ 'text-dark': passwordIsFocused }"
 								for="{{ passwordInputId }}"
 							>
 								{{ Label.password }}
 							</label>
 						</p-floatlabel>
 						@if (password == null || password == '') {
-							<small class="block mt-1 text-sm text-red-500 pl-3"
+							<small class="d-block mt-1 fs-6 text-danger ps-3"
 								>{{ ErrorMessage.pleaseEnterPassword }}
 							</small>
 						} @else if (password.length < 8 || password.length > 30) {
-							<small class="block mt-1 text-sm text-red-500 pl-3"
+							<small class="d-block mt-1 fs-6 text-danger ps-3"
 								>{{
 									ErrorMessage.passwordHasAtLeast8CharactersAndSmallerThan30
 								}}
 							</small>
 						}
 					</div>
-					<div class="flex flex-col justify-center">
-						<p-floatlabel variant="on" class="w-full">
+					<div class="d-flex flex-column justify-content-center">
+						<p-floatlabel variant="on" class="w-100">
 							<p-password
 								[(ngModel)]="retypePassword"
-								class="w-full"
+								class="w-100"
 								size="large"
 								[toggleMask]="true"
 								[feedback]="false"
@@ -133,18 +133,18 @@ import { RouterLink } from '@angular/router';
 								(onBlur)="setFocus('retypePassword', false)"
 							/>
 							<label
-								[ngClass]="{ 'text-black': retypePasswordIsFocused }"
+								[ngClass]="{ 'text-dark': retypePasswordIsFocused }"
 								for="{{ retypePasswordInputId }}"
 								>{{ Label.retypePassword }}</label
 							>
 						</p-floatlabel>
 						@if (password.trim() !== retypePassword.trim()) {
-							<small class="block mt-1 text-sm text-red-500 pl-3"
+							<small class="d-block mt-1 fs-6 text-danger ps-3"
 								>{{ ErrorMessage.retypePasswordMustBeSame }}
 							</small>
 						}
 					</div>
-					<div class="card flex gap-4 pt-4">
+					<div class="card d-flex gap-2 pt-3">
 						<p-button
 							label="{{ Label.register }}"
 							[style]="{
@@ -154,11 +154,11 @@ import { RouterLink } from '@angular/router';
 							}"
 						/>
 					</div>
-					<div class="card flex flex-row gap-1 pt-2">
-						<p class="text-center text-sm">{{ Label.ifUHaveAnAccount }}</p>
+					<div class="card d-flex flex-row gap-1 pt-2">
+						<p class="text-center fs-6">{{ Label.ifUHaveAnAccount }}</p>
 						<a
 							routerLink="/{{ RouteLink.loginRoute }}"
-							class="text-center text-sm text-[#0096FF]"
+							class="text-center fs-6 text-primary"
 						>
 							{{ Label.returnToLogin }}
 						</a>

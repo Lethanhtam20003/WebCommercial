@@ -49,20 +49,18 @@ const authRoutes: Routes = [
  * Định nghĩa các route được bảo vệ (yêu cầu đăng nhập)
  */
 const protectedRoutes: Routes = [
-	{
-		path: 'dashboard',
-		loadComponent: () =>
-			import('./shared/components/dashboard/dashboard.component').then(
-				m => m.DashboardComponent
-			),
-		title: 'Dashboard',
-		// canActivate: [AuthGuard],
-		data: {
-			showHeader: true,
-			showFooter: true,
-			breadcrumb: 'Dashboard',
-		},
-	},
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./shared/components/dashboard/dashboard.component')
+      .then(m => m.DashboardComponent),
+    title: 'Dashboard',
+    // canActivate: [AuthGuard],
+    data: {
+      showHeader: true,
+      showFooter: true,
+      breadcrumb: 'Dashboard'
+    }
+  }
 ];
 
 /**
