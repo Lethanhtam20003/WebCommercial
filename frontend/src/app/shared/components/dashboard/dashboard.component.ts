@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ProductListComponent } from '../../../features/product-list/product-list.component';
-
+import { ProductListComponent } from '../../../features/product/product-list/product-list.component';
+import { ProductList2Component } from '../../../features/product/product-list2/product-list2.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ RouterModule, ProductListComponent],
+  imports: [ RouterModule, ProductListComponent, ProductList2Component],
   template: ` 
     <p>
       dashboard works!
       <app-product-list></app-product-list>
-      ok
+      <app-product-list2></app-product-list2>
     </p>
   `,
   styleUrl: './dashboard.component.scss'

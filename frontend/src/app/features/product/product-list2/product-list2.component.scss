@@ -1,0 +1,30 @@
+.card {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+}
+.product-card {
+    button {
+        background: linear-gradient(to right, #3C3D42, #FF392A,#FFEC74);
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        
+        &:hover {
+        background: linear-gradient(to left, #3C3D42, #FF392A,#FFEC74);
+        transform: translateY(-2px);
+        }
+
+    }   
+    .product-price {
+    color: #4A4E59;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-right: 10px;
+    }
+}
