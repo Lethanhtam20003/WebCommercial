@@ -1,109 +1,83 @@
-<div
-class="vh-100 d-flex align-items-start justify-content-center pt-4 bg-white w-100"
->
-<!-- <form class="bg-white border border-light shadow p-4" (ngSubmit)="ngOnsubmit()">
-  <div class="d-flex justify-content-center fw-bold pb-4 fs-3">
-    {{ Label.logIn }}
-  </div>
-  <div class="card d-flex justify-content-center flex-column w-100">
-    <div class="d-flex flex-column justify-content-center pb-3">
-      <p-floatlabel variant="on">
+<div class="login vh-100 d-flex flex-row align-items-center justify-content-center w-100">
+  <div class="login-container d-flex flex-row justify-content-center align-items-center">
+    
+    <div class="login-content p-4 ">
+      <!-- Câu chào mừng -->
+    <div class="welcome-message mb-4">
+      <h1 class="fade-in">Chào mừng đến với <span class="highlight">
+        <div class="fw-bold mb-4 text-center gradient-text">
+        <h1 class="logo-title">FIREKNIGHT</h1>
+        <h2 class="logo-subtitle">SPORT</h2>
+      </div></span></h1>
+      <p class="fade-in delay-1s">
+        Nền tảng quản lý và kết nối cộng đồng thể thao hiện đại, nhanh chóng và bảo mật.
+      </p>
+    </div>
+    
+    <!-- Form -->
+    <form [formGroup]="loginForm" class="login-form" (ngSubmit)="ngOnsubmit()">
+      
+      <div class="mb-3">
         <input
-          #usernameInput
-          pInputText
-          pSize="large"
-          class="w-100"
-          id="{{ usernameInputId }}"
-          [(ngModel)]="username"
+          class="form-control login-input"
+          id="username"
+          formControlName="username"
           autocomplete="on"
-          name="{{ usernameInputId }}"
+          placeholder="Username"
         />
-        <label
-          [ngClass]="{ 'text-dark': usernameIsFocused }"
-          for="{{ usernameInputId }}"
-        >{{ Label.username }}</label
-        >
-      </p-floatlabel>
-      @if (username == null || username == '') {
-        <small class="d-block mt-1 fs-6 text-danger ps-1"
-        >{{ ErrorMessage.pleaseEnterUsername }}
+        <small *ngIf="isFieldInvalid('username')" class="text-danger2">
+          {{ getErrorMessage('username') }}
         </small>
-      } @else if (username.length < 3) {
-        <small class="d-block mt-1 fs-6 text-danger ps-1"
-        >{{ ErrorMessage.usernameHasAtLeast3Characters }}
-        </small>
-      }
-    </div>
-    <div class="d-flex flex-column justify-content-center">
-      <p-floatlabel variant="on" class="w-100">
-        <p-password
-          [(ngModel)]="password"
-          class="w-100"
-          size="large"
-          [toggleMask]="true"
-          [feedback]="false"
-          [inputId]="passwordInputId"
-          name="{{ passwordInputId }}"
-          (onFocus)="setFocus('password', true)"
-          (onBlur)="setFocus('password', false)"
-        />
-        <label
-          [ngClass]="{ 'text-dark': passwordIsFocused }"
-          [for]="passwordInputId"
-        >{{ Label.password }}</label
-        >
-      </p-floatlabel>
-      @if (password == null || password == '') {
-        <small class="d-block mt-1 fs-6 text-danger ps-3"
-        >{{ ErrorMessage.pleaseEnterPassword }}
-        </small>
-      } @else if (password.length < 8 || password.length > 30) {
-        <small class="d-block mt-1 fs-6 text-danger ps-3"
-        >{{
-            ErrorMessage.passwordHasAtLeast8CharactersAndSmallerThan30
-          }}
-        </small>
-      }
-    </div>
-    <div class="card d-flex gap-2 pt-3">
-      <p-button type="submit"
-        label="{{ Label.logIn }}"
-        [style]="{
-                          'background-color': '#141d22',
-                          'border-color': '#141d22',
-                          'border-radius': '0px',
-                      }"
-      />
-      <p-button
-        routerLink="/{{ RouteLink.registerRoute }}"
-        label="{{ Label.register }}"
-        [style]="{
-                          'background-color': '#141d22',
-                          'border-color': '#141d22',
-                          'border-radius': '0px',
-                      }"
-      />
-    </div>
-    <div class="card d-flex flex-column gap-2 pt-2">
-      <p class="text-center fs-6">{{ Label.loginWithOther }}</p>
-      <div
-        class="card d-flex flex-row gap-2 w-100 justify-content-center align-items-center"
-      >
-        <p-button (onClick)="loginWithFacebook()"
-          severity="info"
-          [rounded]="true"
-          icon="pi pi-facebook"
-        />
-        <p-button
-          severity="success"
-          [rounded]="true"
-          icon="pi pi-google"
-        />
       </div>
+      <div class="mb-3">
+        <input
+          type="password"
+          class="form-control login-input"
+          id="password"
+          formControlName="password"
+          placeholder="Password"
+        />
+        <small *ngIf="isFieldInvalid('password')" class="text-danger2">
+          {{ getErrorMessage('password') }}
+        </small>
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary login-btn w-100 mb-3"
+        [disabled]="loginForm.invalid || isLoading"
+      >
+        {{ isLoading ? 'Đang đăng nhập...' : 'Đăng nhập' }}
+      </button>
+      <div class="text-center mb-3">
+        <span class="text-light">Chưa có tài khoản? <a  (click)="navigateToRegister()" class="register-link">Đăng ký ngay</a></span>
+      </div>
+
+      <!-- OR -->
+      <div class="or-divider my-3">
+        <span>HOẶC</span>
+      </div>
+
+      <!-- Facebook -->
+      <button
+        type="button"
+        class="btn login-btn-fb w-100 mb-2"
+        (click)="loginWithFacebook()"
+        [disabled]="isLoading"
+      >
+        <i class="bi bi-facebook me-2"></i>Đăng nhập với Facebook
+      </button>
+
+      <!-- Google -->
+      <button
+        type="button"
+        class="btn login-btn-gg w-100"
+        (click)="loginWithGoogle()"
+        [disabled]="isLoading"
+      >
+        <i class="bi bi-google me-2"></i>Đăng nhập với Google
+      </button>
+    </form>
     </div>
+    
   </div>
-</form> -->
-<form class="bg-white border border-black shadow pt-5 ">
-  oke
-</form>
 </div>

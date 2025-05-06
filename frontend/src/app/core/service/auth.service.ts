@@ -56,7 +56,7 @@ export class AuthService {
    */
   verifyAuthentication(): Observable<boolean> { 
     return this.isLoggedIn$.pipe(
-      take(1), // 👈 chỉ nhận 1 giá trị duy nhất
+      take(1), //  chỉ nhận 1 giá trị duy nhất
       switchMap(isLoggedIn => {
         if (isLoggedIn) {
           return of(true); // Đã đăng nhập, không cần kiểm tra lại
