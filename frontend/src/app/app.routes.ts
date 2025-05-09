@@ -60,6 +60,17 @@ const protectedRoutes: Routes = [
       showFooter: true,
       breadcrumb: 'Dashboard'
     }
+  },
+  {
+    path: RouteLink.profileRoute,
+    loadComponent: () => import('./shared/components/user-profile/user-profile.component').then(m=>m.UserProfileComponent),
+    title: LabelConstants.userProfile,
+    // canActivate: [AuthGuard],
+    data: {
+      showHeader: true,
+      showFooter: true,
+      breadcrumb: LabelConstants.userProfile
+    }
   }
 ];
 

@@ -10,5 +10,8 @@ export class ErrorMessageConstants {
   static readonly UnknownErrorOccurred: string='Đã xảy ra lỗi không xác định';
   static readonly userNotExisted: string='Tài khoản không tồn tại';
   static readonly passwordNotCorrect: string='Mật khẩu không chính xác';
+  static readonly cannotUploadImage: string='Không thể upload hình ảnh';
+  static readonly imageIsOversized: string='Hình ảnh có dung luọng quá 5 Mb';
+  static readonly imageIsNotInAllowedType: string='Hình ảnh không đúng định dạng cho phép';
 
 }
