@@ -23,6 +23,8 @@ import { AlertService } from '../../../core/service/alert.service';
 export class LoginComponent implements OnInit {
 	private cleanup: (() => void) | null = null;
 	returnUrl: string = '/';
+	username: string | null = null;
+	password: string | null = null;
 	constructor(
 		private router: Router,
 		private popupMessageService: PopupMessageService,
@@ -30,34 +32,13 @@ export class LoginComponent implements OnInit {
 		private alertService: AlertService,
 		private route: ActivatedRoute,
 		private fb: FormBuilder
-	) {
+	) 
+	{
 		this.loginForm = this.fb.group({
 			username: ['', [Validators.required, Validators.minLength(3)]],
 			password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]]
 		});
 	}
-	/*
-	 * @description: value for username and password in input
-	 * */
-	username: string = '';
-	password: string = '';
-
-	/*
-	 * @description: id for username and password input
-	 * */
-	readonly usernameInputId: string = 'username';
-	readonly passwordInputId: string = 'password';
-
-	/*
-	 * @description: state for username and password input
-	 * */
-	usernameIsFocused: boolean = false;
-	passwordIsFocused: boolean = false;
-
-	/*
-	 * @description: set focus for username input
-	 * */
-	@ViewChild('usernameInput') usernameInput!: ElementRef;
 
 	// Constants
 	Label = LabelConstants;
@@ -70,33 +51,32 @@ export class LoginComponent implements OnInit {
 	// Biến hiển thị loading
 	isLoading: boolean = false;
 
-	ngAfterViewInit() {
-		if (this.usernameInput) {
-			this.usernameInput.nativeElement.addEventListener('focus', () => {
-				this.setFocus('username', true);
-			});
-			this.usernameInput.nativeElement.addEventListener('blur', () => {
-				this.setFocus('username', false);
-			});
-		}
-	}
-
-	/*
-	 * @description: event handler set focus for input
-	 * */
-	setFocus(field: string, isFocused: boolean) {
-		if (field === 'username') {
-			this.usernameIsFocused = isFocused;
-		} else if (field === 'password') {
-			this.passwordIsFocused = isFocused;
-		}
-	}
+	
 
 	ngOnInit() {
 		// Bắt đầu lắng nghe token
 		this.cleanup = this.popupMessageService.listenForToken();
 		this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
-	}
+		const navigation = this.router.getCurrentNavigation();
+		if (navigation?.extras.state) {
+			this.username = navigation.extras.state['username'];
+			this.password = navigation.extras.state['password'];
+
+			// Tự động đăng nhập nếu có username và password
+			if (this.username && this.password) {
+				this.authService.login(this.username, this.password).subscribe({
+				next: (response) => {
+					if (response.code === 200) {
+					this.router.navigate([RouteLink.dashboardRoute]);
+					}
+				},
+				error: () => {
+					console.error('Đăng nhập thất bại');
+				}
+				});
+			}
+		}
+	}	
 
 	/**
 	 * Kiểm tra trường có lỗi validation không
@@ -115,7 +95,9 @@ export class LoginComponent implements OnInit {
 	 */
 	getErrorMessage(fieldName: string): string {
 		const field = this.loginForm.get(fieldName);
-		if (!field) return '';
+		if (!field) {
+			return '';
+		}
 
 		if (field.hasError('required')) {
 			return fieldName === 'username' 

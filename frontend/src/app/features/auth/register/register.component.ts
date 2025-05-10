@@ -1,236 +1,183 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LabelConstants } from '../../../core/constants/label.constants';
 import { ErrorMessageConstants } from '../../../core/constants/error-message.constants';
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { RouteLink } from '../../../core/constants/route-link';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AlertService } from '../../../core/service/alert.service';
+import { emailOrPhoneValidator } from '../../../shared/validations/emailOrPhoneValidator';
+import { AuthService } from '../../../core/service/auth.service';
+
 
 @Component({
 	selector: 'register-component',
 	standalone: true,
 	imports: [
 		FormsModule,
-		NgClass,
-		RouterLink,
+		ReactiveFormsModule,
+		CommonModule
+
 	],
-	template: `
-		<div
-			class="vh-100 d-flex align-items-start justify-content-center pt-4 bg-white w-100"
-		>
-			<form class="bg-white border border-light shadow p-4">
-				<div class="d-flex justify-content-center fw-bold pb-4 fs-3">
-					{{ Label.register }}
-				</div>
-				<div class="card d-flex justify-content-center flex-column w-100">
-					<div class="d-flex flex-column justify-content-center pb-3">
-						<div class="form-floating">
-							<input
-								#usernameInput
-								type="text"
-								class="form-control"
-								id="{{ usernameInputId }}"
-								[(ngModel)]="username"
-								autocomplete="on"
-								name="{{ usernameInputId }}"
-								placeholder="{{ Label.username }}"
-							/>
-							<label
-								[ngClass]="{ 'text-dark': usernameIsFocused }"
-								for="{{ usernameInputId }}"
-								>{{ Label.username }}</label
-							>
-						</div>
-						@if (username == null || username == '') {
-							<small class="d-block mt-1 fs-6 text-danger ps-1"
-								>{{ ErrorMessage.pleaseEnterUsername }}
-							</small>
-						} @else if (username.length < 3) {
-							<small class="d-block mt-1 fs-6 text-danger ps-1"
-								>{{ ErrorMessage.usernameHasAtLeast3Characters }}
-							</small>
-						}
-					</div>
-					<div class="d-flex flex-column justify-content-center pb-3">
-						<div class="form-floating">
-							<input
-								#emailInput
-								type="email"
-								class="form-control"
-								id="{{ emailInputId }}"
-								[(ngModel)]="email"
-								autocomplete="on"
-								name="{{ emailInputId }}"
-								placeholder="{{ Label.email }}"
-							/>
-							<label
-								[ngClass]="{ 'text-dark': emailIsFocused }"
-								for="{{ emailInputId }}"
-								>{{ Label.email }}</label
-							>
-						</div>
-						@if (email == null || email == '') {
-							<small class="d-block mt-1 fs-6 text-danger ps-1"
-								>{{ ErrorMessage.pleaseEnterEmail }}
-							</small>
-						} @else if (!isValidEmail(email)) {
-							<small class="d-block mt-1 fs-6 text-danger ps-1">
-								{{ ErrorMessage.emailIsNotValid }}
-							</small>
-						}
-					</div>
-					<div class="d-flex flex-column justify-content-center pb-3">
-						<div class="form-floating">
-							<input
-								type="password"
-								class="form-control"
-								id="{{ passwordInputId }}"
-								[(ngModel)]="password"
-								name="{{ passwordInputId }}"
-								placeholder="{{ Label.password }}"
-								(focus)="setFocus('password', true)"
-								(blur)="setFocus('password', false)"
-							/>
-							<label
-								[ngClass]="{ 'text-dark': passwordIsFocused }"
-								for="{{ passwordInputId }}"
-							>
-								{{ Label.password }}
-							</label>
-						</div>
-						@if (password == null || password == '') {
-							<small class="d-block mt-1 fs-6 text-danger ps-3"
-								>{{ ErrorMessage.pleaseEnterPassword }}
-							</small>
-						} @else if (password.length < 8 || password.length > 30) {
-							<small class="d-block mt-1 fs-6 text-danger ps-3"
-								>{{
-									ErrorMessage.passwordHasAtLeast8CharactersAndSmallerThan30
-								}}
-							</small>
-						}
-					</div>
-					<div class="d-flex flex-column justify-content-center">
-						<div class="form-floating">
-							<input
-								type="password"
-								class="form-control"
-								id="{{ retypePasswordInputId }}"
-								[(ngModel)]="retypePassword"
-								name="{{ retypePasswordInputId }}"
-								placeholder="{{ Label.retypePassword }}"
-								(focus)="setFocus('retypePassword', true)"
-								(blur)="setFocus('retypePassword', false)"
-							/>
-							<label
-								[ngClass]="{ 'text-dark': retypePasswordIsFocused }"
-								for="{{ retypePasswordInputId }}"
-								>{{ Label.retypePassword }}</label
-							>
-						</div>
-						@if (password.trim() !== retypePassword.trim()) {
-							<small class="d-block mt-1 fs-6 text-danger ps-3"
-								>{{ ErrorMessage.retypePasswordMustBeSame }}
-							</small>
-						}
-					</div>
-					<div class="card d-flex gap-2 pt-3">
-						<button
-							type="button"
-							class="btn btn-dark"
-							style="border-radius: 0px;"
-						>
-							{{ Label.register }}
-						</button>
-					</div>
-					<div class="card d-flex flex-row gap-1 pt-2">
-						<p class="text-center fs-6">{{ Label.ifUHaveAnAccount }}</p>
-						<a
-							routerLink="/{{ RouteLink.loginRoute }}"
-							class="text-center fs-6 text-primary"
-						>
-							{{ Label.returnToLogin }}
-						</a>
-					</div>
-				</div>
-			</form>
-		</div>
-	`,
+	templateUrl: './register.component.html',
 	styleUrl: './register.component.scss',
 })
-export class RegisterComponent {
-	/*
-	 * @description: value for username and password in input
-	 * */
-	username: string = '';
-	password: string = '';
-	retypePassword: string = '';
-	email: string = '';
-
-	/*
-	 * @description: id for username and password input
-	 * */
-	readonly usernameInputId: string = 'username';
-	readonly passwordInputId: string = 'password';
-	readonly retypePasswordInputId: string = 'retypePassword';
-	readonly emailInputId: string = 'email';
-
-	/*
-	 * @description: state for username and password input
-	 * */
-	usernameIsFocused: boolean = false;
-	passwordIsFocused: boolean = false;
-	retypePasswordIsFocused: boolean = false;
-	emailIsFocused: boolean = false;
-
-	/*
-	 * @description: set focus for username input
-	 * */
-	@ViewChild('usernameInput') usernameInput!: ElementRef;
-	@ViewChild('emailInput') emailInput!: ElementRef;
-	ngAfterViewInit() {
-		if (this.usernameInput) {
-			this.usernameInput.nativeElement.addEventListener('focus', () => {
-				this.setFocus('username', true);
-			});
-			this.usernameInput.nativeElement.addEventListener('blur', () => {
-				this.setFocus('username', false);
-			});
-		}
-		if (this.emailInput) {
-			this.emailInput.nativeElement.addEventListener('focus', () => {
-				this.setFocus('email', true);
-			});
-			this.emailInput.nativeElement.addEventListener('blur', () => {
-				this.setFocus('email', false);
-			});
-		}
+export class RegisterComponent implements OnInit{
+	constructor(
+		private router: Router,
+		private alertService: AlertService,
+		private fb: FormBuilder,
+		private authService: AuthService,
+	) {
+		this.registerForm = this.fb.group({
+			username: ['', [Validators.required, Validators.minLength(3)]],
+			password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]],
+			emailOrPhone: ['', [Validators.required, emailOrPhoneValidator.bind(this)]],
+			reenterpassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]]
+		});
 	}
+	// Constants
+	ErrorMessage = ErrorMessageConstants;
+	
+	registerForm: FormGroup;
+	isLoading: boolean = false;
+	passwordFieldOut = false;
+	reenterPasswordFieldOut = false;
 
-	/*
-	 * @description: event handler set focus for input
-	 * */
-	setFocus(field: string, isFocused: boolean) {
-		if (field === 'username') {
-			this.usernameIsFocused = isFocused;
-		} else if (field === 'email') {
-			this.emailIsFocused = isFocused;
-		} else if (field === 'password') {
-			this.passwordIsFocused = isFocused;
-		} else if (field === 'retypePassword') {
-			this.retypePasswordIsFocused = isFocused;
+
+	isFieldInvalid(fieldName: string): boolean {
+		const field = this.registerForm.get(fieldName);
+		return field ? field.invalid && (field.dirty || field.touched) : false;
+	}
+	
+	isPasswordFieldOut(): void {
+	  this.passwordFieldOut = true;
+	}
+	
+	isPasswordFieldIn(): void {
+	  this.passwordFieldOut = false;
+	}
+	
+	isReenterPasswordFieldOut(): void {
+	  this.reenterPasswordFieldOut = true;
+	}
+	
+	getErrorMessage(fieldName: string): string {
+		switch (fieldName) {
+			case 'username':
+				return this.getUsernameErrorMessage();
+			case 'password':
+				return this.getPasswordErrorMessage();
+			case 'emailOrPhone':
+				return this.getEmailOrPhoneErrorMessage();
+			case 'reenterpassword':
+				return this.getReEnterPassword();
+			default:
+				return '';
 		}
 	}
-
-	/*
-	 * @description: validate email format
-	 * */
-	isValidEmail(email: string): boolean {
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return emailRegex.test(email);
+	getUsernameErrorMessage(): string{
+		// if (this.registerForm.get('username')?.hasError('required')) {
+		// 	return this.ErrorMessage.pleaseEnterUsername;
+		// }
+		if (this.registerForm.get('username')?.hasError('minlength')) {
+			return this.ErrorMessage.usernameHasAtLeast3Characters;
+		}
+		return '';
 	}
+	getPasswordErrorMessage(): string{
+		// if (this.registerForm.get('password')?.hasError('required')) {
+		// 	return this.ErrorMessage.pleaseEnterPassword;
+		// }
+		if (this.registerForm.get('password')?.hasError('minlength')) {
+			return this.ErrorMessage.passwordHasAtLeast8Characters;
+		}
+		if (this.registerForm.get('password')?.hasError('maxlength')) {
+			return this.ErrorMessage.passwordHasAtMost30Characters;
+		}
+		return '';
+	}
+	getEmailOrPhoneErrorMessage(): string {
+		const emailControl = this.registerForm.get('emailOrPhone');
+	  
+		if (emailControl?.hasError('emailOrPhone')) {
+		  return 'Vui lòng nhập đúng định dạng email hoặc số điện thoại';
+		}
+	  
+		return '';
+	  }
+	  
+	getReEnterPassword(): string{
+		if (this.registerForm.get('reenterpassword')?.hasError('minlength')) {
+			return this.ErrorMessage.passwordHasAtLeast8Characters;
+		}
+		if (this.registerForm.get('reenterpassword')?.hasError('maxlength')) {
+			return this.ErrorMessage.passwordHasAtMost30Characters;
+		}
+		if (this.registerForm.get('reenterpassword')?.value !== this.registerForm.get('password')?.value) {
+			return this.ErrorMessage.retypePasswordMustBeSame;
+		}
+		return '';
+	}
+	isPasswordSame(): boolean {
+		// Chỉ kiểm tra sau khi đã rời khỏi ô mật khẩu
+		if (!this.passwordFieldOut) {
+		  return true; // Đừng hiện lỗi sớm
+		}
+	  
+		const password = this.registerForm.get('password')?.value;
+		const reenter = this.registerForm.get('reenterpassword')?.value;
+	  
+		if (password && reenter && password !== reenter) {
+		  return false; // KHÔNG KHỚP → Hiện lỗi
+		}
+	  
+		return true; // Khớp hoặc chưa nhập đủ → Không lỗi
+	  }
+	  
+	ngOnInit(): void {
+	}
+	ngOnsubmit(){
+		this.isLoading = true;
+		if (this.registerForm.invalid) {
+			this.registerForm.markAllAsTouched();
+			this.isLoading = false; 
+			return;
+		}
+		const formData = this.registerForm.value;
+		const { username, password, emailOrPhone } = formData;
 
-	protected readonly Label = LabelConstants;
-	protected readonly ErrorMessage = ErrorMessageConstants;
-	protected readonly RouteLink = RouteLink;
+		this.authService.register(username, emailOrPhone, password)
+		.subscribe({
+			next: (response) => {
+				if (response.code === 200) {
+					this.alertService.success('Đăng ký thành công!');
+					this.isLoading = false; 
+					this.router.navigate([RouteLink.loginRoute], {
+						state: { username: username, password: password }
+					  });
+					  
+				} else {
+					this.isLoading = false;
+					this.alertService.error(response.message || 'Đăng ký thất bại!');
+				}
+			},
+			error: () => {
+				this.isLoading = false;
+				this.alertService.error('Đăng ký thất bại!');
+			}
+		});
+
+	}
+	loginWithGoogle(){
+
+	}
+	loginWithFacebook(){
+
+	}
+	navigateToLogin(){
+		this.router.navigate([RouteLink.loginRoute]);
+	}
+		
+	
 }
