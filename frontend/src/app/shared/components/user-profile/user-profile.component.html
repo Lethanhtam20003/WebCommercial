@@ -27,7 +27,7 @@
 		>
 	</nav>
 	<hr class="mt-0 mb-4" />
-	<div class="row">
+	<form class="row" [formGroup]="updateInformationForm">
 		<div class="col-xl-4">
 			<!-- Profile picture card-->
 			<div class="card mb-4 mb-xl-0">
@@ -69,8 +69,6 @@
 			<div class="card mb-4">
 				<div class="card-header">{{ label.userProfile }}</div>
 				<div class="card-body">
-					<form>
-						<!-- Form Group (username)-->
 						<div class="mb-3">
 							<label class="small mb-1" for="inputUsername">
 								{{ label.username }}
@@ -79,19 +77,18 @@
 								class="form-control"
 								id="inputUsername"
 								type="text"
-								value="username"
+								formControlName="username"
 							/>
 						</div>
-						<!-- Form Row-->
 						<div class="mb-3">
-							<label class="small mb-1" for="inputUsername">
+							<label class="small mb-1" for="inputFullName">
 								{{ label.fullName }}
 							</label>
 							<input
 								class="form-control"
 								id="inputFullName"
 								type="text"
-								value="full-name"
+                formControlName="fullName"
 							/>
 						</div>
 						<div class="row gx-3 mb-3">
@@ -104,10 +101,11 @@
 									class="form-select"
 									style="padding: 0.75rem"
 									aria-label="Default select example"
+                  formControlName="gender"
 								>
-									<option selected>{{ label.male }}</option>
-									<option value="2">{{ label.female }}</option>
-									<option value="3">{{ label.other }}</option>
+									<option [value]="label.male">{{ label.male }}</option>
+									<option [value]="label.female">{{ label.female }}</option>
+									<option [value]="label.other">{{ label.other }}</option>
 								</select>
 							</div>
 							<!-- Form Group (address)-->
@@ -119,7 +117,7 @@
 									class="form-control"
 									id="inputAddress"
 									type="text"
-									value="San Francisco, CA"
+                  formControlName="address"
 								/>
 							</div>
 						</div>
@@ -131,12 +129,10 @@
 								class="form-control"
 								id="inputEmailAddress"
 								type="email"
-								value="name@example.com"
+                formControlName="email"
 							/>
 						</div>
-						<!-- Form Row-->
 						<div class="row gx-3 mb-3">
-							<!-- Form Group (phone number)-->
 							<div class="col-md-6">
 								<label class="small mb-1" for="inputPhone">{{
 									label.phone
@@ -145,10 +141,9 @@
 									class="form-control"
 									id="inputPhone"
 									type="tel"
-									value="555-123-4567"
+                  formControlName="phoneNum"
 								/>
 							</div>
-							<!-- Form Group (birthday)-->
 							<div class="col-md-6">
 								<label class="small mb-1" for="inputBirthday">{{
 									label.birthDay
@@ -157,18 +152,16 @@
 									class="form-control"
 									id="inputBirthday"
 									type="text"
-									name="birthday"
-									value="06/10/1988"
+                  formControlName="birthday"
 								/>
 							</div>
 						</div>
 						<!-- Save changes button-->
-						<button class="btn btn-primary" type="button">
+						<button class="btn btn-primary" type="submit">
 							{{ label.saveChanges }}
 						</button>
-					</form>
 				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 </div>
