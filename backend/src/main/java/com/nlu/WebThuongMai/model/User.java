@@ -48,7 +48,7 @@ public class User {
     /**
      * Email của người dùng, không được null và phải duy nhất
      */
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     String email;
 
     /**
@@ -60,7 +60,7 @@ public class User {
     /**
      * Nhà cung cấp xác thực (LOCAL, FACEBOOK, GOOGLE, etc.)
      */
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "auth_provider")
     AuthProvider authProvider;
 
