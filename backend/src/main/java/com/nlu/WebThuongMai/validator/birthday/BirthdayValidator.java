@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.validator;
+package com.nlu.WebThuongMai.validator.birthday;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
