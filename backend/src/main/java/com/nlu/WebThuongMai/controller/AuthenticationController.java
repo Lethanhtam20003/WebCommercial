@@ -1,10 +1,7 @@
 package com.nlu.WebThuongMai.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.nlu.WebThuongMai.dto.request.authenticationReq.AuthenticationRequest;
-import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
-import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
-import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.*;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
@@ -28,6 +25,17 @@ public class AuthenticationController {
     OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
 
     /**
+     * Đăng ký tài khoản mới
+     * @param request Thông tin người dùng mới
+     * @return Không có dữ liệu trả về
+     */
+    @PostMapping("/register")
+    ApiResponse<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+        authenticationService.register(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .build();
+    }
+    /**
      * Đăng nhập vào hệ thống
      * @param request Thông tin đăng nhập (username/password)
      * @return Token xác thực và thông tin người dùng
@@ -39,6 +47,8 @@ public class AuthenticationController {
                 .result(result)
                 .build();
     }
+
+
 
     /**
      * Đăng xuất khỏi hệ thống

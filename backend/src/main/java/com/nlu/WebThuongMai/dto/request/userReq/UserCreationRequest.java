@@ -1,6 +1,6 @@
 package com.nlu.WebThuongMai.dto.request.userReq;
 
-import com.nlu.WebThuongMai.validator.BirthdayConstraint;
+import com.nlu.WebThuongMai.validator.birthday.BirthdayConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;

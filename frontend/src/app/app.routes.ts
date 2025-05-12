@@ -71,7 +71,7 @@ export const routes: Routes = [
 		path: '',
 		redirectTo: 'dashboard',
 		pathMatch: 'full',
-	},
+	},	
 	...authRoutes,
 	...protectedRoutes,
 	{
@@ -82,7 +82,7 @@ export const routes: Routes = [
 			),
 		title: 'Page Not Found',
 		data: {
-			showHeader: true,
+			showHeader: false,
 			showFooter: true,
 		},
 	},

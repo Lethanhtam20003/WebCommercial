@@ -8,6 +8,7 @@ import { IntrospectResponse } from '../models/introspect_response.model';
 import { URL_API } from '../constants/url-api.constants';
 import { LabelConstants } from '../constants/label.constants';
 import { ErrorMessageConstants } from '../constants/error-message.constants';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -56,7 +57,7 @@ export class AuthService {
    */
   verifyAuthentication(): Observable<boolean> { 
     return this.isLoggedIn$.pipe(
-      take(1), // 👈 chỉ nhận 1 giá trị duy nhất
+      take(1), //  chỉ nhận 1 giá trị duy nhất
       switchMap(isLoggedIn => {
         if (isLoggedIn) {
           return of(true); // Đã đăng nhập, không cần kiểm tra lại
@@ -155,22 +156,67 @@ export class AuthService {
       `width=${width},height=${height},left=${left},top=${top}`
     );
   }
+  register(username: string, emailOrPhone: string, password: string): Observable<ApiResponse<AuthenticationResponse>> {
+    const email = emailOrPhone.includes('@') ? emailOrPhone : null;
+    const phone = emailOrPhone.includes('@') ? null : emailOrPhone;
+    
+    const body = {
+      username,
+      email,
+      phone,
+      password
+    };
+  
+    return this.http.post<ApiResponse<AuthenticationResponse>>(
+      URL_API.registerUrl,
+      body,
+      {
+        headers: new HttpHeaders().set('skipAuth', 'true'),
+      }
+    ).pipe(
+      tap(res => {
+       
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error occurred during registration:', error);
+        this.updateLoginStatus(false);
+        let errorMessage = ErrorMessageConstants.UnknownErrorOccurred;
+  
+        if (error.error?.message === 'user existed') {
+          errorMessage = ErrorMessageConstants.userExisted;
+        }
+        if (error.error?.message === 'email existed') {
+          errorMessage = ErrorMessageConstants.emailExisted;
+        }
+        if (error.error?.message === 'phone existed') {
+          errorMessage = ErrorMessageConstants.phoneExisted;
+        }
+        return of({
+          code: error.error?.code || 500,
+          message: errorMessage,
+          result: { token: '' } as AuthenticationResponse
+        });
+      })
+    );
+  }
+  
 
   login(username: string, password: string): Observable<ApiResponse<AuthenticationResponse>> {
-    
+    console.log('log1')
     const body = {
       username,
       password
     };
-
+    
     return this.http.post<ApiResponse<AuthenticationResponse>>(
       URL_API.loginUrl,
       body,{
-      headers : new HttpHeaders().set('skipAuth', 'true'),
+        headers : new HttpHeaders().set('skipAuth', 'true'),
       }
     ).pipe(
       tap(res => {
         if (res.code === 200) {
+          console.log('Log2');
           localStorage.setItem(this.TOKEN_KEY, res.result.token);
           this.updateLoginStatus(true);
         } 

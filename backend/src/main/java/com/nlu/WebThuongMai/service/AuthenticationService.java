@@ -5,12 +5,10 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.nlu.WebThuongMai.dto.request.authenticationReq.AuthenticationRequest;
-import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
-import com.nlu.WebThuongMai.dto.request.authenticationReq.LogoutRequest;
-import com.nlu.WebThuongMai.dto.request.authenticationReq.RefreshRequest;
+import com.nlu.WebThuongMai.dto.request.authenticationReq.*;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
+import com.nlu.WebThuongMai.enums.AuthProvider;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.model.InvalidatedToken;
@@ -59,6 +57,34 @@ public class AuthenticationService {
     @Value("${jwt.refreshable-duration}")
     long REFRESHABLE_DURATION;
 
+    /**
+     * Đăng ký tài khoản mới
+     * Mã hóa mật khẩu và lưu thông tin người dùng vào cơ sở dữ liệu
+     *
+     * @param request Thông tin người dùng mới
+     * @throws AppException nếu tên đăng nhập đã tồn tại
+     */
+    public void register(@NotNull RegisterRequest request) {
+        if ( userRepository.existsByUsername(request.getUsername()))
+            throw new AppException(ErrorCode.USER_EXISTED);
+        if(request.getEmail() != null && !request.getEmail().isEmpty())
+            if ( userRepository.existsByEmail(request.getEmail()) && !request.getEmail().isEmpty())
+                throw new AppException(ErrorCode.EMAIL_EXISTED);
+        if (request.getPhone() != null && !request.getPhone().isEmpty())
+            if ( userRepository.existsByPhone(request.getPhone()))
+                throw new AppException(ErrorCode.PHONE_EXISTED);
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .email(request.getEmail() == null ? null : request.getEmail())
+                .phone(request.getPhone() == null? null : request.getPhone())
+                .authProvider(AuthProvider.LOCAL)
+                .build();
+        userRepository.save(user);
+        log.info("Register user successfully");
+    }
     /**
      * Xác thực người dùng và tạo token JWT
      * 

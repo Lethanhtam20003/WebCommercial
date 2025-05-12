@@ -17,4 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.authProviderId = :authProviderId")
     User findUserByAuthProviderId(String authProviderId);
 
+    boolean existsByEmail(String email);
+
+    boolean existsByPhone(String phoneNumber);
 }
