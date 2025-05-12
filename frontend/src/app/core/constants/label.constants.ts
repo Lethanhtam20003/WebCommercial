@@ -79,4 +79,6 @@ export class LabelConstants {
 	public static readonly female: string = 'Nữ';
 	public static readonly other: string = 'Khác';
 	public static readonly profilePicture: string = 'Hình ảnh đại diện';
+  public static readonly onWorkingProcess: string = 'Đang trong quá trình thực hiện';
+  public static readonly pleaseWaitAMinute: string = 'Vui lòng đợi một chút';
 }
