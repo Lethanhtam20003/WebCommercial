@@ -8,7 +8,6 @@ import { ProductList2Component } from '../../../features/product/product-list2/p
   imports: [ RouterModule, ProductListComponent, ProductList2Component],
   template: ` 
     <p>
-      dashboard works!
       <app-product-list></app-product-list>
       <app-product-list2></app-product-list2>
     </p>
