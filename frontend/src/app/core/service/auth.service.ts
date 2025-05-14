@@ -182,10 +182,10 @@ export class AuthService {
       catchError((error: HttpErrorResponse) => {
         console.error('Error occurred during registration:', error);
         this.updateLoginStatus(false);
-        let errorMessage = ErrorMessageConstants.UnknownErrorOccurred;
+          let errorMessage: string = ErrorMessageConstants.UnknownErrorOccurred;
 
         if (error.error?.message === 'user existed') {
-          errorMessage = ErrorMessageConstants.userExisted;
+          errorMessage = String(ErrorMessageConstants.userExisted);
         }
         if (error.error?.message === 'email existed') {
           errorMessage = ErrorMessageConstants.emailExisted;
@@ -223,11 +223,10 @@ export class AuthService {
       }),
       catchError((error: HttpErrorResponse) => {
         this.updateLoginStatus(false);
-        let errorMessage = ErrorMessageConstants.UnknownErrorOccurred;
-        if(error.error.message === 'user not existed') {
-          errorMessage = ErrorMessageConstants.userNotExisted;
-        }if(          error.error.message === 'password not correct') {
-          errorMessage = ErrorMessageConstants.passwordNotCorrect;
+        let errorMessage =String(ErrorMessageConstants.UnknownErrorOccurred);        if(error.error.message === 'user not existed') {
+          errorMessage = String(ErrorMessageConstants.userNotExisted);
+        }if(error.error.message === 'password not correct') {
+          errorMessage = String(ErrorMessageConstants.passwordNotCorrect);
         }
         return of({
           code: error.error.code,

@@ -99,7 +99,7 @@
 				</form>
 
 				<div class="text-end">
-					<ng-container *ngIf="isLoggedIn; else notLogIn">
+					<ng-container *ngIf="!isLoggedIn; else notLogIn">
 						<button
 							type="button"
 							class="btn btn-outline-light me-2"
