@@ -155,6 +155,10 @@ export class AuthService {
       '_blank',
       `width=${width},height=${height},left=${left},top=${top}`
     );
+    if (!popup) {
+      alert('Popup bị chặn bởi trình duyệt. Vui lòng cho phép popup để tiếp tục đăng nhập bằng Facebook.');
+      return;
+    }
   }
   register(username: string, emailOrPhone: string, password: string): Observable<ApiResponse<AuthenticationResponse>> {
     const email = emailOrPhone.includes('@') ? emailOrPhone : null;
@@ -174,9 +178,6 @@ export class AuthService {
         headers: new HttpHeaders().set('skipAuth', 'true'),
       }
     ).pipe(
-      tap(res => {
-       
-      }),
       catchError((error: HttpErrorResponse) => {
         console.error('Error occurred during registration:', error);
         this.updateLoginStatus(false);
@@ -194,7 +195,7 @@ export class AuthService {
         return of({
           code: error.error?.code || 500,
           message: errorMessage,
-          result: { token: '' } as AuthenticationResponse
+          result: {} as AuthenticationResponse
         });
       })
     );
@@ -202,7 +203,6 @@ export class AuthService {
   
 
   login(username: string, password: string): Observable<ApiResponse<AuthenticationResponse>> {
-    console.log('log1')
     const body = {
       username,
       password
@@ -216,7 +216,6 @@ export class AuthService {
     ).pipe(
       tap(res => {
         if (res.code === 200) {
-          console.log('Log2');
           localStorage.setItem(this.TOKEN_KEY, res.result.token);
           this.updateLoginStatus(true);
         } 
@@ -232,7 +231,7 @@ export class AuthService {
         return of({
           code: error.error.code,
           message: errorMessage,
-          result: {token: '' } as AuthenticationResponse
+          result: {} as AuthenticationResponse
         });
       })
     );
