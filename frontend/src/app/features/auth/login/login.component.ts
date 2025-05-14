@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 		private alertService: AlertService,
 		private route: ActivatedRoute,
 		private fb: FormBuilder
-	) 
+	)
 	{
 		this.loginForm = this.fb.group({
 			username: ['', [Validators.required, Validators.minLength(3)]],
@@ -47,11 +47,11 @@ export class LoginComponent implements OnInit {
 
 	// Form controls
 	loginForm: FormGroup;
-	
+
 	// Biến hiển thị loading
 	isLoading: boolean = false;
 
-	
+
 
 	ngOnInit() {
 		// Bắt đầu lắng nghe token
@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit {
 				});
 			}
 		}
-	}	
+	}
 
 	/**
 	 * Kiểm tra trường có lỗi validation không
@@ -100,8 +100,8 @@ export class LoginComponent implements OnInit {
 		}
 
 		if (field.hasError('required')) {
-			return fieldName === 'username' 
-				? this.ErrorMessage.pleaseEnterUsername 
+			return fieldName === 'username'
+				? this.ErrorMessage.pleaseEnterUsername
 				: this.ErrorMessage.pleaseEnterPassword;
 		}
 
@@ -125,10 +125,10 @@ export class LoginComponent implements OnInit {
 		if (this.loginForm.invalid) {
 			return;
 		}
-		
+
 		this.isLoading = true;
 		const formValues = this.loginForm.value;
-		
+
 		// Sử dụng giá trị từ form thay vì biến class
 		this.authService.login(formValues.username, formValues.password).subscribe(
 			res => {
@@ -168,7 +168,7 @@ export class LoginComponent implements OnInit {
 		// Hiển thị thông báo đang phát triển
 		this.alertService.warning('Chức năng đăng nhập bằng Google đang được phát triển!');
 	}
-	
+
 	/**
 	 * Chuyển hướng đến trang đăng ký
 	 */

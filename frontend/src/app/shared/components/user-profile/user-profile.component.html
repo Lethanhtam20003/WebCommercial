@@ -1,0 +1,204 @@
+<div class="container-xl px-4 mt-4">
+	<div class="d-flex">
+		<div style="width: 250px; min-width: 250px;">
+			<side-bar-user-profile />
+		</div>
+		<form
+			class="row flex-grow-1"
+			[formGroup]="updateInformationForm"
+			(ngSubmit)="onSubmit()"
+		>
+			<div class="col-xl-9">
+				<!-- Account details card-->
+				<div class="card mb-4">
+					<div class="card-header">{{ label.userProfile }}</div>
+					<div class="card-body">
+						<div class="mb-3">
+							<label class="small mb-1" for="inputUsername">
+								{{ label.username }}
+							</label>
+							<input
+								class="form-control"
+								id="inputUsername"
+								type="text"
+								formControlName="username"
+							/>
+							<div
+								*ngIf="
+									updateInformationForm.get('username')?.touched &&
+									updateInformationForm.get('username')?.hasError('required')
+								"
+								class="small text-danger ps-3"
+							>
+								{{ errorMessage.userNameIsNotEmpty }}
+							</div>
+						</div>
+						<div class="mb-3">
+							<label class="small mb-1" for="inputFullName">
+								{{ label.fullName }}
+							</label>
+							<input
+								class="form-control"
+								id="inputFullName"
+								type="text"
+								formControlName="fullName"
+							/>
+							<div
+								*ngIf="
+									updateInformationForm.get('fullName')?.touched &&
+									updateInformationForm.get('fullName')?.hasError('required')
+								"
+								class="small text-danger ps-3"
+							>
+								{{ errorMessage.fullNameIsNotEmpty }}
+							</div>
+						</div>
+						<div class="row gx-3 mb-3">
+							<!-- Form Group (organization name)-->
+							<div class="col-md-6">
+								<label class="small mb-1" for="inputOrgName">{{
+									label.gender
+								}}</label>
+								<select
+									class="form-select"
+									style="padding: 0.75rem"
+									aria-label="Default select example"
+									formControlName="gender"
+								>
+									<option [value]="label.male">{{ label.male }}</option>
+									<option [value]="label.female">{{ label.female }}</option>
+									<option [value]="label.other">{{ label.other }}</option>
+								</select>
+								<div
+									*ngIf="
+										updateInformationForm.get('gender')?.touched &&
+										updateInformationForm.get('gender')?.hasError('required')
+									"
+									class="small text-danger ps-3"
+								>
+									{{ errorMessage.genderIsNotEmpty }}
+								</div>
+							</div>
+							<!-- Form Group (address)-->
+							<div class="col-md-6">
+								<label class="small mb-1" for="inputLocation">{{
+									label.address
+								}}</label>
+								<input
+									class="form-control"
+									id="inputAddress"
+									type="text"
+									formControlName="address"
+								/>
+							</div>
+						</div>
+						<div class="mb-3">
+							<label class="small mb-1" for="inputEmailAddress">{{
+								label.email
+							}}</label>
+							<input
+								class="form-control"
+								id="inputEmailAddress"
+								type="email"
+								formControlName="email"
+							/>
+							<div
+								*ngIf="
+									updateInformationForm.get('email')?.touched &&
+									updateInformationForm.get('email')?.invalid
+								"
+								class="small text-danger ps-3"
+							>
+								<div
+									*ngIf="
+										updateInformationForm.get('email')?.hasError('required')
+									"
+								>
+									{{ errorMessage.emailIsNotEmpty }}
+								</div>
+								<div
+									*ngIf="updateInformationForm.get('email')?.hasError('email')"
+								>
+									{{ errorMessage.emailIsNotValid }}
+								</div>
+							</div>
+						</div>
+						<div class="row gx-3 mb-3">
+							<div class="col-md-6">
+								<label class="small mb-1" for="inputPhone">{{
+									label.phone
+								}}</label>
+								<input
+									class="form-control"
+									id="inputPhone"
+									type="tel"
+									formControlName="phoneNum"
+								/>
+								<div
+									*ngIf="
+										updateInformationForm.get('phoneNum')?.touched &&
+										updateInformationForm.get('phoneNum')?.hasError('required')
+									"
+									class="small text-danger ps-3"
+								>
+									{{ errorMessage.phoneNumIsNotEmpty }}
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label class="small mb-1" for="inputBirthday">{{
+									label.birthDay
+								}}</label>
+								<input
+									class="form-control"
+									id="inputBirthday"
+									type="text"
+									formControlName="birthday"
+								/>
+							</div>
+						</div>
+						<!-- Save changes button-->
+						<button class="btn btn-primary" type="submit">
+							{{ label.saveChanges }}
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3">
+				<!-- Profile picture card-->
+				<div class="card mb-4 mb-xl-0">
+					<div class="card-header">{{ label.profilePicture }}</div>
+					<div class="card-body text-center">
+						<!-- Profile picture image-->
+						<img
+							class="img-account-profile rounded-circle mb-2"
+							[src]="
+								imagePreview ||
+								'http://bootdey.com/img/Content/avatar/avatar1.png'
+							"
+							alt=""
+						/>
+						<!-- Profile picture help block-->
+						<div class="small font-italic text-muted mb-4">
+							{{ label.imageFileNoLargerThan5Mb }}
+						</div>
+						<input
+							type="file"
+							hidden
+							accept="image/*"
+							(change)="onFileSelected($event)"
+							#fileInput
+						/>
+						<!-- Profile picture upload button-->
+						<button
+							class="btn btn-primary"
+							type="button"
+							(click)="fileInput.click()"
+						>
+							{{ label.uploadNewImage }}
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

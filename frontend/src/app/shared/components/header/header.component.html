@@ -50,16 +50,19 @@
 					href="/"
 					class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
 				>
-					<img [src]="logo2" alt="" class="w-30" />
+					<img [src]="logo" alt="" width="30" />
 				</a>
 
 				<ul
 					class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
 				>
 					<li>
-						<a href="#" class="nav-link px-2 text-secondary" (click)="goHome()">{{
-							label.home
-						}}</a>
+						<a
+							href="#"
+							class="nav-link px-2 text-secondary"
+							(click)="goHome()"
+							>{{ label.home }}</a
+						>
 					</li>
 					<li>
 						<a href="#" class="nav-link px-2 text-white">{{
@@ -84,6 +87,7 @@
 				<form
 					class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
 					[formGroup]="searchForm"
+					(ngSubmit)="onSearch()"
 				>
 					<input
 						type="search"
@@ -95,20 +99,45 @@
 				</form>
 
 				<div class="text-end">
-					<button
-						type="button"
-						class="btn btn-outline-light me-2"
-						[routerLink]="route.loginRoute"
-					>
-						{{ label.logIn }}
-					</button>
-					<button
-						type="button"
-						class="btn btn-primary"
-						[routerLink]="route.registerRoute"
-					>
-						{{ label.register }}
-					</button>
+					<ng-container *ngIf="isLoggedIn; else notLogIn">
+						<button
+							type="button"
+							class="btn btn-outline-light me-2"
+							[routerLink]="route.loginRoute"
+						>
+							{{ label.logIn }}
+						</button>
+						<button
+							type="button"
+							class="btn btn-primary"
+							[routerLink]="route.registerRoute"
+						>
+							{{ label.register }}
+						</button>
+					</ng-container>
+					<ng-template #notLogIn>
+						<div class="dropdown">
+							<button
+								class="btn btn-primary dropdown-toggle"
+								type="button"
+								id="dropdownMenuButton1"
+								data-bs-toggle="dropdown"
+								aria-expanded="false"
+							>
+								{{ label.userAccount }}
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+								<li>
+									<a class="dropdown-item" [routerLink]="route.profileRoute">{{
+										label.myAccount
+									}}</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="#">{{ label.logOut }}</a>
+								</li>
+							</ul>
+						</div>
+					</ng-template>
 				</div>
 			</div>
 		</div>
