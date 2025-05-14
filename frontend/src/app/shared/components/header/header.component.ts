@@ -10,7 +10,6 @@ import { Router, RouterModule } from '@angular/router';
 import { LabelConstants } from '../../../core/constants/label.constants';
 import { RouteLink } from '../../../core/constants/route-link';
 import { AuthService } from '../../../core/service/auth.service';
-import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-header',

@@ -43,7 +43,7 @@ export class LabelConstants {
 	public static readonly organizationPhoneNumber: string = '+842 3456 7890';
 	public static readonly description: string =
 		'Fire Knight Sport là cửa hàng chuyên về bán dụng cụ thể thao như cầu lông, đá banh, bóng chuyền, tenis, bóng bàn các loại.';
-	public static readonly userProfile: string = 'Thông tin cá nhân';
+	public static readonly userProfile: string = 'Hồ sơ của tôi';
 	public static readonly searchProduct: string = 'Tìm kiếm sản phẩm';
 	public static readonly logInWithGoogle: string = 'Đăng nhập bằng google';
 	public static readonly signUpWithGoogle: string = 'Đăng ký bằng google';
@@ -81,4 +81,6 @@ export class LabelConstants {
 	public static readonly profilePicture: string = 'Hình ảnh đại diện';
   public static readonly onWorkingProcess: string = 'Đang trong quá trình thực hiện';
   public static readonly pleaseWaitAMinute: string = 'Vui lòng đợi một chút';
+  public static readonly myAccount: string = 'Tài khoản của tôi';
+  public static readonly updateUserProfile: string = 'Sửa hồ sơ';
 }

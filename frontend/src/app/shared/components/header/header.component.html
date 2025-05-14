@@ -128,16 +128,9 @@
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 								<li>
-									<a class="dropdown-item" href="#">{{ label.order }}</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#">{{ label.voucher }}</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#">{{ label.cart }}</a>
-								</li>
-								<li>
-									<a class="dropdown-item" [routerLink]="route.profileRoute">{{ label.userProfile }}</a>
+									<a class="dropdown-item" [routerLink]="route.profileRoute">{{
+										label.myAccount
+									}}</a>
 								</li>
 								<li>
 									<a class="dropdown-item" href="#">{{ label.logOut }}</a>

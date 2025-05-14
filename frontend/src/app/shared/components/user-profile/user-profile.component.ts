@@ -12,10 +12,11 @@ import Swal from 'sweetalert2';
 import { ErrorMessageConstants } from '../../../core/constants/error-message.constants';
 import { CommonModule } from '@angular/common';
 import { UserProfileFormFields } from './user-profile.interface';
+import { SideBarUserProfile } from '../side-bar-user-profile/side-bar-user-profile';
 
 @Component({
 	selector: 'user-profile',
-	imports: [CommonModule, ReactiveFormsModule],
+	imports: [CommonModule, ReactiveFormsModule, SideBarUserProfile],
 	templateUrl: './user-profile.component.html',
 	styleUrl: './user-profile.component.scss',
 })
@@ -61,7 +62,7 @@ export class UserProfileComponent implements OnInit {
 				html: this.label.pleaseWaitAMinute,
 				timer: 3000,
 				timerProgressBar: true,
-        allowOutsideClick: false,
+				allowOutsideClick: false,
 				didOpen: () => {
 					Swal.showLoading();
 				},
