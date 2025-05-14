@@ -1,110 +1,180 @@
-
-::ng-deep .p-button:hover {
-    background-color: #ff4500 !important;
-    border-color: #ff4500 !important;
+.login{
+  background: linear-gradient(to right top,#191F2B,#62656E); /* Màu nền từ trái dưới sang phải trên */
+  
+  .login-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 30px;
   }
-
-  /* 1. Mobile (sm) styles */
-  @media (min-width: 320px) and (max-width: 640px) {
-    ::ng-deep {
-        .p-password {
-          height: 44.1px !important;
-        }
-
-      p-button {
-        .p-button-icon-only {
-          width: 25px;
-          height: 25px;
-
-          span {
-            font-size: 18px;
-          }
-        }
-
-        button {
-          width: 100%;
-          height: 100%;
-
-          span {
-            font-size: 10px;
-          }
-        }
-      }
+  
+  
+  .login-logo {
+    width: 280px;
+    margin-bottom: 32px;
+  }
+  
+  form {
+    padding: 12px 8px;
+    width: 100%;
+    max-width: 600px;
+    small{
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #FEEA6F;
     }
-    form {
-      width: 280px;
-
-      div {
-        font-size: 25px;
-
-        div {
-          width: 200px;
-
-          p, a {
-            font-size: 10px;
-          }
-
-          a {
-            width: 80px;
-            height: 40px;
-          }
-        }
-
-        .p-floatlabel,
-        small {
-          font-size: 10px;
-          width: 200px;
-
-          input {
-            font-size: 15px;
-          }
-
-          label {
-            font-size: 10px;
-          }
-        }
-      }
+    .login-input {
+      background: #23272f !important;
+      color: #fff !important;
+      border: 1.5px solid #444 !important;
+      border-radius: 8px !important;
+      font-size: 1.5rem;
+      padding: 12px 16px;
+    }
+    
+    .login-input::placeholder {
+      color: #aaa;
     }
   }
-
-  /* 2. Mobile (sm) styles */
-  @media (max-width: 640px) {
-    .p-floatlabel {
-      font-size: 0.875rem;
+  
+  button {
+    background: #FE6118 !important;
+    border: none !important;
+    color: #FDFFFE !important;
+    font-weight: 600;
+    border-radius: 8px !important;
+    font-size: 1.5rem;
+    padding: 12px 0;
+  }
+ 
+  .or-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #aaa;
+    font-weight: 500;
+    font-size: 1.5rem;
+  }
+  
+  .or-divider::before,
+  .or-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1.5px solid #444;
+    margin: 0 8px;
+  }
+  
+  .register-link {
+    color: #FE6118;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: lighten(#FE6118, 10%);
+      text-decoration: underline;
     }
-    .p-button {
+  }
+  
+  .login-btn-fb {
+    background: #3b5998 !important;
+  }
+  
+  .login-btn-gg {
+    background: #db4437 !important;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+.gradient-text {
+  font-family: 'Anton', sans-serif;
+  font-size: 4rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: linear-gradient(to bottom, #ffffff 0%, #999999 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; // For Firefox
+  color: transparent;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+.welcome-message {
+  font-family: 'Roboto', sans-serif;
+  color: #ffffff;
+  padding: 2rem;
+  text-align: center;
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .highlight {
+    color: #FE6118;
+    font-weight: bold;
+  }
+
+  .fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+  }
+
+  .delay-1s {
+    animation-delay: 1s;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .login {
+    .login-container {
+      flex-direction: column-reverse;
       width: 100%;
+      padding: 20px;
     }
-  }
-
-  /* 3. Tablet (md) styles */
-  @media (min-width: 640px) and (max-width: 1024px) {
-    .p-floatlabel {
-      font-size: 1rem;
+    
+    .login-left-section {
+      width: 100%;
+      margin-bottom: 30px;
     }
-    .p-button {
-      width: auto;
-    }
-  }
-
-  /* 4. Desktop (lg) styles */
-  @media (min-width: 1024px) {
-    .p-floatlabel {
-      font-size: 1.125rem;
-    }
-    .p-button {
-      width: auto;
-    }
-    ::ng-deep {
-      p-button {
-        .p-button-icon-only {
-          width: 45px;
-          height: 45px;
-
-          span {
-            font-size: 35px;
-          }
-        }
+    
+    .welcome-message {
+      h1 {
+        font-size: 2rem;
+      }
+      
+      p {
+        font-size: 1rem;
       }
     }
+    
+    .login-logo {
+      width: 200px;
+    }
   }
+}
+
+
+
+

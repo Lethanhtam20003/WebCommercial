@@ -27,9 +27,9 @@ public enum ErrorCode {
     INVALID_ACCESS_TOKEN(1013, "invalid access token", HttpStatus.BAD_REQUEST),
     PASSWORD_INVALID(1014, "password invalid", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_CORRECT(1015, "password not correct", HttpStatus.BAD_REQUEST),
-
-    UNCATEGORIZED_EXCEPTION(9998, "Uncategorized Exception", HttpStatus.INTERNAL_SERVER_ERROR);
-
+    EMAIL_EXISTED(1016,"email existed" , HttpStatus.BAD_REQUEST),
+    PHONE_EXISTED(1017,"phone existed" , HttpStatus.BAD_REQUEST),
+    UNCATEGORIZED_EXCEPTION(9998, "Uncategorized Exception", HttpStatus.INTERNAL_SERVER_ERROR), ;
     int code;
     String message;
     HttpStatusCode httpStatusCode;

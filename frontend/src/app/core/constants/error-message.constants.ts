@@ -26,4 +26,8 @@ export class ErrorMessageConstants {
 	static readonly phoneNumIsInvalid: string = 'Số điện thoại không hợp lệ';
 	static readonly genderIsNotEmpty: string = 'Giới tính không được để trống';
 	static readonly meetAnError: string = 'Có lỗi xảy ra';
+  static readonly pleaseEnterEmailOrPhone: string='Vui lòng nhập email hoặc số điện thoại';
+  static readonly userExisted: string='Tài khoản đã tồn tại';
+  static readonly phoneExisted: string='Điện thoại đã tồn tại';
+  static readonly emailExisted: string='Email đã tồn tại';
 }

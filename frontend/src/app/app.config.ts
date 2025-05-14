@@ -1,16 +1,11 @@
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import Aura from '@primeng/themes/aura';
-import Material from '@primeng/themes/material';
-import Lara from '@primeng/themes/lara';
-import Nora from '@primeng/themes/nora';
 
 import { routes } from './app.routes';
 import { SocialAuthServiceConfig, FacebookLoginProvider } from '@abacritt/angularx-social-login';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
-import { providePrimeNG } from 'primeng/config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,19 +26,6 @@ export const appConfig: ApplicationConfig = {
         // ],
       } as SocialAuthServiceConfig,
     },
-    providePrimeNG({
-      theme: {
-        preset: Aura,
-        options: {
-          prefix: 'p',
-          darkModeSelector: 'system',
-          cssLayer: {
-            name: 'primeng',
-            order: 'theme, base, primeng'
-          },
-        },
-      },
-    }),
     provideHttpClient(withInterceptorsFromDi()),
     {
       provide: HTTP_INTERCEPTORS,
