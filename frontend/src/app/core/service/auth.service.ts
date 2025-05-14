@@ -55,7 +55,7 @@ export class AuthService {
    * Kiểm tra xác thực người dùng
    * @returns Observable<boolean>
    */
-  verifyAuthentication(): Observable<boolean> { 
+  verifyAuthentication(): Observable<boolean> {
     return this.isLoggedIn$.pipe(
       take(1), //  chỉ nhận 1 giá trị duy nhất
       switchMap(isLoggedIn => {
@@ -82,7 +82,7 @@ export class AuthService {
     };
 
     return this.http.post<ApiResponse<IntrospectResponse>>(
-      URL_API.introspect, 
+      URL_API.introspect,
       body, {
         headers : new HttpHeaders().set('skipAuth', 'true'),
     })
@@ -96,7 +96,7 @@ export class AuthService {
         // if (isAuthenticated && !res.result.isValid) {
         //   return this.handleTokenRefresh();
         // }
-        
+
         return of(false);
       }),
       catchError(() => {
@@ -106,7 +106,7 @@ export class AuthService {
     );
   }
 
-  
+
 
   /**
    * Xử lý làm mới token
@@ -163,14 +163,14 @@ export class AuthService {
   register(username: string, emailOrPhone: string, password: string): Observable<ApiResponse<AuthenticationResponse>> {
     const email = emailOrPhone.includes('@') ? emailOrPhone : null;
     const phone = emailOrPhone.includes('@') ? null : emailOrPhone;
-    
+
     const body = {
       username,
       email,
       phone,
       password
     };
-  
+
     return this.http.post<ApiResponse<AuthenticationResponse>>(
       URL_API.registerUrl,
       body,
@@ -178,11 +178,12 @@ export class AuthService {
         headers: new HttpHeaders().set('skipAuth', 'true'),
       }
     ).pipe(
+    
       catchError((error: HttpErrorResponse) => {
         console.error('Error occurred during registration:', error);
         this.updateLoginStatus(false);
         let errorMessage = ErrorMessageConstants.UnknownErrorOccurred;
-  
+
         if (error.error?.message === 'user existed') {
           errorMessage = ErrorMessageConstants.userExisted;
         }
@@ -200,14 +201,14 @@ export class AuthService {
       })
     );
   }
-  
+
 
   login(username: string, password: string): Observable<ApiResponse<AuthenticationResponse>> {
     const body = {
       username,
       password
     };
-    
+
     return this.http.post<ApiResponse<AuthenticationResponse>>(
       URL_API.loginUrl,
       body,{
@@ -218,12 +219,12 @@ export class AuthService {
         if (res.code === 200) {
           localStorage.setItem(this.TOKEN_KEY, res.result.token);
           this.updateLoginStatus(true);
-        } 
+        }
       }),
       catchError((error: HttpErrorResponse) => {
         this.updateLoginStatus(false);
         let errorMessage = ErrorMessageConstants.UnknownErrorOccurred;
-        if(error.error.message === 'user not existed') {  
+        if(error.error.message === 'user not existed') {
           errorMessage = ErrorMessageConstants.userNotExisted;
         }if(          error.error.message === 'password not correct') {
           errorMessage = ErrorMessageConstants.passwordNotCorrect;
