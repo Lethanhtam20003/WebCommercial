@@ -1,11 +1,9 @@
-export class URL_API{
-    static readonly originUrl: string = 'http://localhost:8080';
-    static readonly baseUrl: string = 'http://localhost:8080/api/v1';
-    static readonly loginUrl: string = `${URL_API.baseUrl}/auth/login`;
-    static readonly registerUrl: string = `${URL_API.baseUrl}/auth/register`;
-    static readonly refreshTokenUrl: string = `${URL_API.baseUrl}/auth/refresh`;
-    static readonly introspect: string = `${URL_API.baseUrl}/auth/introspect`;
-    static readonly facebookLogin: string = `http://localhost:8080/api/oauth2/authorization/facebook`;
-
-
-}
+export const URL_API = {
+    originUrl: 'http://localhost:8080',
+    baseUrl: 'http://localhost:8080/api/v1',
+    loginUrl: 'http://localhost:8080/api/v1/auth/login',
+    registerUrl: 'http://localhost:8080/api/v1/auth/register',
+    refreshTokenUrl: 'http://localhost:8080/api/v1/auth/refresh',
+    introspect: 'http://localhost:8080/api/v1/auth/introspect',
+    facebookLogin: 'http://localhost:8080/api/oauth2/authorization/facebook'
+} as const;
