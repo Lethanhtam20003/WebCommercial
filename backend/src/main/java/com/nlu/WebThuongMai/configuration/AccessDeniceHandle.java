@@ -3,6 +3,7 @@ package com.nlu.WebThuongMai.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
@@ -10,44 +11,31 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-/**
- * Entry point xử lý các request chưa được xác thực
- * Implements AuthenticationEntryPoint để xử lý các exception liên quan đến authentication
- */
 @Slf4j
-
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
+/**
+ * Xử lý các lỗi truy cập không hợp lệ
+ * Implements AccessDeniedHandler để xử lý các lỗi truy cập không hợp lệ
+ */
+public class AccessDeniceHandle implements AccessDeniedHandler {
     private final ObjectMapper objectMapper;
 
-    public JwtAuthenticationEntryPoint() {
+    public AccessDeniceHandle() {
         this.objectMapper = new ObjectMapper();
     }
-
-    /**
-     * Xử lý các request chưa được xác thực và trả về response phù hợp
-     *
-     * @param request       HTTP request chưa được xác thực
-     * @param response      HTTP response
-     * @param authException Exception chứa thông tin về lỗi xác thực
-     * @throws IOException nếu có lỗi khi ghi response
-     */
     @Override
-    public void commence(final HttpServletRequest request,
-                        final HttpServletResponse response,
-                        final AuthenticationException authException) throws IOException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         try {
             final ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-            log.error("Unauthorized error: {}", authException.getMessage());
+            log.error("Unauthorized error: {}", accessDeniedException.getMessage());
 
             response.setStatus(errorCode.getHttpStatusCode().value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);

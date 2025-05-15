@@ -68,7 +68,7 @@ public class User {
      * ID của người dùng từ nhà cung cấp xác thực
      */
     @Column(name = "provider_id")
-    long authProviderId;
+    String authProviderId;
 
     /**
      * Họ tên đầy đủ của người dùng

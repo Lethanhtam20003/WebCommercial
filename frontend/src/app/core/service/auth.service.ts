@@ -163,6 +163,25 @@ export class AuthService {
     }
   }
   /**
+   * Đăng nhập bằng Google
+   */
+  loginWithGoogle(): void {
+    // Tính toán vị trí để popup hiển thị giữa 
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+    const popup = window.open(
+      URL_API.googleLogin,
+      '_blank',
+      `width=${width},height=${height},left=${left},top=${top}`
+    );
+    if (!popup) {
+      alert('Popup bị chặn bởi trình duyệt. Vui lòng cho phép popup để tiếp tục đăng nhập bằng Google.');
+      return;
+    }
+  }
+  /**
    *  đăng nhập sau khi nhận được token từ popup
    * @param token 
    */

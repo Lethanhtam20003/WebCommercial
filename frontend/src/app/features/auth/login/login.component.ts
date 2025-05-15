@@ -166,7 +166,7 @@ export class LoginComponent implements OnInit {
 	 */
 	loginWithGoogle(): void {
 		// Hiển thị thông báo đang phát triển
-		this.alertService.warning('Chức năng đăng nhập bằng Google đang được phát triển!');
+		this.authService.loginWithGoogle();
 	}
 
 	/**

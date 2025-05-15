@@ -1,8 +1,8 @@
 package com.nlu.WebThuongMai.configuration;
 
 import com.nlu.WebThuongMai.service.CustomOAuth2UserService;
+import com.nlu.WebThuongMai.service.CustomOidcUserService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -44,18 +43,17 @@ public class SecurityConfig {
             "/v1/auth", "/v1/auth/*",
             "/v1/products", "/v1/products/*",
             "/v1/oauth2", "/v1/oauth2/*",
-            "/login/facebook", "/oauth2/authorization/facebook"};
+            "/login/facebook", "/oauth2/authorization/facebook",
+            "/login/google", "/oauth2/authorization/google",};
 
-    @Autowired
-    private CustomJwtDecoder customJwtDecoder;
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
-    @Autowired
-    private Oauth2SuccessHandler oAuth2SuccessHandler;
+    private final Oauth2SuccessHandler oAuth2SuccessHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOidcUserService customOidcUserService;
+    private final AuthenticationFailHandler authenticationFailHandler;
 
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAccessDeniceHandle jwtAccessDeniceHandle;
-    private final JwtAuthencationfailHandler jwtAuthencationfailHandler;
+    private final CustomJwtDecoder customJwtDecoder;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
+    private final AccessDeniceHandle accessDeniceHandle;
 
     /**
      * Cấu hình chuỗi bộ lọc bảo mật
@@ -79,23 +77,24 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 // Cấu hình xử lý khi người dùng không có quyền truy cập
                .exceptionHandling(exceptionHandling -> exceptionHandling
-                       .authenticationEntryPoint(jwtAuthenticationEntryPoint) // Trả về lỗi 401 nếu không có quyền
-                       .accessDeniedHandler(jwtAccessDeniceHandle)// 403
+                       .authenticationEntryPoint(authenticationEntryPoint) // Trả về lỗi 401 nếu không có quyền
+                       .accessDeniedHandler(accessDeniceHandle)// 403
                )
 
 //              cấu hình login
                 .oauth2Login(oauth2Login -> oauth2Login
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+                                .oidcUserService(customOidcUserService)
                                 .userService(customOAuth2UserService)
                         )
                         .successHandler(oAuth2SuccessHandler)
-                        .failureHandler(jwtAuthencationfailHandler)
+                        .failureHandler(authenticationFailHandler)
                 )
                 //              dùng để xác thực token JWT được gửi từ client
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.decoder(customJwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .authenticationEntryPoint(authenticationEntryPoint)
                 );
 
 
