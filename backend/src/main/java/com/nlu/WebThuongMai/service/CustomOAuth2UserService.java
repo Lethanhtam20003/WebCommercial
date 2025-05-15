@@ -61,7 +61,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .avatar(avata)
                     .build());
         }
-        log.warn(user.toString());
         return oAuth2User;
     }
 }

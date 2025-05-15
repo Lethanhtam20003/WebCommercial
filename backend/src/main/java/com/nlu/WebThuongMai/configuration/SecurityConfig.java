@@ -1,6 +1,8 @@
 package com.nlu.WebThuongMai.configuration;
 
 import com.nlu.WebThuongMai.service.CustomOAuth2UserService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +30,8 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
  * Cấu hình bảo mật cho ứng dụng
  * Bao gồm cấu hình CORS, JWT, OAuth2, và các endpoint công khai
  */
+@AllArgsConstructor
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -48,8 +52,10 @@ public class SecurityConfig {
     private CustomOAuth2UserService customOAuth2UserService;
     @Autowired
     private Oauth2SuccessHandler oAuth2SuccessHandler;
-    @Autowired
-    private JwtAuthenticationFilter jwtFilter;
+
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniceHandle jwtAccessDeniceHandle;
+    private final JwtAuthencationfailHandler jwtAuthencationfailHandler;
 
     /**
      * Cấu hình chuỗi bộ lọc bảo mật
@@ -60,35 +66,39 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-//
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                        .anyRequest().authenticated())
-//               .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-//                // Cấu hình xử lý khi người dùng không có quyền truy cập
-//               .exceptionHandling(exceptionHandling -> exceptionHandling
-//                       .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // Trả về lỗi 403 nếu không có quyền
-//               )
-//              dùng để xác thực token JWT được gửi từ client
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.decoder(customJwtDecoder)
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-                )
-////              cấu hình login
-//                .oauth2Login(oauth2Login -> oauth2Login
-//                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-//                                .userService(customOAuth2UserService)
-//                        )
-//                        .successHandler(oAuth2SuccessHandler)
-//                );
-        //      Tắt CSRF nếu không cần thiết
+                //      Tắt CSRF nếu không cần thiết
                 .csrf(AbstractHttpConfigurer::disable)
                 //      cấu hình cho phép frontend truy cập các api
                 .cors((cors -> cors.configurationSource(corsConfigurationSource())))
                 //         Stateless session
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // cấu hình security filter chain
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .anyRequest().authenticated())
+                // Cấu hình xử lý khi người dùng không có quyền truy cập
+               .exceptionHandling(exceptionHandling -> exceptionHandling
+                       .authenticationEntryPoint(jwtAuthenticationEntryPoint) // Trả về lỗi 401 nếu không có quyền
+                       .accessDeniedHandler(jwtAccessDeniceHandle)// 403
+               )
+
+//              cấu hình login
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+                                .userService(customOAuth2UserService)
+                        )
+                        .successHandler(oAuth2SuccessHandler)
+                        .failureHandler(jwtAuthencationfailHandler)
+                )
+                //              dùng để xác thực token JWT được gửi từ client
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.decoder(customJwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                );
+
+
         return http.build();
     }
 
