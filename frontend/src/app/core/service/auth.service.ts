@@ -18,7 +18,9 @@ export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private alertService: AlertService
+  ) {
     // Kiểm tra trạng thái đăng nhập khi service được khởi tạo
     // this.checkInitialAuthState();
   }
@@ -160,6 +162,22 @@ export class AuthService {
       return;
     }
   }
+  /**
+   *  đăng nhập sau khi nhận được token từ popup
+   * @param token 
+   */
+  loginWithToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
+    this.updateLoginStatus(true);
+  }
+
+  /**
+   * Đăng ký tài khoản
+   * @param username - Tên đăng nhập
+   * @param emailOrPhone - Email hoặc số điện thoại
+   * @param password - Mật khẩu
+   * @returns Observable<ApiResponse<AuthenticationResponse>>
+   */
   register(username: string, emailOrPhone: string, password: string): Observable<ApiResponse<AuthenticationResponse>> {
     const email = emailOrPhone.includes('@') ? emailOrPhone : null;
     const phone = emailOrPhone.includes('@') ? null : emailOrPhone;
@@ -243,6 +261,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     this.updateLoginStatus(false);
+    this.alertService.success('Đăng xuất thành công!');
   }
 }
 

@@ -71,5 +71,6 @@ export const LabelConstants = {
   onWorkingProcess: 'Đang trong quá trình thực hiện',
   pleaseWaitAMinute: 'Vui lòng đợi một chút',
   myAccount: 'Tài khoản của tôi',
-  updateUserProfile: 'Sửa hồ sơ'
+  updateUserProfile: 'Sửa hồ sơ',
+  logoutSuccess: 'Đăng xuất thành công',
 } as const;

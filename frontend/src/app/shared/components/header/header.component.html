@@ -82,6 +82,12 @@
 							label.pickleball
 						}}</a>
 					</li>
+					<li>
+						<a  class="nav-link px-2 text-white" (click)="logg()" type="button">{{
+							label.cart
+						}}</a>
+					</li>
+
 				</ul>
 
 				<form
@@ -99,7 +105,7 @@
 				</form>
 
 				<div class="text-end">
-					<ng-container *ngIf="!isLoggedIn; else notLogIn">
+					<ng-container *ngIf="!(isLoggedIn$ | async) else notLogIn">
 						<button
 							type="button"
 							class="btn btn-outline-light me-2"
@@ -133,7 +139,7 @@
 									}}</a>
 								</li>
 								<li>
-									<a class="dropdown-item" href="#">{{ label.logOut }}</a>
+									<a class="dropdown-item"  (click)="logout()">{{ label.logOut }}</a>
 								</li>
 							</ul>
 						</div>
