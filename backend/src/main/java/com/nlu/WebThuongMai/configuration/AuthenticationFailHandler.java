@@ -8,40 +8,67 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 @Slf4j
-@AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Component
 /**
  * Xử lý các lỗi xác thực khi người dùng đăng nhập không thành công
  * Implements AuthenticationFailureHandler để xử lý các lỗi xác thực
  */
 public class AuthenticationFailHandler implements AuthenticationFailureHandler {
-   ObjectMapper objectMapper;
+   final ObjectMapper objectMapper;
+
+    @Value("${app.frontend.url}")
+    String frontendUrl;
+
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         try {
-            log.info("Authentication failed: {}", exception.getMessage());
-            final ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-            log.error("Unauthorized error: {}", exception.getMessage());
+            String message = exception.getMessage();
+            log.info("Authentication failed: {}", message);
+            if (exception instanceof OAuth2AuthenticationException oauthEx) {
+                message = oauthEx.getError().getDescription(); // ví dụ lấy từ OAuth2Error
+                log.info("Authentication failed: {}", message);
+            }
+            ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+            if (message.equals("user not existed")) {
+                errorCode = ErrorCode.USER_NOT_EXISTED;
+            }
+            // Nếu đang đăng nhập qua popup → gửi thông báo về parent window
+            response.setContentType("text/html;charset=UTF-8");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-            response.setStatus(errorCode.getHttpStatusCode().value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-            final ApiResponse<?> apiResponse = ApiResponse.builder()
+            ApiResponse<?> apiResponse = ApiResponse.builder()
                     .code(errorCode.getHttpStatusCode().value())
                     .message(errorCode.getMessage())
                     .build();
+            log.info("Response: {}", apiResponse);
+            String apiResponseJson = objectMapper.writeValueAsString(apiResponse);
 
-            objectMapper.writeValue(response.getWriter(), apiResponse);
+            String html = """
+                    <html><body>
+                    <script>
+                     const error = %s;
+                     window.opener?.postMessage({ error }, '%s');
+                     window.close();
+                    </script>
+                    </body></html>
+                 """.formatted(apiResponseJson,frontendUrl);
+            response.getWriter().write(html);
         } catch (IOException e) {
             log.error("Lỗi khi ghi response: {}", e.getMessage());
             throw e;

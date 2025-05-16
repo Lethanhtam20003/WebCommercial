@@ -73,4 +73,5 @@ export const LabelConstants = {
   myAccount: 'Tài khoản của tôi',
   updateUserProfile: 'Sửa hồ sơ',
   logoutSuccess: 'Đăng xuất thành công',
+  loginFails: 'Đăng nhập thất bại',
 } as const;

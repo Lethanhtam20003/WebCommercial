@@ -4,6 +4,9 @@ import { URL_API } from '../constants/url-api.constants';
 import {  Router } from '@angular/router'; 
 import { NgZone } from '@angular/core';
 import { AuthService } from './auth.service';
+import { AlertService } from './alert.service';
+import { LabelConstants } from '../constants/label.constants';
+import { ErrorMessageConstants } from '../constants/error-message.constants';
 
 /**
  * Service xử lý nhận token từ popup OAuth
@@ -22,7 +25,7 @@ export class PopupMessageService {
    * Observable để components có thể subscribe và nhận token
    */
 
-  constructor(private router: Router, private ngZone: NgZone,private authservice: AuthService) { }
+  constructor(private router: Router, private ngZone: NgZone, private authservice: AuthService, private alertService: AlertService) { }
 
   /**
    * Lắng nghe và xử lý token từ popup OAuth
@@ -34,23 +37,32 @@ export class PopupMessageService {
       if (event.origin !== URL_API.originUrl) {
         return;
       }
-
       // Kiểm tra và xử lý token từ message data
       const token = event.data?.token;
-      if (token) {
-        // Sử dụng NgZone để đảm bảo các thao tác được thực hiện trong Angular zone
-        this.ngZone.run(() => {
-
-          // Phát tín hiệu token đã được nhận
+      const error = event.data?.error;
+      // Sử dụng NgZone để đảm bảo các thao tác được thực hiện trong Angular zone
+      this.ngZone.run(() => {
+        console.log('datadata nhận được từ popup:'+event.data);
+        
+        if(token){
+            // Phát tín hiệu token đã được nhận
           this.authservice.loginWithToken(token);
-          
+        
           // Điều hướng về trang chủ sau khi nhận token
           this.router.navigate(['/']);
-        });
-        
-        // Gỡ bỏ event listener sau khi đã xử lý token
-        window.removeEventListener('message', messageListener);
-      }
+        }
+
+        if(error){  
+          let errorMessage = LabelConstants.loginFails ;
+          if(error.message === "user not existed"){
+            errorMessage +='\n' +  ErrorMessageConstants.userExisted;
+          }
+          this.alertService.error(errorMessage);
+        }
+      });
+      
+      // Gỡ bỏ event listener sau khi đã xử lý token
+      window.removeEventListener('message', messageListener);
     };
 
     // Đăng ký lắng nghe message events

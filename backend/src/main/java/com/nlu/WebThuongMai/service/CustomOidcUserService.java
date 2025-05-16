@@ -48,8 +48,9 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
         if (user == null) {
             // Kiểm tra xem người dùng đã tồn tại trong hệ thống chưa
             if(userRepository.existsByEmail(email)){
+                ErrorCode errorCode = ErrorCode.USER_NOT_EXISTED;
                 throw new OAuth2AuthenticationException(
-                        new OAuth2Error("invalid_user", "Email không tồn tại", null)
+                        new OAuth2Error(errorCode.getCode()+"", errorCode.getMessage(), null)
                 );
             }
 
