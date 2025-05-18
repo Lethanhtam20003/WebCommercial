@@ -85,11 +85,15 @@ export const routes: Routes = [
 	},	
 	...authRoutes,
 	...protectedRoutes,
-	  {
+	{
     path: 'admin',
     loadChildren: () =>
-      import('./features/admin/admin.module').then((m) => m.AdminModule),
-  },
+		import('./features/admin/admin.module').then(
+			m => m.AdminModule
+		),
+		title: 'Admin',
+		// canActivate: [AuthGuard],
+  	},
 	{
 		path: '**',
 		loadComponent: () =>
