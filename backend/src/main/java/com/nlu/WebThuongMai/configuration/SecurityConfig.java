@@ -1,9 +1,12 @@
 package com.nlu.WebThuongMai.configuration;
 
-import com.nlu.WebThuongMai.service.CustomOAuth2UserService;
-import com.nlu.WebThuongMai.service.CustomOidcUserService;
+import com.nlu.WebThuongMai.configuration.OAuth2Handler.AuthenticationFailHandler;
+import com.nlu.WebThuongMai.configuration.OAuth2Handler.Oauth2SuccessHandler;
+import com.nlu.WebThuongMai.configuration.exceptionHandler.AccessDeniceHandle;
+import com.nlu.WebThuongMai.configuration.exceptionHandler.AuthenticationEntryPoint;
+import com.nlu.WebThuongMai.service.OAuth2Service.CustomOAuth2UserService;
+import com.nlu.WebThuongMai.service.OAuth2Service.CustomOidcUserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;

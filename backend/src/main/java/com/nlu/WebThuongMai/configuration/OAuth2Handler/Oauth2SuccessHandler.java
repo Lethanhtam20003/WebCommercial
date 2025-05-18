@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.configuration;
+package com.nlu.WebThuongMai.configuration.OAuth2Handler;
 
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.model.User;
@@ -15,7 +15,6 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

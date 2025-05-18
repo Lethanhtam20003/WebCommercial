@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.configuration;
+package com.nlu.WebThuongMai.configuration.exceptionHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
