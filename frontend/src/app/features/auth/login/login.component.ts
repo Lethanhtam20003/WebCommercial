@@ -1,9 +1,9 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LabelConstants } from '../../../core/constants/label.constants';
-import { ErrorMessageConstants } from '../../../core/constants/error-message.constants';
+import { LabelConstants } from '../../../shared/constants/label.constants';
+import { ErrorMessageConstants } from '../../../shared/constants/error-message.constants';
 import { NgClass, NgIf, CommonModule } from '@angular/common';
-import { RouteLink } from '../../../core/constants/route-link';
+import { RouteLink } from '../../../shared/constants/route-link';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { PopupMessageService } from '../../../core/service/popup-message.service';
 import { AuthService } from '../../../core/service/auth.service';

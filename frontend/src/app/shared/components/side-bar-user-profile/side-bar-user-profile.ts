@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
-import { LabelConstants } from "../../../core/constants/label.constants";
+import { LabelConstants } from "../../../shared/constants/label.constants";
 import { RouterLink } from "@angular/router";
-import { RouteLink as Routes } from "../../../core/constants/route-link";
+import { RouteLink as Routes } from "../../../shared/constants/route-link";
 
 @Component({
   selector: 'side-bar-user-profile',
