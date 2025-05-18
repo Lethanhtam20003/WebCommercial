@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { URL_API } from '../constants/url-api.constants';
+import { URL_API } from '../../shared/constants/url-api.constants';
 import {  Router } from '@angular/router'; 
 import { NgZone } from '@angular/core';
 import { AuthService } from './auth.service';
 import { AlertService } from './alert.service';
-import { LabelConstants } from '../constants/label.constants';
-import { ErrorMessageConstants } from '../constants/error-message.constants';
+import { LabelConstants } from '../../shared/constants/label.constants';
+import { ErrorMessageConstants } from '../../shared/constants/error-message.constants';
 
 /**
  * Service xử lý nhận token từ popup OAuth

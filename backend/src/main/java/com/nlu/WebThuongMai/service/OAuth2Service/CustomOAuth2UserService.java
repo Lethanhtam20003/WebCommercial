@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.service;
+package com.nlu.WebThuongMai.service.OAuth2Service;
 
 import com.nlu.WebThuongMai.enums.AuthProvider;
 import com.nlu.WebThuongMai.enums.Role;

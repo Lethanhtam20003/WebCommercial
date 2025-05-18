@@ -1,12 +1,10 @@
-package com.nlu.WebThuongMai.service;
+package com.nlu.WebThuongMai.service.OAuth2Service;
 
 import com.nlu.WebThuongMai.enums.AuthProvider;
 import com.nlu.WebThuongMai.enums.Role;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
-import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;

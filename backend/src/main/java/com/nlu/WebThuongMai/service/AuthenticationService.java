@@ -197,7 +197,7 @@ public class AuthenticationService {
                 : signedJWT.getJWTClaimsSet().getExpirationTime();
         var verifiedJWT = signedJWT.verify(verifier);
         if (!(verifiedJWT && expiryTime.after(new Date())))
-            throw new AppException(ErrorCode.UNAUTHORIZED);
+            throw new AppException(ErrorCode.TOKEN_EXPIRED);
         if (invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.UNAUTHORIZED);
         return signedJWT;

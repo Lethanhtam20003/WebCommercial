@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.configuration;
+package com.nlu.WebThuongMai.configuration.exceptionHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
@@ -25,10 +25,10 @@ import java.io.IOException;
  * Xử lý các lỗi truy cập không hợp lệ
  * Implements AccessDeniedHandler để xử lý các lỗi truy cập không hợp lệ
  */
-public class AccessDeniceHandle implements AccessDeniedHandler {
+public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     private final ObjectMapper objectMapper;
 
-    public AccessDeniceHandle() {
+    public CustomAccessDeniedHandler() {
         this.objectMapper = new ObjectMapper();
     }
     @Override

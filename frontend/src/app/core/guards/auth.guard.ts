@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { AuthService } from '../service/auth.service';
-import { RouteLink } from '../constants/route-link';
+import { RouteLink } from '../../shared/constants/route-link';
 import { map, catchError, take, switchMap } from 'rxjs/operators';
 
 @Injectable({
