@@ -116,3 +116,7 @@ tmp/
 
 frontend/src/environments/environment.prod.ts
 frontend/src/environments/environment.ts
+.devcontainer/Dockerfile
+.gitignore
+.devcontainer/devcontainer.json
+.devcontainer/docker-compose.yml
