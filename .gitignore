@@ -112,7 +112,8 @@ karma-coverage/
 # Temporary files
 temp/
 tmp/
-
+# dev container
+.devcontainer/
 
 frontend/src/environments/environment.prod.ts
 frontend/src/environments/environment.ts

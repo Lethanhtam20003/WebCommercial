@@ -4,17 +4,19 @@ server:
     context-path: /api
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/data
-    username: myuser
-    password: myuser
-    driver-class-name: org.postgresql.Driver
+     url: jdbc:postgresql://localhost:5432/data
+     username: myuser
+     password: myuser
+#    url: ${SPRING_DATASOURCE_URL}
+#    username: ${SPRING_DATASOURCE_USERNAME}
+#    password: ${SPRING_DATASOURCE_PASSWORD}
+#    driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      #      ddl-auto:     create
+#      ddl-auto:     create
       ddl-auto: update
-
-    show-sql: true
+#    show-sql: true
   security:
     oauth2:
       client:
@@ -28,12 +30,24 @@ spring:
               - public_profile
             client-name: Facebook
             authorization-grant-type: authorization_code
+          google:
+            client-id: 22261971260-9gv8aaldds89h0k3o5fldss6hlofem55.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+            scope: openid, email, profile
+
         provider:
           facebook:
             authorization-uri: https://www.facebook.com/v18.0/dialog/oauth
             token-uri: https://graph.facebook.com/v18.0/oauth/access_token
             user-info-uri: https://graph.facebook.com/me?fields=id,name,email,picture
             user-name-attribute: id
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+
 
 logging:
   level:

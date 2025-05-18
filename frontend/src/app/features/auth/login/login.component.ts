@@ -109,10 +109,8 @@ export class LoginComponent implements OnInit {
 			return this.ErrorMessage.usernameHasAtLeast3Characters;
 		}
 
-		if (fieldName === 'password') {
-			if (field.hasError('minlength') || field.hasError('maxlength')) {
-				return this.ErrorMessage.passwordHasAtLeast8CharactersAndSmallerThan30;
-			}
+		if (fieldName === 'password' && (field.hasError('minlength') || field.hasError('maxlength'))) {
+			return this.ErrorMessage.passwordHasAtLeast8CharactersAndSmallerThan30;
 		}
 
 		return '';
@@ -166,7 +164,7 @@ export class LoginComponent implements OnInit {
 	 */
 	loginWithGoogle(): void {
 		// Hiển thị thông báo đang phát triển
-		this.alertService.warning('Chức năng đăng nhập bằng Google đang được phát triển!');
+		this.authService.loginWithGoogle();
 	}
 
 	/**
