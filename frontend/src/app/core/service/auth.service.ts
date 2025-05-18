@@ -5,9 +5,9 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { ApiResponse } from '../models/api-response.model';
 import { AuthenticationResponse } from '../models/authentication-response.model';
 import { IntrospectResponse } from '../models/introspect_response.model';
-import { URL_API } from '../constants/url-api.constants';
-import { LabelConstants } from '../constants/label.constants';
-import { ErrorMessageConstants } from '../constants/error-message.constants';
+import { URL_API } from '../../shared/constants/url-api.constants';
+import { LabelConstants } from '../../shared/constants/label.constants';
+import { ErrorMessageConstants } from '../../shared/constants/error-message.constants';
 import { AlertService } from './alert.service';
 
 @Injectable({

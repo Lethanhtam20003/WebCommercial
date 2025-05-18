@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
-import { LabelConstants } from './core/constants/label.constants';
-import { RouteLink } from './core/constants/route-link';
+import { LabelConstants } from './shared/constants/label.constants';
+import { RouteLink } from './shared/constants/route-link';
 
 /**
  * Định nghĩa các route cho module Auth
