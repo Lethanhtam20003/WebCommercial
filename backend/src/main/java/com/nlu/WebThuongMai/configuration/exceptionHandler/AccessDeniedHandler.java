@@ -25,10 +25,10 @@ import java.io.IOException;
  * Xử lý các lỗi truy cập không hợp lệ
  * Implements AccessDeniedHandler để xử lý các lỗi truy cập không hợp lệ
  */
-public class AccessDeniceHandle implements AccessDeniedHandler {
+public class AccessDeniedHandler implements AccessDeniedHandler {
     private final ObjectMapper objectMapper;
 
-    public AccessDeniceHandle() {
+    public AccessDeniedHandler() {
         this.objectMapper = new ObjectMapper();
     }
     @Override

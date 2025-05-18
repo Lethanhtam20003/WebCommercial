@@ -18,7 +18,7 @@ import { SideBarUserProfile } from '../side-bar-user-profile/side-bar-user-profi
 	selector: 'user-profile',
 	imports: [CommonModule, ReactiveFormsModule, SideBarUserProfile],
 	templateUrl: './user-profile.component.html',
-	styleUrl: './user-profile.component.scss',
+	styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
 	updateInformationForm!: FormGroup;
