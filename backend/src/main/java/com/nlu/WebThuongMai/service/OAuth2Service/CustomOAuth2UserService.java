@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.service;
+package com.nlu.WebThuongMai.service.OAuth2Service;
 
 import com.nlu.WebThuongMai.enums.AuthProvider;
 import com.nlu.WebThuongMai.enums.Role;
@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
      */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        log.info("Load user from OAuth2 request: {}", userRequest);
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         // Lấy thông tin người dùng từ Facebook
@@ -45,23 +49,29 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
         String avata = oAuth2User.getAttribute("avatar");
+        AuthProvider authProvider = AuthProvider.FACEBOOK;
         if (id == null) {
             throw new RuntimeException("provider_id is missing from OAuth2 response");
         }
-        long providerId = Long.parseLong(id);
         // Lưu hoặc cập nhật người dùng
         User user = userRepository.findUserByAuthProviderId(id);
+
         if (user == null) {
+            // Kiểm tra xem người dùng đã tồn tại trong hệ thống chưa
+            if(userRepository.existsByEmail(email)){
+                throw new OAuth2AuthenticationException(
+                        new OAuth2Error("invalid_user", "Email không tồn tại", null)
+                );
+            }
             userRepository.save(User.builder()
                     .username(name)
                     .email(email)
-                    .authProvider(AuthProvider.FACEBOOK)
-                    .authProviderId(providerId)
+                    .authProvider(authProvider)
+                    .authProviderId(id)
                     .role(Role.USER)
                     .avatar(avata)
                     .build());
         }
-        log.warn(user.toString());
         return oAuth2User;
     }
 }

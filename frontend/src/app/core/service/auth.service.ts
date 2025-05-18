@@ -18,7 +18,9 @@ export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private alertService: AlertService
+  ) {
     // Kiểm tra trạng thái đăng nhập khi service được khởi tạo
     // this.checkInitialAuthState();
   }
@@ -155,7 +157,46 @@ export class AuthService {
       '_blank',
       `width=${width},height=${height},left=${left},top=${top}`
     );
+    if (!popup) {
+      alert('Popup bị chặn bởi trình duyệt. Vui lòng cho phép popup để tiếp tục đăng nhập bằng Facebook.');
+      return;
+    }
   }
+  /**
+   * Đăng nhập bằng Google
+   */
+  loginWithGoogle(): void {
+    // Tính toán vị trí để popup hiển thị giữa 
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+    const popup = window.open(
+      URL_API.googleLogin,
+      '_blank',
+      `width=${width},height=${height},left=${left},top=${top}`
+    );
+    if (!popup) {
+      alert('Popup bị chặn bởi trình duyệt. Vui lòng cho phép popup để tiếp tục đăng nhập bằng Google.');
+      return;
+    }
+  }
+  /**
+   *  đăng nhập sau khi nhận được token từ popup
+   * @param token 
+   */
+  loginWithToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
+    this.updateLoginStatus(true);
+  }
+
+  /**
+   * Đăng ký tài khoản
+   * @param username - Tên đăng nhập
+   * @param emailOrPhone - Email hoặc số điện thoại
+   * @param password - Mật khẩu
+   * @returns Observable<ApiResponse<AuthenticationResponse>>
+   */
   register(username: string, emailOrPhone: string, password: string): Observable<ApiResponse<AuthenticationResponse>> {
     const email = emailOrPhone.includes('@') ? emailOrPhone : null;
     const phone = emailOrPhone.includes('@') ? null : emailOrPhone;
@@ -174,16 +215,14 @@ export class AuthService {
         headers: new HttpHeaders().set('skipAuth', 'true'),
       }
     ).pipe(
-      tap(res => {
-
-      }),
+    
       catchError((error: HttpErrorResponse) => {
         console.error('Error occurred during registration:', error);
         this.updateLoginStatus(false);
-        let errorMessage = ErrorMessageConstants.UnknownErrorOccurred;
+          let errorMessage: string = ErrorMessageConstants.UnknownErrorOccurred;
 
         if (error.error?.message === 'user existed') {
-          errorMessage = ErrorMessageConstants.userExisted;
+          errorMessage = String(ErrorMessageConstants.userExisted);
         }
         if (error.error?.message === 'email existed') {
           errorMessage = ErrorMessageConstants.emailExisted;
@@ -194,7 +233,7 @@ export class AuthService {
         return of({
           code: error.error?.code || 500,
           message: errorMessage,
-          result: { token: '' } as AuthenticationResponse
+          result: {} as AuthenticationResponse
         });
       })
     );
@@ -215,23 +254,21 @@ export class AuthService {
     ).pipe(
       tap(res => {
         if (res.code === 200) {
-          console.log('Log2');
           localStorage.setItem(this.TOKEN_KEY, res.result.token);
           this.updateLoginStatus(true);
         }
       }),
       catchError((error: HttpErrorResponse) => {
         this.updateLoginStatus(false);
-        let errorMessage = ErrorMessageConstants.UnknownErrorOccurred;
-        if(error.error.message === 'user not existed') {
-          errorMessage = ErrorMessageConstants.userNotExisted;
-        }if(          error.error.message === 'password not correct') {
-          errorMessage = ErrorMessageConstants.passwordNotCorrect;
+        let errorMessage =String(ErrorMessageConstants.UnknownErrorOccurred);        if(error.error.message === 'user not existed') {
+          errorMessage = String(ErrorMessageConstants.userNotExisted);
+        }if(error.error.message === 'password not correct') {
+          errorMessage = String(ErrorMessageConstants.passwordNotCorrect);
         }
         return of({
           code: error.error.code,
           message: errorMessage,
-          result: {token: '' } as AuthenticationResponse
+          result: {} as AuthenticationResponse
         });
       })
     );
@@ -243,6 +280,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     this.updateLoginStatus(false);
+    this.alertService.success('Đăng xuất thành công!');
   }
 }
 

@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
 import { LabelConstants } from '../../../core/constants/label.constants';
 import { RouteLink } from '../../../core/constants/route-link';
 import { AuthService } from '../../../core/service/auth.service';
@@ -23,23 +24,25 @@ export class HeaderComponent implements OnInit {
 	searchForm!: FormGroup;
 	protected readonly route = RouteLink;
 	protected readonly label = LabelConstants;
-	isLoggedIn: boolean=false;
+	isLoggedIn$: Observable<boolean>;
 
 	constructor(
 		private fb: FormBuilder,
 		// private http: HttpClient,
 		private router: Router,
 		private authService: AuthService
-	) {}
+	) {
+		this.isLoggedIn$ = this.authService.isLoggedIn$;
+	}
 
 	ngOnInit(): void {
 		this.searchForm = this.fb.group({
 			searchInput: [''],
 		});
 
-		this.authService.isLoggedIn$.subscribe(loggedIn => {
-			this.isLoggedIn = loggedIn;
-		});
+		// this.authService.isLoggedIn$.subscribe(loggedIn => {
+		// 	this.isLoggedIn = loggedIn;
+		// });
 	}
 
 	/**
@@ -59,4 +62,22 @@ export class HeaderComponent implements OnInit {
 			this.router.navigate(['/search'], { queryParams: { q: keyword } });
 		}
 	}
+	/**
+	 * @description: logout
+	 */
+	logout(): void {
+		// log isloggedIn$
+		this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
+			console.log('isLoggedIn:', isLoggedIn);
+		});
+		console.log('Logout');
+		this.authService.logout();
+    	this.router.navigate(['/log-in']);
+	}
+	logg(): void{
+		this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
+			console.log('isLoggedIn:', isLoggedIn);
+		});
+	}
+
 }
