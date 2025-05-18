@@ -51,7 +51,7 @@ const authRoutes: Routes = [
 const protectedRoutes: Routes = [
   {
     path: 'dashboard',
-    loadComponent: () => import('./shared/components/dashboard/dashboard.component')
+    loadComponent: () => import('./pages/dashboard/dashboard.component')
       .then(m => m.DashboardComponent),
     title: 'Dashboard',
     // canActivate: [AuthGuard],
@@ -85,6 +85,11 @@ export const routes: Routes = [
 	},	
 	...authRoutes,
 	...protectedRoutes,
+	  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./features/admin/admin.module').then((m) => m.AdminModule),
+  },
 	{
 		path: '**',
 		loadComponent: () =>

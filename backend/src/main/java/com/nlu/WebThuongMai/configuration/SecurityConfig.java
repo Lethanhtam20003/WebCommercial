@@ -2,8 +2,8 @@ package com.nlu.WebThuongMai.configuration;
 
 import com.nlu.WebThuongMai.configuration.OAuth2Handler.AuthenticationFailHandler;
 import com.nlu.WebThuongMai.configuration.OAuth2Handler.Oauth2SuccessHandler;
-import com.nlu.WebThuongMai.configuration.exceptionHandler.AccessDeniceHandle;
 import com.nlu.WebThuongMai.configuration.exceptionHandler.AuthenticationEntryPoint;
+import com.nlu.WebThuongMai.configuration.exceptionHandler.CustomAccessDeniedHandler;
 import com.nlu.WebThuongMai.service.OAuth2Service.CustomOAuth2UserService;
 import com.nlu.WebThuongMai.service.OAuth2Service.CustomOidcUserService;
 import lombok.AllArgsConstructor;
@@ -56,7 +56,7 @@ public class SecurityConfig {
 
     private final CustomJwtDecoder customJwtDecoder;
     private final AuthenticationEntryPoint authenticationEntryPoint;
-    private final AccessDeniceHandle accessDeniceHandle;
+    private final CustomAccessDeniedHandler accessDeniceHandle;
 
     /**
      * Cấu hình chuỗi bộ lọc bảo mật
