@@ -1,0 +1,40 @@
+// 🎨 Màu chủ đạo
+$primary-color: #141d22;
+$primary-text-color: #ffffff;
+
+// 🌟 Màu nhấn
+$accent-color: #ff4500;
+$accent-text-color: #ffffff;
+
+// 🧱 Màu nền và chữ
+$surface-color: #ffffff;
+$surface-text-color: #141d22;
+
+$background-color: #ffffff;
+$background-text-color: #141d22;
+
+// 📲 Màu nền thương hiệu
+$facebook-logo-color: #1877f2;
+$google-green-color: #34a853;
+
+// 🔘 PrimeNG hoặc UI Component
+$p-inputtext-focus-ring-color: $primary-color;
+
+$p-button-primary-background: $primary-color;
+$p-button-primary-color: $primary-text-color;
+$p-button-primary-border-color: $primary-color;
+
+$p-button-primary-hover-background: $accent-color;
+$p-button-primary-hover-border-color: $accent-color;
+
+
+// 🖋️ Font
+$font-family: 'Roboto', sans-serif;
+$font-size-base: 16px;
+
+// 📏 Kích thước
+$container-max-width: 1200px;
+$border-radius: 6px;
+
+// 🔳 Box-shadow
+$box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
