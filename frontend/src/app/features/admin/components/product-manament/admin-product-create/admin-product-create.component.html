@@ -1,0 +1,70 @@
+<div class="container mt-3">
+  <div class="card">
+    <div class="card-header bg-light">
+      <h5 class="mb-0">➕ Thêm mới sản phẩm</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="productForm" class="row g-3">
+        <!-- Thông tin chung -->
+        <div class="col-12">
+          <h6 class="fw-bold text-success">✔ Thông tin chung</h6>
+          <hr />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Tên sản phẩm</label>
+          <input type="text" class="form-control" formControlName="name" placeholder="Tên sản phẩm" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Alias</label>
+          <input type="text" class="form-control" formControlName="alias" placeholder="Alias" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Mã sản phẩm</label>
+          <input type="text" class="form-control" formControlName="code" placeholder="Mã sản phẩm" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Kích thước</label>
+          <input type="text" class="form-control" formControlName="size" placeholder="Kích thước" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Chất liệu</label>
+          <input type="text" class="form-control" formControlName="material" placeholder="Chất liệu" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Giá bán</label>
+          <input type="number" class="form-control" formControlName="price" placeholder="0,00" />
+          <small class="text-muted">💡 Đơn vị tiền tệ cấu hình trong hệ thống (mặc định VND)</small>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Đơn vị tính</label>
+          <select class="form-select" formControlName="unit">
+            <option value="VND">VND</option>
+            <option value="USD">USD</option>
+            <option value="Cái">Cái</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Giá khuyến mãi</label>
+          <input type="number" class="form-control" formControlName="discountPrice" placeholder="0,00" />
+          <small class="text-muted">💡 Đơn vị tiền tệ cấu hình trong hệ thống (mặc định VND)</small>
+        </div>
+
+        <!-- Nút thao tác -->
+        <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+          <button class="btn btn-success" (click)="onSubmit()" [disabled]="productForm.invalid">
+            💾 Lưu lại
+          </button>
+          <button class="btn btn-secondary" (click)="goBack()">↩ Quay lại</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
