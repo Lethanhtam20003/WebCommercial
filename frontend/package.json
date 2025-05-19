@@ -19,6 +19,7 @@
     "@angular/platform-browser": "19.2.0",
     "@angular/platform-browser-dynamic": "19.2.0",
     "@angular/router": "19.2.0",
+    "@ng-select/ng-select": "^14.7.0",
     "@popperjs/core": "2.11.8",
     "@primeng/themes": "19.1.0",
     "autoprefixer": "10.4.20",

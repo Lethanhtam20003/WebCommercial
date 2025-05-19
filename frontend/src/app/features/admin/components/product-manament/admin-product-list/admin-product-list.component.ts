@@ -4,35 +4,26 @@ import { CommonModule, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { Input } from '@angular/core';
 import { Product } from '../../../models/Product';
+import { AdminProductService } from '../../../service/admin-product.service';
+import { ProductResponse } from '../../../models/productResponse';
 
 @Component({
   standalone: true,
-  imports: [FormsModule, CommonModule, NgIf],
+  imports: [FormsModule, CommonModule],
   selector: 'app-admin-product-list',
   templateUrl: './admin-product-list.component.html',
-  styleUrls: ['./admin-product-list.component.css']
+  styleUrls: ['./admin-product-list.component.scss']
 })
 export class AdminProductListComponent implements OnInit {
-  constructor() { }
+  constructor(private adminProductService: AdminProductService, private router: Router) { }
 
-  products: Product[] = [
-    {
-      imageUrl: 'http://localhost:4200/assets/images/shop/logo.png',
-      name: 'Nội thất văn phòng VP04',
-      price: 0,
-      discountPrice: 0,
-      category: 'Văn phòng',
-      inStock: true,
-      isHot: false,
-      isNew: false,
-      isPromo: false,
-      visible: true,
-      order: 1,
-    },
-    // ...thêm các sản phẩm khác
-  ];
+  products: ProductResponse[] = [];
 
   ngOnInit() {
+    this.adminProductService.getAll().subscribe(data => {
+      console.log('data', data);
+      this.products = data; 
+    });
   }
 
 }
