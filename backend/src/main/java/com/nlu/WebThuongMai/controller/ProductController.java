@@ -59,5 +59,11 @@ public class ProductController {
                 .result(productService.getProductByCategory(request, pageable))
                 .build();
     }
+    @PostMapping("/create")
+    ApiResponse<ProductRequest> createProduct(@RequestBody ProductRequest request) {
+        return ApiResponse.<ProductRequest>builder()
+                .result(productService.createProduct(request))
+                .build();
+    }
 
 }

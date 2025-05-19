@@ -1,6 +1,7 @@
 package com.nlu.WebThuongMai.configuration;
 
 import com.nimbusds.jwt.SignedJWT;
+import com.nlu.WebThuongMai.enums.AuthProvider;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.repository.UserRepository;
@@ -79,10 +80,14 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             
             var user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+            String password = user.getPassword();
+            if (password == null && user.getAuthProvider() != AuthProvider.LOCAL) {
+                password = ""; // hoặc UUID.randomUUID().toString()
+            }
 
             UserDetails userDetails = org.springframework.security.core.userdetails.User
                     .withUsername(user.getUsername())
-                    .password(user.getPassword())
+                    .password(password)
                     .authorities(String.valueOf(user.getRole()))
                     .build();
 

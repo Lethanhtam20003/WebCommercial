@@ -35,6 +35,11 @@ public class ProductService {
     }
 
     public Page<ProductRequest> getProductByCategory(CategoryRequest request, Pageable pageable) {
-        return productMapper.toPageProductRequest(productRepository.findByCategory(request.getCategory(), pageable));
+        return productMapper.toPageProductRequest(productRepository.findByCategoryName(request.getCategory(), pageable));
+    }
+
+    public ProductRequest createProduct(ProductRequest request) {
+        return productMapper.toProductRequest(productRepository
+                .save(productMapper.toProduct( request)));
     }
 }
