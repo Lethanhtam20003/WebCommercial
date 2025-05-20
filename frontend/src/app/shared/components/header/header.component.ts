@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { LabelConstants } from '../../../core/constants/label.constants';
+import { Label } from '../../../core/constants/label.constants';
 import { RouteLink } from '../../../core/constants/route-link';
 import { AuthService } from '../../../core/service/auth.service';
 
@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
 	logo: string = 'assets/images/shop/logo.png';
 	searchForm!: FormGroup;
 	protected readonly route = RouteLink;
-	protected readonly label = LabelConstants;
+	protected readonly label = Label;
 	isLoggedIn: boolean=false;
 
 	constructor(

@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LabelConstants } from '../../../core/constants/label.constants';
+import { Label } from '../../../core/constants/label.constants';
 import { ErrorMessageConstants } from '../../../core/constants/error-message.constants';
 import { NgClass, NgIf, CommonModule } from '@angular/common';
 import { RouteLink } from '../../../core/constants/route-link';
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
 	}
 
 	// Constants
-	Label = LabelConstants;
+	Label = Label;
 	ErrorMessage = ErrorMessageConstants;
 	RouteLink = RouteLink;
 

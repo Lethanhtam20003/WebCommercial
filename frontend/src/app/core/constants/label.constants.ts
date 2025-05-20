@@ -1,4 +1,4 @@
-export const LabelConstants = {
+export const Label = {
 	logIn: 'Đăng nhập',
 	logOut: 'Đăng xuất',
 	register: 'Đăng ký',
@@ -8,7 +8,7 @@ export const LabelConstants = {
 	confirmPassword: 'Xác nhận mật khẩu',
 	email: 'Email',
 	phone: 'Số điện thoại',
-	loginWithOther: 'Hoặc là bạn có thể đăng nhập bằng các tài khoản khác',
+	loginWithOther: 'Hoặc đăng nhập với',
 	logInPage: 'Đăng nhập',
 	registerPage: 'Đăng ký',
 	forgotPasswordPage: 'Quên mật khẩu',
@@ -76,4 +76,13 @@ export const LabelConstants = {
 	pleaseWaitAMinute: 'Vui lòng đợi một chút',
 	myAccount: 'Tài khoản của tôi',
 	updateUserProfile: 'Sửa hồ sơ',
+  changePassowrd: 'Đổi mật khẩu',
+  all: 'Tất cả',
+  waitingForPayment: 'Chờ thanh toán',
+  isShipping: 'Đang vận chuyển',
+  waitingForDelivery: 'Chờ giao hàng',
+  deliverComplete: 'Vận chuyển hoàn tất',
+  canceled: 'Đã huỷ',
+  refunds: 'Trả hàng/Hoàn tiền',
+  vouchersList: 'Kho vouchers',
 };

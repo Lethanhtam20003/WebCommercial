@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LabelConstants } from '../../../core/constants/label.constants';
+import { Label } from '../../../core/constants/label.constants';
 import {
 	FormBuilder,
 	FormControl,
@@ -23,7 +23,7 @@ import { SideBarUserProfile } from '../side-bar-user-profile/side-bar-user-profi
 export class UserProfileComponent implements OnInit {
 	updateInformationForm!: FormGroup;
 	imagePreview: string | ArrayBuffer | null = null;
-	protected readonly label = LabelConstants;
+	protected readonly label = Label;
 	protected readonly errorMessage = ErrorMessageConstants;
 
 	constructor(private fb: FormBuilder) {}

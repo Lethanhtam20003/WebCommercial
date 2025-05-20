@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
-import { LabelConstants } from './core/constants/label.constants';
+import { Label } from './core/constants/label.constants';
 import { RouteLink } from './core/constants/route-link';
 
 /**
@@ -13,7 +13,7 @@ const authRoutes: Routes = [
 			import('./features/auth/login/login.component').then(
 				m => m.LoginComponent
 			),
-		title: LabelConstants.logInPage,
+		title: Label.logInPage,
 		data: {
 			showHeader: false,
 			showFooter: false,
@@ -25,7 +25,7 @@ const authRoutes: Routes = [
 			import('./features/auth/register/register.component').then(
 				m => m.RegisterComponent
 			),
-		title: LabelConstants.registerPage,
+		title: Label.registerPage,
 		data: {
 			showHeader: false,
 			showFooter: false,
@@ -37,7 +37,7 @@ const authRoutes: Routes = [
 			import('./shared/components/redirect/oauth2_redirect.component').then(
 				m => m.Oauth2RedirectComponent
 			),
-		title: LabelConstants.ProcessingLogin,
+		title: Label.ProcessingLogin,
 		data: {
 			showHeader: false,
 			showFooter: false,
@@ -49,29 +49,44 @@ const authRoutes: Routes = [
  * Định nghĩa các route được bảo vệ (yêu cầu đăng nhập)
  */
 const protectedRoutes: Routes = [
-  {
-    path: 'dashboard',
-    loadComponent: () => import('./shared/components/dashboard/dashboard.component')
-      .then(m => m.DashboardComponent),
-    title: 'Dashboard',
-    // canActivate: [AuthGuard],
-    data: {
-      showHeader: true,
-      showFooter: true,
-      breadcrumb: 'Dashboard'
-    }
-  },
-  {
-    path: RouteLink.profileRoute,
-    loadComponent: () => import('./shared/components/user-profile/user-profile.component').then(m=>m.UserProfileComponent),
-    title: LabelConstants.userProfile,
-    // canActivate: [AuthGuard],
-    data: {
-      showHeader: true,
-      showFooter: true,
-      breadcrumb: LabelConstants.userProfile
-    }
-  }
+	{
+		path: 'dashboard',
+		loadComponent: () =>
+			import('./shared/components/dashboard/dashboard.component').then(
+				m => m.DashboardComponent
+			),
+		title: 'Dashboard',
+		// canActivate: [AuthGuard],
+		data: {
+			showHeader: true,
+			showFooter: true,
+			breadcrumb: 'Dashboard',
+		},
+	},
+	{
+		path: RouteLink.userRoute,
+		children: [
+      {
+        path: '',
+        redirectTo: RouteLink.profileRoute,
+        pathMatch: 'full'
+      },
+			{
+				path: RouteLink.profileRoute,
+				loadComponent: () =>
+					import(
+						'./shared/components/user-profile/user-profile.component'
+					).then(m => m.UserProfileComponent),
+				title: Label.userProfile,
+				// canActivate: [AuthGuard],
+				data: {
+					showHeader: true,
+					showFooter: true,
+					breadcrumb: Label.userProfile,
+				},
+			},
+		],
+	},
 ];
 
 /**
@@ -82,7 +97,7 @@ export const routes: Routes = [
 		path: '',
 		redirectTo: 'dashboard',
 		pathMatch: 'full',
-	},	
+	},
 	...authRoutes,
 	...protectedRoutes,
 	{

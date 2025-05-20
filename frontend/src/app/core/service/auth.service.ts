@@ -6,7 +6,7 @@ import { ApiResponse } from '../models/api-response.model';
 import { AuthenticationResponse } from '../models/authentication-response.model';
 import { IntrospectResponse } from '../models/introspect_response.model';
 import { URL_API } from '../constants/url-api.constants';
-import { LabelConstants } from '../constants/label.constants';
+import { Label } from '../constants/label.constants';
 import { ErrorMessageConstants } from '../constants/error-message.constants';
 import { AlertService } from './alert.service';
 

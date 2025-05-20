@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouteLink } from '../../../core/constants/route-link';
-import { LabelConstants } from '../../../core/constants/label.constants';
+import { Label } from '../../../core/constants/label.constants';
 
 @Component({
 	selector: 'app-footer',
@@ -13,5 +13,5 @@ import { LabelConstants } from '../../../core/constants/label.constants';
 export class FooterComponent {
 	logo: string = 'assets/images/shop/logo.png';
 	protected readonly RouteLink = RouteLink;
-	protected readonly Label = LabelConstants;
+	protected readonly Label = Label;
 }

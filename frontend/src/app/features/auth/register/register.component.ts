@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LabelConstants } from '../../../core/constants/label.constants';
+import { Label } from '../../../core/constants/label.constants';
 import { ErrorMessageConstants } from '../../../core/constants/error-message.constants';
 import { CommonModule, NgClass } from '@angular/common';
 import { RouteLink } from '../../../core/constants/route-link';
