@@ -11,11 +11,11 @@ import { filter } from 'rxjs';
 import { NgClass } from '@angular/common';
 
 @Component({
-	selector: 'side-bar-user-profile',
+	selector: 'side-bar-user-account',
 	standalone: true,
 	imports: [RouterLink, NgClass],
-	styleUrl: './side-bar-user-profile.scss',
-	templateUrl: './side-bar-user-profile.html',
+	styleUrl: './side-bar-user-account.scss',
+	templateUrl: './side-bar-user-account.html',
 })
 export class SideBarUserProfile {
 	protected readonly label = Label;

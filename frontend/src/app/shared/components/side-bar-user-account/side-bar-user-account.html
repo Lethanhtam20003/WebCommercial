@@ -31,20 +31,22 @@
 			</button>
 			<div class="collapse show" id="home-collapse">
 				<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-					<li
-						routerLinkActive="active"
-					>
+					<li routerLinkActive="active">
 						<a
 							href="#"
 							class="link-dark rounded"
 							[routerLink]="'/' + routes.userRoute + '/' + routes.profileRoute"
-              [ngClass]="{ active: isActive('/user/profile') }"
+							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.profileRoute) }"
 							>{{label.userProfile}}</a
 						>
 					</li>
-					<li><a href="#" class="link-dark rounded">{{label.address}}</a></li>
 					<li>
-						<a href="#" class="link-dark rounded">{{label.changePassowrd}}</a>
+						<a
+							class="link-dark rounded"
+							[routerLink]="'/' + routes.userRoute + '/' + routes.changePassword"
+							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.changePassword) }"
+							>{{label.changePassowrd}}</a
+						>
 					</li>
 				</ul>
 			</div>
