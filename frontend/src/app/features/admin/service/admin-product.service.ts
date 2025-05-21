@@ -4,9 +4,10 @@ import { ProductResponse } from '../models/productResponse';
 import { map, Observable, Subject } from 'rxjs';
 import { URL_API } from '../../../shared/constants/url-api.constants';
 import { ApiResponse } from '../models/ApiResponse';
+import { AdminModule } from '../admin.module';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: AdminModule
   
 })
 export class AdminProductService {

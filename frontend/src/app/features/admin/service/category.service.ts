@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { category } from '../models/category';
 import { Observable } from 'rxjs';
 import { URL_API } from '../../../shared/constants/url-api.constants';
+import { AdminModule } from '../admin.module';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: AdminModule
 })
 export class CategoryService {
 
