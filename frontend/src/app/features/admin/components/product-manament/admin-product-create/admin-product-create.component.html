@@ -9,7 +9,15 @@
 					<!-- Tên sản phẩm -->
 					<div class="col-md-6">
 						<label class="form-label">Tên sản phẩm *</label>
-						<input type="text" class="form-control" formControlName="name" />
+						<input
+							type="text"
+							class="form-control"
+							formControlName="name"
+							placeholder="Tên sản phẩm"
+						/>
+						<div *ngIf="productForm.get('name')?.hasError('nameTaken')">
+							Tên đã tồn tại, vui lòng chọn tên khác.
+						</div>
 					</div>
 
 					<!-- Giá -->
@@ -57,15 +65,44 @@
 					<!-- Ảnh -->
 					<div class="col-12">
 						<label class="form-label">Ảnh sản phẩm</label>
+						<!-- Input group: URL + Add URL + Open File -->
+						<div class="input-group mb-2">
+							<input
+								#imageUrl
+								type="text"
+								class="form-control"
+								placeholder="Enter image URL"
+								(keyup.enter)="addImageUrl(imageUrl)"
+							/>
+							<button
+								class="btn btn-outline-secondary"
+								type="button"
+								(click)="addImageUrl(imageUrl)"
+							>
+								thêm ảnh
+							</button>
+							<button
+								class="btn btn-outline-primary"
+								type="button"
+								(click)="fileInput.click()"
+							>
+								chọn ảnh
+							</button>
+						</div>
+
+						<!-- Hidden file input -->
 						<input
+							#fileInput
 							type="file"
-							class="form-control"
+							class="d-none"
 							(change)="onImageSelected($event)"
 							multiple
 						/>
+
+						<!-- Preview images -->
 						<div class="mt-2 d-flex flex-wrap gap-2">
 							<img
-								*ngFor="let img of previewImages"
+								*ngFor="let img of ImageUrls"
 								[src]="img"
 								width="80"
 								height="80"

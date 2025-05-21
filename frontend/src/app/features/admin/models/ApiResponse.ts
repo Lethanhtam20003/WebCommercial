@@ -1,7 +1,7 @@
 import { PagedProductResult } from './PagedProductResult';
 
-export interface ApiResponse {
+export interface ApiResponse<T> {
   code: number;
   message: string;
-  result: PagedProductResult;
+  result: T;
 }

@@ -9,4 +9,5 @@ export const URL_API = {
     googleLogin:   'http://localhost:8080/api/oauth2/authorization/google',
     getAllProduct: 'http://localhost:8080/api/v1/products',
     getAllCategory: 'http://localhost:8080/api/v1/category',
+    checkProductNameExited: 'http://localhost:8080/api/v1/products/check-name',
 } as const;
