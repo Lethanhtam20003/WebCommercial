@@ -65,12 +65,11 @@ const protectedRoutes: Routes = [
 	},
 	{
 		path: RouteLink.userRoute,
+		loadComponent: () =>
+			import('./shared/components/user-account/user-account.component').then(
+				m => m.UserAccountComponent
+			),
 		children: [
-      {
-        path: '',
-        redirectTo: RouteLink.profileRoute,
-        pathMatch: 'full'
-      },
 			{
 				path: RouteLink.profileRoute,
 				loadComponent: () =>
@@ -79,6 +78,30 @@ const protectedRoutes: Routes = [
 					).then(m => m.UserProfileComponent),
 				title: Label.userProfile,
 				// canActivate: [AuthGuard],
+				data: {
+					showHeader: true,
+					showFooter: true,
+					breadcrumb: Label.userProfile,
+				},
+			},
+      {
+				path: RouteLink.changePassword,
+				loadComponent: () =>
+					import(
+						'./shared/components/change-password/change-password.component'
+					).then(m => m.ChangePasswordComponent),
+				title: Label.changePassowrd,
+				// canActivate: [AuthGuard],
+				data: {
+					showHeader: true,
+					showFooter: true,
+					breadcrumb: Label.userProfile,
+				},
+			},
+			{
+				path: '',
+				redirectTo: RouteLink.profileRoute,
+				pathMatch: 'full',
 				data: {
 					showHeader: true,
 					showFooter: true,

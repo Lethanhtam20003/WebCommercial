@@ -27,4 +27,6 @@ export const ErrorMessageConstants = {
 	userExisted: 'Tài khoản đã tồn tại',
 	phoneExisted: 'Điện thoại đã tồn tại',
 	emailExisted: 'Email đã tồn tại',
+  retypePasswordIsNotEmpty: 'Nhập lại mật khẩu không được để trống',
+  passwordIsNotEmpty: 'Mật khẩu không được để trống',
 };

@@ -14,4 +14,5 @@ export const RouteLink = {
 	// aboutUsRoute: 'about-us',
   addressRoute: 'address',
   userRoute: 'user',
+  changePassword: 'change-password',
 };
