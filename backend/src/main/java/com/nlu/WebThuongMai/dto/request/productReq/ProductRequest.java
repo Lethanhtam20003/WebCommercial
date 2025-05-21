@@ -4,10 +4,12 @@ import com.nlu.WebThuongMai.model.Category;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -15,7 +17,8 @@ import java.util.Set;
 public class ProductRequest {
     String name;
     String price;
-    String description;
     String status;
     Set<Long> categoryIds;
+    String description;
+    Set<String> image;
 }

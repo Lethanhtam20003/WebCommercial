@@ -1,6 +1,7 @@
 package com.nlu.WebThuongMai.controller;
 
 import com.nlu.WebThuongMai.dto.request.productReq.CategoryRequest;
+import com.nlu.WebThuongMai.dto.request.productReq.ProductNameRequest;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.service.ProductService;
@@ -64,6 +65,11 @@ public class ProductController {
         return ApiResponse.<ProductRequest>builder()
                 .result(productService.createProduct(request))
                 .build();
+    }
+    @GetMapping("/check-name")
+    ApiResponse<Boolean> checkName(@RequestParam ProductNameRequest request) {
+        return ApiResponse.<Boolean>builder()
+                .result(productService.checkName(request.getName())).build();
     }
 
 }

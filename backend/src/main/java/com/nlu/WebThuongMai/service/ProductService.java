@@ -42,4 +42,8 @@ public class ProductService {
         return productMapper.toProductRequest(productRepository
                 .save(productMapper.toProduct( request)));
     }
+
+    public Boolean checkName(String name) {
+        return productRepository.existsByName(name);
+    }
 }

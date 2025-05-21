@@ -13,5 +13,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.name = :name")
     Page<Product> findByCategoryName(@Param("name") String name, Pageable pageable);
 
-
+    Boolean existsByName(String name);
 }
