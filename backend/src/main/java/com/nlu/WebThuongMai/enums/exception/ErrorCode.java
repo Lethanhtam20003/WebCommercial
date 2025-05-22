@@ -31,6 +31,7 @@ public enum ErrorCode {
     PHONE_EXISTED(1017,"phone existed" , HttpStatus.BAD_REQUEST),
     INVALID_SIGNATURE(1018,"invalid signature" , HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1019,"token expired" , HttpStatus.BAD_REQUEST),
+    PRODUCT_EXISTED(1020,"product existed" , HttpStatus.BAD_REQUEST),
     UNCATEGORIZED_EXCEPTION(9998, "Uncategorized Exception", HttpStatus.INTERNAL_SERVER_ERROR), ;
     int code;
     String message;

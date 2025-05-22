@@ -4,6 +4,7 @@ import com.nlu.WebThuongMai.dto.request.productReq.CategoryRequest;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductNameRequest;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
+import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.service.ProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +29,11 @@ public class ProductController {
      * @param pageable Thông tin phân trang (số trang, số lượng mỗi trang)
      * @return Danh sách sản phẩm được phân trang
      */
-    @GetMapping()
-    ApiResponse<Page<ProductRequest>> getAllProduct(Pageable pageable) {
-        return ApiResponse.<Page<ProductRequest>>builder()
+    @GetMapping
+    ApiResponse<Page<ProductResponse>> getAllProduct(Pageable pageable) {
+        return ApiResponse.<Page<ProductResponse>>builder()
                 .result(productService.getAllProduct(pageable))
                 .build();
-
     }
 
     /**
@@ -41,9 +41,9 @@ public class ProductController {
      * @param productId ID của sản phẩm cần tìm
      * @return Thông tin chi tiết của sản phẩm
      */
-    @PostMapping("/id")
-    ApiResponse<ProductRequest> getProductById(@RequestBody long productId) {
-        return ApiResponse.<ProductRequest>builder()
+    @GetMapping("/id")
+    ApiResponse<ProductResponse> getProductById(@RequestBody long productId) {
+        return ApiResponse.<ProductResponse>builder()
                 .result(productService.getProductById(productId))
                 .build();
     }
@@ -54,15 +54,15 @@ public class ProductController {
      * @param pageable Thông tin phân trang (số trang, số lượng mỗi trang)
      * @return Danh sách sản phẩm theo danh mục được phân trang
      */
-    @PostMapping("/category")
-    ApiResponse<Page<ProductRequest>> getProductByCategory(@RequestBody CategoryRequest request, Pageable pageable) {
-        return ApiResponse.<Page<ProductRequest>>builder()
+    @GetMapping("/category")
+    ApiResponse<Page<ProductResponse>> getProductByCategory(@RequestBody CategoryRequest request, Pageable pageable) {
+        return ApiResponse.<Page<ProductResponse>>builder()
                 .result(productService.getProductByCategory(request, pageable))
                 .build();
     }
-    @PostMapping("/create")
-    ApiResponse<ProductRequest> createProduct(@RequestBody ProductRequest request) {
-        return ApiResponse.<ProductRequest>builder()
+    @PostMapping
+    ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest request) {
+        return ApiResponse.<ProductResponse>builder()
                 .result(productService.createProduct(request))
                 .build();
     }

@@ -1,10 +1,8 @@
-package com.nlu.WebThuongMai.dto.request.productReq;
+package com.nlu.WebThuongMai.dto.response.productResp;
 
-import com.nlu.WebThuongMai.model.Category;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -14,7 +12,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductRequest {
+public class ProductResponse {
+    String id;
     String name;
     String price;
     String status;

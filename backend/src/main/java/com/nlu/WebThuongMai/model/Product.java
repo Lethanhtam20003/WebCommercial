@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,6 +13,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -55,7 +54,7 @@ public class Product {
     // Quan hệ nhiều ảnh
     @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<ProductImage> images = new ArrayList<>();
+    Set<ProductImage> images = new HashSet<>();
 
     // Quan hệ nhiều-danh mục
     @Builder.Default
