@@ -4,12 +4,16 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Entity đại diện cho sản phẩm trong hệ thống
  * Lưu trữ thông tin chi tiết về sản phẩm và mối quan hệ với danh mục
  */
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -40,18 +44,27 @@ public class Product {
     /**
      * Mô tả chi tiết về sản phẩm
      */
+    @Column(columnDefinition = "TEXT")
     String description;
 
     /**
-     * Trạng thái của sản phẩm (còn hàng, hết hàng, etc.)
+     * Trạng thái của sản phẩm (mở bán , ngừng bán, etc.)
      */
     String status;
 
-    /**
-     * Danh mục của sản phẩm
-     * Quan hệ nhiều-một với bảng Category
-     */
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    Category category;
+    // Quan hệ nhiều ảnh
+    @Builder.Default
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<ProductImage> images = new HashSet<>();
+
+    // Quan hệ nhiều-danh mục
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(
+            name = "product_categories",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    Set<Category> categories = new HashSet<>();
+
 }

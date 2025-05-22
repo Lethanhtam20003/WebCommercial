@@ -158,6 +158,13 @@
             <version>26.0.1</version>
             <scope>compile</scope>
         </dependency>
+<!--        opnencsv hỗ trợ đọc file csv-->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.9</version>
+        </dependency>
+
     </dependencies>
 
     <!-- === Build Configuration === -->

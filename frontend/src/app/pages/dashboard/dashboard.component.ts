@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ProductListComponent } from '../../../features/product/product-list/product-list.component';
-import { ProductList2Component } from '../../../features/product/product-list2/product-list2.component';
+import { ProductListComponent } from '../../features/product/product-list/product-list.component';
+import { ProductList2Component } from '../../features/product/product-list2/product-list2.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,

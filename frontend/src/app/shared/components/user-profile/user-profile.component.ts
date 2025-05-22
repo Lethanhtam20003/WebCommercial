@@ -64,7 +64,7 @@ export class UserProfileComponent implements OnInit {
 				timerProgressBar: true,
 				allowOutsideClick: false,
 				didOpen: () => {
-					Swal.showLoading();
+					Swal.showLoading(Swal.getConfirmButton());
 				},
 			}).then(result => {
 				/* Read more about handling dismissals below */

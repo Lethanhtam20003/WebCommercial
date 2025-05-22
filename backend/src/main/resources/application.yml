@@ -14,9 +14,9 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-#      ddl-auto:     create
-      ddl-auto: update
-#    show-sql: true
+      ddl-auto:     create
+#      ddl-auto: update
+    show-sql: true
   security:
     oauth2:
       client:
@@ -56,8 +56,8 @@ logging:
 
 jwt:
   key: AaGpWmjmTnXtXbAR+Dkx/GTU5oV26NvIP/BWkm1btLZmm28hoUwBljJo6Cgy/X/4
-  valid-duration: 18000 # in second   5 hour
-  refreshable-duration: 604800 # in second  1 week
+  valid-duration: 18000 # in second 5 hour
+  refreshable-duration: 604800 # in second 1 week
 schedules:
   reset-invalidated-token: "0 0 0 * * ?" # Chạy vào 00:00  mỗi ngày
 

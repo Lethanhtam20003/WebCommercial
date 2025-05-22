@@ -1,9 +1,12 @@
 package com.nlu.WebThuongMai.controller;
 
 import com.nlu.WebThuongMai.dto.request.productReq.CategoryRequest;
+import com.nlu.WebThuongMai.dto.request.productReq.ProductNameRequest;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
+import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.service.ProductService;
+import com.nlu.WebThuongMai.service.ReadCSVFile;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,18 +24,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/products")
 public class ProductController {
     ProductService productService;
+    ReadCSVFile readCSVFile;
 
     /**
      * Lấy danh sách tất cả sản phẩm có phân trang
      * @param pageable Thông tin phân trang (số trang, số lượng mỗi trang)
      * @return Danh sách sản phẩm được phân trang
      */
-    @GetMapping()
-    ApiResponse<Page<ProductRequest>> getAllProduct(Pageable pageable) {
-        return ApiResponse.<Page<ProductRequest>>builder()
+    @GetMapping
+    ApiResponse<Page<ProductResponse>> getAllProduct(Pageable pageable) {
+        return ApiResponse.<Page<ProductResponse>>builder()
                 .result(productService.getAllProduct(pageable))
                 .build();
-
     }
 
     /**
@@ -40,9 +43,9 @@ public class ProductController {
      * @param productId ID của sản phẩm cần tìm
      * @return Thông tin chi tiết của sản phẩm
      */
-    @PostMapping("/id")
-    ApiResponse<ProductRequest> getProductById(@RequestBody long productId) {
-        return ApiResponse.<ProductRequest>builder()
+    @GetMapping("/id")
+    ApiResponse<ProductResponse> getProductById(@RequestBody long productId) {
+        return ApiResponse.<ProductResponse>builder()
                 .result(productService.getProductById(productId))
                 .build();
     }
@@ -53,11 +56,28 @@ public class ProductController {
      * @param pageable Thông tin phân trang (số trang, số lượng mỗi trang)
      * @return Danh sách sản phẩm theo danh mục được phân trang
      */
-    @PostMapping("/category")
-    ApiResponse<Page<ProductRequest>> getProductByCategory(@RequestBody CategoryRequest request, Pageable pageable) {
-        return ApiResponse.<Page<ProductRequest>>builder()
+    @GetMapping("/category")
+    ApiResponse<Page<ProductResponse>> getProductByCategory(@RequestBody CategoryRequest request, Pageable pageable) {
+        return ApiResponse.<Page<ProductResponse>>builder()
                 .result(productService.getProductByCategory(request, pageable))
                 .build();
     }
+    @PostMapping
+    ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest request) {
+        return ApiResponse.<ProductResponse>builder()
+                .result(productService.createProduct(request))
+                .build();
+    }
+    @GetMapping("/check-name")
+    ApiResponse<Boolean> checkName(@RequestParam ProductNameRequest request) {
+        return ApiResponse.<Boolean>builder()
+                .result(productService.checkName(request.getName())).build();
+    }
 
+    @PostMapping("/getAllProductFromCSVFile")
+    ApiResponse<Boolean> getAllProductFromCSVFile() {
+        readCSVFile.readCSVFile();
+        return ApiResponse.<Boolean>builder()
+                .result(true).build();
+    }
 }
