@@ -52,12 +52,14 @@ public interface ProductMapper {
     default Set<ProductImage> toProductImageSet(Set<String> urls) {
         if (urls == null) return new HashSet<>();
         return urls.stream()
+                .filter(url -> url != null && !url.isBlank())
                 .map(url -> ProductImage.builder()
                         .name(getNameImage(url))
                         .image(url).build())
                 .collect(Collectors.toSet());
     }
     default String getNameImage(String url) {
+        if(url == null || url.isBlank()) return null;
         StringBuilder res = new StringBuilder();
         res.append(url.substring(url.lastIndexOf("/") + 1));
         if(url.contains("?"))

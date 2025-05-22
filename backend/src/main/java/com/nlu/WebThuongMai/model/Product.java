@@ -44,6 +44,7 @@ public class Product {
     /**
      * Mô tả chi tiết về sản phẩm
      */
+    @Column(columnDefinition = "TEXT")
     String description;
 
     /**

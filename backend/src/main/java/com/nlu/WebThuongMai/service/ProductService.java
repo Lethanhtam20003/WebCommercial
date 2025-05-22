@@ -30,6 +30,7 @@ public class ProductService {
     ProductMapper productMapper;
 
     public ProductResponse createProduct(ProductRequest request) {
+        log.info("Create product: {}", request);
         if (productRepository.existsByName(request.getName())) {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
         }

@@ -6,6 +6,7 @@ import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.service.ProductService;
+import com.nlu.WebThuongMai.service.ReadCSVFile;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/products")
 public class ProductController {
     ProductService productService;
+    ReadCSVFile readCSVFile;
 
     /**
      * Lấy danh sách tất cả sản phẩm có phân trang
@@ -72,4 +74,10 @@ public class ProductController {
                 .result(productService.checkName(request.getName())).build();
     }
 
+    @PostMapping("/getAllProductFromCSVFile")
+    ApiResponse<Boolean> getAllProductFromCSVFile() {
+        readCSVFile.readCSVFile();
+        return ApiResponse.<Boolean>builder()
+                .result(true).build();
+    }
 }
