@@ -43,8 +43,8 @@
 					<li>
 						<a
 							class="link-dark rounded"
-							[routerLink]="'/' + routes.userRoute + '/' + routes.changePassword"
-							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.changePassword) }"
+							[routerLink]="'/' + routes.userRoute + '/' + routes.changePasswordRoute"
+							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.changePasswordRoute) }"
 							>{{label.changePassowrd}}</a
 						>
 					</li>
@@ -62,9 +62,19 @@
 			</button>
 			<div class="collapse" id="dashboard-collapse">
 				<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-					<li><a href="#" class="link-dark rounded">{{label.all}}</a></li>
 					<li>
-						<a href="#" class="link-dark rounded"
+						<a
+							[routerLink]="'/' + routes.userRoute + '/' + routes.orderRoute"
+							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.orderRoute) }"
+							class="link-dark rounded"
+							>{{label.all}}</a
+						>
+					</li>
+					<li>
+						<a
+							[routerLink]="'/' + routes.userRoute + '/' + routes.orderRoute"
+							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.orderRoute) }"
+							class="link-dark rounded"
 							>{{label.waitingForPayment}}</a
 						>
 					</li>

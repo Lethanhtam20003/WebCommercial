@@ -6,7 +6,7 @@ export const RouteLink = {
 	forgotPasswordRoute: 'forgot-password',
 	resetPasswordRoute: 'reset-password',
 	profileRoute: 'profile',
-	// changePasswordRoute: 'change-password',
+	changePasswordRoute: 'change-password',
 	oauth2RedirectRoute: 'oauth2-redirect',
 	// ProcessingLogin: 'đang xử lý đăng nhập ...',
 
@@ -14,5 +14,11 @@ export const RouteLink = {
 	// aboutUsRoute: 'about-us',
   addressRoute: 'address',
   userRoute: 'user',
-  changePassword: 'change-password',
+  orderRoute: 'orders',
+  allRoute: 'all',
+  waitingForDelivery: 'waiting-for-delivery',
+  deliverComplete: 'deliver-complete',
+  canceled: 'canceled',
+  refunds: 'refunds',
+  vouchersList: 'vouchers-list'
 };

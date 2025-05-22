@@ -84,13 +84,27 @@ const protectedRoutes: Routes = [
 					breadcrumb: Label.userProfile,
 				},
 			},
-      {
-				path: RouteLink.changePassword,
+			{
+				path: RouteLink.changePasswordRoute,
 				loadComponent: () =>
 					import(
 						'./shared/components/change-password/change-password.component'
 					).then(m => m.ChangePasswordComponent),
 				title: Label.changePassowrd,
+				// canActivate: [AuthGuard],
+				data: {
+					showHeader: true,
+					showFooter: true,
+					breadcrumb: Label.userProfile,
+				},
+			},
+			{
+				path: RouteLink.orderRoute,
+				loadComponent: () =>
+					import(
+						'./shared/components/order-mamangement/order-mamangement.component'
+					).then(m => m.OrderMamangementComponent),
+				title: Label.order,
 				// canActivate: [AuthGuard],
 				data: {
 					showHeader: true,
