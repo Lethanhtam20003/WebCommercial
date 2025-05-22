@@ -10,6 +10,9 @@ import { CloudinaryUploadService } from '../../../service/cloudinary-upload.serv
 import { AlertService } from '../../../../../core/service/alert.service';
 import { AdminProductService } from '../../../service/admin-product.service';
 import { ValidNameValidator } from '../../../ValidationCustom/ValidName.validator';
+import { ProductRequest } from '../../../models/ProductRequest';
+import { ProductResponse } from '../../../models/productResponse';
+import { ApiResponse } from '../../../../../core/models/api-response.model';
 @Component({
 	standalone: true,
 	imports: [ReactiveFormsModule, NgFor, NgSelectModule, NgIf],
@@ -81,15 +84,23 @@ export class AdminProductCreateComponent implements OnInit {
 	}
 	onSubmit() {
 		if (this.productForm.valid) {
-			const productData = this.productForm.value;
-			console.log('Dữ liệu gửi đi:', productData);
-			// TODO: gửi dữ liệu + ảnh lên backend
-			const payload = {
-				...this.productForm.value,
-				images: this.ImageUrls,
-			};
-			console.log(payload);
-			// this.productService.create(payload).subscribe(...);
+			const productRequest: ProductRequest = {
+				name: this.productForm.value.name,
+				price: this.productForm.value.price,
+				status: this.productForm.value.status,
+				categoryIds: this.productForm.value.categories.map((category: category) => category.id),
+				description: this.productForm.value.description,
+				image: this.ImageUrls,
+			}
+			this.productService.createProduct(productRequest).subscribe({
+				next: (response: ApiResponse<ProductResponse>) => {
+					this.alertService.success('Thêm sản phẩm thành công');
+					this.router.navigate(['/admin/product-management/product-list']);
+				},
+				error: error => {
+					this.alertService.error('Thêm sản phẩm thất bại');
+				}
+			});
 		}
 	}
 	isImageUrl(url: string): boolean {

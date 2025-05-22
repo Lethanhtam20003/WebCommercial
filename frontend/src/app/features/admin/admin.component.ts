@@ -11,7 +11,6 @@ import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.
   <div class="d-flex">
   <app-admin-sidebar></app-admin-sidebar>
   <div class="flex-grow-1 p-4">
-    <!-- Nội dung trang -->
     <router-outlet></router-outlet>
   </div>
 </div>

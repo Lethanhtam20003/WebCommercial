@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { ProductResponse } from '../models/productResponse';
 import { map, Observable, Subject } from 'rxjs';
 import { URL_API } from '../../../shared/constants/url-api.constants';
-import { ApiResponse } from '../models/ApiResponse';
+import { ApiResponse } from '../../../core/models/api-response.model';
 import { AdminModule } from '../admin.module';
 import { PagedProductResult } from '../models/PagedProductResult';
+import { ProductRequest } from '../models/ProductRequest';
 
 @Injectable({
 	providedIn: AdminModule,
@@ -19,9 +20,16 @@ export class AdminProductService {
 
 	getAll(): Observable<ProductResponse[]> {
 		return this.http
-			.get<ApiResponse<PagedProductResult>>(URL_API.getAllProduct)
+			.get<ApiResponse<PagedProductResult>>(URL_API.productsUrl)
 			.pipe(map(response => response.result.content));
 	}
+
+	createProduct(product: ProductRequest): Observable<ApiResponse<ProductResponse>> {
+		return this.http
+			.post<ApiResponse<ProductResponse>>(URL_API.productsUrl, product)
+			.pipe(map(response => response));
+	}
+
 	checkProductNameExited(name: string): Observable<boolean> {
 		return this.http
 			.get<ApiResponse<boolean>>(`${URL_API.checkProductNameExited}${name}`)

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
 import { Router, RouterLink, RouterModule } from '@angular/router';
-import { Input } from '@angular/core';
-import { Product } from '../../../models/Product';
 import { AdminProductService } from '../../../service/admin-product.service';
 import { ProductResponse } from '../../../models/productResponse';
 
