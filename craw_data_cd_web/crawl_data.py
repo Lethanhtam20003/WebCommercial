@@ -72,7 +72,8 @@ def crawl_product_list(output_csv="product.csv", base_url="https://shop.webtheth
                 product_price = product_info.find_element(By.CSS_SELECTOR, "div.price-box span.price").text.strip()
                 
                 # Lấy ra danh mục bằng cách xác định tên
-                category = get_category_info(title)
+                # category = get_category_info(title)
+                category="Chạy bộ"
                 
                 # if category_count[category] >= CATEGORY_LIMIT:
                 #     continue
@@ -269,7 +270,7 @@ if __name__ == "__main__":
 
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
-    crawl_product_list(base_url="https://shop.webthethao.vn/mon-the-thao-pickleball?q=collections:3446043&page=1&view=grid", output_csv="pickleball.csv")
+    crawl_product_list(base_url="https://shop.webthethao.vn/quan-ao-tap-gym?q=collections:3198753&page=2&view=grid", output_csv="gym.csv")
     
     # get_image_info(url='https://shop.webthethao.vn/giay-pickleball-nam-dong-luc-jogarbola-endura-white-jg-23557-05-hang-chinh-hang', driver=driver)
     
