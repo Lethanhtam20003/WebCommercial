@@ -9,6 +9,8 @@ import csv
 from bs4 import BeautifulSoup
 import requests
 from time import sleep
+import re
+import unicodedata
 
 def crawl_product_list(output_csv="product.csv", base_url="https://shop.webthethao.vn/collections/all", timeout=5):
     chrome_options = Options()
@@ -23,34 +25,57 @@ def crawl_product_list(output_csv="product.csv", base_url="https://shop.webtheth
 
     products_data = []
     product_links = []
+    
+    # Giới hạn số sản phẩm mỗi danh mục
+    # CATEGORY_LIMIT = 15
+    # category_count = {
+    #     "Bóng rổ": 0,
+    #     "Bóng chuyền": 0,
+    #     "Cầu lông": 0,
+    #     "Bi-a": 0,
+    #     "Bóng đá & Futsal": 0,
+    #     "Pickleball": 0,
+    #     "Khác": 0
+    # }
+    
     fieldnames = ["title", "img_urls", "category", "description", "price", "detail_url"]
 
     try:
+        # page=1
+        # while True:
+        # url = f"{base_url}?page={page}"
+        # print(f"[INFO] Đang tải trang {page}: {url}")
         driver.get(base_url)
 
+        # try:
         WebDriverWait(driver, timeout).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "div.col-6.col-xs-6.col-sm-6.col-md-4.col-lg-3.col-xl-3"))
         )
+        # except:
+        #     print(f"[INFO] Không còn sản phẩm ở trang {page}. Kết thúc crawl.")
+        #     break # Không còn sản phẩm nữa
 
         product_divs = driver.find_elements(By.CSS_SELECTOR, "div.col-6.col-xs-6.col-sm-6.col-md-4.col-lg-3.col-xl-3")
-
         print(f"[INFO] Tìm thấy {len(product_divs)} sản phẩm")
 
         for idx, product in enumerate(product_divs, 1):
             try:
                 item_product_main = product.find_element(By.CSS_SELECTOR, "div.item_product_main")
                 product_info = item_product_main.find_element(By.CSS_SELECTOR, "div.product-info")
-
                 product_name = product_info.find_element(By.CSS_SELECTOR, "h3.product-name a")
                 
                 # Lấy ra tên sản phẩm
-                title = product_name.text.strip()
+                # title = exclude_word(title=product_name.text.strip()) 
+                title = title=product_name.text.strip()
                 
                 # Lấy ra giá thành sản phẩm
                 product_price = product_info.find_element(By.CSS_SELECTOR, "div.price-box span.price").text.strip()
                 
                 # Lấy ra danh mục bằng cách xác định tên
                 category = get_category_info(title)
+                
+                # if category_count[category] >= CATEGORY_LIMIT:
+                #     continue
                 
                 # Truy cập trang chi tiết sản phẩm
                 detail_url = product_name.get_attribute("href")
@@ -61,17 +86,29 @@ def crawl_product_list(output_csv="product.csv", base_url="https://shop.webtheth
                     "price": product_price,
                     "detail_url": detail_url,
                 })
+                
+                # category_count[category] += 1
             except Exception as e:
                 print(f"[WARN] Lỗi khi xử lý sản phẩm #{idx}: {e}")
 
+        # Kiểm tra nếu tất cả danh mục đã đạt giới hạn thì dừng lại
+        # if all(count >= CATEGORY_LIMIT for count in category_count.values()):
+        #     print("[INFO] Đã đạt giới hạn cho tất cả danh mục. Dừng crawl.")
+        #     break
+              
+            # page += 1
+            # sleep(2)
+
+        # Crawl chi tiết từng sản phẩm
         for idx, prod in enumerate(product_links, 1):
             try:
-                print(f"[INFO] Đang xử lý sản phẩm #{idx}: {prod['title']}")
+                print(f"[INFO] Đang xử lý sản phẩm #{idx}: {prod['title']} - Danh mục: {prod["category"]} - Giá: {prod["price"]}")
                 
                 # gọi hàm để lấy toàn bộ dường dẫn hình ảnh bên trong trang đó 
-                detail_img_url = get_detail_info(prod["detail_url"], driver)
+                detail_img_url = get_image_info(prod["detail_url"], driver)
                 
                 # lấy mô tả sản phẩm ra 
+                # description = replace_keyword(get_description_info(prod["detail_url"], driver))
                 description = get_description_info(prod["detail_url"], driver)
                 
                 # tạm đừng khoảng 3 giây để trang web không nhận biết mình là bot
@@ -104,7 +141,7 @@ def crawl_product_list(output_csv="product.csv", base_url="https://shop.webtheth
     finally:
         driver.quit()
 
-def get_detail_info(url, driver, timeout=10):
+def get_image_info(url, driver, timeout=10):
     try:
         driver.get(url)
 
@@ -129,7 +166,7 @@ def get_detail_info(url, driver, timeout=10):
           
           img_urls = img_urls + f"; {slide_img_url}"
           
-        print(f"Img urls info: ${img_urls}")
+        # print(f"Img urls info: ${img_urls}")
           
         return img_urls
     
@@ -196,6 +233,32 @@ def get_category_info(name):
     else:
         return "Khác"
   
+def exclude_word(title, keyword="cầu lông /"):
+    # Chuẩn hóa để tránh lỗi ký tự Unicode
+    title = unicodedata.normalize("NFKC", title)
+    keyword = unicodedata.normalize("NFKC", keyword)
+
+    # Tạo regex pattern không phân biệt hoa thường
+    pattern = re.compile(re.escape(keyword), re.IGNORECASE)
+
+    # Thay thế và dọn chuỗi
+    cleaned = pattern.sub("", title)
+    cleaned = re.sub(r"\s{2,}", " ", cleaned)       # Xóa khoảng trắng dư
+    cleaned = re.sub(r"\s*/\s*", " / ", cleaned)     # Dọn dấu /
+    return cleaned.strip()
+
+def replace_keyword(content, keyword="cầu lông", replace_word="bóng chuyền"):
+    # Normalize Unicode để tránh lỗi dấu hoặc ký tự lạ
+    content = unicodedata.normalize("NFKC", content)
+    keyword = unicodedata.normalize("NFKC", keyword)
+    replace_word = unicodedata.normalize("NFKC", replace_word)
+
+    # Compile regex không phân biệt hoa thường
+    pattern = re.compile(re.escape(keyword), re.IGNORECASE)
+
+    # Thay thế keyword bằng replace_word
+    return pattern.sub(replace_word, content)
+
 if __name__ == "__main__":
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -206,10 +269,14 @@ if __name__ == "__main__":
 
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
-    get_detail_info(url='https://shop.webthethao.vn/giay-pickleball-nam-dong-luc-jogarbola-endura-white-jg-23557-05-hang-chinh-hang', driver=driver)
+    crawl_product_list(base_url="https://shop.webthethao.vn/mon-the-thao-pickleball?q=collections:3446043&page=1&view=grid", output_csv="pickleball.csv")
+    
+    # get_image_info(url='https://shop.webthethao.vn/giay-pickleball-nam-dong-luc-jogarbola-endura-white-jg-23557-05-hang-chinh-hang', driver=driver)
     
     # get_description_info(url='https://shop.webthethao.vn/bo-quan-ao-thi-dau-nhiet-huyet-sao-vang-trang-hong-sv-nh-02-hang-chinh-hang', driver=driver)
     
-    # crawl_product_list()
+    # print(get_category_info("Giày Cầu Lông / Bóng Chuyền Nam Nữ Động Lực Jogarbola Kira ""Xanh lá"" JG-220420-03 - Hàng Chính Hãng"))
     
-    # print(get_category_info("Bóng đá Động Lực UHV 1.02D DL-UHV102 - Hàng Chính Hãng"))
+    # print(exclude_word(title="Giày Cầu Lông / Bóng Chuyền Nam Nữ Động Lực Jogarbola Kira ""Xanh lá"" JG-220420-03 - Hàng Chính Hãng"))
+    
+    # print(replace_keyword(content = "Giày Bóng Chuyền cao cấp BÓNG CHUYỀN cho Nam Nữ", keyword="bóng chuyền", replace_word="cầu lông"))
