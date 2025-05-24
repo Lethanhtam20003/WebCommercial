@@ -1,9 +1,9 @@
 export interface Product {
-  imageUrl: string;
   name: string;
   price: number;
   discountPrice: number;
   category: string;
+  imageUrl: string;
   inStock: boolean;
   isHot: boolean;
   isNew: boolean;
