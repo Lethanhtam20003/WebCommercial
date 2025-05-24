@@ -53,9 +53,13 @@ public interface ProductMapper {
         if (urls == null) return new HashSet<>();
         return urls.stream()
                 .filter(url -> url != null && !url.isBlank())
-                .map(url -> ProductImage.builder()
-                        .name(getNameImage(url))
-                        .image(url).build())
+                .map(url -> {
+                    if(url.contains("?"))
+                        url = url.substring(0, url.lastIndexOf("?"));
+                    return ProductImage.builder()
+                            .name(getNameImage(url))
+                            .image(url.trim()).build();
+                })
                 .collect(Collectors.toSet());
     }
     default String getNameImage(String url) {
