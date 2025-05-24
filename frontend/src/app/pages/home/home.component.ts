@@ -1,30 +1,29 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ProductListComponent } from '../../features/product/product-list/product-list.component';
+import { OutstandingProductCatalogComponent } from '../../features/category/OutstandingProductCatalog/OutstandingProductCatalog.component';
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [ RouterModule, ProductListComponent],
-  template: ` 
-    <p>
-      <app-product-list></app-product-list>
-      <!-- <app-product-list2></app-product-list2> -->
-       
-    </p>
-    <pre>
-1. 🖼 Banner chính / Slider khuyến mãi
-Slide ảnh lớn ở đầu trang
+	selector: 'app-home',
+	standalone: true,
+	imports: [
+		RouterModule,
+		ProductListComponent,
+		OutstandingProductCatalogComponent,
+	],
+	template: `
+		<pre>
+      Banner chính / Slider khuyến mãi
+      Slide ảnh lớn ở đầu trang
+      Dẫn tới sản phẩm hot / flash sale / bộ sưu tập mới
+    </pre
+		>
 
-Dẫn tới sản phẩm hot / flash sale / bộ sưu tập mới
+		<app-OutstandingProductCatalog></app-OutstandingProductCatalog>
+		<app-product-list></app-product-list>
+		<!-- <app-product-list2></app-product-list2> -->
 
-Có CTA (nút): “Xem ngay”, “Mua liền tay”
+		<pre>
 
-2. 🧭 Danh mục sản phẩm nổi bật
-Hiển thị dạng thẻ (icon + tên)
-
-Ví dụ: 👗 Thời trang – 💄 Mỹ phẩm – 📱 Điện thoại
-
-Bấm vào dẫn tới trang danh mục lọc
 
 3. 🛍 Danh sách sản phẩm nổi bật
 Grid sản phẩm: ảnh, tên, giá, giảm giá, nút mua
@@ -56,10 +55,9 @@ Bài viết như “Cách chọn son phù hợp”, “Top 5 điện thoại gi�
 Cuối trang: Hotline, Chat, Email
 
 Nút “Hỗ trợ ngay” hoặc Chatbox nổi
-    </pre>
-  `,
-  styleUrl: './home.component.scss'
+    </pre
+		>
+	`,
+	styleUrl: './home.component.scss',
 })
-export class HomeComponent {
-
-}
+export class HomeComponent {}
