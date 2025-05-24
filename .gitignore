@@ -121,3 +121,4 @@ frontend/src/environments/environment.ts
 .gitignore
 .devcontainer/devcontainer.json
 .devcontainer/docker-compose.yml
+backend/src/main/resources/db/migration/csvFiles/product.csv

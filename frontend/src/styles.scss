@@ -1,5 +1,16 @@
-@use "bootstrap-icons/font/bootstrap-icons.css";
+// styles custom
+	// variables chứa các biến màu sắc, kích thước, font chữ
+@use 'styles/variables.scss' ;
+	// reset chứa các kiểu mặc định cho các thẻ HTML
+@use 'styles/reset.scss' ;
+	// mixins chứa các hàm và kiểu tùy chỉnh
+@use 'styles/mixins' ;
+
+// styles bootstrap
 @use 'bootstrap/scss/bootstrap';
+@use "bootstrap-icons/font/bootstrap-icons.css";
+
+
 
 :root {
 	--primary-color: #141d22;

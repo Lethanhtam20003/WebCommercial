@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -34,6 +35,11 @@ public class Category {
     String name;
 
     /**
+     * Đường dẫn URL của hình ảnh đại diện cho danh mục.
+     */
+    String imageUrl;
+
+    /**
      * Mô tả về danh mục
      */
     String description;
@@ -43,6 +49,8 @@ public class Category {
      * Quan hệ một-nhiều với bảng Product
      * Cascade ALL để tự động xử lý các thao tác với Product
      */
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    Set<Product> products;
+    @Builder.Default
+    @ManyToMany(mappedBy = "categories")
+    Set<Product> products = new HashSet<>();
+
 }

@@ -1,19 +1,24 @@
 package com.nlu.WebThuongMai.dto.request.productReq;
 
+import com.nlu.WebThuongMai.model.Category;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+import java.util.Set;
+
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductRequest {
-    Long id;
     String name;
     String price;
-    String description;
     String status;
-    long categoryId;
+    Set<Long> categoryIds;
+    String description;
+    Set<String> images;
 }

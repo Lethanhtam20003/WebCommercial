@@ -25,17 +25,18 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
     private final OidcUserService delegate = new OidcUserService();
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("✅ Load user from Google OIDC request");
+        log.info("Load user from Google OIDC request");
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OidcUser oidcUser = delegate.loadUser(userRequest);
         Map<String, Object> attributes = oidcUser.getAttributes();
 
-        String id = (String) attributes.get("sub"); // ✅ Google uses "sub" not "id"
+        String id = (String) attributes.get("sub"); // Google uses "sub" not "id"
         String email = (String) attributes.get("email");
         String name = (String) attributes.get("name");
         String avatar = (String) attributes.get("picture");
         AuthProvider authProvider = AuthProvider.GOOGLE;
+
 
 
         if (id == null) {
@@ -46,12 +47,12 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
         if (user == null) {
             // Kiểm tra xem người dùng đã tồn tại trong hệ thống chưa
             if(userRepository.existsByEmail(email)){
-                ErrorCode errorCode = ErrorCode.USER_NOT_EXISTED;
+                ErrorCode errorCode = ErrorCode.USER_EXISTED;
                 throw new OAuth2AuthenticationException(
                         new OAuth2Error(errorCode.getCode()+"", errorCode.getMessage(), null)
                 );
             }
-
+//          tao user moi
             userRepository.save(User.builder()
                     .username(name)
                     .email(email)

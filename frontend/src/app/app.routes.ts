@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
-import { LabelConstants } from './core/constants/label.constants';
-import { RouteLink } from './core/constants/route-link';
+import { LabelConstants } from './shared/constants/label.constants';
+import { RouteLink } from './shared/constants/route-link';
 
 /**
  * Định nghĩa các route cho module Auth
@@ -50,15 +50,14 @@ const authRoutes: Routes = [
  */
 const protectedRoutes: Routes = [
   {
-    path: 'dashboard',
-    loadComponent: () => import('./shared/components/dashboard/dashboard.component')
-      .then(m => m.DashboardComponent),
-    title: 'Dashboard',
+    path: 'home',
+    loadComponent: () => import('./pages/home/home.component')
+      .then(m => m.HomeComponent),
+    title: 'home',
     // canActivate: [AuthGuard],
     data: {
       showHeader: true,
       showFooter: true,
-      breadcrumb: 'Dashboard'
     }
   },
   {
@@ -80,11 +79,20 @@ const protectedRoutes: Routes = [
 export const routes: Routes = [
 	{
 		path: '',
-		redirectTo: 'dashboard',
+		redirectTo: 'home',
 		pathMatch: 'full',
 	},	
 	...authRoutes,
 	...protectedRoutes,
+	{
+    path: 'admin',
+    loadChildren: () =>
+		import('./features/admin/admin.module').then(
+			m => m.AdminModule
+		),
+		title: 'Admin',
+		// canActivate: [AuthGuard],
+  	},
 	{
 		path: '**',
 		loadComponent: () =>

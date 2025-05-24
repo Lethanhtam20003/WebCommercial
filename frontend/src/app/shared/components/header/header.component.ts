@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
-import { LabelConstants } from '../../../core/constants/label.constants';
-import { RouteLink } from '../../../core/constants/route-link';
+import { LabelConstants } from '../../../shared/constants/label.constants';
+import { RouteLink } from '../../../shared/constants/route-link';
 import { AuthService } from '../../../core/service/auth.service';
 
 @Component({
