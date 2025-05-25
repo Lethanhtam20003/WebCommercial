@@ -36,8 +36,9 @@ public class ProductImage {
      */
     String image;
 
-    /**
-     * ID của sản phẩm mà hình ảnh này thuộc về
-     */
-    long productId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    Product product;
+
 }

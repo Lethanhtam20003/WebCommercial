@@ -25,6 +25,7 @@ public class UserResponse {
     String address;
     Role role;
     String status;
+    String authProvider;
     LocalDateTime created_at;
     LocalDateTime updated_at;
 }

@@ -1,13 +1,13 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Label } from '../../../core/constants/label.constants';
-import { ErrorMessageConstants } from '../../../core/constants/error-message.constants';
+import { ErrorMessageConstants } from '../../../shared/constants/error-message.constants';
 import { NgClass, NgIf, CommonModule } from '@angular/common';
-import { RouteLink } from '../../../core/constants/route-link';
+import { RouteLink } from '../../../shared/constants/route-link';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { PopupMessageService } from '../../../core/service/popup-message.service';
 import { AuthService } from '../../../core/service/auth.service';
 import { AlertService } from '../../../core/service/alert.service';
+import { LabelConstants } from '../../../shared/constants/label.constants';
 
 @Component({
 	selector: 'login-component',
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
 	}
 
 	// Constants
-	Label = Label;
+	Label = LabelConstants;
 	ErrorMessage = ErrorMessageConstants;
 	RouteLink = RouteLink;
 
@@ -109,10 +109,8 @@ export class LoginComponent implements OnInit {
 			return this.ErrorMessage.usernameHasAtLeast3Characters;
 		}
 
-		if (fieldName === 'password') {
-			if (field.hasError('minlength') || field.hasError('maxlength')) {
-				return this.ErrorMessage.passwordHasAtLeast8CharactersAndSmallerThan30;
-			}
+		if (fieldName === 'password' && (field.hasError('minlength') || field.hasError('maxlength'))) {
+			return this.ErrorMessage.passwordHasAtLeast8CharactersAndSmallerThan30;
 		}
 
 		return '';
@@ -166,7 +164,7 @@ export class LoginComponent implements OnInit {
 	 */
 	loginWithGoogle(): void {
 		// Hiển thị thông báo đang phát triển
-		this.alertService.warning('Chức năng đăng nhập bằng Google đang được phát triển!');
+		this.authService.loginWithGoogle();
 	}
 
 	/**

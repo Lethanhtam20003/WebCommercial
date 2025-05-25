@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { URL_API } from '../constants/url-api.constants';
+import { URL_API } from '../../shared/constants/url-api.constants';
 import {  Router } from '@angular/router'; 
 import { NgZone } from '@angular/core';
+import { AuthService } from './auth.service';
+import { AlertService } from './alert.service';
+import { LabelConstants } from '../../shared/constants/label.constants';
+import { ErrorMessageConstants } from '../../shared/constants/error-message.constants';
 
 /**
  * Service xử lý nhận token từ popup OAuth
@@ -16,14 +20,12 @@ export class PopupMessageService {
    * Subject để phát tín hiệu khi nhận được token
    * @private
    */
-  private tokenReceivedSubject = new Subject<string>();
 
   /**
    * Observable để components có thể subscribe và nhận token
    */
-  tokenReceived$ = this.tokenReceivedSubject.asObservable();
 
-  constructor(private router: Router, private ngZone: NgZone) { }
+  constructor(private router: Router, private ngZone: NgZone, private authservice: AuthService, private alertService: AlertService) { }
 
   /**
    * Lắng nghe và xử lý token từ popup OAuth
@@ -35,25 +37,32 @@ export class PopupMessageService {
       if (event.origin !== URL_API.originUrl) {
         return;
       }
-
       // Kiểm tra và xử lý token từ message data
       const token = event.data?.token;
-      if (token) {
-        // Sử dụng NgZone để đảm bảo các thao tác được thực hiện trong Angular zone
-        this.ngZone.run(() => {
-          // Lưu token vào localStorage
-          localStorage.setItem('access_token', token);
-          
-          // Phát tín hiệu token đã được nhận
-          this.tokenReceivedSubject.next(token);
-          
+      const error = event.data?.error;
+      // Sử dụng NgZone để đảm bảo các thao tác được thực hiện trong Angular zone
+      this.ngZone.run(() => {
+        console.log('datadata nhận được từ popup:'+event.data);
+        
+        if(token){
+            // Phát tín hiệu token đã được nhận
+          this.authservice.loginWithToken(token);
+        
           // Điều hướng về trang chủ sau khi nhận token
           this.router.navigate(['/']);
-        });
-        
-        // Gỡ bỏ event listener sau khi đã xử lý token
-        window.removeEventListener('message', messageListener);
-      }
+        }
+
+        if(error){  
+          let errorMessage = LabelConstants.loginFails ;
+          if(error.message === "user not existed"){
+            errorMessage +='\n' +  ErrorMessageConstants.userExisted;
+          }
+          this.alertService.error(errorMessage);
+        }
+      });
+      
+      // Gỡ bỏ event listener sau khi đã xử lý token
+      window.removeEventListener('message', messageListener);
     };
 
     // Đăng ký lắng nghe message events

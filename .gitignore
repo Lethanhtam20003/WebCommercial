@@ -112,7 +112,13 @@ karma-coverage/
 # Temporary files
 temp/
 tmp/
-
+# dev container
+.devcontainer/
 
 frontend/src/environments/environment.prod.ts
 frontend/src/environments/environment.ts
+.devcontainer/Dockerfile
+.gitignore
+.devcontainer/devcontainer.json
+.devcontainer/docker-compose.yml
+backend/src/main/resources/db/migration/csvFiles/product.csv

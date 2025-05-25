@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Label } from '../../../core/constants/label.constants';
 import {
 	NavigationEnd,
 	Router,
 	RouterLink,
 	RouterLinkActive,
 } from '@angular/router';
-import { RouteLink as Routes } from '../../../core/constants/route-link';
 import { filter } from 'rxjs';
 import { NgClass } from '@angular/common';
+import { LabelConstants } from '../../constants/label.constants';
+import { RouteLink } from '../../constants/route-link';
 
 @Component({
 	selector: 'side-bar-user-account',
@@ -18,8 +18,8 @@ import { NgClass } from '@angular/common';
 	templateUrl: './side-bar-user-account.html',
 })
 export class SideBarUserProfile {
-	protected readonly label = Label;
-	protected readonly routes = Routes;
+	protected readonly label = LabelConstants;
+	protected readonly routes = RouteLink;
 	currentUrl = '';
 	constructor(private router: Router) {
 		this.router.events

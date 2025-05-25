@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Label } from '../../../core/constants/label.constants';
-import { ErrorMessageConstants } from '../../../core/constants/error-message.constants';
 import Swal from 'sweetalert2';
 import {
 	FormBuilder,
@@ -12,6 +10,8 @@ import {
 } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
 import { ChangePasswordFormFields } from './change-password.interface';
+import { LabelConstants } from '../../constants/label.constants';
+import { ErrorMessageConstants } from '../../constants/error-message.constants';
 
 @Component({
 	selector: 'change-password',
@@ -21,7 +21,7 @@ import { ChangePasswordFormFields } from './change-password.interface';
 })
 export class ChangePasswordComponent {
 	updatePasswordForm!: FormGroup;
-	protected readonly label = Label;
+	protected readonly label = LabelConstants;
 	protected readonly errorMessage = ErrorMessageConstants;
 
 	constructor(private fb: FormBuilder) {}
@@ -56,7 +56,7 @@ export class ChangePasswordComponent {
 			timerProgressBar: true,
 			allowOutsideClick: false,
 			didOpen: () => {
-				Swal.showLoading();
+				Swal.showLoading(null);
 			},
 		}).then(result => {
 			/* Read more about handling dismissals below */

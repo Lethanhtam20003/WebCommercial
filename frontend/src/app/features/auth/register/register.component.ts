@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Label } from '../../../core/constants/label.constants';
-import { ErrorMessageConstants } from '../../../core/constants/error-message.constants';
+import { LabelConstants } from '../../../shared/constants/label.constants';
+import { ErrorMessageConstants } from '../../../shared/constants/error-message.constants';
 import { CommonModule, NgClass } from '@angular/common';
-import { RouteLink } from '../../../core/constants/route-link';
+import { RouteLink } from '../../../shared/constants/route-link';
 import { Router, RouterLink } from '@angular/router';
 import { AlertService } from '../../../core/service/alert.service';
 import { emailOrPhoneValidator } from '../../../shared/validations/emailOrPhoneValidator';

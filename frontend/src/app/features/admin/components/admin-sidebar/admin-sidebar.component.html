@@ -1,0 +1,71 @@
+<!-- Sidebar -->
+<div
+	id="sidebarMenu"
+	class="admin-sidebar collapse show d-flex flex-column bg-dark text-white p-3 vh-100"
+>
+	<a
+		href="/"
+		class="d-flex align-items-center mb-3 text-white text-decoration-none"
+	>
+		<span class="fs-4">Dashboard</span>
+	</a>
+	<hr />
+
+	<ul class="nav nav-pills flex-column mb-auto">
+		<li class="nav-item" >
+			<a [routerLink]="['/admin/dashboard']" routerLinkActive="active"
+        class="nav-link text-white">
+				<i class="bi bi-speedometer2 me-2"></i> Dashboard
+			</a>
+		</li>
+
+		<!-- Collapsible Dropdown -->
+		<li class="nav-item">
+			<a
+				class="nav-link text-white d-flex justify-content-between align-items-center"
+				data-bs-toggle="collapse"
+				href="#productMenu"
+				role="button"
+				aria-expanded="false"
+				aria-controls="productMenu"
+			>
+				<span><i class="bi bi-box me-2"></i> Product Management</span>
+				<i class="bi bi-caret-down-fill"></i>
+			</a>
+			<div [ngClass]="{ 'collapse': true, 'show': isProductMenuOpen }" class="collapse" id="productMenu">
+				<ul class="nav flex-column ms-4">
+					<li class="nav-item" routerLinkActive="active">
+						<a
+							class="nav-link text-white"
+							[routerLink]="['/admin/product-management/product-list']"
+							routerLinkActive="active"
+							>List Products</a
+						>
+					</li>
+					<li class="nav-item">
+						<a
+							class="nav-link text-white"
+							[routerLink]="['/admin/product-management/create-product']"
+							routerLinkActive="active"
+							>Create Product</a
+						>
+					</li>
+					
+				</ul>
+			</div>
+		</li>
+
+		<li class="nav-item">
+			<a href="#" class="nav-link text-white">
+				<i class="bi bi-table me-2"></i> Orders
+			</a>
+		</li>
+
+		<li class="nav-item">
+			<a href="#" class="nav-link text-white">
+				<i class="bi bi-people me-2"></i> Customers
+			</a>
+		</li>
+	</ul>
+	<hr />
+</div>

@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
-import { Label } from './core/constants/label.constants';
-import { RouteLink } from './core/constants/route-link';
+import { LabelConstants } from './shared/constants/label.constants';
+import { RouteLink } from './shared/constants/route-link';
 
 /**
  * Định nghĩa các route cho module Auth
@@ -13,7 +13,7 @@ const authRoutes: Routes = [
 			import('./features/auth/login/login.component').then(
 				m => m.LoginComponent
 			),
-		title: Label.logInPage,
+		title: LabelConstants.logInPage,
 		data: {
 			showHeader: false,
 			showFooter: false,
@@ -25,7 +25,7 @@ const authRoutes: Routes = [
 			import('./features/auth/register/register.component').then(
 				m => m.RegisterComponent
 			),
-		title: Label.registerPage,
+		title: LabelConstants.registerPage,
 		data: {
 			showHeader: false,
 			showFooter: false,
@@ -37,7 +37,7 @@ const authRoutes: Routes = [
 			import('./shared/components/redirect/oauth2_redirect.component').then(
 				m => m.Oauth2RedirectComponent
 			),
-		title: Label.ProcessingLogin,
+		title: LabelConstants.ProcessingLogin,
 		data: {
 			showHeader: false,
 			showFooter: false,
@@ -49,21 +49,18 @@ const authRoutes: Routes = [
  * Định nghĩa các route được bảo vệ (yêu cầu đăng nhập)
  */
 const protectedRoutes: Routes = [
-	{
-		path: 'dashboard',
-		loadComponent: () =>
-			import('./shared/components/dashboard/dashboard.component').then(
-				m => m.DashboardComponent
-			),
-		title: 'Dashboard',
-		// canActivate: [AuthGuard],
-		data: {
-			showHeader: true,
-			showFooter: true,
-			breadcrumb: 'Dashboard',
-		},
-	},
-	{
+  {
+    path: 'home',
+    loadComponent: () => import('./pages/home/home.component')
+      .then(m => m.HomeComponent),
+    title: 'home',
+    // canActivate: [AuthGuard],
+    data: {
+      showHeader: true,
+      showFooter: true,
+    }
+  },
+  {
 		path: RouteLink.userRoute,
 		loadComponent: () =>
 			import('./shared/components/user-account/user-account.component').then(
@@ -76,12 +73,12 @@ const protectedRoutes: Routes = [
 					import(
 						'./shared/components/user-profile/user-profile.component'
 					).then(m => m.UserProfileComponent),
-				title: Label.userProfile,
+				title: LabelConstants.userProfile,
 				// canActivate: [AuthGuard],
 				data: {
 					showHeader: true,
 					showFooter: true,
-					breadcrumb: Label.userProfile,
+					breadcrumb: LabelConstants.userProfile,
 				},
 			},
 			{
@@ -90,12 +87,12 @@ const protectedRoutes: Routes = [
 					import(
 						'./shared/components/change-password/change-password.component'
 					).then(m => m.ChangePasswordComponent),
-				title: Label.changePassowrd,
+				title: LabelConstants.changePassword,
 				// canActivate: [AuthGuard],
 				data: {
 					showHeader: true,
 					showFooter: true,
-					breadcrumb: Label.userProfile,
+					breadcrumb: LabelConstants.userProfile,
 				},
 			},
 			{
@@ -104,12 +101,12 @@ const protectedRoutes: Routes = [
 					import(
 						'./shared/components/order-mamangement/order-mamangement.component'
 					).then(m => m.OrderMamangementComponent),
-				title: Label.order,
+				title: LabelConstants.order,
 				// canActivate: [AuthGuard],
 				data: {
 					showHeader: true,
 					showFooter: true,
-					breadcrumb: Label.userProfile,
+					breadcrumb: LabelConstants.userProfile,
 				},
 			},
 			{
@@ -119,7 +116,7 @@ const protectedRoutes: Routes = [
 				data: {
 					showHeader: true,
 					showFooter: true,
-					breadcrumb: Label.userProfile,
+					breadcrumb: LabelConstants.userProfile,
 				},
 			},
 		],
@@ -132,11 +129,20 @@ const protectedRoutes: Routes = [
 export const routes: Routes = [
 	{
 		path: '',
-		redirectTo: 'dashboard',
+		redirectTo: 'home',
 		pathMatch: 'full',
 	},
 	...authRoutes,
 	...protectedRoutes,
+	{
+    path: 'admin',
+    loadChildren: () =>
+		import('./features/admin/admin.module').then(
+			m => m.AdminModule
+		),
+		title: 'Admin',
+		// canActivate: [AuthGuard],
+  	},
 	{
 		path: '**',
 		loadComponent: () =>

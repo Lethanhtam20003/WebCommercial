@@ -7,5 +7,5 @@ export interface IntrospectResponse {
      * true: Đã xác thực
      * false: Chưa xác thực
      */
-    isValid: boolean;
+    valid: boolean;
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Label } from '../../../core/constants/label.constants';
+import { LabelConstants } from '../../../shared/constants/label.constants';
 import {
 	FormBuilder,
 	FormControl,
@@ -9,7 +9,7 @@ import {
 	Validators,
 } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { ErrorMessageConstants } from '../../../core/constants/error-message.constants';
+import { ErrorMessageConstants } from '../../../shared/constants/error-message.constants';
 import { CommonModule } from '@angular/common';
 import { UserProfileFormFields } from './user-profile.interface';
 
@@ -17,12 +17,12 @@ import { UserProfileFormFields } from './user-profile.interface';
 	selector: 'user-profile',
 	imports: [CommonModule, ReactiveFormsModule],
 	templateUrl: './user-profile.component.html',
-	styleUrl: './user-profile.component.scss',
+	styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
 	updateInformationForm!: FormGroup;
 	imagePreview: string | ArrayBuffer | null = null;
-	protected readonly label = Label;
+	protected readonly label = LabelConstants;
 	protected readonly errorMessage = ErrorMessageConstants;
 
 	constructor(private fb: FormBuilder) {}
@@ -63,7 +63,7 @@ export class UserProfileComponent implements OnInit {
 				timerProgressBar: true,
 				allowOutsideClick: false,
 				didOpen: () => {
-					Swal.showLoading();
+					Swal.showLoading(Swal.getConfirmButton());
 				},
 			}).then(result => {
 				/* Read more about handling dismissals below */
