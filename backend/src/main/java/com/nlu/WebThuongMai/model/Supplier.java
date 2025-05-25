@@ -56,4 +56,14 @@ public class Supplier {
      * Mô tả thêm về nhà cung cấp
      */
     String description;
+
+    /**
+     * Website của nhà cung cấp
+     */
+    String website;
+
+    /**
+     * URL ảnh đại diện của nhà cung cấp
+     */
+    String logo;
 }
