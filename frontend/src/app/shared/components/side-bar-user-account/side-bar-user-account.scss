@@ -109,3 +109,7 @@ i {
 a.active {
   color: var(--accent-color) !important;
 }
+
+::ng-deep .no-caret::before {
+  content: none !important;
+}

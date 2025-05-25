@@ -1,1 +1,45 @@
-<p>order-mamangement works!</p>
+<div class="container mt-4">
+  <h2 class="mb-4">Quản lý đơn hàng</h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Mã đơn</th>
+          <th>Khách hàng</th>
+          <th>Ngày đặt</th>
+          <th>Trạng thái</th>
+          <th>Tổng tiền</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders; index as i">
+          <td>{{ i + 1 }}</td>
+          <td>{{ order.id }}</td>
+          <td>{{ order.customerName }}</td>
+          <td>{{ order.orderDate | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-warning': order.status === 'Chờ xác nhận',
+                'bg-info': order.status === 'Đang giao',
+                'bg-success': order.status === 'Hoàn tất',
+                'bg-danger': order.status === 'Đã huỷ'
+              }"
+            >
+              {{ order.status }}
+            </span>
+          </td>
+          <td>{{ order.total | currency:'VND' }}</td>
+          <td>
+            <button class="btn btn-sm btn-primary me-1" (click)="viewOrder(order)">Xem</button>
+            <button class="btn btn-sm btn-danger" (click)="cancelOrder(order)">Huỷ</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

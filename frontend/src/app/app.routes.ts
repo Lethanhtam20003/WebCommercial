@@ -49,18 +49,18 @@ const authRoutes: Routes = [
  * Định nghĩa các route được bảo vệ (yêu cầu đăng nhập)
  */
 const protectedRoutes: Routes = [
-  {
-    path: 'home',
-    loadComponent: () => import('./pages/home/home.component')
-      .then(m => m.HomeComponent),
-    title: 'home',
-    // canActivate: [AuthGuard],
-    data: {
-      showHeader: true,
-      showFooter: true,
-    }
-  },
-  {
+	{
+		path: 'home',
+		loadComponent: () =>
+			import('./pages/home/home.component').then(m => m.HomeComponent),
+		title: 'home',
+		// canActivate: [AuthGuard],
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+	},
+	{
 		path: RouteLink.userRoute,
 		loadComponent: () =>
 			import('./shared/components/user-account/user-account.component').then(
@@ -78,7 +78,7 @@ const protectedRoutes: Routes = [
 				data: {
 					showHeader: true,
 					showFooter: true,
-					breadcrumb: LabelConstants.userProfile,
+					breadcrumb: LabelConstants.userAccount,
 				},
 			},
 			{
@@ -92,11 +92,11 @@ const protectedRoutes: Routes = [
 				data: {
 					showHeader: true,
 					showFooter: true,
-					breadcrumb: LabelConstants.userProfile,
+					breadcrumb: LabelConstants.userAccount,
 				},
 			},
 			{
-				path: RouteLink.orderRoute,
+				path: RouteLink.orderRoute + '/:status',
 				loadComponent: () =>
 					import(
 						'./shared/components/order-mamangement/order-mamangement.component'
@@ -106,7 +106,21 @@ const protectedRoutes: Routes = [
 				data: {
 					showHeader: true,
 					showFooter: true,
-					breadcrumb: LabelConstants.userProfile,
+					breadcrumb: LabelConstants.userAccount,
+				},
+			},
+      {
+				path: RouteLink.couponRoute,
+				loadComponent: () =>
+					import(
+						'./shared/components/coupon-list/coupon-list.component'
+					).then(m => m.CouponListComponent),
+				title: LabelConstants.couponList,
+				// canActivate: [AuthGuard],
+				data: {
+					showHeader: true,
+					showFooter: true,
+					breadcrumb: LabelConstants.userAccount,
 				},
 			},
 			{
@@ -118,6 +132,11 @@ const protectedRoutes: Routes = [
 					showFooter: true,
 					breadcrumb: LabelConstants.userProfile,
 				},
+			},
+			{
+				path: RouteLink.orderRoute,
+				redirectTo: `${RouteLink.orderRoute}/${RouteLink.allRoute}`,
+				pathMatch: 'full',
 			},
 		],
 	},
@@ -135,14 +154,12 @@ export const routes: Routes = [
 	...authRoutes,
 	...protectedRoutes,
 	{
-    path: 'admin',
-    loadChildren: () =>
-		import('./features/admin/admin.module').then(
-			m => m.AdminModule
-		),
+		path: 'admin',
+		loadChildren: () =>
+			import('./features/admin/admin.module').then(m => m.AdminModule),
 		title: 'Admin',
 		// canActivate: [AuthGuard],
-  	},
+	},
 	{
 		path: '**',
 		loadComponent: () =>

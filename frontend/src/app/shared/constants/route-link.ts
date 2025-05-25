@@ -15,11 +15,15 @@ export const RouteLink = {
 
   addressRoute: 'address',
   userRoute: 'user',
+
+  /**
+   * order route
+   */
   orderRoute: 'orders',
   allRoute: 'all',
-  waitingForDelivery: 'waiting-for-delivery',
-  deliverComplete: 'deliver-complete',
-  canceled: 'canceled',
-  refunds: 'refunds',
-  vouchersList: 'vouchers-list'
+  pendingRoute: 'pending',
+  shippedRoute: 'shipped',
+  deliveredRoute: 'delivered',
+  canceledRoute: 'canceled',
+  couponRoute: 'coupon-list'
 } as const;

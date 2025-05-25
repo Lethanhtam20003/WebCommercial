@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { ErrorMessageConstants } from '../../../shared/constants/error-message.constants';
 import { CommonModule } from '@angular/common';
 import { UserProfileFormFields } from './user-profile.interface';
+import { AlertService } from '../../../core/service/alert.service';
 
 @Component({
 	selector: 'user-profile',
@@ -25,7 +26,10 @@ export class UserProfileComponent implements OnInit {
 	protected readonly label = LabelConstants;
 	protected readonly errorMessage = ErrorMessageConstants;
 
-	constructor(private fb: FormBuilder) {}
+	constructor(
+		private fb: FormBuilder,
+		private alert: AlertService
+	) {}
 
 	ngOnInit(): void {
 		this.updateInformationForm = this.fb.group({
@@ -49,11 +53,10 @@ export class UserProfileComponent implements OnInit {
 	onSubmit(): void {
 		if (this.updateInformationForm.invalid) {
 			if (this.updateInformationForm.get('gender')?.hasError('required')) {
-				Swal.fire({
-					icon: 'error',
-					title: ErrorMessageConstants.meetAnError,
-					text: ErrorMessageConstants.genderIsNotEmpty + '!',
-				});
+				this.alert.error(
+					ErrorMessageConstants.genderIsNotEmpty + '!',
+					ErrorMessageConstants.meetAnError
+				);
 			}
 		} else {
 			Swal.fire({
@@ -131,10 +134,10 @@ export class UserProfileComponent implements OnInit {
 		return !!(genderField?.touched && genderField.hasError('required'));
 	}
 
-  get isPhoneNumRequiredValid(): boolean {
-    const phoneNumField = this.updateInformationForm.get('phoneNum');
-    return !!(phoneNumField?.touched && phoneNumField.hasError('required'));
-  }
+	get isPhoneNumRequiredValid(): boolean {
+		const phoneNumField = this.updateInformationForm.get('phoneNum');
+		return !!(phoneNumField?.touched && phoneNumField.hasError('required'));
+	}
 
 	get emailControl() {
 		return this.updateInformationForm.get('email');

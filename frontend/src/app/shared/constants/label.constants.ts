@@ -50,10 +50,15 @@ export const LabelConstants = {
 	ProcessingLogin: 'Đăng nhập bằng Github',
 	userAccount: 'Tài khoản',
 	order: 'Hoá đơn',
-	voucher: 'Mã giảm giá',
-	vouchersList: 'Kho vouchers',
+	coupon: 'Mã giảm giá',
+	couponList: 'Kho vouchers',
 	cart: 'Giỏ hàng',
 	fullName: 'Họ tên',
+
+  /**
+   * user profile
+   */
+
 	imageFileNoLargerThan5Mb: 'File có đuôi JPG hoặc PNG có kích thước không vượt quá 5 MB',
 	uploadNewImage: 'Tải hình ảnh lên',
 	address: 'Địa chỉ',
@@ -64,23 +69,29 @@ export const LabelConstants = {
 	enterYourEmailAddress: 'Nhập địa chỉ email',
 	enterYourLocation: 'Nhập địa chỉ',
 	enterYourOrganizationName: 'Nhập địa chỉ',
+
 	gender: 'Giới tính',
 	male: 'Nam',
 	female: 'Nữ',
 	other: 'Khác',
+
 	profilePicture: 'Hình ảnh đại diện',
 	onWorkingProcess: 'Đang trong quá trình thực hiện',
 	pleaseWaitAMinute: 'Vui lòng đợi một chút',
-	myAccount: 'Tài khoản của tôi',
+
+  myAccount: 'Tài khoản của tôi',
 	updateUserProfile: 'Sửa hồ sơ',
 	changePassword: 'Đổi mật khẩu',
-	all: 'Tất cả',
-	waitingForPayment: 'Chờ thanh toán',
-	isShipping: 'Đang vận chuyển',
-	waitingForDelivery: 'Chờ giao hàng',
-	deliverComplete: 'Vận chuyển hoàn tất',
-	canceled: 'Đã huỷ',
-	refunds: 'Trả hàng/Hoàn tiền',
+
+  /**
+   * dành cho hoá đơn
+   */
+	all: 'tất cả',
+  pending: 'đang giải quyết',
+	shipped: 'đã vận chuyển',
+  delivered: 'đã giao hàng',
+	canceled: 'đã huỷ',
+
 	logoutSuccess: 'Đăng xuất thành công',
 	loginFails: 'Đăng nhập thất bại',
 } as const;
