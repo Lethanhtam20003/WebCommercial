@@ -98,6 +98,7 @@ public class SecurityConfig {
                         .jwt(jwt -> jwt.decoder(customJwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                         .authenticationEntryPoint(authenticationEntryPoint)
+
                 );
 
 

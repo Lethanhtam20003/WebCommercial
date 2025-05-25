@@ -26,9 +26,9 @@ public class SupplierService {
      * @param name tên của nhà cung cấp
      * @return true nếu nhà cung cấp đã tồn tại, false nếu chưa
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public boolean checkSupplier(String name) {
-        return repository.existsByContactName(name);
+        return repository.existsByName(name);
     }
 
     /**
@@ -36,7 +36,7 @@ public class SupplierService {
      * @param request đối tượng chứa thông tin cần tạo
      * @return SupplierResponse chứa thông tin nhà cung cấp mới
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public SupplierResponse createSupplier(SupplierRequest request) {
         if (checkSupplier(request.getName())) {
             throw new AppException(ErrorCode.SUPPLIER_EXISTED);
@@ -49,7 +49,8 @@ public class SupplierService {
      * @param pageable số lượng phân trang
      * @return danh sách nhà cung cấp
      */
-    @PreAuthorize("hasRole('ADMIN')")
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Page<SupplierResponse> getAllSupplier(Pageable pageable) {
         return mapper.toPageSupplierResponse(repository.findAll(pageable));
     }
@@ -59,7 +60,7 @@ public class SupplierService {
      * @param supplierId id nhà cung cấp
      * @return thông tin nhà cung cấp
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public SupplierResponse getSupplierById(long supplierId) {
         return mapper.toSupplierResponse(repository.findById(supplierId)
                 .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND)));
@@ -71,11 +72,11 @@ public class SupplierService {
      * @param request thông tin cần cập nhật
      * @return thông tin nhà cùn cấp sau khi cập nhật
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public SupplierResponse updateSupplier(long supplierId, SupplierRequest request) {
          Supplier supplier = repository.findById(supplierId)
                 .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND));
-         if(!request.getName().equals(supplier.getContactName())){
+         if(!request.getName().equals(supplier.getName())){
              if(checkSupplier(request.getName())){
                  throw new AppException(ErrorCode.SUPPLIER_NAME_EXISTED);
              }

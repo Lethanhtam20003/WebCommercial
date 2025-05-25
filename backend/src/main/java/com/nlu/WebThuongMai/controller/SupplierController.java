@@ -4,6 +4,7 @@ import com.nlu.WebThuongMai.dto.request.productReq.SupplierRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.productResp.SupplierResponse;
 import com.nlu.WebThuongMai.service.SupplierService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ public class SupplierController {
      * Tạo mới một nhà cung cấp
      */
     @PostMapping()
-    public ApiResponse<SupplierResponse> createSupplier(SupplierRequest request){
+    public ApiResponse<SupplierResponse> createSupplier(@RequestBody @Valid SupplierRequest request){
         return ApiResponse.<SupplierResponse>builder()
                 .result(supplierService.createSupplier(request))
                 .build();

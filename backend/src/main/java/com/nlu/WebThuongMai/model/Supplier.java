@@ -33,7 +33,7 @@ public class Supplier {
      * Tên người liên hệ của nhà cung cấp, không được null
      */
     @Column(nullable = false)
-    String contactName;
+    String name;
 
     /**
      * Số điện thoại liên hệ, không được null
