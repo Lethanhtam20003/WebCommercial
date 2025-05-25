@@ -18,7 +18,7 @@ import { HeaderComponent } from './shared/components/header/header.component';
 	template: `
 		<app-header *ngIf="showHeader"></app-header>
 		<router-outlet></router-outlet>
-    <app-footer *ngIf="showFooter"></app-footer>
+    	<app-footer *ngIf="showFooter"></app-footer>
 	`,
 	styles: ``,
 })

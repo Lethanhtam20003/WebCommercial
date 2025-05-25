@@ -9,11 +9,11 @@ import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.
   imports: [RouterOutlet, CommonModule, RouterModule, AdminSidebarComponent],
   template: `
   <div class="d-flex">
-  <app-admin-sidebar></app-admin-sidebar>
-  <div class="flex-grow-1 p-4">
-    <router-outlet></router-outlet>
+    <app-admin-sidebar></app-admin-sidebar>
+    <div class="flex-grow-1">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-</div>
 
   <pre>
      📊 Dashboard	Thống kê, biểu đồ tổng quan hệ thống
@@ -32,5 +32,5 @@ import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.
 export class AdminComponent {
     constructor() {
         // Constructor logic if needed
-    }
+    } 
 }
