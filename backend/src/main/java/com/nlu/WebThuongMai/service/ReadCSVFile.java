@@ -1,16 +1,12 @@
 package com.nlu.WebThuongMai.service;
 
 import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
-import com.nlu.WebThuongMai.model.Category;
-import com.nlu.WebThuongMai.model.ProductImage;
-import com.nlu.WebThuongMai.repository.ProductRepository;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;

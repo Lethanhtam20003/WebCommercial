@@ -38,22 +38,16 @@ public class UserFacebook {
      * Class đại diện cho thông tin ảnh đại diện
      * Được sử dụng để map với cấu trúc JSON của Facebook API
      */
+    @Setter
+    @Getter
     public static class Picture {
 
+        // Getter và Setter cho trường picture
         /**
          * Dữ liệu chi tiết của ảnh
          */
         @JsonProperty("data")
         private Data data;
-
-        // Getter và Setter cho trường picture
-        public Data getData() {
-            return data;
-        }
-
-        public void setData(Data data) {
-            this.data = data;
-        }
 
         /**
          * Class chứa thông tin URL của ảnh đại diện
@@ -65,14 +59,6 @@ public class UserFacebook {
              */
             private String url;
 
-            // Getter và Setter cho trường "url"
-            public String getUrl() {
-                return url;
-            }
-
-            public void setUrl(String url) {
-                this.url = url;
-            }
         }
     }
 }

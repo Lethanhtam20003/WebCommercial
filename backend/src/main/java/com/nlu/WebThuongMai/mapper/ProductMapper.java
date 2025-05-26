@@ -1,7 +1,6 @@
 package com.nlu.WebThuongMai.mapper;
 
 import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
-import com.nlu.WebThuongMai.dto.response.productResp.ProductImageResponse;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.model.Category;
 import com.nlu.WebThuongMai.model.Product;
