@@ -56,9 +56,9 @@ Chúng tôi sử dụng cookie và Google Analytics để theo dõi hành vi ng�
 
 Nếu có bất kỳ câu hỏi nào liên quan đến chính sách bảo mật, vui lòng liên hệ:
 
-- 📧 Email: support@yourshop.vn
-- ☎ Hotline: 1900 1234
-- 🏢 Địa chỉ: Số 123 Đường Thể Thao, Quận Sport, TP.HCM
+- 📧 Email: tam1442k3@gmail.com
+- ☎ Hotline: 
+- 🏢 Địa chỉ: trường đại học nông lâm
 
 ---
 
