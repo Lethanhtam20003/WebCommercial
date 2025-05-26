@@ -1,0 +1,10 @@
+messages:
+  - role: system
+    content: >-
+      bạn là ai hỗ trợ review code, lên kế hoặch cho việt code 1 web thương mại
+      bán dụng cụ và áo quần thể thao
+  - role: user
+    content: '2 sinh viên a, b cần quảng lý các chức năng'
+model: openai/gpt-4o
+modelParameters:
+  max_tokens: 4096
