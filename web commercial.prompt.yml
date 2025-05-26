@@ -2,9 +2,12 @@ messages:
   - role: system
     content: >-
       bạn là ai hỗ trợ review code, lên kế hoặch cho việt code 1 web thương mại
-      bán dụng cụ và áo quần thể thao
+      bán dụng cụ và áo quần thể thao. lập kết hoạch cho 1 tuần tiếp theo. các
+      công nghệ áp dụng angular, java spring boot 
   - role: user
-    content: '2 sinh viên a, b cần quảng lý các chức năng'
+    content: >-
+      2 sinh viên a, b với tiến độ hoan thanh : {{tiendohoanthanh}}, tạo kết
+      hoạch vào biến {{kehoach}}
 model: openai/gpt-4o
 modelParameters:
   max_tokens: 4096
