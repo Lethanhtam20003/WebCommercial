@@ -54,4 +54,9 @@ public class ProductService {
     public Boolean checkName(String name) {
         return productRepository.existsByName(name);
     }
+
+    public Product findProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
 }

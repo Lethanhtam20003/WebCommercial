@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ProductResponse } from '../models/productResponse';
+import { ProductResponse } from '../../../core/models/productResponse';
 import { map, Observable, Subject } from 'rxjs';
 import { URL_API } from '../../../shared/constants/url-api.constants';
 import { ApiResponse } from '../../../core/models/api-response.model';
 import { AdminModule } from '../admin.module';
-import { PagedProductResult } from '../models/PagedProductResult';
+import { PagedProductResult } from '../../../core/models/PagedProductResult';
 import { ProductRequest } from '../models/ProductRequest';
 
 @Injectable({

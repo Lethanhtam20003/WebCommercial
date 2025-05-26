@@ -1,6 +1,6 @@
 package com.nlu.WebThuongMai.mapper;
 
-import com.nlu.WebThuongMai.dto.UserFacebook;
+import com.nlu.WebThuongMai.dto.response.userResp.UserFacebook;
 import com.nlu.WebThuongMai.dto.request.userReq.UserCreationRequest;
 import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.userResp.UserResponse;
@@ -16,9 +16,6 @@ public interface UserMapper {
 
     /**
      * NullValuePropertyMappingStrategy.IGNORE các giá trị null sẽ ko dc map vao giữ nguyên giá trị cũ
-     *
-     * @param user
-     * @param userUpdateRequest
      */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void toUser(@MappingTarget User user, UserUpdateRequest userUpdateRequest);

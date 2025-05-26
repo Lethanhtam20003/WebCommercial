@@ -50,15 +50,14 @@ const authRoutes: Routes = [
  */
 const protectedRoutes: Routes = [
   {
-    path: 'dashboard',
-    loadComponent: () => import('./pages/dashboard/dashboard.component')
-      .then(m => m.DashboardComponent),
-    title: 'Dashboard',
+    path: 'home',
+    loadComponent: () => import('./pages/home/home.component')
+      .then(m => m.HomeComponent),
+    title: 'home',
     // canActivate: [AuthGuard],
     data: {
       showHeader: true,
       showFooter: true,
-      breadcrumb: 'Dashboard'
     }
   },
   {
@@ -80,7 +79,7 @@ const protectedRoutes: Routes = [
 export const routes: Routes = [
 	{
 		path: '',
-		redirectTo: 'dashboard',
+		redirectTo: 'home',
 		pathMatch: 'full',
 	},	
 	...authRoutes,

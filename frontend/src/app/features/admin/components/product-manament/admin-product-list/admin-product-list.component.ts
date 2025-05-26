@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AdminProductService } from '../../../service/admin-product.service';
-import { ProductResponse } from '../../../models/productResponse';
+import { ProductResponse } from '../../../../../core/models/productResponse';
 
 @Component({
 	standalone: true,

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatusCode;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorCode {
+    UNCATEGORIZED_EXCEPTION(9998, "Uncategorized Exception", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_KEY(1000, "Invalid message key", HttpStatus.BAD_REQUEST),
     USER_EXISTED(1001, "user existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(1002, "user not existed", HttpStatus.NOT_FOUND),
@@ -32,7 +33,17 @@ public enum ErrorCode {
     INVALID_SIGNATURE(1018,"invalid signature" , HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1019,"token expired" , HttpStatus.BAD_REQUEST),
     PRODUCT_EXISTED(1020,"product existed" , HttpStatus.BAD_REQUEST),
-    UNCATEGORIZED_EXCEPTION(9998, "Uncategorized Exception", HttpStatus.INTERNAL_SERVER_ERROR), ;
+    SUPPLIER_EXISTED(1021,"supplier existed" , HttpStatus.BAD_REQUEST  ),
+    SUPPLIER_NOT_FOUND(1022, "supplier not found" ,HttpStatus.BAD_REQUEST),
+    SUPPLIER_NAME_EXISTED(1023,"supplier name existed" , HttpStatus.BAD_REQUEST ),
+    PURCHASE_ORDER_NOT_FOUND( 1024 , "purchase order not found" , HttpStatus.BAD_REQUEST ),
+    QUALITY_PRODUCT_NOT_ENOUGH( 1025 , "quality product not enough" , HttpStatus.BAD_REQUEST ), ;
+
+
+
+
+
+
     int code;
     String message;
     HttpStatusCode httpStatusCode;
