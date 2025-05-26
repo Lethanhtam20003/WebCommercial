@@ -10,20 +10,25 @@ export const ErrorMessageConstants = {
 	UnknownErrorOccurred: 'Đã xảy ra lỗi không xác định',
 	userNotExisted: 'Tài khoản không tồn tại',
 	passwordNotCorrect: 'Mật khẩu không chính xác',
-	cannotUploadImage: 'Không thể upload hình ảnh',
+
+  cannotUploadImage: 'Không thể upload hình ảnh',
 	imageIsOversized: 'Hình ảnh có dung luọng quá 5 Mb',
 	imageIsNotInAllowedType: 'Hình ảnh không đúng định dạng cho phép',
-	userNameIsNotEmpty: 'Tên tài khoản không được để trống',
+  errorInUploadImagePleaseTryAgain: 'Đã có lỗi khi upload ảnh. Vui lòng thử lại!',
+
+  userNameIsNotEmpty: 'Tên tài khoản không được để trống',
 	fullNameIsNotEmpty: 'Họ tên không được để trống',
 	emailIsNotEmpty: 'Email không được để trống',
 	phoneNumIsNotEmpty: 'Số điện thoại không được để trống',
 	phoneNumIsInvalid: 'Số điện thoại không hợp lệ',
 	genderIsNotEmpty: 'Giới tính không được để trống',
 	meetAnError: 'Có lỗi xảy ra',
-	pleaseEnterEmailOrPhone: 'Vui lòng nhập email hoặc số điện thoại',
+
+  pleaseEnterEmailOrPhone: 'Vui lòng nhập email hoặc số điện thoại',
 	userExisted: 'Tài khoản đã tồn tại',
 	phoneExisted: 'Điện thoại đã tồn tại',
 	emailExisted: 'Email đã tồn tại',
+
 	pleaseEnterReEnterPassword: 'Vui lòng nhập lại mật khẩu',
 	passwordHasAtMost30Characters: 'Mật khẩu không được quá 30 ký tự',
 	passwordHasAtLeast8Characters: 'Mật khẩu phải có ít nhất 8 ký tự',

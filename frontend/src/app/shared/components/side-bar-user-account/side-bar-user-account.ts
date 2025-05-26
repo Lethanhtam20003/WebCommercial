@@ -17,7 +17,7 @@ import { RouteLink } from '../../constants/route-link';
 	styleUrl: './side-bar-user-account.scss',
 	templateUrl: './side-bar-user-account.html',
 })
-export class SideBarUserProfile {
+export class SideBarUserAccount {
 	protected readonly label = LabelConstants;
 	protected readonly routes = RouteLink;
 	currentUrl = '';
@@ -40,7 +40,6 @@ export class SideBarUserProfile {
 			});
 	}
 	isActive(path: string): boolean {
-		console.log(this.currentUrl);
 		return this.currentUrl === path;
 	}
 

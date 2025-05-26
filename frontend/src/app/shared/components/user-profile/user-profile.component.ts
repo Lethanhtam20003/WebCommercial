@@ -13,10 +13,12 @@ import { ErrorMessageConstants } from '../../../shared/constants/error-message.c
 import { CommonModule } from '@angular/common';
 import { UserProfileFormFields } from './user-profile.interface';
 import { AlertService } from '../../../core/service/alert.service';
+import { CloudinaryUploadService } from '../../../features/admin/service/cloudinary-upload.service';
 
 @Component({
 	selector: 'user-profile',
 	imports: [CommonModule, ReactiveFormsModule],
+	providers: [CloudinaryUploadService],
 	templateUrl: './user-profile.component.html',
 	styleUrls: ['./user-profile.component.scss'],
 })
@@ -28,7 +30,8 @@ export class UserProfileComponent implements OnInit {
 
 	constructor(
 		private fb: FormBuilder,
-		private alert: AlertService
+		private alert: AlertService,
+		private cloudinary: CloudinaryUploadService
 	) {}
 
 	ngOnInit(): void {
@@ -59,21 +62,10 @@ export class UserProfileComponent implements OnInit {
 				);
 			}
 		} else {
-			Swal.fire({
-				title: this.label.onWorkingProcess,
-				html: this.label.pleaseWaitAMinute,
-				timer: 3000,
-				timerProgressBar: true,
-				allowOutsideClick: false,
-				didOpen: () => {
-					Swal.showLoading(Swal.getConfirmButton());
-				},
-			}).then(result => {
-				/* Read more about handling dismissals below */
-				if (result.dismiss === Swal.DismissReason.timer) {
-					console.log('I was closed by the timer');
-				}
-			});
+			this.alert.loading(
+				this.label.pleaseWaitAMinute,
+				this.label.onWorkingProcess
+			);
 		}
 	}
 
@@ -86,11 +78,10 @@ export class UserProfileComponent implements OnInit {
 		const allowedTypes = ['image/png', 'image/jpeg'];
 
 		if (file.size > maxSizeInBytes) {
-			Swal.fire({
-				icon: 'error',
-				title: ErrorMessageConstants.cannotUploadImage,
-				text: ErrorMessageConstants.imageIsOversized + '!',
-			});
+			this.alert.error(
+				ErrorMessageConstants.imageIsOversized + '!',
+				ErrorMessageConstants.cannotUploadImage
+			);
 
 			this.updateInformationForm.patchValue({ profileImage: null });
 			this.imagePreview = null;
@@ -98,11 +89,10 @@ export class UserProfileComponent implements OnInit {
 		}
 
 		if (!allowedTypes.includes(file.type)) {
-			Swal.fire({
-				icon: 'error',
-				title: ErrorMessageConstants.cannotUploadImage,
-				text: ErrorMessageConstants.imageIsNotInAllowedType + '!',
-			});
+			this.alert.error(
+				ErrorMessageConstants.imageIsNotInAllowedType + '!',
+				ErrorMessageConstants.cannotUploadImage
+			);
 
 			this.updateInformationForm.patchValue({ profileImage: null });
 			this.imagePreview = null;
@@ -112,11 +102,26 @@ export class UserProfileComponent implements OnInit {
 		this.updateInformationForm.patchValue({ profileImage: file });
 		this.updateInformationForm.get('profileImage')?.updateValueAndValidity();
 
+		// 👇 Preview trước
 		const reader = new FileReader();
 		reader.onload = () => {
 			this.imagePreview = reader.result;
 		};
 		reader.readAsDataURL(file);
+
+		// 👇 Upload lên Cloudinary
+		this.cloudinary
+			.uploadImage(file)
+			.then(url => {
+				console.log('Uploaded image URL:', url);
+				this.updateInformationForm.patchValue({ profileImage: url }); // Gán URL luôn
+			})
+			.catch(err => {
+				this.alert.error(
+					ErrorMessageConstants.errorInUploadImagePleaseTryAgain,
+					ErrorMessageConstants.cannotUploadImage
+				);
+			});
 	}
 
 	get isUsernameRequiredInvalid(): boolean {
