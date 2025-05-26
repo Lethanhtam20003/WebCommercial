@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto;
+package com.nlu.WebThuongMai.dto.response.userResp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

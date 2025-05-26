@@ -13,9 +13,9 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductResponse {
-    String id;
+    long id;
     String name;
-    String price;
+    double price;
     String status;
     Set<Long> categoryIds;
     String description;

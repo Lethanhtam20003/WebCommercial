@@ -1,0 +1,62 @@
+<div class="container py-5 bg-light">
+  <div class="card shadow">
+    <div class="card-body">
+      <!-- Tiêu đề và thời gian tạo đơn -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 fw-bold text-uppercase">Nhập hàng vào kho</h2>
+        <div class="text-muted">Thời gian tạo: {{ today | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+      </div>
+
+      <!-- Chọn nhà cung cấp -->
+      <div class="mb-3">
+        <label for="supplier" class="form-label">Nhà cung cấp</label>
+        <select id="supplier" name="supplier" [(ngModel)]="formData.supplier" class="form-select" required>
+          <option [ngValue]="null">-- Chọn nhà cung cấp --</option>
+          <option *ngFor="let supplier of suppliers" [ngValue]="supplier.id">{{ supplier.name }}</option>
+        </select>
+      </div>
+
+      <!-- Danh sách sản phẩm nhập -->
+      <div class="mb-4">
+        <h5 class="mb-3">Sản phẩm cần nhập</h5>
+        <div *ngFor="let item of formData.items; let i = index" class="row g-2 mb-3 align-items-end">
+          <div class="col-md-5">
+            <select class="form-select" [(ngModel)]="item.productId" name="product-{{i}}" required>
+              <option [ngValue]="null">-- Chọn sản phẩm --</option>
+              <option *ngFor="let p of products" [ngValue]="p.id">{{ p.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <input type="number" class="form-control" [(ngModel)]="item.quantity" name="quantity-{{i}}" min="1" required placeholder="Số lượng">
+          </div>
+          <div class="col-md-3">
+            <input type="number" class="form-control" [(ngModel)]="item.importPrice" name="price-{{i}}" min="0" required placeholder="Giá nhập">
+          </div>
+          <div class="col-md-1">
+            <button type="button" class="btn btn-outline-danger" (click)="removeItem(i)">✖</button>
+          </div>
+        </div>
+        <div class="text-end">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addItem()">➕ Thêm sản phẩm</button>
+        </div>
+      </div>
+
+      <!-- Ghi chú -->
+      <div class="mb-3">
+        <textarea class="form-control" id="note" name="note" [(ngModel)]="formData.note" rows="3" placeholder="Ghi chú thêm (nếu có)"></textarea>
+      </div>
+
+      <!-- Nút nhập hàng -->
+      <div class="text-center">
+        <button type="button" class="btn btn-success fw-bold px-4" (click)="onSubmit()">
+          ✅ Nhập hàng
+        </button>
+      </div>
+
+      <!-- Thông báo -->
+      <div *ngIf="message" class="alert alert-success mt-4 text-center">
+        {{ message }}
+      </div>
+    </div>
+  </div>
+</div>

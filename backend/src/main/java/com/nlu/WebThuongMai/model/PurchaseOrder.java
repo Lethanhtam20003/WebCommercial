@@ -8,6 +8,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Entity đại diện cho đơn đặt hàng từ nhà cung cấp
@@ -57,4 +61,13 @@ public class PurchaseOrder {
      * Tổng giá trị của đơn đặt hàng
      */
     BigDecimal totalPrice;
+
+    /**
+     * Danh sách các sản phẩm đã đặt hàng
+     */
+    @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL)
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    Set<PurchaseOrderItem> purchaseOrderItems = new HashSet<>();
 }

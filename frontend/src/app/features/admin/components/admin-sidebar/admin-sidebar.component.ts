@@ -25,5 +25,9 @@ export class AdminSidebarComponent implements OnInit {
       const {url} = this.router;
       this.isProductMenuOpen = url.includes('/product-management/');
   }
+  isInventoryMenuOpen = false;
+  toggleInventoryMenu() {
+    this.isInventoryMenuOpen = !this.isInventoryMenuOpen;
+  }
 }
 
