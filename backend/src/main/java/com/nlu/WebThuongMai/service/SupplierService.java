@@ -86,4 +86,20 @@ public class SupplierService {
                         mapper.toSupplier(supplierId,request)));
 
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public boolean deleteSupplier(long supplierId) {
+        try {
+            repository.deleteById(supplierId);
+            return true;
+        } catch (Exception e) {
+            log.error("Error when delete supplier with id: {}", supplierId);
+            return false;
+        }
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Supplier findSupplierById(long supplierId){
+        return repository.findById(supplierId)
+                .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND));
+    }
+
 }
