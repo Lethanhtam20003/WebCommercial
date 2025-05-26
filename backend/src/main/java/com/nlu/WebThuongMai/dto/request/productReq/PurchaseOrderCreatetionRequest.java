@@ -1,7 +1,7 @@
-package com.nlu.WebThuongMai.dto.response.productResp;
+package com.nlu.WebThuongMai.dto.request.productReq;
 
 import com.nlu.WebThuongMai.enums.PurchaseStatus;
-import com.nlu.WebThuongMai.model.Supplier;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,19 +12,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-/**
- * tiếng viêt
- *
- */
 @Data
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PurchaseOrderResponse {
-    Long id;
-    Supplier supplier;
+public class PurchaseOrderCreatetionRequest {
+    @NotNull
     LocalDateTime createdAt;
+    @NotNull
     PurchaseStatus status;
+    @NotNull
     BigDecimal totalPrice;
-    Set<PurchaseOrderItemResponse> items;
+
+    Set<PurchaseOrderItemRequest> items;
 }

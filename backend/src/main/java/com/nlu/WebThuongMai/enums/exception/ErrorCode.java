@@ -35,7 +35,9 @@ public enum ErrorCode {
     PRODUCT_EXISTED(1020,"product existed" , HttpStatus.BAD_REQUEST),
     SUPPLIER_EXISTED(1021,"supplier existed" , HttpStatus.BAD_REQUEST  ),
     SUPPLIER_NOT_FOUND(1022, "supplier not found" ,HttpStatus.BAD_REQUEST),
-    SUPPLIER_NAME_EXISTED(1023,"supplier name existed" , HttpStatus.BAD_REQUEST );
+    SUPPLIER_NAME_EXISTED(1023,"supplier name existed" , HttpStatus.BAD_REQUEST ),
+    PURCHASE_ORDER_NOT_FOUND( 1024 , "purchase order not found" , HttpStatus.BAD_REQUEST ),
+    QUALITY_PRODUCT_NOT_ENOUGH( 1025 , "quality product not enough" , HttpStatus.BAD_REQUEST ), ;
 
 
 
