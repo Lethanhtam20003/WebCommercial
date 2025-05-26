@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +29,8 @@ public class ReadCSVFile {
     CategoryService categoryService;
 
     public void readCSVFile() {
-        String filePath = "D:\\isDoing\\ChuyenDeWeb\\WebCommercial\\backend\\src\\main\\resources\\db\\migration\\csvFiles\\product.csv";
+        String filePath = "D:\\isDoing\\ChuyenDeWeb\\WebCommercial\\backend\\src\\main\\resources\\db\\migration\\csvFiles\\allProducts.csv";
+
         ArrayList<ProductRequest> listProduct = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
             List<String[]> allRecords = reader.readAll();
@@ -51,7 +53,7 @@ public class ReadCSVFile {
                                     .filter(cate -> cate != -1)
                                     .collect(Collectors.toSet()))
                             .description(record[3])
-                            .price(record[4])
+                            .price(Double.parseDouble(record[4].substring(0,record[4].indexOf("₫")).replace(".","")))
                             .build()
                     ).collect(Collectors.toCollection(ArrayList::new));
 //            listProduct.forEach(System.out::println);
@@ -62,5 +64,18 @@ public class ReadCSVFile {
         log.info("CSV file written successfully");
     }
 
+    public static void main(String[] args) {
+        String fileName =  "D:\\isDoing\\ChuyenDeWeb\\WebCommercial\\backend\\src\\main\\resources\\db\\migration\\csvFiles\\allProducts.csv";
+        try(CSVReader reader = new CSVReader(new FileReader(fileName))){
+            List<String[]> records = reader.readAll();
+            records.stream()
+                    .skip(1)
+                    .map(record -> Integer.parseInt(record[4].substring(0,record[4].indexOf("₫")).replace(".","")))
+                    .forEach(System.out::println);
+        } catch (IOException | CsvException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }

@@ -1,6 +1,6 @@
 package com.nlu.WebThuongMai.mapper;
 
-import com.nlu.WebThuongMai.dto.UserFacebook;
+import com.nlu.WebThuongMai.dto.response.userResp.UserFacebook;
 import com.nlu.WebThuongMai.dto.request.userReq.UserCreationRequest;
 import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.userResp.UserResponse;

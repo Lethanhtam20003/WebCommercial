@@ -1,2 +1,2 @@
 insert into public.users (birthday, created_at, updated_at, user_id, avatar, address, auth_provider, coupons, email, full_name, gender, password, phone, provider_id, role, status, username)
-values  (null, '2025-05-25 19:54:31.646281', null, 1, null, null, null, null, 'tam1442k3@gmail.com', null, null, '$2a$12$fXEeYnnESADNi9bjy9kg2.4EJXXlEZnLM26JinMQ/ryxoqYYGUrTu', null, null, 'ADMIN', null, 'admin');
+values  (null, '2025-05-26 15:03:51.073062', null, 1, null, null, null, null, 'tam1442k3@gmail.com', null, null, '$2a$12$PqeXs1KN5Qe30lM8A7Akg.Niwu0b0ZJuBn.ms6HeyjEIOKJkSI08y', null, null, 'ADMIN', null, 'admin');

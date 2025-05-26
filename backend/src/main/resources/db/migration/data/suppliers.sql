@@ -1,4 +1,1 @@
-insert into public.suppliers (supplier_id, address, description, email, logo, name, phone, website)
-values  (4, '123 Nguyễn Văn Linh, Q.7, TP.HCM', 'Nhà cung cấp chuyên thiết bị văn phòng', 'contact@abc.com', 'https://abc.com/logo.png', 'Công ty TNHH ABC', '0909123456', 'https://abc.com'),
-        (5, '123 Nguyễn Văn Linh, Q.7, TP.HCM', 'Nhà cung cấp chuyên thiết bị văn phòng', 'contact@abc.com', 'https://abc.com/logo.png', 'Công ty TNHH ABC2', '0909123456', 'https://abc.com'),
-        (3, '123 Nguyễn Văn Linh, Q.7, TP.HCM', 'Nhà cung cấp chuyên thiết bị văn phòng', 'contact@abc.com', 'https://abc.com/logo.png', 'Công ty TNHH ABC3', '0909123456', 'https://abc.com');
+;

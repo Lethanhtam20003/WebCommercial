@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.model;
 
+import com.nlu.WebThuongMai.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -38,7 +39,7 @@ public class Product {
     /**
      * Giá sản phẩm
      */
-    String price;
+    double price;
 
     /**
      * Mô tả chi tiết về sản phẩm
@@ -49,7 +50,9 @@ public class Product {
     /**
      * Trạng thái của sản phẩm (mở bán , ngừng bán, etc.)
      */
-    String status;
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    ProductStatus status = ProductStatus.ACTIVE;
 
     // Quan hệ nhiều ảnh
     @Builder.Default
