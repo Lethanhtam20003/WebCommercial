@@ -37,5 +37,6 @@ public class Inventory {
     /**
      * Số lượng sản phẩm hiện có trong kho
      */
+    @Column(nullable = false)
     int quantity;
 }

@@ -5,27 +5,26 @@ import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.model.Category;
 import com.nlu.WebThuongMai.model.Product;
 import com.nlu.WebThuongMai.model.ProductImage;
-import com.nlu.WebThuongMai.repository.CategoryRepository;
 import org.mapstruct.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
+uses = {ProductImageMapper.class})
 public interface ProductMapper {
 
     @Mapping(target = "categoryIds", expression = "java(mapCategoriesToIds(product.getCategories()))")
-    @Mapping(target = "images" , expression = "java(mapImagesToUrl(product.getImages()))" )
+    @Mapping(target = "images", source = "images")
     ProductResponse toProductResponse(Product product);
 
     default Set<Long> mapCategoriesToIds(Set<Category> categories) {
         if (categories == null) return new HashSet<>();
         return categories.stream().map(Category::getId).collect(Collectors.toSet());
     }
-    default Set<String> mapImagesToUrl(Set<ProductImage> images) {
+    default Set<String> mapProductImagesToUrls(Set<ProductImage> images) {
         if (images == null) return new HashSet<>();
         return images.stream().map(ProductImage::getImage).collect(Collectors.toSet());
     }

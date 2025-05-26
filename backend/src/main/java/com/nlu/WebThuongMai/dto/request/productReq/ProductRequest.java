@@ -1,10 +1,8 @@
 package com.nlu.WebThuongMai.dto.request.productReq;
 
-import com.nlu.WebThuongMai.model.Category;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -16,7 +14,7 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductRequest {
     String name;
-    String price;
+    Double price;
     String status;
     Set<Long> categoryIds;
     String description;

@@ -132,7 +132,6 @@ public class UserService {
      * @return UserResponse chứa thông tin của người dùng hiện tại
      * @throws AppException nếu không tìm thấy thông tin người dùng trong hệ thống
      */
-    @PreAuthorize("hasAuthority('USER')")
     public UserResponse getMyInf() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
