@@ -19,5 +19,5 @@ public class ProductResponse {
     String status;
     Set<Long> categoryIds;
     String description;
-    Set<ProductImageResponse> images;
+    Set<String> images;
 }
