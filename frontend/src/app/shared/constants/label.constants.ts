@@ -95,4 +95,6 @@ export const LabelConstants = {
 
 	logoutSuccess: 'Đăng xuất thành công',
 	loginFails: 'Đăng nhập thất bại',
+
+  newPassword: 'Mật khẩu mới',
 } as const;

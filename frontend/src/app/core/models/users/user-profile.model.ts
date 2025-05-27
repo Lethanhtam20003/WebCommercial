@@ -10,14 +10,9 @@ export interface UserProfile {
 	username: string;
 
 	/**
-	 * Họ của người dùng
+	 * Họ tên của người dùng
 	 */
-	firstName: string | null;
-
-	/**
-	 * Tên của người dùng
-	 */
-	lastName: string | null;
+	fullName: string | null;
 
 	/**
 	 * Đường dẫn URL ảnh đại diện của người dùng.
@@ -55,11 +50,6 @@ export interface UserProfile {
 	 * Vai trò/quyền hạn của người dùng trong hệ thống
 	 */
 	role: string;
-
-	/**
-	 * Trạng thái hoạt động của người dùng, ví dụ: 'ACTIVE', 'INACTIVE', v.v. hoặc null nếu chưa xác định
-	 */
-	status: string | null;
 
 	/**
 	 * Phương thức xác thực của người dùng (ví dụ: 'LOCAL', 'GOOGLE', v.v.)

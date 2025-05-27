@@ -4,8 +4,10 @@ import { URL_API } from '../../shared/constants/url-api.constants';
 import { ErrorMessageConstants } from '../../shared/constants/error-message.constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserProfile } from '../models/user-profile.model';
-import { UserResponse, UserUpdateRequest } from '../../features/admin/models/user-update';
+import { UserProfile } from '../models/users/user-profile.model';
+import { UserUpdateRequest } from '../../features/user/models/user-update.inteface';
+import { UserResponse } from '../models/users/user-response.interface';
+import { UserChangePasswordRequest } from '../../features/user/models/user-change-password.inteface';
 
 @Injectable({
 	providedIn: 'root',
@@ -13,7 +15,7 @@ import { UserResponse, UserUpdateRequest } from '../../features/admin/models/use
 export class UserService {
 	constructor(private http: HttpClient) {}
 	getCurrentInfo(): Observable<UserProfile> {
-		return this.http.get<ApiResponse<UserProfile>>(URL_API.getMyInfo).pipe(
+		return this.http.get<ApiResponse<UserProfile>>(URL_API.myInfo).pipe(
 			map(response => {
 				if (response.code !== 200) {
 					throw new Error(
@@ -24,7 +26,7 @@ export class UserService {
 
 				// Nếu authProvider là GOOGLE thì gán username vào firstName
 				if (user.authProvider === 'GOOGLE') {
-					user.firstName = user.username;
+					user.fullName = user.username;
 					user.username = '';
 				}
 
@@ -40,6 +42,10 @@ export class UserService {
 	}
 
   updateUser(userId: number, request: UserUpdateRequest): Observable<UserResponse> {
-		return this.http.put<UserResponse>(`${URL_API}/${userId}`, request);
+		return this.http.put<UserResponse>(`${URL_API.myInfo}/${userId}`, request);
 	}
+
+  changePasswordUser(userId: number, request: UserChangePasswordRequest): Observable<UserResponse> {
+    return this.http.put<UserResponse>(`${URL_API.changePassword}/${userId}`, request);
+  }
 }

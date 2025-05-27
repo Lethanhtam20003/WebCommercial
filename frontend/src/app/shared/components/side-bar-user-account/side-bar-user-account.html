@@ -42,7 +42,7 @@
 							>{{label.userProfile}}</a
 						>
 					</li>
-					<li>
+					<li *ngIf="!isOAuthProvider()">
 						<a
 							class="link-dark rounded"
 							[routerLink]="'/' + routes.userRoute + '/' + routes.changePasswordRoute"

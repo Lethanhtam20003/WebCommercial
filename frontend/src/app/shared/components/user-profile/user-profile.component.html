@@ -9,37 +9,23 @@
 		<div class="card mb-4">
 			<div class="card-header">{{ label.userProfile }}</div>
 			<div class="card-body">
-				<div class="row gx-3 mb-3">
+				<div class="mb-3">
 					<!-- First name -->
-					<div class="col-md-6">
-						<label class="small mb-1" for="inputFirstName">{{
-							this.utility.capitalize(this.label.firstName)
+					<div class="col-md-12">
+						<label class="small mb-1" for="inputFullName">{{
+							this.utility.capitalize(this.label.lastName) +
+								' ' +
+								this.label.firstName
 						}}</label>
 						<input
 							class="form-control"
-							id="inputFirstName"
+							id="inputFullName"
 							type="text"
-							formControlName="firstName"
+							formControlName="fullName"
 						/>
-						<div
-							*ngIf="isFirstNameRequiredValid"
-							class="small text-danger ps-3"
-						>
-							{{ errorMessage.firstNameIsNotEmpty }}
+						<div *ngIf="isFullNameRequiredValid" class="small text-danger ps-3">
+							{{ errorMessage.fullNameIsNotEmpty }}
 						</div>
-					</div>
-
-					<!-- Last name -->
-					<div class="col-md-6">
-						<label class="small mb-1" for="inputLastName">{{
-							this.utility.capitalize(this.label.lastName)
-						}}</label>
-						<input
-							class="form-control"
-							id="inputLastName"
-							type="text"
-							formControlName="lastName"
-						/>
 					</div>
 				</div>
 
@@ -55,9 +41,9 @@
 							aria-label="Default select example"
 							formControlName="gender"
 						>
-							<option [value]="label.male">{{ label.male }}</option>
-							<option [value]="label.female">{{ label.female }}</option>
-							<option [value]="label.other">{{ label.other }}</option>
+							<option [value]="gender.MALE">{{ label.male }}</option>
+							<option [value]="gender.FEMALE">{{ label.female }}</option>
+							<option [value]="gender.OTHER">{{ label.other }}</option>
 						</select>
 						<div *ngIf="isGenderRequiredValid" class="small text-danger ps-3">
 							{{ errorMessage.genderIsNotEmpty }}
@@ -74,6 +60,9 @@
 							type="text"
 							formControlName="address"
 						/>
+						<div *ngIf="isAddressRequiredValid" class="small text-danger ps-3">
+							{{ errorMessage.addressIsNotEmpty }}
+						</div>
 					</div>
 				</div>
 				<div class="mb-3">
@@ -118,6 +107,9 @@
 							type="text"
 							formControlName="birthday"
 						/>
+						<div *ngIf="isBirthdayRequiredValid" class="small text-danger ps-3">
+							{{ errorMessage.birthdayIsNotEmpty }}
+						</div>
 					</div>
 				</div>
 				<!-- Save changes button-->

@@ -12,7 +12,7 @@ import { RouteLink } from '../../constants/route-link';
 import { AuthService } from '../../../core/service/auth.service';
 import { ErrorMessageConstants } from '../../constants/error-message.constants';
 import { UserService } from '../../../core/service/user.service';
-import { UserProfile } from '../../../core/models/user-profile.model';
+import { UserProfile } from '../../../core/models/users/user-profile.model';
 import { UserStateService } from '../../../core/service/user-state.service';
 import { AlertService } from '../../../core/service/alert.service';
 import { UtitlyService } from '../../../core/service/utility.service';
@@ -57,9 +57,19 @@ export class SideBarUserAccount {
 		protected utility: UtitlyService
 	) {
 		this.router.events
-			.pipe(filter(event => event instanceof NavigationEnd))
+			.pipe(
+				filter(event => event instanceof NavigationEnd),
+				takeUntil(this.destroy$)
+			)
 			.subscribe((event: NavigationEnd) => {
 				this.currentUrl = event.urlAfterRedirects;
+
+				const userProfilePath =
+					'/' + this.routes.userRoute + '/' + this.routes.profileRoute;
+
+				if (this.currentUrl === userProfilePath) {
+					this.userState.fetchUserInfo();
+				}
 			});
 
 		this.userState.user$.pipe(takeUntil(this.destroy$)).subscribe({
@@ -67,8 +77,7 @@ export class SideBarUserAccount {
 				if (user) {
 					this.currentUser = user;
 					this.currentImage = user.avatar ?? this.currentImage;
-					this.displayName =
-						`${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
+					this.displayName = user.fullName ?? '';
 				}
 			},
 			error: () => {
@@ -78,5 +87,13 @@ export class SideBarUserAccount {
 	}
 	isActive(path: string): boolean {
 		return this.currentUrl === path;
+	}
+
+	isOAuthProvider(): boolean {
+		if (!this.currentUser) return false;
+		const oauthProviders = ['google', 'facebook'];
+		return oauthProviders.includes(
+			this.currentUser.authProvider?.toLowerCase() ?? ''
+		);
 	}
 }

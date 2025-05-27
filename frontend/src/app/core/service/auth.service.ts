@@ -212,7 +212,7 @@ export class AuthService {
 	 * @param token
 	 */
 	loginWithToken(token: string): void {
-		localStorage.setItem(this.TOKEN_KEY, token);
+		this.setToken(token);
 		this.updateLoginStatus(true);
 	}
 
@@ -307,9 +307,23 @@ export class AuthService {
 	 * Đăng xuất
 	 */
 	logout(): void {
-		localStorage.removeItem(this.TOKEN_KEY);
+		this.removeToken();
 		this.updateLoginStatus(false);
 		this.alertService.success('Đăng xuất thành công!');
 	}
 
+	/**
+	 * Lưu token vào localStorage
+	 * @param token - Chuỗi token cần lưu
+	 */
+	private setToken(token: string): void {
+		localStorage.setItem(this.TOKEN_KEY, token);
+	}
+
+	/**
+	 * Xóa token khỏi localStorage
+	 */
+	private removeToken(): void {
+		localStorage.removeItem(this.TOKEN_KEY);
+	}
 }

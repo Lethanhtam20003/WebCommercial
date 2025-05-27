@@ -40,5 +40,10 @@ export const ErrorMessageConstants = {
   cannotLoadUserInfo: 'Không thể tải thông tin người dùng',
 
   firstNameIsNotEmpty: 'Tên người dùng không được để trống',
+  lastNameIsNotEmpty: 'Họ người dùng không được để trống',
   currentUserIsunidentified: 'Người dùng hiện tại Không thể xác định',
+  addressIsNotEmpty: 'Địa chỉ không được để trống',
+  birthdayIsNotEmpty: 'Ngày sinh không được để trống',
+
+  changePasswordFail: 'Đổi mật khẩu thất bại',
 } as const;

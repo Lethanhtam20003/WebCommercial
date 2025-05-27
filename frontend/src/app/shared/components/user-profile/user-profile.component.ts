@@ -14,12 +14,14 @@ import { CommonModule } from '@angular/common';
 import { AlertService } from '../../../core/service/alert.service';
 import { CloudinaryUploadService } from '../../../features/admin/service/cloudinary-upload.service';
 import { UserStateService } from '../../../core/service/user-state.service';
-import { Subject, takeUntil } from 'rxjs';
-import { UserProfile } from '../../../core/models/user-profile.model';
+import { Subject, takeUntil, timeout } from 'rxjs';
+import { UserProfile } from '../../../core/models/users/user-profile.model';
 import { UtitlyService } from '../../../core/service/utility.service';
-import { UserUpdateRequest } from '../../../features/admin/models/user-update';
+import { UserUpdateRequest } from '../../../features/user/models/user-update.inteface';
 import { ResponseMessage } from '../../constants/response-message.constants';
 import { UserService } from '../../../core/service/user.service';
+import { Gender } from '../../../core/enum/gender.enum';
+import { AuthService } from '../../../core/service/auth.service';
 
 @Component({
 	selector: 'user-profile',
@@ -31,6 +33,7 @@ import { UserService } from '../../../core/service/user.service';
 export class UserProfileComponent implements OnInit {
 	updateInformationForm!: FormGroup;
 	protected readonly label = LabelConstants;
+	protected readonly gender = Gender;
 	protected readonly errorMessage = ErrorMessageConstants;
 	protected readonly responseMessage = ResponseMessage;
 	private destroy$ = new Subject<void>();
@@ -42,7 +45,8 @@ export class UserProfileComponent implements OnInit {
 		private cloudinary: CloudinaryUploadService,
 		private userState: UserStateService,
 		protected utility: UtitlyService,
-		private userService: UserService
+		private userService: UserService,
+		private authService: AuthService
 	) {}
 
 	ngOnInit(): void {
@@ -50,8 +54,6 @@ export class UserProfileComponent implements OnInit {
 
 		this.userState.user$.pipe(takeUntil(this.destroy$)).subscribe({
 			next: user => {
-        console.log('💥 Raw user:', user);
-
 				if (!user) {
 					this.userState.fetchUserInfo(); // gọi API để lấy user nếu chưa có
 					return;
@@ -65,30 +67,29 @@ export class UserProfileComponent implements OnInit {
 							Validators.required,
 							Validators.email,
 						]),
-						firstName: new FormControl<string>('', Validators.required),
-						lastName: new FormControl<string>(''),
+						fullName: new FormControl<string>('', Validators.required),
 						profileImage: new FormControl<string | null>(
-							'http://bootdey.com/img/Content/avatar/avatar1.png'
+							'http://bootdey.com/img/Content/avatar/avatar1.png',
+							Validators.required
 						),
-						address: new FormControl<string>(''),
+						address: new FormControl<string>('', Validators.required),
 						phoneNum: new FormControl<string>('', Validators.required),
-						birthday: new FormControl<string>(''),
+						birthday: new FormControl<string>('', Validators.required),
 						gender: new FormControl<string>(
-							this.label.male,
+							this.gender.MALE,
 							Validators.required
 						),
 					}) as FormGroup<UserProfileFormFields>;
 
 					this.updateInformationForm.patchValue({
 						email: user.email ?? '',
-						firstName: user.firstName ?? '',
-						lastName: user.lastName ?? '',
+						fullName: user.fullName ?? '',
 						profileImage:
 							user.avatar ??
 							'http://bootdey.com/img/Content/avatar/avatar1.png',
 						address: user.address ?? '',
 						phoneNum: user.phone ?? '',
-						birthday: user.birthday ?? '',
+						birthday: this.utility.convertIsoToDdMmYyyy(user.birthday ?? ''),
 						gender: user.gender ?? this.label.male,
 					});
 				}
@@ -124,51 +125,28 @@ export class UserProfileComponent implements OnInit {
 
 		const formValue = this.updateInformationForm.value;
 
-    console.log(formValue);
+		const newBirthDay: string = this.utility.convertDdMmYyyyToIso(
+			formValue.birthday as string
+		);
 
-		const updatePayload: Partial<UserUpdateRequest> = {};
-
-		// So sánh từng field – chỉ gán nếu khác
-		if (formValue.firstName.trim() !== this.currentUser.firstName)
-			updatePayload.firstName = formValue.firstName.trim();
-
-		if (formValue.lastName.trim() !== this.currentUser.lastName)
-			updatePayload.lastName = formValue.lastName.trim();
-
-		if (formValue.email.trim() !== this.currentUser.email)
-			updatePayload.email = formValue.email.trim();
-
-		if (formValue.phoneNum.trim() !== this.currentUser.phone)
-			updatePayload.phone = formValue.phoneNum.trim();
-
-		if ((formValue.address ?? '').trim() !== (this.currentUser.address ?? ''))
-			updatePayload.address = formValue.address?.trim() ?? '';
-
-		if (formValue.gender !== this.currentUser.gender)
-			updatePayload.gender = formValue.gender;
-
-		if (formValue.birthday && formValue.birthday !== this.currentUser.birthday)
-			updatePayload.birthday = formValue.birthday;
-
-		if (
-			formValue.profileImage &&
-			formValue.profileImage !== this.currentUser.avatar
-		)
-			updatePayload.avatar = formValue.profileImage;
-
-		// Optional: nếu không có field nào thay đổi
-		if (Object.keys(updatePayload).length === 0) {
-			this.alert.success(ResponseMessage.updateUserSuccess);
-			return;
-		}
+		const updatePayload: UserUpdateRequest = {
+			email: formValue.email,
+			fullName: formValue.fullName,
+			avatar: formValue.profileImage,
+			address: formValue.address,
+			phone: formValue.phoneNum,
+			birthday: newBirthDay ?? null,
+			gender: formValue.gender,
+		};
 
 		this.userService
 			.updateUser(this.currentUser.id, updatePayload)
-			.pipe(takeUntil(this.destroy$))
+			.pipe(takeUntil(this.destroy$), timeout(3000))
 			.subscribe({
 				next: updatedUser => {
 					// ✅ Cập nhật frontend state để phản ánh ngay
 					this.userState.updateUserInfo(updatedUser);
+					this.userState.fetchUserInfo();
 					this.alert.success(this.responseMessage.updateUserSuccess);
 				},
 				error: () => {
@@ -209,7 +187,6 @@ export class UserProfileComponent implements OnInit {
 		this.cloudinary
 			.uploadImage(file)
 			.then(url => {
-				console.log('Uploaded image URL:', url);
 				this.updateInformationForm.patchValue({ profileImage: url }); // Gán URL luôn
 			})
 			.catch(err => {
@@ -220,9 +197,19 @@ export class UserProfileComponent implements OnInit {
 			});
 	}
 
-	get isFirstNameRequiredValid() {
-		const ctrl = this.updateInformationForm?.get('firstName');
-		return ctrl?.hasError('required') && ctrl?.touched;
+	get isFullNameRequiredValid(): boolean | undefined {
+		const ctrl = this.updateInformationForm.get('fullName');
+		return ctrl?.touched && ctrl.hasError('required');
+	}
+
+	get isBirthdayRequiredValid(): boolean | undefined {
+		const ctrl = this.updateInformationForm.get('birthday');
+		return ctrl?.touched && ctrl.hasError('required');
+	}
+
+	get isAddressRequiredValid(): boolean | undefined {
+		const ctrl = this.updateInformationForm.get('address');
+		return ctrl?.touched && ctrl.hasError('required');
 	}
 
 	get isGenderRequiredValid(): boolean {
@@ -254,8 +241,7 @@ export class UserProfileComponent implements OnInit {
 
 interface UserProfileFormFields {
 	email: FormControl<string>;
-	firstName: FormControl<string>;
-	lastName: FormControl<string>;
+	fullName: FormControl<string>;
 	address: FormControl<string>;
 	phoneNum: FormControl<string>;
 	profileImage: FormControl<string | null>;
@@ -263,15 +249,13 @@ interface UserProfileFormFields {
 	gender: FormControl<string>;
 }
 
-interface UserUpdateFormFields {
-	password: FormControl<string | null>;
-	firstName: FormControl<string | null>;
-	lastName: FormControl<string | null>;
-	birthday: FormControl<string | null>;
-	avatar: FormControl<string | null>;
-	gender: FormControl<string | null>;
-	email: FormControl<string | null>;
-	phone: FormControl<string | null>;
-	address: FormControl<string | null>;
-	status: FormControl<string | null>;
-}
+// interface UserUpdateFormFields {
+// 	password: FormControl<string | null>;
+// 	birthday: FormControl<string | null>;
+// 	avatar: FormControl<string | null>;
+// 	gender: FormControl<string | null>;
+// 	email: FormControl<string | null>;
+// 	phone: FormControl<string | null>;
+// 	address: FormControl<string | null>;
+// 	status: FormControl<string | null>;
+// }

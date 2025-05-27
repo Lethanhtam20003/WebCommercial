@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { UserProfile } from '../models/user-profile.model';
+import { UserProfile } from '../models/users/user-profile.model';
 import { UserService } from './user.service';
 import { HttpClient } from '@angular/common/http';
 import { URL_API } from '../../shared/constants/url-api.constants';
@@ -30,6 +30,7 @@ export class UserStateService {
 
 	updateUserInfo(user: UserProfile) {
 		this.userSubject.next(user);
+    localStorage.setItem('user', JSON.stringify(user));
 	}
 
 	loadUserFromStorageOrAPI(): void {
@@ -37,7 +38,7 @@ export class UserStateService {
 		if (local) {
 			this.userSubject.next(JSON.parse(local));
 		} else {
-			this.http.get<UserProfile>(URL_API.getMyInfo).subscribe(user => {
+			this.http.get<UserProfile>(URL_API.myInfo).subscribe(user => {
 				this.userSubject.next(user);
 				localStorage.setItem('user', JSON.stringify(user));
 			});
