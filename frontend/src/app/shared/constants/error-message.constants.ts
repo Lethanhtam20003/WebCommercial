@@ -34,4 +34,11 @@ export const ErrorMessageConstants = {
 	passwordHasAtLeast8Characters: 'Mật khẩu phải có ít nhất 8 ký tự',
 	retypePasswordIsNotEmpty: 'Nhập lại mật khẩu không được để trống',
 	passwordIsNotEmpty: 'Mật khẩu không được để trống',
+
+  errorInGettingUserInfo: 'Có lỗi xảy ra khi lấy thông tin người dùng',
+  errorInUpdateUserInfo: 'Có lỗi xảy ra khi cập nhật thông tin người dùng',
+  cannotLoadUserInfo: 'Không thể tải thông tin người dùng',
+
+  firstNameIsNotEmpty: 'Tên người dùng không được để trống',
+  currentUserIsunidentified: 'Người dùng hiện tại Không thể xác định',
 } as const;

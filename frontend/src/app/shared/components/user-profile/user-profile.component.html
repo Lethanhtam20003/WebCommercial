@@ -1,37 +1,48 @@
-<form class="row" [formGroup]="updateInformationForm" (ngSubmit)="onSubmit()">
+<form
+	class="row"
+	*ngIf="updateInformationForm"
+	[formGroup]="updateInformationForm"
+	(ngSubmit)="onSubmit()"
+>
 	<div class="col-xl-9">
 		<!-- Account details card-->
 		<div class="card mb-4">
 			<div class="card-header">{{ label.userProfile }}</div>
 			<div class="card-body">
-				<div class="mb-3">
-					<label class="small mb-1" for="inputUsername">
-						{{ label.username }}
-					</label>
-					<input
-						class="form-control"
-						id="inputUsername"
-						type="text"
-						formControlName="username"
-					/>
-					<div *ngIf="isUsernameRequiredInvalid" class="small text-danger ps-3">
-						{{ errorMessage.userNameIsNotEmpty }}
+				<div class="row gx-3 mb-3">
+					<!-- First name -->
+					<div class="col-md-6">
+						<label class="small mb-1" for="inputFirstName">{{
+							this.utility.capitalize(this.label.firstName)
+						}}</label>
+						<input
+							class="form-control"
+							id="inputFirstName"
+							type="text"
+							formControlName="firstName"
+						/>
+						<div
+							*ngIf="isFirstNameRequiredValid"
+							class="small text-danger ps-3"
+						>
+							{{ errorMessage.firstNameIsNotEmpty }}
+						</div>
+					</div>
+
+					<!-- Last name -->
+					<div class="col-md-6">
+						<label class="small mb-1" for="inputLastName">{{
+							this.utility.capitalize(this.label.lastName)
+						}}</label>
+						<input
+							class="form-control"
+							id="inputLastName"
+							type="text"
+							formControlName="lastName"
+						/>
 					</div>
 				</div>
-				<div class="mb-3">
-					<label class="small mb-1" for="inputFullName">
-						{{ label.fullName }}
-					</label>
-					<input
-						class="form-control"
-						id="inputFullName"
-						type="text"
-						formControlName="fullName"
-					/>
-					<div *ngIf="isFullNameRequiredValid" class="small text-danger ps-3">
-						{{ errorMessage.fullNameIsNotEmpty }}
-					</div>
-				</div>
+
 				<div class="row gx-3 mb-3">
 					<!-- Form Group (organization name)-->
 					<div class="col-md-6">
@@ -125,9 +136,10 @@
 				<img
 					class="img-account-profile rounded-circle mb-2"
 					[src]="
-						imagePreview || 'http://bootdey.com/img/Content/avatar/avatar1.png'
+						updateInformationForm.get('profileImage')?.value ||
+						'http://bootdey.com/img/Content/avatar/avatar1.png'
 					"
-					alt=""
+					[alt]="currentUser?.username ?? 'User Avatar'"
 				/>
 				<!-- Profile picture help block-->
 				<div class="small font-italic text-muted mb-4">

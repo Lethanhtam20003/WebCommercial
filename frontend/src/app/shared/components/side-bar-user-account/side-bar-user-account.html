@@ -4,11 +4,13 @@
 		<div class="flex-shrink-0">
 			<img
 				class="img-account-profile rounded-circle"
-				[src]="'http://bootdey.com/img/Content/avatar/avatar1.png'"
+				[src]="this.currentImage"
 			/>
 		</div>
 		<div class="flex-grow-1 ps-3 d-flex flex-column justify-content-center">
-			<span class="fw-semibold" style="font-size: 20px">username</span>
+			<span class="fw-semibold" style="font-size: 20px"
+				>{{this.displayName}}</span
+			>
 			<a
 				[routerLink]="['/', routes.profileRoute]"
 				class="text-decoration-none text-secondary"
@@ -68,7 +70,7 @@
 							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.orderRoute + '/' + key) }"
 							class="link-dark rounded"
 						>
-							{{ capitalize(orderLabel[key]) }}
+							{{ this.utility.capitalize(orderLabel[key]) }}
 						</a>
 					</li>
 				</ul>
@@ -83,7 +85,7 @@
 			>
 				<a
 					[routerLink]="'/' + routes.userRoute + '/' + routes.couponRoute"
-          [ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.couponRoute) }"
+					[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.couponRoute) }"
 					class="text-decoration-none text-secondary"
 					style="font-size: 15px"
 				>

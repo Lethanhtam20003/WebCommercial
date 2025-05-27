@@ -70,40 +70,32 @@ export class AlertService {
 			.then(result => result.isConfirmed);
 	}
 
-  /**
-   * Hiển thị SweetAlert dạng loading với spinner và tự động đóng sau thời gian quy định.
-   *
-   * @param message Nội dung hiển thị trong alert
-   * @param title Tiêu đề của alert
-   * @param timer Thời gian tồn tại (ms), mặc định 3000
-   * @param timerProgressBar Hiển thị progress bar hay không, mặc định true
-   * @param allowOutsideClick Có cho phép click ra ngoài để đóng alert không, mặc định false
-   */
+	/**
+	 * Hiển thị SweetAlert dạng loading với spinner và tự động đóng sau thời gian quy định.
+	 *
+	 * @param message Nội dung hiển thị trong alert
+	 * @param title Tiêu đề của alert
+	 * @param timer Thời gian tồn tại (ms), mặc định 3000
+	 * @param timerProgressBar Hiển thị progress bar hay không, mặc định true
+	 * @param allowOutsideClick Có cho phép click ra ngoài để đóng alert không, mặc định false
+	 */
 	loading(
 		message: string,
 		title: string,
 		timer = 3000,
 		timerProgressBar: boolean = true,
 		allowOutsideClick: boolean = false
-	) {
-		return this.swal
-			.fire({
-				title,
-				html: message,
-				timer,
-				timerProgressBar: timerProgressBar,
-				allowOutsideClick: allowOutsideClick,
-				didOpen: () => {
-					this.swal.showLoading(this.swal.getConfirmButton());
-				},
-			})
-			// .then(result => {
-			// 	/* Read more about handling dismissals below */
-			// 	if (result.dismiss === this.swal.DismissReason.timer) {
-			// 		console.log('I was closed by the timer');
-			// 	}
-			// })
-      ;
+	): Promise<any | null> {
+		return this.swal.fire({
+			title,
+			html: message,
+			timer,
+			timerProgressBar: timerProgressBar,
+			allowOutsideClick: allowOutsideClick,
+			didOpen: () => {
+				this.swal.showLoading(this.swal.getConfirmButton());
+			},
+		}).then(result => (result.isConfirmed ? result.value : null));
 	}
 
 	/**
@@ -121,6 +113,30 @@ export class AlertService {
 				showCancelButton: true,
 			})
 			.then(result => (result.isConfirmed ? result.value : null));
+	}
+
+  /**
+   * Hiển thị một hộp thoại thông tin với các tùy chọn xác nhận, từ chối hoặc hủy.
+   *
+   * @param title - Tiêu đề của hộp thoại.
+   * @param confirmButtonText - Nội dung nút xác nhận.
+   * @param showDenyButton - Có hiển thị nút từ chối hay không (mặc định là false).
+   * @param showCancelButton - Có hiển thị nút hủy hay không (mặc định là false).
+   * @returns Một Promise trả về `result.value` nếu người dùng bấm xác nhận, ngược lại trả về null.
+   */
+	info(
+		title: string,
+		confirmButtonText: string,
+		showDenyButton: boolean = false,
+		showCancelButton: boolean = false
+	): Promise<any | null> {
+		return this.swal.fire({
+			title,
+			showDenyButton,
+			showCancelButton,
+			confirmButtonText,
+			denyButtonText: `Don't save`,
+		}).then(result => (result.isConfirmed ? result.value : null));
 	}
 	constructor() {}
 }

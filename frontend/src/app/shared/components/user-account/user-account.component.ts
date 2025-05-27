@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SideBarUserAccount } from '../side-bar-user-account/side-bar-user-account';
+import { UserStateService } from '../../../core/service/user-state.service';
 
 @Component({
   selector: 'user-account',
@@ -8,6 +9,11 @@ import { SideBarUserAccount } from '../side-bar-user-account/side-bar-user-accou
   templateUrl: './user-account.component.html',
   styleUrl: './user-account.component.scss'
 })
-export class UserAccountComponent {
+export class UserAccountComponent implements OnInit{
+  constructor(private userState: UserStateService) {}
+
+  ngOnInit() {
+    this.userState.fetchUserInfo();
+  }
 
 }

@@ -53,7 +53,8 @@ export const LabelConstants = {
 	coupon: 'Mã giảm giá',
 	couponList: 'Kho vouchers',
 	cart: 'Giỏ hàng',
-	fullName: 'Họ tên',
+	firstName: 'tên',
+  lastName: 'họ',
 
   /**
    * user profile

@@ -10,4 +10,5 @@ export const URL_API = {
     productsUrl: 'http://localhost:8080/api/v1/products',
     catogoryUrl: 'http://localhost:8080/api/v1/category',
     checkProductNameExited: 'http://localhost:8080/api/v1/products/check-name',
+    getMyInfo: 'http://localhost:8080/api/v1/users/myInfo'
 } as const;
