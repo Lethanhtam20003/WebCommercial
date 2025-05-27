@@ -9,6 +9,7 @@ import com.nlu.WebThuongMai.dto.request.authenticationReq.*;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationResponse;
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
 import com.nlu.WebThuongMai.enums.AuthProvider;
+import com.nlu.WebThuongMai.enums.Role;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.model.InvalidatedToken;
@@ -81,6 +82,7 @@ public class AuthenticationService {
                 .email(request.getEmail() == null ? null : request.getEmail())
                 .phone(request.getPhone() == null? null : request.getPhone())
                 .authProvider(AuthProvider.LOCAL)
+                .role(Role.USER)
                 .build();
         userRepository.save(user);
         log.info("Register user successfully");
