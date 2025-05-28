@@ -99,7 +99,7 @@ const protectedRoutes: Routes = [
 				path: RouteLink.orderRoute + '/:status',
 				loadComponent: () =>
 					import(
-						'./shared/components/order-mamangement/order-mamangement.component'
+						'./shared/components/order-management/order-management.component'
 					).then(m => m.OrderMamangementComponent),
 				title: LabelConstants.order,
 				// canActivate: [AuthGuard],

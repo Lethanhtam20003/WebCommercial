@@ -4,10 +4,10 @@ import { URL_API } from '../../shared/constants/url-api.constants';
 import { ErrorMessageConstants } from '../../shared/constants/error-message.constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserProfile } from '../models/users/user-profile.model';
-import { UserUpdateRequest } from '../../features/user/models/user-update.inteface';
-import { UserResponse } from '../models/users/user-response.interface';
-import { UserChangePasswordRequest } from '../../features/user/models/user-change-password.inteface';
+import { UserProfile } from '../models/response/user-profile-response.model';
+import { UserUpdateRequest } from '../models/request/user-update-request.inteface';
+import { UserResponse } from '../models/response/user-response.interface';
+import { UserChangePasswordRequest } from '../models/request/user-change-password-request.inteface';
 
 @Injectable({
 	providedIn: 'root',
@@ -41,11 +41,23 @@ export class UserService {
 		);
 	}
 
-  updateUser(userId: number, request: UserUpdateRequest): Observable<UserResponse> {
-		return this.http.put<UserResponse>(`${URL_API.myInfo}/${userId}`, request);
+	updateUser(
+		userId: number,
+		request: UserUpdateRequest
+	): Observable<ApiResponse<UserResponse>> {
+		return this.http.put<ApiResponse<UserResponse>>(
+			`${URL_API.myInfo}/${userId}`,
+			request
+		);
 	}
 
-  changePasswordUser(userId: number, request: UserChangePasswordRequest): Observable<UserResponse> {
-    return this.http.put<UserResponse>(`${URL_API.changePassword}/${userId}`, request);
-  }
+	changePasswordUser(
+		userId: number,
+		request: UserChangePasswordRequest
+	): Observable<ApiResponse<UserResponse>> {
+		return this.http.put<ApiResponse<UserResponse>>(
+			`${URL_API.changePassword}/${userId}`,
+			request
+		);
+	}
 }

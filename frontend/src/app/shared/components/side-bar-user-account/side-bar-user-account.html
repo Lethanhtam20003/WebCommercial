@@ -55,26 +55,20 @@
 		</li>
 		<li class="mb-1">
 			<button
-				class="btn btn-toggle align-items-center rounded collapsed"
+				class="btn btn-toggle align-items-center rounded collapsed no-caret"
 				data-bs-toggle="collapse"
 				data-bs-target="#dashboard-collapse"
 				aria-expanded="false"
 			>
-				{{label.order}}
+        <a
+					[routerLink]="'/' + routes.userRoute + '/' + routes.orderRoute"
+					[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.orderRoute) }"
+					class="text-decoration-none text-secondary"
+					style="font-size: 15px"
+				>
+					{{label.order}}
+				</a>
 			</button>
-			<div class="collapse" id="dashboard-collapse">
-				<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-					<li *ngFor="let key of orderStatus">
-						<a
-							[routerLink]="['/' + routes.userRoute, routes.orderRoute, key]"
-							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.orderRoute + '/' + key) }"
-							class="link-dark rounded"
-						>
-							{{ this.utility.capitalize(orderLabel[key]) }}
-						</a>
-					</li>
-				</ul>
-			</div>
 		</li>
 		<li class="mb-1">
 			<button

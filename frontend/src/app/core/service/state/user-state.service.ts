@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { UserProfile } from '../models/users/user-profile.model';
-import { UserService } from './user.service';
+import { UserProfile } from '../../models/response/user-profile-response.model';
+import { UserService } from '../user.service';
 import { HttpClient } from '@angular/common/http';
-import { URL_API } from '../../shared/constants/url-api.constants';
+import { URL_API } from '../../../shared/constants/url-api.constants';
 
 @Injectable({ providedIn: 'root' })
 export class UserStateService {
@@ -30,17 +30,24 @@ export class UserStateService {
 
 	updateUserInfo(user: UserProfile) {
 		this.userSubject.next(user);
-    localStorage.setItem('user', JSON.stringify(user));
+		sessionStorage.setItem('user', JSON.stringify(user));
 	}
 
 	loadUserFromStorageOrAPI(): void {
-		const local = localStorage.getItem('user');
-		if (local) {
-			this.userSubject.next(JSON.parse(local));
+		const sessionData  = sessionStorage.getItem('user');
+		if (sessionData ) {
+			const parsed  = JSON.parse(sessionData );
+      const user = parsed.result ? parsed.result : parsed;
+			this.userSubject.next(user);
 		} else {
-			this.http.get<UserProfile>(URL_API.myInfo).subscribe(user => {
-				this.userSubject.next(user);
-				localStorage.setItem('user', JSON.stringify(user));
+			this.http.get<UserProfile>(URL_API.myInfo).subscribe({
+				next: user => {
+					this.userSubject.next(user);
+					sessionStorage.setItem('user', JSON.stringify(user));
+				},
+				error: err => {
+					console.error('Failed to load user from API', err);
+				},
 			});
 		}
 	}

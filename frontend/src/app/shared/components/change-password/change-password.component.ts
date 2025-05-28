@@ -12,8 +12,8 @@ import {
 import { CommonModule, NgIf } from '@angular/common';
 import { LabelConstants } from '../../constants/label.constants';
 import { ErrorMessageConstants } from '../../constants/error-message.constants';
-import { UserStateService } from '../../../core/service/user-state.service';
-import { UserChangePasswordRequest } from '../../../features/user/models/user-change-password.inteface';
+import { UserStateService } from '../../../core/service/state/user-state.service';
+import { UserChangePasswordRequest } from '../../../core/models/request/user-change-password-request.inteface';
 import { UserService } from '../../../core/service/user.service';
 import { ResponseMessage } from '../../constants/response-message.constants';
 

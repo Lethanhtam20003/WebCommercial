@@ -12,8 +12,8 @@ import { RouteLink } from '../../constants/route-link';
 import { AuthService } from '../../../core/service/auth.service';
 import { ErrorMessageConstants } from '../../constants/error-message.constants';
 import { UserService } from '../../../core/service/user.service';
-import { UserProfile } from '../../../core/models/users/user-profile.model';
-import { UserStateService } from '../../../core/service/user-state.service';
+import { UserProfile } from '../../../core/models/response/user-profile-response.model';
+import { UserStateService } from '../../../core/service/state/user-state.service';
 import { AlertService } from '../../../core/service/alert.service';
 import { UtitlyService } from '../../../core/service/utility.service';
 
@@ -33,22 +33,6 @@ export class SideBarUserAccount {
 	currentImage: string | null =
 		'http://bootdey.com/img/Content/avatar/avatar1.png';
 	private destroy$ = new Subject<void>();
-
-	readonly orderLabel: Record<string, string> = {
-		all: this.label.all,
-		pending: this.label.pending,
-		shipped: this.label.shipped,
-		delivered: this.label.delivered,
-		canceled: this.label.canceled,
-	};
-
-	readonly orderStatus = [
-		'all',
-		'pending',
-		'shipped',
-		'delivered',
-		'canceled',
-	] as const;
 
 	constructor(
 		private router: Router,
@@ -86,7 +70,7 @@ export class SideBarUserAccount {
 		});
 	}
 	isActive(path: string): boolean {
-		return this.currentUrl === path;
+		return this.currentUrl.startsWith(path);
 	}
 
 	isOAuthProvider(): boolean {

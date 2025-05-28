@@ -12,5 +12,7 @@ export const URL_API = {
     checkProductNameExited: 'http://localhost:8080/api/v1/products/check-name',
     myInfo: 'http://localhost:8080/api/v1/users/myInfo',
     users: 'http://localhost:8080/api/v1/users',
-    changePassword: 'http://localhost:8080/api/v1/users/myInfo/change-password'
+    changePassword: 'http://localhost:8080/api/v1/users/myInfo/change-password',
+    getOrders: 'http://localhost:8080/api/v1/orders',
+    getOrdersAdmin: 'http://localhost:8080/api/v1/orders/filter/admin',
 } as const;

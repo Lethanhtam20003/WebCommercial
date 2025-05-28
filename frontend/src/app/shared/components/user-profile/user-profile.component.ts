@@ -13,11 +13,11 @@ import { ErrorMessageConstants } from '../../../shared/constants/error-message.c
 import { CommonModule } from '@angular/common';
 import { AlertService } from '../../../core/service/alert.service';
 import { CloudinaryUploadService } from '../../../features/admin/service/cloudinary-upload.service';
-import { UserStateService } from '../../../core/service/user-state.service';
+import { UserStateService } from '../../../core/service/state/user-state.service';
 import { Subject, takeUntil, timeout } from 'rxjs';
-import { UserProfile } from '../../../core/models/users/user-profile.model';
+import { UserProfile } from '../../../core/models/response/user-profile-response.model';
 import { UtitlyService } from '../../../core/service/utility.service';
-import { UserUpdateRequest } from '../../../features/user/models/user-update.inteface';
+import { UserUpdateRequest } from '../../../core/models/request/user-update-request.inteface';
 import { ResponseMessage } from '../../constants/response-message.constants';
 import { UserService } from '../../../core/service/user.service';
 import { Gender } from '../../../core/enum/gender.enum';
@@ -46,7 +46,6 @@ export class UserProfileComponent implements OnInit {
 		private userState: UserStateService,
 		protected utility: UtitlyService,
 		private userService: UserService,
-		private authService: AuthService
 	) {}
 
 	ngOnInit(): void {
@@ -145,7 +144,7 @@ export class UserProfileComponent implements OnInit {
 			.subscribe({
 				next: updatedUser => {
 					// ✅ Cập nhật frontend state để phản ánh ngay
-					this.userState.updateUserInfo(updatedUser);
+					this.userState.updateUserInfo(updatedUser.result);
 					this.userState.fetchUserInfo();
 					this.alert.success(this.responseMessage.updateUserSuccess);
 				},

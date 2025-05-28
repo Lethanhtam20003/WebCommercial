@@ -46,4 +46,6 @@ export const ErrorMessageConstants = {
   birthdayIsNotEmpty: 'Ngày sinh không được để trống',
 
   changePasswordFail: 'Đổi mật khẩu thất bại',
+  errorWhenLoadingUserOrder: 'Lỗi khi load đơn hàng user',
+  errorWhenLoadingAdminOrder: 'Lỗi khi load đơn hàng user',
 } as const;

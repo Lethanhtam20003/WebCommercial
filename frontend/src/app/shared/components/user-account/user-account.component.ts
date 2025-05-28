@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SideBarUserAccount } from '../side-bar-user-account/side-bar-user-account';
-import { UserStateService } from '../../../core/service/user-state.service';
+import { UserStateService } from '../../../core/service/state/user-state.service';
 
 @Component({
   selector: 'user-account',
