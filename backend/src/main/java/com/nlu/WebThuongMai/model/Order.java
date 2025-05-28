@@ -27,7 +27,7 @@ import java.util.Set;
  * 1 đơn hàng được tạo ra cho 1 user bất kỳ
  * 1 đơn hàng chứa các sản phẩm 
  */
-public class Order {
+public class    Order {
     /**
      * ID của đơn hàng, tự động tăng
      */
@@ -81,4 +81,12 @@ public class Order {
      */
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     Set<OrderItem> orderItems;// 1 đơn hàng có nhiều sản phầm các sản phẩm ko dc trùng nhau, nếu trùng thì tăng số lượng
+
+    /**
+     * Coupon được áp dụng cho đơn hàng này
+     */
+    @ManyToOne
+    @JoinColumn(name = "coupon_id")
+    private Coupon coupon;
+
 }
