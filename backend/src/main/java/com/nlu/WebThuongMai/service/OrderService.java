@@ -11,6 +11,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +30,18 @@ public class OrderService {
     OrderMapper orderMapper;
 
     @PreAuthorize("hasAuthority('USER')")
-    public List<OrderResponse> findOrdersByUserIdAndStatus(OrderFilterRequest orderFilterRequest) {
-        List<Order> orders = orderRepository.findOrdersByUserIdAndStatus(orderFilterRequest.getUserId(), orderFilterRequest.getStatus());
+    public Page<OrderResponse> findOrdersByUserIdAndStatus(OrderFilterRequest orderFilterRequest) {
+        Pageable pageable = PageRequest.of(orderFilterRequest.getPage(), orderFilterRequest.getSize());
+        Page<Order> orders = orderRepository.findOrdersByUserIdAndStatus(orderFilterRequest.getUserId(), orderFilterRequest.getStatus(), pageable);
 
-        return orderMapper.toOrderResponseList(orders);
+        return orders.map(orderMapper::toOrderResponse);
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    public List<OrderResponse> getOrdersById(Long userId) {
-        List<Order> orders = orderRepository.findOrdersByUserId(userId);
+    public Page<OrderResponse> getOrdersById(Long userId, Pageable pageable) {
+        Page<Order> orders = orderRepository.findOrdersByUserId(userId, pageable);
 
-        return orderMapper.toOrderResponseList(orders);
+        return orders.map(orderMapper::toOrderResponse);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

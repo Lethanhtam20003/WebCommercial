@@ -7,4 +7,6 @@ import lombok.Data;
 public class OrderFilterRequest {
     private Long userId;
     private OrderStatus status;
+    int page=0;
+    int size=10;
 }

@@ -10,6 +10,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,18 +26,23 @@ import java.util.List;
 public class OrderController {
 
     OrderService orderService;
+
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("{userId}")
-    public ApiResponse<List<OrderResponse>> getOrdersForUser(@PathVariable Long userId) {
-        return ApiResponse.<List<OrderResponse>>builder()
-                .result(orderService.getOrdersById(userId))
+    @GetMapping()
+    public ApiResponse<Page<OrderResponse>> getOrdersForUser(
+            @RequestParam Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ApiResponse.<Page<OrderResponse>>builder()
+                .result(orderService.getOrdersById(userId, pageable))
                 .build();
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping()
-    public ApiResponse<List<OrderResponse>> getOrdersByUserIdAndStatus(@RequestBody OrderFilterRequest orderFilterRequest) {
-        return ApiResponse.<List<OrderResponse>>builder()
+    public ApiResponse<Page<OrderResponse>> getOrdersByUserIdAndStatus(@RequestBody OrderFilterRequest orderFilterRequest) {
+        return ApiResponse.<Page<OrderResponse>>builder()
                 .result(orderService.findOrdersByUserIdAndStatus(orderFilterRequest))
                 .build();
     }

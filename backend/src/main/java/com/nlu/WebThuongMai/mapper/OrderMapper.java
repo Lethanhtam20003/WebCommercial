@@ -35,7 +35,7 @@ public interface OrderMapper {
      * @param orderItem thực thể sản phẩm trong đơn hàng
      * @return đối tượng phản hồi OrderItemResponse
      */
-    @Mapping(source = "product.images", target = "productImage")
+    @Mapping(source = "product.images", target = "productImage", qualifiedByName = "mapFirstImage")
     @Mapping(source = "product.name", target = "productName")
     OrderItemResponse toOrderItemResponse(OrderItem orderItem);
 
@@ -47,10 +47,11 @@ public interface OrderMapper {
      */
     List<OrderItemResponse> toOrderItemResponseList(List<OrderItem> items);
 
-    // 👇 THÊM HÀM NÀY để xử lý ánh xạ Set<ProductImage> -> String
-    default String map(Set<ProductImage> images) {
-        return images != null && !images.isEmpty()
-                ? images.iterator().next().getImage()  // hoặc getUrl() tuỳ tên field
-                : null;
+    @Named("mapFirstImage")
+    static String mapFirstImage(Set<ProductImage> images) {
+        return images.stream()
+                .findFirst()
+                .map(ProductImage::getImage)
+                .orElse(null);
     }
 }
