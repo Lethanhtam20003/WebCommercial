@@ -10,5 +10,6 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CategoryMapper {
     CategoryResponse toCategoryResponse(Category category);
+
     List<CategoryResponse> toListCategoryResponse(List<Category> categories);
 }

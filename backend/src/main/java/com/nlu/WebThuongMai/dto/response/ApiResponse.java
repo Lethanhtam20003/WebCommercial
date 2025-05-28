@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 /**
  * Class đại diện cho cấu trúc response chuẩn của API
+ *
  * @param <T> Kiểu dữ liệu của kết quả trả về
  */
 @Data

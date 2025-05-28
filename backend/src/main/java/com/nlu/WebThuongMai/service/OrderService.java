@@ -41,7 +41,7 @@ public class OrderService {
      * @param request thông tin chi tiết của đơn hàng cần tạo, bao gồm ID người dùng,
      *                danh sách sản phẩm đặt hàng, mã giảm giá tùy chọn, ghi chú và ngày tạo
      * @return phản hồi chứa thông tin chi tiết của đơn hàng đã tạo như ID đơn hàng,
-     *         tổng giá trị, giá sau khi giảm, trạng thái và danh sách sản phẩm trong đơn hàng
+     * tổng giá trị, giá sau khi giảm, trạng thái và danh sách sản phẩm trong đơn hàng
      */
 
     public OrderResponse createOrder(OrderCreateRequest request) {
@@ -57,20 +57,20 @@ public class OrderService {
         AtomicReference<BigDecimal> totalPrice = new AtomicReference<>(BigDecimal.ZERO);
 
         // thêm sản phẩm vào đơn hàng
-        Set<OrderItem> orderItems = request.getOrderItems().stream().map(item ->{
-           var product = productService.findProductById(item.getProductId());
+        Set<OrderItem> orderItems = request.getOrderItems().stream().map(item -> {
+            var product = productService.findProductById(item.getProductId());
 
-           BigDecimal itemPrice = BigDecimal.valueOf(product.getPrice())
+            BigDecimal itemPrice = BigDecimal.valueOf(product.getPrice())
                     .multiply(BigDecimal.valueOf(item.getQuantity()));
-           totalPrice.updateAndGet(t -> t.add(itemPrice));
+            totalPrice.updateAndGet(t -> t.add(itemPrice));
 
-           inventoryService.updateInventory(product, -item.getQuantity());
-           return OrderItem.builder()
-                   .product(product)
-                   .quantity(item.getQuantity())
-                   .price(BigDecimal.valueOf(product.getPrice()))
-                   .order(order)
-                   .build();
+            inventoryService.updateInventory(product, -item.getQuantity());
+            return OrderItem.builder()
+                    .product(product)
+                    .quantity(item.getQuantity())
+                    .price(BigDecimal.valueOf(product.getPrice()))
+                    .order(order)
+                    .build();
         }).collect(Collectors.toSet());
 
         order.setOrderItems(orderItems);
@@ -81,69 +81,73 @@ public class OrderService {
         order.setDiscountedPrice(discountedPrice);
         return mapper.toOrderResponse(repository.save(order));
     }
+
     public Order getOrderById(long orderId) {
-        return  repository.findById(orderId)
+        return repository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
     }
-    
-    public OrderResponse confirmOrder(long orderId) {
-        var order =  getOrderById(orderId);
 
-        if(order.getStatus() != OrderStatus.PENDING ){
-            if(order.getStatus() == OrderStatus.CONFIRMED){
+    public OrderResponse confirmOrder(long orderId) {
+        var order = getOrderById(orderId);
+
+        if (order.getStatus() != OrderStatus.PENDING) {
+            if (order.getStatus() == OrderStatus.CONFIRMED) {
                 throw new AppException(ErrorCode.ORDER_ALREADY_CONFIRMED);
             }
-            if(order.getStatus() == OrderStatus.DELIVERED){
+            if (order.getStatus() == OrderStatus.DELIVERED) {
                 throw new AppException(ErrorCode.ORDER_ALREADY_DELIVERED);
             }
-            if(order.getStatus() == OrderStatus.CANCELLED){
+            if (order.getStatus() == OrderStatus.CANCELLED) {
                 throw new AppException(ErrorCode.ORDER_ALREADY_CANCELLED);
             }
-            if(order.getStatus() == OrderStatus.SHIPPED){
+            if (order.getStatus() == OrderStatus.SHIPPED) {
                 throw new AppException(ErrorCode.ORDER_ALREADY_SHIPPED);
             }
         }
         order.setStatus(OrderStatus.CONFIRMED);
         return mapper.toOrderResponse(repository.save(order));
     }
+
     public OrderResponse shippedOrder(long orderId) {
-        var order =  getOrderById(orderId);
-        if(order.getStatus() != OrderStatus.CONFIRMED ){
-            if(order.getStatus() == OrderStatus.PENDING){
+        var order = getOrderById(orderId);
+        if (order.getStatus() != OrderStatus.CONFIRMED) {
+            if (order.getStatus() == OrderStatus.PENDING) {
                 throw new AppException(ErrorCode.ORDER_NOT_CONFIRMED);
             }
-            if(order.getStatus() == OrderStatus.SHIPPED){
+            if (order.getStatus() == OrderStatus.SHIPPED) {
                 throw new AppException(ErrorCode.ORDER_ALREADY_SHIPPED);
             }
-            if(order.getStatus() == OrderStatus.DELIVERED){
+            if (order.getStatus() == OrderStatus.DELIVERED) {
                 throw new AppException(ErrorCode.ORDER_ALREADY_DELIVERED);
             }
-            if(order.getStatus() == OrderStatus.CANCELLED){
+            if (order.getStatus() == OrderStatus.CANCELLED) {
                 throw new AppException(ErrorCode.ORDER_ALREADY_CANCELLED);
             }
         }
         order.setStatus(OrderStatus.SHIPPED);
         return mapper.toOrderResponse(repository.save(order));
     }
+
     public OrderResponse deliveredOrder(long orderId) {
-        var order =  getOrderById(orderId);
-        if(order.getStatus() == OrderStatus.PENDING){
+        var order = getOrderById(orderId);
+        if (order.getStatus() == OrderStatus.PENDING) {
             throw new AppException(ErrorCode.ORDER_NOT_CONFIRMED);
         }
         order.setStatus(OrderStatus.DELIVERED);
         return mapper.toOrderResponse(repository.save(order));
     }
+
     public OrderResponse cancelOrder(long orderId) {
-        var order =  getOrderById(orderId);
-        if(order.getStatus() != OrderStatus.PENDING){
-        throw new AppException(ErrorCode.ORDER_CAN_NOT_CANCEL_BECAUSE_IT_WAS_CONFIRMED_OR_SHIPPED);
+        var order = getOrderById(orderId);
+        if (order.getStatus() != OrderStatus.PENDING) {
+            throw new AppException(ErrorCode.ORDER_CAN_NOT_CANCEL_BECAUSE_IT_WAS_CONFIRMED_OR_SHIPPED);
         }
         order.setStatus(OrderStatus.CANCELLED);
         return mapper.toOrderResponse(repository.save(order));
     }
 
-    public OrderResponse updateOrder(long orderId,OrderUpdateRequest request) {
-        Order order =  getOrderById(orderId);
+    public OrderResponse updateOrder(long orderId, OrderUpdateRequest request) {
+        Order order = getOrderById(orderId);
         //
 
         order.setStatus(request.getStatus());
@@ -158,7 +162,6 @@ public class OrderService {
         repository.deleteById(orderId);
         return true;
     }
-
 
 
 }

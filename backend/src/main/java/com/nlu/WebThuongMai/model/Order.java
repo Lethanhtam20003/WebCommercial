@@ -27,7 +27,7 @@ import java.util.Set;
  * 1 đơn hàng được tạo ra cho 1 user bất kỳ
  * 1 đơn hàng chứa các sản phẩm 
  */
-public class    Order {
+public class Order {
     /**
      * ID của đơn hàng, tự động tăng
      */

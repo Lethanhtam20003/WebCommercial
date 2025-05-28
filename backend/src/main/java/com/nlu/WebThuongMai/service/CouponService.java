@@ -28,7 +28,6 @@ public class CouponService {
     CouponMapper mapper;
 
 
-
     public CouponResponse createCoupon(CouponCreateRequest request) {
         Coupon coupon = repository.findByCode(request.getCode())
                 .orElse(null);
@@ -56,7 +55,7 @@ public class CouponService {
         coupon.setDescription(request.getDescription());
         coupon.setExpirationDate(request.getExpirationDate());
         coupon.setLimitUsers(request.getLimitUsers());
-        coupon.setPriceCondition( request.getPriceCondition());
+        coupon.setPriceCondition(request.getPriceCondition());
         coupon.setMinPrice(request.getMinPrice());
 
         return mapper.toCouponResponse(repository.save(coupon));

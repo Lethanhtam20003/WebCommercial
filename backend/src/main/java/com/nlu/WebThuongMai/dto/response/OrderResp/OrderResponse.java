@@ -1,7 +1,6 @@
 package com.nlu.WebThuongMai.dto.response.OrderResp;
 
 import com.nlu.WebThuongMai.enums.OrderStatus;
-import com.nlu.WebThuongMai.model.OrderItem;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -60,6 +60,7 @@ public class SecurityConfig {
 
     /**
      * Cấu hình chuỗi bộ lọc bảo mật
+     *
      * @param http Đối tượng HttpSecurity để cấu hình
      * @return SecurityFilterChain đã được cấu hình
      * @throws Exception Nếu có lỗi trong quá trình cấu hình
@@ -79,10 +80,10 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated())
                 // Cấu hình xử lý khi người dùng không có quyền truy cập
-               .exceptionHandling(exceptionHandling -> exceptionHandling
-                       .authenticationEntryPoint(authenticationEntryPoint) // Trả về lỗi 401 nếu không có quyền
-                       .accessDeniedHandler(accessDeniceHandle)// 403
-               )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(authenticationEntryPoint) // Trả về lỗi 401 nếu không có quyền
+                        .accessDeniedHandler(accessDeniceHandle)// 403
+                )
 
 //              cấu hình login
                 .oauth2Login(oauth2Login -> oauth2Login

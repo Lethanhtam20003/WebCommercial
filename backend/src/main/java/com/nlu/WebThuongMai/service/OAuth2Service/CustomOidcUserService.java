@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+
 @Slf4j
 @RequiredArgsConstructor
 
@@ -23,6 +24,7 @@ import java.util.Map;
 public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest, OidcUser> {
     private final UserRepository userRepository;
     private final OidcUserService delegate = new OidcUserService();
+
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
         log.info("Load user from Google OIDC request");
@@ -38,7 +40,6 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
         AuthProvider authProvider = AuthProvider.GOOGLE;
 
 
-
         if (id == null) {
             throw new RuntimeException("Google provider_id is missing (sub)");
         }
@@ -46,10 +47,10 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
         User user = userRepository.findUserByAuthProviderId(id);
         if (user == null) {
             // Kiểm tra xem người dùng đã tồn tại trong hệ thống chưa
-            if(userRepository.existsByEmail(email)){
+            if (userRepository.existsByEmail(email)) {
                 ErrorCode errorCode = ErrorCode.USER_EXISTED;
                 throw new OAuth2AuthenticationException(
-                        new OAuth2Error(errorCode.getCode()+"", errorCode.getMessage(), null)
+                        new OAuth2Error(errorCode.getCode() + "", errorCode.getMessage(), null)
                 );
             }
 //          tao user moi

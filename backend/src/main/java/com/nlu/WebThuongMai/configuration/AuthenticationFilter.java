@@ -33,14 +33,14 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private AuthenticationService authenticationService;
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request,
-                                  final HttpServletResponse response,
-                                  final FilterChain filterChain) throws ServletException, IOException {
+                                    final HttpServletResponse response,
+                                    final FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = extractToken(request);
             if (token != null) {
@@ -50,12 +50,13 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             log.error("Lỗi xử lý JWT token: {}", e.getMessage());
             SecurityContextHolder.clearContext();
         }
-        
+
         filterChain.doFilter(request, response);
     }
 
     /**
      * Trích xuất JWT token từ request
+     *
      * @param request HTTP request
      * @return JWT token hoặc null nếu không tìm thấy
      */
@@ -69,15 +70,16 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     /**
      * Xử lý JWT token và set authentication nếu token hợp lệ
+     *
      * @param token JWT token cần xử lý
      * @throws com.nimbusds.jose.JOSEException nếu có lỗi khi xử lý JWT
-     * @throws java.text.ParseException nếu có lỗi khi parse JWT
+     * @throws java.text.ParseException        nếu có lỗi khi parse JWT
      */
     private void processToken(final String token) throws com.nimbusds.jose.JOSEException, java.text.ParseException {
         try {
             SignedJWT signedJWT = authenticationService.verifyToken(token, false);
             String username = signedJWT.getJWTClaimsSet().getSubject();
-            
+
             var user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
             String password = user.getPassword();
@@ -93,7 +95,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            
+
             SecurityContextHolder.getContext().setAuthentication(auth);
             log.debug("Xác thực thành công cho user: {}", username);
         } catch (Exception e) {

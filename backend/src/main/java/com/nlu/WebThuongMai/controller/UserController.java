@@ -23,6 +23,7 @@ public class UserController {
 
     /**
      * Tạo mới một người dùng
+     *
      * @param request Thông tin người dùng cần tạo
      * @return Thông tin người dùng đã được tạo
      */
@@ -35,6 +36,7 @@ public class UserController {
 
     /**
      * Lấy danh sách tất cả người dùng
+     *
      * @return Danh sách thông tin của tất cả người dùng
      */
     @GetMapping
@@ -46,6 +48,7 @@ public class UserController {
 
     /**
      * Lấy thông tin người dùng theo ID
+     *
      * @param userId ID của người dùng cần tìm
      * @return Thông tin của người dùng tương ứng
      */
@@ -57,7 +60,8 @@ public class UserController {
 
     /**
      * Cập nhật thông tin người dùng
-     * @param userId ID của người dùng cần cập nhật
+     *
+     * @param userId  ID của người dùng cần cập nhật
      * @param request Thông tin cần cập nhật
      * @return Thông tin người dùng sau khi cập nhật
      */
@@ -70,6 +74,7 @@ public class UserController {
 
     /**
      * Xóa người dùng theo ID
+     *
      * @param userId ID của người dùng cần xóa
      * @return Kết quả xóa người dùng
      */
@@ -84,6 +89,7 @@ public class UserController {
 
     /**
      * Lấy thông tin của người dùng hiện tại
+     *
      * @return Thông tin của người dùng đang đăng nhập
      */
     @GetMapping("/myInfo")

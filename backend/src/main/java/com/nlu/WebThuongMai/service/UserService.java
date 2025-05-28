@@ -102,7 +102,7 @@ public class UserService {
      * Cập nhật thông tin của một người dùng.
      * Method này có thể được gọi bởi ADMIN hoặc chính người dùng đó.
      *
-     * @param userId ID của người dùng cần cập nhật
+     * @param userId  ID của người dùng cần cập nhật
      * @param request Đối tượng chứa thông tin cần cập nhật
      * @return UserResponse chứa thông tin đã được cập nhật
      * @throws RuntimeException nếu không tìm thấy người dùng với ID tương ứng

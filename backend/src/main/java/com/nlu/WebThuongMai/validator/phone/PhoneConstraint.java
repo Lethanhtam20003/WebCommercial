@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(
-        validatedBy={PhoneValidator.class}
+        validatedBy = {PhoneValidator.class}
 )
-public @interface PhoneConstraint  {
+public @interface PhoneConstraint {
 
     String message() default "Invalid Phone Number";
 

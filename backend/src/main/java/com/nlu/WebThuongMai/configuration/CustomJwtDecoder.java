@@ -2,8 +2,6 @@ package com.nlu.WebThuongMai.configuration;
 
 import com.nimbusds.jose.JOSEException;
 import com.nlu.WebThuongMai.dto.request.authenticationReq.IntrospectRequest;
-import com.nlu.WebThuongMai.enums.exception.ErrorCode;
-import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.spec.SecretKeySpec;
 import java.text.ParseException;
 import java.util.Objects;
+
 @Slf4j
 @RequiredArgsConstructor
 
@@ -36,7 +35,7 @@ public class CustomJwtDecoder implements JwtDecoder {
     public Jwt decode(String token) throws JwtException {
         try {
             var response = authenticationService.introspect(IntrospectRequest.builder().token(token).build());
-            if (!response.isValid()){
+            if (!response.isValid()) {
                 throw new BadCredentialsException("Token không hợp lệ");
             }
         } catch (JOSEException | ParseException e) {

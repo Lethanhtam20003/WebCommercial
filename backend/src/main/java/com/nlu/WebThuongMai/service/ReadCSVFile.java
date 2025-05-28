@@ -24,6 +24,20 @@ public class ReadCSVFile {
     @Autowired
     CategoryService categoryService;
 
+    public static void main(String[] args) {
+        String fileName = "D:\\isDoing\\ChuyenDeWeb\\WebCommercial\\backend\\src\\main\\resources\\db\\migration\\csvFiles\\allProducts.csv";
+        try (CSVReader reader = new CSVReader(new FileReader(fileName))) {
+            List<String[]> records = reader.readAll();
+            records.stream()
+                    .skip(1)
+                    .map(record -> Integer.parseInt(record[4].substring(0, record[4].indexOf("₫")).replace(".", "")))
+                    .forEach(System.out::println);
+        } catch (IOException | CsvException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public void readCSVFile() {
         String filePath = "D:\\isDoing\\ChuyenDeWeb\\WebCommercial\\backend\\src\\main\\resources\\db\\migration\\csvFiles\\allProducts.csv";
 
@@ -37,7 +51,7 @@ public class ReadCSVFile {
             listCate.forEach(System.out::println);
             listCate.forEach(categoryService::createCategory);
 
-            listProduct =  allRecords.stream()
+            listProduct = allRecords.stream()
                     .skip(1)
                     .map(record -> ProductRequest.builder()
                             .name(record[0])
@@ -49,7 +63,7 @@ public class ReadCSVFile {
                                     .filter(cate -> cate != -1)
                                     .collect(Collectors.toSet()))
                             .description(record[3])
-                            .price(Double.parseDouble(record[4].substring(0,record[4].indexOf("₫")).replace(".","")))
+                            .price(Double.parseDouble(record[4].substring(0, record[4].indexOf("₫")).replace(".", "")))
                             .build()
                     ).collect(Collectors.toCollection(ArrayList::new));
 //            listProduct.forEach(System.out::println);
@@ -58,20 +72,6 @@ public class ReadCSVFile {
             throw new RuntimeException(e);
         }
         log.info("CSV file written successfully");
-    }
-
-    public static void main(String[] args) {
-        String fileName =  "D:\\isDoing\\ChuyenDeWeb\\WebCommercial\\backend\\src\\main\\resources\\db\\migration\\csvFiles\\allProducts.csv";
-        try(CSVReader reader = new CSVReader(new FileReader(fileName))){
-            List<String[]> records = reader.readAll();
-            records.stream()
-                    .skip(1)
-                    .map(record -> Integer.parseInt(record[4].substring(0,record[4].indexOf("₫")).replace(".","")))
-                    .forEach(System.out::println);
-        } catch (IOException | CsvException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
 }

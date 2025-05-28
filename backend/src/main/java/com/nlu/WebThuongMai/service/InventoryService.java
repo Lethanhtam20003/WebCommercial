@@ -17,13 +17,12 @@ class InventoryService {
     public void updateInventory(Product product, Integer quantity) {
         Inventory inventory = repository.getInventoryByProductId(product.getId());
 
-        if(inventory != null){
-            if(inventory.getQuantity() + quantity < 0)
+        if (inventory != null) {
+            if (inventory.getQuantity() + quantity < 0)
                 throw new AppException(ErrorCode.PRODUCT_NOT_ENOUGH_IN_STOCK);
-            inventory.setQuantity(inventory.getQuantity()+ quantity);
+            inventory.setQuantity(inventory.getQuantity() + quantity);
             repository.save(inventory);
-        }
-        else if(quantity > 0)
+        } else if (quantity > 0)
             repository.save(Inventory.builder().product(product).quantity(quantity).build());
         else
             throw new AppException(ErrorCode.PRODUCT_NOT_FOUND_IN_STOCK);
@@ -31,10 +30,10 @@ class InventoryService {
 
     public boolean checkInventory(long productId, int quantity) {
         Inventory inventory = repository.getInventoryByProductId(productId);
-        if(inventory != null){
-             if(inventory.getQuantity() >= quantity)
-                 return true;
-             throw new AppException(ErrorCode.QUALITY_PRODUCT_NOT_ENOUGH);
+        if (inventory != null) {
+            if (inventory.getQuantity() >= quantity)
+                return true;
+            throw new AppException(ErrorCode.QUALITY_PRODUCT_NOT_ENOUGH);
         }
         return false;
     }

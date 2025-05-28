@@ -8,34 +8,33 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryService {
     CategoryRepository categoryRepository;
     CategoryMapper categoryMapper;
 
-    public CategoryResponse createCategory(String category){
+    public CategoryResponse createCategory(String category) {
         Category cate = categoryRepository.findByName(category);
-        if(cate != null){
+        if (cate != null) {
             return null;
         }
         return categoryMapper.toCategoryResponse(categoryRepository.save(Category.builder().name(category).build()));
     }
 
-    public List<CategoryResponse> getAll(){
+    public List<CategoryResponse> getAll() {
         return categoryMapper.toListCategoryResponse(categoryRepository.findAll());
     }
-    public long getCategoryId(String category){
+
+    public long getCategoryId(String category) {
         Category cate = categoryRepository.findByName(category);
-        if(cate == null){
+        if (cate == null) {
             return -1;
         }
         return cate.getId();

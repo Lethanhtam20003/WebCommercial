@@ -39,7 +39,7 @@ public class CouponCreateRequest {
     @NotNull(message = "FIELD_CAN_NOT_BE_NULL")
     CouponType type;
     @NotNull(message = "FIELD_CAN_NOT_BE_NULL")
-        @DecimalMin(value = "0.0", message = "PRICE_CONDITION_COUPONS_MUST_BE_POSITIVE")
+    @DecimalMin(value = "0.0", message = "PRICE_CONDITION_COUPONS_MUST_BE_POSITIVE")
     BigDecimal priceCondition;
     @NotNull(message = "FIELD_CAN_NOT_BE_NULL")
     @DecimalMin(value = "0.0", message = "MIN_PRICE_COUPONS_MUST_BE_POSITIVE")

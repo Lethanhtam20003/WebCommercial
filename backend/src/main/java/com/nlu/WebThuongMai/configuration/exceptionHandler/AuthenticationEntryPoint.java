@@ -42,8 +42,8 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
      */
     @Override
     public void commence(final HttpServletRequest request,
-                        final HttpServletResponse response,
-                        final AuthenticationException authException) throws IOException {
+                         final HttpServletResponse response,
+                         final AuthenticationException authException) throws IOException {
         try {
             final ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
             log.error("Unauthorized error: {}", authException.getMessage());

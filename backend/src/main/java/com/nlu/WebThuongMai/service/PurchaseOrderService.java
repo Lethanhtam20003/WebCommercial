@@ -13,13 +13,12 @@ import com.nlu.WebThuongMai.model.PurchaseOrderItem;
 import com.nlu.WebThuongMai.repository.PurchaseOrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.el.stream.Stream;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -33,7 +32,6 @@ public class PurchaseOrderService {
     private final InventoryService inventoryService;
 
 
-
     @Transactional
     public PurchaseOrderResponse createPurchaseOrder(long supplierId, PurchaseOrderCreatetionRequest request) {
         // kiểm tra nhà cung cấp
@@ -45,17 +43,17 @@ public class PurchaseOrderService {
                 .totalPrice(request.getTotalPrice())
                 .status(request.getStatus())
                 .build();
-       var items = itemMapper.toSetPurchaseOrderItem(request.getItems()).stream()
-               .map(item ->{
-                   // kiểm tra sản phẩm
-                   var product = productService.findProductById(item.getProduct().getId());
-                   return PurchaseOrderItem.builder()
-                           .product(product)
-                           .quantity(item.getQuantity())
-                           .unitPrice(item.getUnitPrice())
-                           .purchaseOrder(order)
-                           .build();
-               }).collect(Collectors.toSet());
+        var items = itemMapper.toSetPurchaseOrderItem(request.getItems()).stream()
+                .map(item -> {
+                    // kiểm tra sản phẩm
+                    var product = productService.findProductById(item.getProduct().getId());
+                    return PurchaseOrderItem.builder()
+                            .product(product)
+                            .quantity(item.getQuantity())
+                            .unitPrice(item.getUnitPrice())
+                            .purchaseOrder(order)
+                            .build();
+                }).collect(Collectors.toSet());
         order.setPurchaseOrderItems(items);
 
         return mapper.toPurchaseOrderResponse(repository.save(order));
@@ -75,7 +73,7 @@ public class PurchaseOrderService {
     public Boolean deletePurchaseOrder(long orderId) {
         try {
             var order = repository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND));
-            if(order.getStatus() == PurchaseStatus.RECEIVED)
+            if (order.getStatus() == PurchaseStatus.RECEIVED)
                 order.getPurchaseOrderItems().forEach(item -> {
                     inventoryService.updateInventory(item.getProduct(), -item.getQuantity());
                 });
@@ -85,6 +83,7 @@ public class PurchaseOrderService {
             throw new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND);
         }
     }
+
     @Transactional
     public PurchaseOrderResponse updatePurchaseOrder(long orderId, PurchaseOrderUpdateRequest request) {
 
@@ -92,13 +91,13 @@ public class PurchaseOrderService {
                 .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND));
         log.info("Update purchase order: {}", request);
         // xác nhận nhập hàng
-        if(order.getStatus() == PurchaseStatus.PENDING && request.getStatus() == PurchaseStatus.RECEIVED){
+        if (order.getStatus() == PurchaseStatus.PENDING && request.getStatus() == PurchaseStatus.RECEIVED) {
             order.getPurchaseOrderItems().forEach(item -> {
                 inventoryService.updateInventory(item.getProduct(), item.getQuantity());
             });
         }
         // hũy nhập hàng khi sau khi xác nhận nhập hàng
-        if(order.getStatus() == PurchaseStatus.RECEIVED && request.getStatus() == PurchaseStatus.CANCELLED){
+        if (order.getStatus() == PurchaseStatus.RECEIVED && request.getStatus() == PurchaseStatus.CANCELLED) {
             order.getPurchaseOrderItems().forEach(item -> {
                 inventoryService.updateInventory(item.getProduct(), -item.getQuantity());
             });

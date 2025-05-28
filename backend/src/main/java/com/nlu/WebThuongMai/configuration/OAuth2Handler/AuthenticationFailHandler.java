@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -26,7 +27,7 @@ import java.io.IOException;
  * Implements AuthenticationFailureHandler để xử lý các lỗi xác thực
  */
 public class AuthenticationFailHandler implements AuthenticationFailureHandler {
-   final ObjectMapper objectMapper;
+    final ObjectMapper objectMapper;
 
     @Value("${app.frontend.url}")
     String frontendUrl;
@@ -56,14 +57,14 @@ public class AuthenticationFailHandler implements AuthenticationFailureHandler {
             String apiResponseJson = objectMapper.writeValueAsString(apiResponse);
 
             String html = """
-                    <html><body>
-                    <script>
-                     const error = %s;
-                     window.opener?.postMessage({ error }, '%s');
-                     window.close();
-                    </script>
-                    </body></html>
-                 """.formatted(apiResponseJson,frontendUrl);
+                       <html><body>
+                       <script>
+                        const error = %s;
+                        window.opener?.postMessage({ error }, '%s');
+                        window.close();
+                       </script>
+                       </body></html>
+                    """.formatted(apiResponseJson, frontendUrl);
             response.getWriter().write(html);
         } catch (IOException e) {
             log.error("Lỗi khi ghi response: {}", e.getMessage());

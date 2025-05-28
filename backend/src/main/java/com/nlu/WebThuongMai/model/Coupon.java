@@ -42,7 +42,7 @@ public class Coupon {
      * Phần trăm giảm giá
      * Ví dụ: 10.0 tương đương giảm 10%
      */
-    double discount ;
+    double discount;
 
     /**
      * Mô tả về mã giảm giá

@@ -31,6 +31,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public CustomAccessDeniedHandler() {
         this.objectMapper = new ObjectMapper();
     }
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         try {
