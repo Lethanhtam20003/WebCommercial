@@ -1,6 +1,7 @@
 import { CommonModule, CurrencyPipe, DatePipe, NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { OrderResponse } from '../../../core/models/response/order-response.interface';
+import { UtitlyService } from '../../../core/service/utility.service';
 
 @Component({
 	imports: [NgClass, CommonModule],
@@ -13,6 +14,7 @@ export class OrderListComponent {
 	@Input() orders: OrderResponse[] = [];
 	@Output() viewOrder = new EventEmitter<number>();
 
+  constructor(protected utility: UtitlyService){}
 	onView(orderId: number) {
 		this.viewOrder.emit(orderId);
 	}

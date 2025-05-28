@@ -1,5 +1,5 @@
 import { OrderStatus } from "../../enum/order-status.enum";
-import { OrderItemResponse } from "./order-item-response.interface";
+import { OrderDetailResponse } from '../response/order-item-response.interface';
 
 export interface OrderResponse {
   id: number;
@@ -8,5 +8,5 @@ export interface OrderResponse {
   status: OrderStatus;
   note: string;
   createdDate: string;
-  orderItems: OrderItemResponse[];
+  orderItems: OrderDetailResponse[];
 }

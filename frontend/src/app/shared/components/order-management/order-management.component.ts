@@ -88,6 +88,8 @@ export class OrderMamangementComponent implements OnInit {
 			const request: OrderFilterRequest = {
 				userId: currentUser.id,
 				status: this.utility.mapStatusToBackend(status) as OrderStatus,
+        page: 0,
+        size: 10,
 			};
 			// Gọi hàm nhận object
 			this.orderStateService.loadOrdersByStatus(request);

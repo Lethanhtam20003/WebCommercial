@@ -48,4 +48,6 @@ export const ErrorMessageConstants = {
   changePasswordFail: 'Đổi mật khẩu thất bại',
   errorWhenLoadingUserOrder: 'Lỗi khi load đơn hàng user',
   errorWhenLoadingAdminOrder: 'Lỗi khi load đơn hàng user',
+
+  errorWhenLoadingOrderDetail: 'Có lỗi xảy ra khi load chi tiết hoá đơn',
 } as const;

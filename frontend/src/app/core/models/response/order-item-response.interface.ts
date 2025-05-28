@@ -1,4 +1,4 @@
-export interface OrderItemResponse {
+export interface OrderDetailResponse {
 	productName: string;
 	productImage: string;
 	quantity: number;
