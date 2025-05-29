@@ -1,6 +1,12 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Coupon, CouponComponent } from '../coupon/coupon.component';
+import { Component, OnInit } from '@angular/core';
+import { CouponComponent } from '../coupon/coupon.component';
+import { GetAllCouponResponse } from '../../../core/models/response/get-all-coupon-response.interface';
+import { CouponService } from '../../../core/service/coupon.service';
+import { GetAllCouponRequest } from '../../../core/models/request/get-all-coupon-request.interface';
+import { finalize } from 'rxjs';
+import { ApiResponse } from '../../../core/models/api-response.model';
+import { Page } from '../../../core/models/response/page-response.interface';
 
 @Component({
   selector: 'coupon-list',
@@ -8,39 +14,34 @@ import { Coupon, CouponComponent } from '../coupon/coupon.component';
   imports: [CommonModule, CouponComponent],
   templateUrl: './coupon-list.component.html'
 })
-export class CouponListComponent {
-  coupons: Coupon[] = [
-    {
-      id: 1,
-      code: 'SHOPEE12',
-      discountPercentage: 12,
-      description: 'Giảm 12% tối đa ₫70k cho đơn từ ₫250k',
-      createdAt: new Date().toISOString(),
-      expirationDate: new Date(new Date().getTime() + 4 * 3600 * 1000).toISOString() // sau 4 tiếng
-    },
-    {
-      id: 2,
-      code: 'FREESHIP50',
-      discountPercentage: 0,
-      description: 'Freeship tối đa ₫50k cho đơn từ ₫45k',
-      createdAt: new Date().toISOString(),
-      expirationDate: new Date(new Date().getTime() + 1 * 3600 * 1000).toISOString()
-    },
-    {
-      id: 3,
-      code: 'ELEC11',
-      discountPercentage: 11,
-      description: 'Giảm 11% tối đa ₫50k cho đơn từ ₫99k',
-      createdAt: new Date().toISOString(),
-      expirationDate: new Date(new Date().getTime() + 0.5 * 3600 * 1000).toISOString()
-    },
-    {
-      id: 4,
-      code: 'SHOPEE15',
-      discountPercentage: 15,
-      description: 'Giảm 15% tối đa ₫150k cho đơn từ ₫300k',
-      createdAt: new Date().toISOString(),
-      expirationDate: new Date(new Date().getTime() + 2 * 3600 * 1000).toISOString()
-    }
-  ];
+export class CouponListComponent implements OnInit{
+  coupons: GetAllCouponResponse[] = [];
+  isLoading = false;
+  errorMsg = '';
+
+  constructor(private couponService: CouponService) {}
+
+  ngOnInit() {
+    this.loadCoupons();
+  }
+
+  loadCoupons() {
+    this.isLoading = true;
+    this.errorMsg = '';
+
+    const request: GetAllCouponRequest = { page: 0, size: 10 };
+
+    this.couponService.getAllCoupons(request)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (response: ApiResponse<Page<GetAllCouponResponse>>) => {
+          this.coupons = response.result.content;
+        },
+        error: (err) => {
+          this.errorMsg = 'Lỗi khi tải coupon';
+          console.error(err);
+        }
+      });
+  }
+
 }

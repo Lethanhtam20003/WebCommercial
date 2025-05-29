@@ -1,18 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { filter, take } from 'rxjs';
 import { OrderStatus } from '../../../core/enum/order-status.enum';
 import { OrderFilterRequest } from '../../../core/models/request/order-filter-request.interface';
+import { OrderDetailResponse } from '../../../core/models/response/order-item-response.interface';
 import { OrderResponse } from '../../../core/models/response/order-response.interface';
 import { AlertService } from '../../../core/service/alert.service';
+import { OrderDetailService } from '../../../core/service/order-detail.service';
 import { OrderStateService } from '../../../core/service/state/order-state.service';
 import { UserStateService } from '../../../core/service/state/user-state.service';
 import { UtitlyService } from '../../../core/service/utility.service';
 import { ErrorMessageConstants } from '../../constants/error-message.constants';
 import { LabelConstants } from '../../constants/label.constants';
-import { filter, take } from 'rxjs';
-import { OrderListComponent } from '../order-list/order-list.component';
 import { OrderDetailComponent } from '../order-detail/order-detail.component';
+import { OrderListComponent } from '../order-list/order-list.component';
 
 @Component({
 	standalone: true,
@@ -24,8 +26,10 @@ import { OrderDetailComponent } from '../order-detail/order-detail.component';
 export class OrderMamangementComponent implements OnInit {
 	status: string = '';
 	orders: OrderResponse[] = [];
-  selectedOrder?: OrderResponse;
+	selectedOrder?: OrderResponse;
+	selectedOrderItems: OrderDetailResponse[] = [];
 	private readonly label = LabelConstants;
+
 	readonly orderLabel: Record<string, string> = {
 		all: this.label.all,
 		pending: this.label.pending,
@@ -48,7 +52,8 @@ export class OrderMamangementComponent implements OnInit {
 		protected utility: UtitlyService,
 		private userStateService: UserStateService,
 		private alert: AlertService,
-		private router: Router
+		private router: Router,
+		private orderDetailService: OrderDetailService
 	) {}
 
 	ngOnInit(): void {
@@ -88,8 +93,8 @@ export class OrderMamangementComponent implements OnInit {
 			const request: OrderFilterRequest = {
 				userId: currentUser.id,
 				status: this.utility.mapStatusToBackend(status) as OrderStatus,
-        page: 0,
-        size: 10,
+				page: 0,
+				size: 10,
 			};
 			// Gọi hàm nhận object
 			this.orderStateService.loadOrdersByStatus(request);
@@ -102,12 +107,37 @@ export class OrderMamangementComponent implements OnInit {
 		this.router.navigate(['/user/orders', key]);
 	}
 
-  onViewOrder(orderId: number) {
-    this.selectedOrder = this.orders.find(o => o.id === orderId);
-  }
+	onViewOrder(orderId: number) {
+		this.selectedOrder = this.orders.find(o => o.id === orderId);
 
-  onBack() {
-    this.selectedOrder = undefined;
-  }
+		if (!this.selectedOrder) {
+			this.selectedOrderItems = [];
+			return;
+		}
 
+		console.log('🔍 Đã nhấn Xem, orderId =', orderId);
+
+		// Gọi API lấy chi tiết đơn hàng lúc nhấn nút xem
+		this.orderDetailService
+			.getOrderDetailByOrderId({
+				orderId: this.selectedOrder?.id || 0,
+				page: 0,
+				size: 10,
+			})
+			.subscribe({
+				next: items => {
+					console.log('📦 Kết quả trả về từ API:', items);
+					this.selectedOrderItems = items;
+				},
+				error: err => {
+					console.error('❌ Lỗi khi gọi API chi tiết đơn hàng:', err);
+					this.selectedOrderItems = [];
+				},
+			});
+	}
+
+	onBack() {
+		this.selectedOrder = undefined;
+		this.selectedOrderItems = [];
+	}
 }

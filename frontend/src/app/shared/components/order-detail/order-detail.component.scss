@@ -1,0 +1,11 @@
+.btn-order-detail{
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.btn-order-detail:focus,
+.btn-order-detail:hover,
+.btn-order-detail:active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getOrderDetailByOrderId } from '../models/request/get-order-detail-request.interface';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { Page } from '../models/response/page-response.interface';
 import { OrderDetailResponse } from '../models/response/order-item-response.interface';
@@ -15,14 +15,16 @@ export class OrderDetailService {
 
 	getOrderDetailByOrderId(
 		request: getOrderDetailByOrderId
-	): Observable<ApiResponse<Page<OrderDetailResponse>>> {
+	): Observable<OrderDetailResponse[]> {
 		const params = new HttpParams()
 			.set('orderId', request.orderId.toString())
 			.set('page', request.page.toString())
 			.set('size', request.size.toString());
-		return this.http.get<ApiResponse<Page<OrderDetailResponse>>>(
-			URL_API.getOrders,
-			{ params }
-		);
+
+		return this.http
+			.get<
+				ApiResponse<Page<OrderDetailResponse>>
+			>(URL_API.getOrderDetails, { params })
+			.pipe(map(response => response.result.content));
 	}
 }

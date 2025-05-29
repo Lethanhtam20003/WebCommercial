@@ -1,60 +1,4 @@
 <div class="container mt-4 vh-100">
-	<!-- <div class="d-flex gap-2 mb-3" id="order-filter">
-		<button
-			*ngFor="let key of orderStatus"
-			(click)="onStatusClick(key)"
-			class="btn"
-			[ngClass]="{
-				'btn-active': key === status,
-				'btn-inactive': key !== status,
-			}"
-		>
-			{{ this.utility.capitalize(orderLabel[key]) }}
-		</button>
-	</div>
-	<div class="table-responsive">
-		<table class="table table-bordered table-hover">
-			<thead class="table-dark">
-				<tr>
-					<th>#</th>
-					<th>Mã đơn</th>
-					<th>Ngày đặt</th>
-					<th>Trạng thái</th>
-					<th>Tổng tiền</th>
-					<th>Thao tác</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let order of orders; index as i">
-					<td>{{ i + 1 }}</td>
-					<td>{{ order.id }}</td>
-					<td>{{ order.createdDate | date: 'dd/MM/yyyy' }}</td>
-					<td>
-						<span
-							class="badge"
-							[ngClass]="{
-								'bg-warning': order.status === 'PENDING',
-								'bg-info': order.status === 'SHIPPED',
-								'bg-success': order.status === 'DELIVERED',
-								'bg-danger': order.status === 'CANCELLED',
-							}"
-						>
-							{{ order.status }}
-						</span>
-					</td>
-					<td>{{ order.totalPrice | currency: 'VND' }}</td>
-					<td>
-						<button
-							class="btn btn-sm btn-primary me-1"
-							(click)="viewOrder(order)"
-						>
-							Xem
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div> -->
 	<ng-container *ngIf="!selectedOrder; else detailTemplate">
 		<h2 class="mb-4">Quản lý đơn hàng</h2>
 		<order-list
@@ -64,7 +8,7 @@
 	</ng-container>
 	<ng-template #detailTemplate>
 		<ng-container *ngIf="selectedOrder as order">
-			<order-detail [order]="order" (back)="onBack()"></order-detail>
+			<order-detail [order]="order" [orderItems]="selectedOrderItems" (back)="onBack()"></order-detail>
 		</ng-container>
 	</ng-template>
 </div>

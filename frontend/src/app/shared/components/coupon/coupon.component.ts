@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { GetAllCouponResponse } from '../../../core/models/response/get-all-coupon-response.interface';
 
 @Component({
 	selector: 'coupon',
@@ -8,14 +9,5 @@ import { Component, Input } from '@angular/core';
 	templateUrl: './coupon.component.html',
 })
 export class CouponComponent {
-	@Input() coupon!: Coupon;
-}
-
-export interface Coupon {
-  id: number;
-  code: string;
-  discountPercentage: number;
-  description: string;
-  createdAt: string;
-  expirationDate: string;
+	@Input() coupon!: GetAllCouponResponse;
 }

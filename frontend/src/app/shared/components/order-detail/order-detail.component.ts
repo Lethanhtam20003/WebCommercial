@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { OrderResponse } from "../../../core/models/response/order-response.interface";
 import { CommonModule } from "@angular/common";
+import { OrderDetailResponse } from "../../../core/models/response/order-item-response.interface";
 
 @Component({
   imports: [CommonModule],
@@ -11,6 +12,7 @@ import { CommonModule } from "@angular/common";
 })
 export class OrderDetailComponent {
   @Input() order!: OrderResponse;
+  @Input() orderItems: OrderDetailResponse[] = [];
   @Output() back = new EventEmitter<void>();
 
   onBack() {
