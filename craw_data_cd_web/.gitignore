@@ -1,0 +1,64 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs and output files
+*.log
+*.tsv
+*.out
+
+# Environment files
+.env
+.env.*
+
+# VSCode
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Selenium driver downloads (nếu lưu local)
+chromedriver
+chromedriver.exe
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# pipenv or poetry
+Pipfile.lock
+poetry.lock
+
+# OS generated
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# PyInstaller
+*.spec
+dist/
+build/
+
+# Cached test files
+.cache/
+
+# MyPy
+.mypy_cache/
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+htmlcov/
+.coverage
+coverage.xml
+
+# IDEs
+.idea/
+*.iml

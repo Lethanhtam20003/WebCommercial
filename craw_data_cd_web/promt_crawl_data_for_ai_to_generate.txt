@@ -1,0 +1,497 @@
+Viết cho tui đoạn script python crawl data từ trang web 'https://shop.webthethao.vn/' có trang hiển thị toàn bộ sản phẩm là 'https://shop.webthethao.vn/collections/all'v 
+và nó sẽ crawl sản phẩm, thông tin sản phẩm, toàn bộ hình ảnh của nó trong trang chi tiết sản phẩm, danh mục của sản phẩm đó và tránh lỗi 'stale element reference'. 
+Các trường cần crawl và nằm trong file csv là name (tên sản phẩm), price (giá tiền của sản phẩm), description (phần mô tả chi tiết, nếu được thì gôm hết luôn trong mục mô tả sản phẩm), category (tên doanh mục sản phẩm), url_product(đường dẫn hướng tới trang chi tiết sản phẩm đó), images_list (đường dẫn hình ảnh, nhiều khi ảnh khi truy cập vào trang chi tiết sản phẩm, và những hình ảnh được ngăn cách với nhau bằng dấu ký tự ';\t' ). 
+Mỗi trường nằm trên mỗi cột riêng biệt thay vì nằm trong 1 cột duy nhất
+Nếu được thì bốc tách 10 chữ đầu của sản phẩm để điều chỉnh thành switch case sau đó phân ra thành danh mục sẵn các, các danh mục sẵn có bao gồm Bóng rổ, Cầu lông, Bóng chuyền, Bi-a, Bóng đá Futsal, Pickleball. 
+Ví dụ 'Giày Pickleball Nam Động Lực Jogarbola Endura "Navy" JG-23557-06 - Hàng Chính Hãng' có chữ giày pickle ball thì sẽ chuyển vào danh mục pickleball
+Tôi muốn crawl mỗi danh mục có tối thiểu là 20 sản phẩm, tổng số sản phẩm tối thiểu là 100, nếu sau khi crawl theo tiêu chí mỗi danh mục 10 sản phẩm mà vẫn dưới 100, thì crawl sản phẩm ngẫu nhiên khác, 
+nếu trong một trang chỉ có dưới 100 sản phẩm, thì khi crawl hết sản phẩm của trang đó, sẽ đổi qua trang tiếp theo và tiếp tục crawl, cho tới khi nào tổng toàn bộ sản phẩm crawl là 100 hoặc nhiều hơn thì thôi. Ví dụ như crawl trang 1 chỉ được có 30 sản phẩm, thì tiếp tục qua trang 2 là 30 sản phẩm nữa, sau đó tổng lại là 60, vẫn dưới 100, tiếp tục qua trang 3, sau khi hoàn thành crawl hết trang 3 vẫn là 90, thì tiếp tục trang 4, sau khi crawl hết trang 4 là 120 thì mới đạt yêu cầu. 
+Lưu ý, chỉ được kiểm đếm tổng số sản phẩm crawl vào cuối trang, và phải tránh web site nhận ra là mình đang crawl và rồi block mình nữa, sau cho sản phẩm là khác nhau, sau khi crawl xong thì nó sẽ được lưu vào file csv. Thẻ của 1 sản phẩm được hiển thị ở trang product-list như sau:
+<div class="col-6 col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+				<div class="item_product_main">
+<form action="/cart/add" method="post" class="variants product-action" data-id="product-actions-46491527" enctype="multipart/form-data">
+	<a class="image_thumb scale_hover" href="/giay-pickleball-nam-dong-luc-jogarbola-endura-navy-jg-23557-06-hang-chinh-hang" title="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng">
+		<img width="480" height="480" class="lazyload image1 loaded" src="//bizweb.dktcdn.net/thumb/large/100/485/982/products/1-1747208033478.jpg?v=1747208036877" data-src="//bizweb.dktcdn.net/thumb/large/100/485/982/products/1-1747208033478.jpg?v=1747208036877" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-was-processed="true">
+	</a>
+	<div class="group_action">
+		<input class="hidden" type="hidden" name="variantId" value="147352711">
+		<button class="btn-anima hidden-xs btn btn-cart btn-left  btn btn-views left-to" title="Xem chi tiết" type="button" onclick="window.location.href='/giay-pickleball-nam-dong-luc-jogarbola-endura-navy-jg-23557-06-hang-chinh-hang'">
+			<img width="24" height="24" src="//bizweb.dktcdn.net/100/485/982/themes/918620/assets/card-option.svg?1744272864259" alt="Xem chi tiết">
+		</button>
+		<a title="Xem nhanh" href="/giay-pickleball-nam-dong-luc-jogarbola-endura-navy-jg-23557-06-hang-chinh-hang" data-handle="giay-pickleball-nam-dong-luc-jogarbola-endura-navy-jg-23557-06-hang-chinh-hang" class="btn-anima hidden-xs xem_nhanh btn-circle btn-views btn_view btn right-to quick-view">
+			<img width="24" height="24" src="//bizweb.dktcdn.net/100/485/982/themes/918620/assets/view.svg?1744272864259" alt="Xem nhanh">
+		</a>
+		<a href="javascript:void(0)" class="setWishlist btn-anima hidden-xs" data-wish="giay-pickleball-nam-dong-luc-jogarbola-endura-navy-jg-23557-06-hang-chinh-hang" tabindex="0" title="Thêm vào yêu thích">
+			<img width="24" height="24" src="//bizweb.dktcdn.net/100/485/982/themes/918620/assets/heart.svg?1744272864259" alt="Thêm vào yêu thích"> 
+		</a>
+	</div>
+</form>
+<div class="product-info">
+	<h3 class="product-name"><a href="/giay-pickleball-nam-dong-luc-jogarbola-endura-navy-jg-23557-06-hang-chinh-hang" title="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng">Giày Pickleball Nam Động Lực Jogarbola Endura "Navy" JG-23557-06 - Hàng Chính Hãng</a></h3>
+	<div class="price-box">
+		<span class="price">899.000₫</span>
+		<span class="compare-price">950.000₫</span>
+		<div class="sale-label"><span class="smart">- 5% </span></div>
+	</div>
+</div>	
+				</div>
+			</div>
+còn đây là phần html hiển thị tiêu đề, hình ảnh, giá thành của sản phẩm trong trang chi tiết sản phẩm
+<div class="col-lg-9 col-col-md-9 col-sm-12 col-xs-12">
+					<div class="box-pad ">
+						<h1 class="title-product">Giày Pickleball Nam Động Lực Jogarbola Endura "Navy" JG-23557-06 - Hàng Chính Hãng</h1>
+						<div class="row">
+							<div class="product-detail-left product-images col-12 col-md-5 col-lg-5">
+								<div class="product-image-block relative">
+									<div class="swiper-container gallery-top swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events">
+										<div class="swiper-wrapper" id="lightgallery">
+											<a class="swiper-slide swiper-slide-active" data-hash="0" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/1-1747208033478.jpg?v=1747208036877" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/1-1747208033478.jpg?v=1747208036877" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/1-1747208033478.jpg?v=1747208036877" class="img-responsive mx-auto d-block swiper-lazy swiper-lazy-loaded">
+											</a>
+											<a class="swiper-slide swiper-slide-next" data-hash="1" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/2-1747208033483.jpg?v=1747208038430" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/2-1747208033483.jpg?v=1747208038430" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/2-1747208033483.jpg?v=1747208038430" class="img-responsive mx-auto d-block swiper-lazy">
+											</a>
+											<a class="swiper-slide" data-hash="2" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/3-1747208033487.jpg?v=1747208039143" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/3-1747208033487.jpg?v=1747208039143" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/3-1747208033487.jpg?v=1747208039143" class="img-responsive mx-auto d-block swiper-lazy">
+											</a>
+											<a class="swiper-slide" data-hash="3" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/4-1747208033491.jpg?v=1747208039940" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/4-1747208033491.jpg?v=1747208039940" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/4-1747208033491.jpg?v=1747208039940" class="img-responsive mx-auto d-block swiper-lazy">
+											</a>
+											<a class="swiper-slide" data-hash="4" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/5-1747208033498.jpg?v=1747208040773" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/5-1747208033498.jpg?v=1747208040773" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/5-1747208033498.jpg?v=1747208040773" class="img-responsive mx-auto d-block swiper-lazy">
+											</a>
+											<a class="swiper-slide" data-hash="5" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/6-1747208033503.jpg?v=1747208041740" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/6-1747208033503.jpg?v=1747208041740" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/6-1747208033503.jpg?v=1747208041740" class="img-responsive mx-auto d-block swiper-lazy">
+											</a>
+											<a class="swiper-slide" data-hash="6" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/7-1747208033508.jpg?v=1747208042670" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/7-1747208033508.jpg?v=1747208042670" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/7-1747208033508.jpg?v=1747208042670" class="img-responsive mx-auto d-block swiper-lazy">
+											</a>
+											<a class="swiper-slide" data-hash="7" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/8-1747208033515.jpg?v=1747208043593" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/8-1747208033515.jpg?v=1747208043593" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/8-1747208033515.jpg?v=1747208043593" class="img-responsive mx-auto d-block swiper-lazy">
+											</a>
+											<a class="swiper-slide" data-hash="8" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/9-1747208033531.jpg?v=1747208044657" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/9-1747208033531.jpg?v=1747208044657" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/9-1747208033531.jpg?v=1747208044657" class="img-responsive mx-auto d-block swiper-lazy">
+											</a>
+											<a class="swiper-slide" data-hash="9" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/10-1747208033536.jpg?v=1747208045217" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/10-1747208033536.jpg?v=1747208045217" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/10-1747208033536.jpg?v=1747208045217" class="img-responsive mx-auto d-block swiper-lazy">
+											</a>
+											<a class="swiper-slide" data-hash="10" href="//bizweb.dktcdn.net/thumb/1024x1024/100/485/982/products/11-1747208033545.jpg?v=1747208046423" title="Click để xem" style="width: 343px;">
+												<img height="716" width="930" src="https://bizweb.dktcdn.net/100/485/982/products/11-1747208033545.jpg?v=1747208046423" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="https://bizweb.dktcdn.net/100/485/982/products/11-1747208033545.jpg?v=1747208046423" class="img-responsive mx-auto d-block swiper-lazy">
+											</a>
+										</div>
+										<div class="swiper-button-next"></div>
+										<div class="swiper-button-prev swiper-button-disabled"></div>
+									</div>
+									<div class="swiper-container gallery-thumbs swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events swiper-container-free-mode swiper-container-thumbs">
+										<div class="swiper-wrapper">
+											<div class="swiper-slide swiper-slide-visible swiper-slide-active swiper-slide-thumb-active" data-hash="0" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/1-1747208033478.jpg?v=1747208036877" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/1-1747208033478.jpg?v=1747208036877" class="swiper-lazy swiper-lazy-loaded">
+												</div>	
+											</div>
+											<div class="swiper-slide swiper-slide-visible swiper-slide-next" data-hash="1" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/2-1747208033483.jpg?v=1747208038430" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/2-1747208033483.jpg?v=1747208038430" class="swiper-lazy swiper-lazy-loaded">
+												</div>	
+											</div>
+											<div class="swiper-slide swiper-slide-visible" data-hash="2" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/3-1747208033487.jpg?v=1747208039143" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/3-1747208033487.jpg?v=1747208039143" class="swiper-lazy swiper-lazy-loaded">
+												</div>	
+											</div>
+											<div class="swiper-slide swiper-slide-visible" data-hash="3" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/4-1747208033491.jpg?v=1747208039940" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/4-1747208033491.jpg?v=1747208039940" class="swiper-lazy swiper-lazy-loaded">
+												</div>	
+											</div>
+											<div class="swiper-slide" data-hash="4" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/5-1747208033498.jpg?v=1747208040773" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/5-1747208033498.jpg?v=1747208040773" class="swiper-lazy">
+												</div>	
+											</div>
+											<div class="swiper-slide" data-hash="5" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/6-1747208033503.jpg?v=1747208041740" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/6-1747208033503.jpg?v=1747208041740" class="swiper-lazy">
+												</div>	
+											</div>
+											<div class="swiper-slide" data-hash="6" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/7-1747208033508.jpg?v=1747208042670" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/7-1747208033508.jpg?v=1747208042670" class="swiper-lazy">
+												</div>	
+											</div>
+											<div class="swiper-slide" data-hash="7" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/8-1747208033515.jpg?v=1747208043593" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/8-1747208033515.jpg?v=1747208043593" class="swiper-lazy">
+												</div>	
+											</div>
+											<div class="swiper-slide" data-hash="8" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/9-1747208033531.jpg?v=1747208044657" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/9-1747208033531.jpg?v=1747208044657" class="swiper-lazy">
+												</div>	
+											</div>
+											<div class="swiper-slide" data-hash="9" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/10-1747208033536.jpg?v=1747208045217" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/10-1747208033536.jpg?v=1747208045217" class="swiper-lazy">
+												</div>	
+											</div>
+											<div class="swiper-slide" data-hash="10" style="width: 78.25px; margin-right: 10px;">
+												<div class="p-100">
+													<img height="80" width="80" src="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/11-1747208033545.jpg?v=1747208046423" alt="Giày Pickleball Nam Động Lực Jogarbola Endura &quot;Navy&quot; JG-23557-06 - Hàng Chính Hãng" data-image="//bizweb.dktcdn.net/thumb/medium/100/485/982/products/11-1747208033545.jpg?v=1747208046423" class="swiper-lazy">
+												</div>	
+											</div>
+										</div>
+										<div class="swiper-button-next"></div>
+										<div class="swiper-button-prev swiper-button-disabled"></div>
+									</div>
+								</div>
+							</div>
+							<div class="details-pro col-12 col-md-7 col-lg-7">
+								<div class="product-top clearfix">
+									<div class="sku-product clearfix">
+										<span class="d-none" itemprop="brand" itemtype="http://schema.org/Brand" itemscope=""><meta itemprop="name" content="Động Lực">Thương hiệu: <strong>Động Lực</strong></span>
+										<span class="variant-sku" itemprop="sku" content="JG-23557-06-39">Mã: <span class="a-sku">JG-23557-06-39</span></span><br>
+										<span class="d-none" itemprop="type" itemtype="http://schema.org/Type" itemscope=""><meta itemprop="name" content="Giày Pickleball">Chất liệu: <strong>Giày Pickleball</strong></span>
+									</div>
+								</div>
+								<form enctype="multipart/form-data" data-cart-form="" id="add-to-cart-form" action="/cart/add" method="post" class="form-inline">
+									<div class="inventory_quantity">
+										<span class="mb-break">
+											<span class="stock-brand-title">Thương hiệu:</span>
+											<span class="a-vendor">Động Lực
+											</span>
+										</span>
+									</div>
+									<div class="product-summary">
+										<div class="rte">
+											<em>Mô tả đang cập nhật</em>
+										</div>
+									</div>
+<div class="price-box clearfix">
+										<span class="special-price">
+											<span class="price product-price">899.000₫</span>
+											<meta itemprop="price" content="899000">
+											<meta itemprop="priceCurrency" content="VND">
+										</span> <!-- Giá Khuyến mại -->
+										<span class="old-price" itemprop="priceSpecification" itemscope="" itemtype="http://schema.org/priceSpecification">
+											<del class="price product-price-old">950.000₫</del>
+											<meta itemprop="price" content="950000">
+											<meta itemprop="priceCurrency" content="VND">
+										</span> <!-- Giá gốca -->
+										
+										<span class="label_product">Giảm 6%</span>
+</div>
+									<div class="form-product  ">
+										<div class="select-swatch">
+<script>$(window).load(function() { $('.selector-wrapper:eq(0)').hide(); });</script>
+<div class="swatch clearfix" data-option-index="0">
+	<div class="header">Kích thước: <span class="value-roperties">39</span></div>
+	<div data-value="39" class="swatch-element 39 available">
+		<input id="swatch-0-39" type="radio" name="option-0" value="39" checked="">
+		<label for="swatch-0-39">
+			39
+			<img class="crossed-out" src="//bizweb.dktcdn.net/100/485/982/themes/918620/assets/soldout.png?1744272864259" alt="39">
+		</label>
+	</div>
+	<script>
+		jQuery('.swatch[data-option-index="0"] .39').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+	</script>
+	<div data-value="40" class="swatch-element 40 available">
+		<input id="swatch-0-40" type="radio" name="option-0" value="40">
+		<label for="swatch-0-40">
+			40
+			<img class="crossed-out" src="//bizweb.dktcdn.net/100/485/982/themes/918620/assets/soldout.png?1744272864259" alt="40">
+		</label>
+	</div>
+	<script>
+		jQuery('.swatch[data-option-index="0"] .40').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+	</script>
+	<div data-value="41" class="swatch-element 41 available">
+		<input id="swatch-0-41" type="radio" name="option-0" value="41">
+		<label for="swatch-0-41">
+			41
+			<img class="crossed-out" src="//bizweb.dktcdn.net/100/485/982/themes/918620/assets/soldout.png?1744272864259" alt="41">
+		</label>
+	</div>
+	<script>
+		jQuery('.swatch[data-option-index="0"] .41').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+	</script>
+	<div data-value="42" class="swatch-element 42 available">
+		<input id="swatch-0-42" type="radio" name="option-0" value="42">
+		<label for="swatch-0-42">
+			42
+			<img class="crossed-out" src="//bizweb.dktcdn.net/100/485/982/themes/918620/assets/soldout.png?1744272864259" alt="42">
+		</label>
+	</div>
+	<script>
+		jQuery('.swatch[data-option-index="0"] .42').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+	</script>
+	<div data-value="43" class="swatch-element 43 available">
+		<input id="swatch-0-43" type="radio" name="option-0" value="43">
+		<label for="swatch-0-43">
+			43
+			<img class="crossed-out" src="//bizweb.dktcdn.net/100/485/982/themes/918620/assets/soldout.png?1744272864259" alt="43">
+		</label>
+	</div>
+	<script>
+		jQuery('.swatch[data-option-index="0"] .43').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+	</script>
+	<div data-value="44" class="swatch-element 44 available">
+		<input id="swatch-0-44" type="radio" name="option-0" value="44">
+		<label for="swatch-0-44">
+			44
+			<img class="crossed-out" src="//bizweb.dktcdn.net/100/485/982/themes/918620/assets/soldout.png?1744272864259" alt="44">
+		</label>
+	</div>
+	<script>
+		jQuery('.swatch[data-option-index="0"] .44').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+	</script>
+</div>
+										</div>
+										<div class="box-variant clearfix  d-none ">
+											<div class="selector-wrapper" style="text-align: left; margin-bottom: 15px; display: none;"><label>Kích thước</label><select class="single-option-selector" data-option="option1" id="product-selectors-option-0"><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option></select></div><select id="product-selectors" class="form-control form-control-lg" name="variantId" style="display:none">
+												<option selected="selected" value="147352711">39 - 899.000₫</option>
+												<option value="147352925">40 - 899.000₫</option>
+												<option value="147352928">41 - 899.000₫</option>
+												<option value="147352930">42 - 899.000₫</option>
+												<option value="147352932">43 - 899.000₫</option>
+												<option value="147352934">44 - 899.000₫</option>
+											</select>
+										</div>
+										<div class="clearfix form-group">
+											<div class="flex-quantity">
+												<div class="custom custom-btn-number show">
+													<div class="input_number_product">									
+														<button class="btn_num num_1 button button_qty" onclick="var result = document.getElementById('qtym'); var qtypro = result.value; if( !isNaN( qtypro ) &amp;&amp; qtypro > 1 ) result.value--;return false;" type="button">−</button>
+														<input type="text" id="qtym" name="quantity" value="1" maxlength="3" class="form-control prd_quantity" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" onchange="if(this.value == 0)this.value=1;">
+														<button class="btn_num num_2 button button_qty" onclick="var result = document.getElementById('qtym'); var qtypro = result.value; if( !isNaN( qtypro )) result.value++;return false;" type="button"><span>+</span></button>
+													</div>
+												</div>
+												<div class="btn-mua button_actions clearfix">
+													<button type="submit" class="btn btn_base normal_button btn_add_cart add_to_cart btn-cart"><span class="txt-main">Thêm vào giỏ hàng</span></button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								<div class="clearfix"></div>
+								<div class="clearfix"></div>
+<div class="product-coupon__wrapper my-3">
+	<strong class="d-block mb-2">Các mã giảm giá có thể áp dụng: </strong>
+	<div class="product-coupons coupon-toggle-btn">
+		<div class="coupon_item lite">
+			<div class="coupon_content">
+				WTT100
+			</div>
+		</div>
+		<div class="coupon_item lite">
+			<div class="coupon_content">
+				WTT200
+			</div>
+		</div>
+		<div class="coupon_item lite">
+			<div class="coupon_content">
+				PLP2025
+			</div>
+		</div>
+		<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="svg-inline--fa fa-chevron-right fa-w-10"><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" class=""></path></svg>
+	</div>
+</div>
+<div id="modal-coupon-product" class="modalcoupon-product" style="display:none;">
+	<div class="modalcoupon-overlay fancybox-overlay fancybox-overlay-fixed"></div>
+	<div class="modal-coupon-product">
+		<div class="row">
+			<div class="col-md-12 col-12">
+				<div class="chosee_size">
+					<p class="title-size">MÃ KHUYẾN MÃI</p>
+				</div>
+				<div class="box-cpou-dk ">
+					<div class="item_list_coupon">
+						<div class="money_coupon">
+							100K
+						</div>
+						<div class="content_coupon">
+							<div class="boz-left">
+								<div class="zip_coupon">
+									Mã giảm giá <b>WTT100</b>
+								</div>
+								<div class="noidung_coupon">
+									Nhập mã WTT100 giảm ngay 100K
+								</div>
+							</div>
+							<div class="boz-right">
+								<button class="btn dis_copy" data-copy="WTT100">
+									<span>Sao chép</span>
+								</button>
+								<div class="dk_btn dk_btn_2">
+									<span>Điều kiện</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="contet_dk contet_dk_2">
+						Áp dụng cho các đơn hàng có tổng giá trị lớn hơn 1.500.000đ. Áp dụng tới hết ngày 20/03/2025
+					</div>
+				</div>
+				<div class="box-cpou-dk ">
+					<div class="item_list_coupon">
+						<div class="money_coupon">
+							200K
+						</div>
+						<div class="content_coupon">
+							<div class="boz-left">
+								<div class="zip_coupon">
+									Mã giảm giá <b>WTT200</b>
+								</div>
+								<div class="noidung_coupon">
+									Nhập mã WTT200 giảm ngay 200K
+								</div>
+							</div>
+							<div class="boz-right">
+								<button class="btn dis_copy" data-copy="WTT200">
+									<span>Sao chép</span>
+								</button>
+								<div class="dk_btn dk_btn_3">
+									<span>Điều kiện</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="contet_dk contet_dk_3">
+						Áp dụng cho các đơn hàng có tổng giá trị lớn hơn 2.500.000đ. Áp dụng tới hết ngày 20/03/2025
+					</div>
+				</div>
+				<div class="box-cpou-dk last-cpou">
+					<div class="item_list_coupon">
+						<div class="money_coupon">
+							Giảm 5%
+						</div>
+						<div class="content_coupon">
+							<div class="boz-left">
+								<div class="zip_coupon">
+									Mã giảm giá <b>PLP2025</b>
+								</div>
+								<div class="noidung_coupon">
+									Giảm 5% cho tất cả sản phẩm bi-a. Áp dụng đến hết ngày 27/3/2025.
+								</div>
+							</div>
+							<div class="boz-right">
+								<button class="btn dis_copy" data-copy="PLP2025">
+									<span>Sao chép</span>
+								</button>
+								<div class="dk_btn dk_btn_4">
+									<span>Điều kiện</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="contet_dk contet_dk_4">
+						Chỉ áp dụng cho sản phẩm bi-a.
+					</div>
+				</div>
+			</div>
+		</div>
+		<a title="Close" class="modalcoupon-close close-window" href="javascript:;">
+			<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="svg-inline--fa fa-times fa-w-10"><path fill="currentColor" d="M207.6 256l107.72-107.72c6.23-6.23 6.23-16.34 0-22.58l-25.03-25.03c-6.23-6.23-16.34-6.23-22.58 0L160 208.4 52.28 100.68c-6.23-6.23-16.34-6.23-22.58 0L4.68 125.7c-6.23 6.23-6.23 16.34 0 22.58L112.4 256 4.68 363.72c-6.23 6.23-6.23 16.34 0 22.58l25.03 25.03c6.23 6.23 16.34 6.23 22.58 0L160 303.6l107.72 107.72c6.23 6.23 16.34 6.23 22.58 0l25.03-25.03c6.23-6.23 6.23-16.34 0-22.58L207.6 256z" class=""></path></svg>
+		</a>
+	</div>
+</div>
+<script>
+	$(document).on('click', '.modalcoupon-close, #modal-coupon-product .modalcoupon-overlay, .fancybox-overlay', function(e){
+		$("#modal-coupon-product").fadeOut(0);
+		awe_hidePopup();
+	});
+	$(document).ready(function ($){
+		var modal = $('.modalcoupon-product');
+		var btn = $('.coupon-toggle-btn');
+		var span = $('.modalcoupon-close');
+		btn.click(function () {
+			modal.show();
+		});
+		span.click(function () {
+			modal.hide();
+		});
+		$(window).on('click', function (e) {
+			if ($(e.target).is('.modal')) {
+				modal.hide();
+			}
+		});
+	});
+	$('.dk_btn_1').click(function () {
+		$('.contet_dk_1').slideToggle();
+		return false;
+	});
+	$('.dk_btn_2').click(function () {
+		$('.contet_dk_2').slideToggle();
+		return false;
+	});
+	$('.dk_btn_3').click(function () {
+		$('.contet_dk_3').slideToggle();
+		return false;
+	});
+	$('.dk_btn_4').click(function () {
+		$('.contet_dk_4').slideToggle();
+		return false;
+	});
+	$(document).on('click', '.dis_copy',function(e){
+		e.preventDefault();
+		var copyText = $(this).attr('data-copy');
+		var copyTextarea = document.createElement("textarea");
+		copyTextarea.textContent = copyText;
+		document.body.appendChild(copyTextarea);
+		copyTextarea.select();
+		document.execCommand("copy"); 
+		document.body.removeChild(copyTextarea);
+		var cur_text = $(this).text();
+		var $cur_btn = $(this);
+		$(this).addClass("disabled");
+		$(this).text("Đã lưu");
+		$(this).parent().addClass('active');
+		setTimeout(function(){
+			$cur_btn.removeClass("disabled");
+			$cur_btn.parent().removeClass('active');
+			$cur_btn.text(cur_text);
+		},2500)
+	})
+</script>
+								<div class="clearfix"></div>
+<div class="box-free-ship not-add-to-cart">
+	<div class="progress js-free-shipping" data-value="500000">
+		<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+		<span class="free-shipping-content js-free-shipping-text"></span>
+	</div>
+</div>
+							</div>
+						</div>
+					</div>
+				</div>
+còn đây là phần hiển thị mô tả sản phẩm 
+<div class=" col-sm-12 col-xs-12">
+					<div class="box-pad-no">
+<div class="product-tab e-tabs not-dqtab">
+	<ul class="tabs tabs-title clearfix">	
+		<li class="tab-link active" data-tab="#tab-1">
+			<h3>Mô tả sản phẩm</h3>
+		</li>																	
+	</ul>																									
+	<div class="tab-float">
+		<div id="tab-1" class="tab-content active content_extab">
+			<div class="rte product_getcontent">
+				<div id="content">
+					<p><strong>Giày Pickleball Jogarbola Endura – Bảo Vệ Chân, Lên Sân Tự Tin</strong></p>
+<p>Giày Pickleball Jogarbola Endura là lựa chọn hoàn hảo cho người chơi bán chuyên và phong trào, mang đến sự thoải mái, ổn định và hiệu suất vượt trội trên sân. Với thiết kế tối giản, dễ phối đồ cùng những công nghệ hiện đại, đôi giày này giúp bạn làm chủ từng bước di chuyển.</p>
+<p><strong>Đặc điểm nổi bật</strong></p>
+<p>Upper TPU kết hợp Microfiber bền bỉ cùng lưới thoáng khí, mang lại độ ôm chân vừa vặn và sự thông thoáng tối đa.</p>
+<p>Công nghệ J-Foam – Đế Phylon đàn hồi tốt, giảm chấn hiệu quả, mang lại cảm giác nhẹ nhàng và êm ái trong từng bước di chuyển.</p>
+<p>Công nghệ J-Rubber – Đế cao su tăng cường ma sát, chống trơn trượt, giúp bạn luôn vững vàng trên mọi mặt sân.</p>
+<p>Công nghệ J-Lock – Thanh TPU chống vặn xoắn, hạn chế lật cổ chân, tối ưu phản lực khi di chuyển và đổi hướng nhanh.</p>
+<p><strong>Thông số kỹ thuật</strong></p>
+<p><strong>Chất liệu</strong>: TPU, Microfiber, vải lưới</p>
+<p><strong>Màu</strong>: Beige, Navy, White</p>
+<p><strong>Size</strong>: 39-44</p>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+					</div>
+				</div>

@@ -54,8 +54,8 @@ main {
 }
 .btn-toggle:hover,
 .btn-toggle:focus {
-	color: rgba(0, 0, 0, 0.85);
-	background-color: #d2f4ea;
+	// color: rgba(0, 0, 0, 0.85);
+	color: var(--accent-color) !important;
 }
 
 .btn-toggle::before {
@@ -82,7 +82,7 @@ main {
 }
 .btn-toggle-nav a:hover,
 .btn-toggle-nav a:focus {
-	background-color: #d2f4ea;
+	color: var(--accent-color) !important;
 }
 
 .scrollarea {
@@ -104,4 +104,12 @@ img {
 
 i {
 	font-size: 14px;
+}
+
+a.active {
+  color: var(--accent-color) !important;
+}
+
+::ng-deep .no-caret::before {
+  content: none !important;
 }

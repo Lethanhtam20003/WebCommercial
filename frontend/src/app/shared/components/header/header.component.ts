@@ -17,7 +17,7 @@ import { AuthService } from '../../../core/service/auth.service';
 	standalone: true,
 	imports: [RouterModule, FormsModule, ReactiveFormsModule, CommonModule],
 	templateUrl: './header.component.html',
-	styleUrls: ['./header.component.scss', './header.scss'],
+	styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
 	logo: string = 'assets/images/shop/logo.png';

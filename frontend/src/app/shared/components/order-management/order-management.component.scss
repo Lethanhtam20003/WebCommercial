@@ -1,0 +1,11 @@
+.btn-inactive {
+	background-color: var(--primary-text-color);
+	border-color: var(--primary-color);
+	color: var(--primary-color);
+}
+
+.btn-active {
+	background-color: var(--primary-color);
+	border-color: var(--primary-text-color);
+	color: var(--primary-text-color);
+}
