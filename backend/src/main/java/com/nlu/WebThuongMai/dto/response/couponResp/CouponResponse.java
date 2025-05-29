@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto.response.OrderResp;
+package com.nlu.WebThuongMai.dto.response.couponResp;
 
 import com.nlu.WebThuongMai.enums.CouponStatus;
 import com.nlu.WebThuongMai.enums.CouponType;

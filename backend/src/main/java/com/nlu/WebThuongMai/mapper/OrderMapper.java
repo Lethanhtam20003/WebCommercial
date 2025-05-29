@@ -1,6 +1,6 @@
 package com.nlu.WebThuongMai.mapper;
 
-import com.nlu.WebThuongMai.dto.request.orderReq.OrderCreateRequest;
+import com.nlu.WebThuongMai.dto.response.OrderResp.OrderItemResponse;
 import com.nlu.WebThuongMai.dto.response.OrderResp.OrderResponse;
 import com.nlu.WebThuongMai.model.Order;
 import org.mapstruct.Mapper;
@@ -8,9 +8,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 
-import com.nlu.WebThuongMai.dto.response.orderResp.OrderItemResponse;
-import com.nlu.WebThuongMai.dto.response.orderResp.OrderResponse;
-import com.nlu.WebThuongMai.model.Order;
 import com.nlu.WebThuongMai.model.OrderItem;
 import com.nlu.WebThuongMai.model.ProductImage;
 import org.mapstruct.*;

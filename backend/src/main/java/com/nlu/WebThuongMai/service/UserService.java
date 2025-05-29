@@ -152,7 +152,7 @@ public class UserService {
     public User findUserById(@NotNull long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
+    }
     /**
      * Cập nhật thông tin cá nhân của người dùng hiện tại.
      *

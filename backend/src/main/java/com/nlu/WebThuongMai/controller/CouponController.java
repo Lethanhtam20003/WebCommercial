@@ -3,7 +3,7 @@ package com.nlu.WebThuongMai.controller;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
-import com.nlu.WebThuongMai.dto.response.OrderResp.CouponResponse;
+import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
 import com.nlu.WebThuongMai.service.CouponService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -44,7 +44,7 @@ public class CouponController {
      *
      * @return Danh sách mã giảm giá
      */
-    @GetMapping()
+    @GetMapping("/all")
     public ApiResponse<List<CouponResponse>> getAllCoupon() {
         return ApiResponse.<List<CouponResponse>>builder()
                 .result(service.getAllCoupon())
@@ -114,7 +114,7 @@ public class CouponController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ApiResponse.<Page<GetAllCouponResponse>>builder()
-                .result(couponService.getAllCoupons(pageable))
+                .result(service.getAllCoupons(pageable))
                 .build();
     }
 

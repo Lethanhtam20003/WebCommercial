@@ -1,10 +1,11 @@
 package com.nlu.WebThuongMai.mapper;
 
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
-import com.nlu.WebThuongMai.dto.response.OrderResp.CouponResponse;
+import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.GetAllCouponResponse;
 import com.nlu.WebThuongMai.model.Coupon;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 

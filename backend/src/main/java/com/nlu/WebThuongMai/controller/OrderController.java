@@ -5,15 +5,12 @@ import com.nlu.WebThuongMai.dto.request.orderReq.OrderUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.OrderResp.OrderResponse;
 import com.nlu.WebThuongMai.dto.request.orderReq.OrderFilterRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
-import com.nlu.WebThuongMai.dto.response.orderResp.OrderResponse;
-import com.nlu.WebThuongMai.enums.OrderStatus;
 import com.nlu.WebThuongMai.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +28,7 @@ class OrderController {
     OrderService service;
 
     // tạo đơn hàng
-    @PostMapping()
+    @PostMapping("/create")
     public ApiResponse<OrderResponse> createOrder(@RequestBody @Valid OrderCreateRequest request) {
         return ApiResponse.<OrderResponse>builder()
                 .result(service.createOrder(request))
@@ -107,7 +104,7 @@ class OrderController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ApiResponse.<Page<OrderResponse>>builder()
-                .result(orderService.getOrdersById(userId, pageable))
+                .result(service.getOrdersById(userId, pageable))
                 .build();
     }
 
@@ -115,7 +112,7 @@ class OrderController {
     @PostMapping()
     public ApiResponse<Page<OrderResponse>> getOrdersByUserIdAndStatus(@RequestBody OrderFilterRequest orderFilterRequest) {
         return ApiResponse.<Page<OrderResponse>>builder()
-                .result(orderService.findOrdersByUserIdAndStatus(orderFilterRequest))
+                .result(service.findOrdersByUserIdAndStatus(orderFilterRequest))
                 .build();
     }
 
@@ -131,7 +128,7 @@ class OrderController {
     @GetMapping("/filter/admin")
     public ApiResponse<List<OrderResponse>> getAdminOrders(@RequestBody OrderFilterRequest request) {
         return ApiResponse.<List<OrderResponse>>builder()
-                .result(orderService.filterOrdersByAdmin(request))
+                .result(service.filterOrdersByAdmin(request))
                 .build();
     }
 }

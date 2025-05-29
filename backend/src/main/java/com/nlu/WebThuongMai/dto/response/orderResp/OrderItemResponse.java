@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto.response.orderResp;
+package com.nlu.WebThuongMai.dto.response.OrderResp;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderItemResponse {
+    Long id;
+    long productId;
     String productImage;
     String productName;
     Integer quantity;

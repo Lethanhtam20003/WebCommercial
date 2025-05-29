@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto.response.orderResp;
+package com.nlu.WebThuongMai.dto.response.OrderResp;
 
 import com.nlu.WebThuongMai.enums.OrderStatus;
 import lombok.*;
@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +20,5 @@ public class OrderResponse {
     OrderStatus status;
     String note;
     LocalDateTime createdDate;
+    Set<OrderItemResponse> orderItems;
 }
