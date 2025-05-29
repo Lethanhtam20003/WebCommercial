@@ -7,6 +7,7 @@ import com.nlu.WebThuongMai.dto.response.OrderResp.CouponResponse;
 import com.nlu.WebThuongMai.enums.CouponType;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
+import com.nlu.WebThuongMai.dto.response.couponResp.GetAllCouponResponse;
 import com.nlu.WebThuongMai.mapper.CouponMapper;
 import com.nlu.WebThuongMai.model.Coupon;
 import com.nlu.WebThuongMai.repository.CouponRepository;
@@ -14,6 +15,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -87,4 +93,7 @@ public class CouponService {
 
         return total.subtract(discountAmount).max(BigDecimal.ZERO);
     }
+    public Page<GetAllCouponResponse> getAllCoupons(Pageable pageable) {
+    Page<Coupon> couponPage = couponRepository.findAll(pageable);
+    return couponPage.map(couponMapper::toGetAllCouponResponse);}
 }

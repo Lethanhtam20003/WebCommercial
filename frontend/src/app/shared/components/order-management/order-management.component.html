@@ -1,0 +1,14 @@
+<div class="container mt-4 vh-100">
+	<ng-container *ngIf="!selectedOrder; else detailTemplate">
+		<h2 class="mb-4">Quản lý đơn hàng</h2>
+		<order-list
+			[orders]="orders"
+			(viewOrder)="onViewOrder($event)"
+		></order-list>
+	</ng-container>
+	<ng-template #detailTemplate>
+		<ng-container *ngIf="selectedOrder as order">
+			<order-detail [order]="order" [orderItems]="selectedOrderItems" (back)="onBack()"></order-detail>
+		</ng-container>
+	</ng-template>
+</div>

@@ -1,8 +1,12 @@
 package com.nlu.WebThuongMai.controller;
 
+import com.nlu.WebThuongMai.dto.request.userReq.UserChangePasswordRequest;
 import com.nlu.WebThuongMai.dto.request.userReq.UserCreationRequest;
+import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateInfoRequest;
 import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
+import com.nlu.WebThuongMai.dto.response.userResp.UserChangePasswordResponse;
+import com.nlu.WebThuongMai.dto.response.userResp.UserInforResponse;
 import com.nlu.WebThuongMai.dto.response.userResp.UserResponse;
 import com.nlu.WebThuongMai.service.UserService;
 import jakarta.validation.Valid;
@@ -93,9 +97,37 @@ public class UserController {
      * @return Thông tin của người dùng đang đăng nhập
      */
     @GetMapping("/myInfo")
-    ApiResponse<UserResponse> getMyInf() {
-        return ApiResponse.<UserResponse>builder()
+    ApiResponse<UserInforResponse> getMyInf() {
+        return ApiResponse.<UserInforResponse>builder()
                 .result(userService.getMyInf())
+                .build();
+    }
+
+    /**
+     * Cập nhật thông tin cá nhân của người dùng.
+     *
+     * @param userId  ID của người dùng cần cập nhật (xác thực từ token)
+     * @param request Dữ liệu thông tin mới của người dùng
+     * @return ApiResponse chứa thông tin người dùng sau khi cập nhật
+     */
+    @PutMapping("/myInfo/{userId}")
+    ApiResponse<UserInforResponse> updateMyInfoUser(@PathVariable long userId, @Valid @RequestBody UserUpdateInfoRequest request) {
+        return ApiResponse.<UserInforResponse>builder()
+                .result(userService.updateMyUserInfo(userId, request))
+                .build();
+    }
+
+    /**
+     * Thay đổi mật khẩu của người dùng sau khi xác thực mật khẩu cũ.
+     *
+     * @param userId  ID của người dùng cần đổi mật khẩu
+     * @param request Dữ liệu gồm mật khẩu cũ và mật khẩu mới
+     * @return ApiResponse chứa kết quả sau khi đổi mật khẩu thành công
+     */
+    @PutMapping("/myInfo/change-password/{userId}")
+    ApiResponse<UserChangePasswordResponse> updateUserPassword(@PathVariable long userId, @Valid @RequestBody UserChangePasswordRequest request) {
+        return ApiResponse.<UserChangePasswordResponse>builder()
+                .result(userService.updateUserPassword(userId, request))
                 .build();
     }
 }

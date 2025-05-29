@@ -12,6 +12,11 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.nlu.WebThuongMai.dto.response.couponResp.GetAllCouponResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -99,5 +104,18 @@ public class CouponController {
                 .build();
     }
 
+
+
+    @GetMapping()
+    @PreAuthorize("hasAuthority('USER')")
+    public ApiResponse<Page<GetAllCouponResponse>> getOrderItems(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ApiResponse.<Page<GetAllCouponResponse>>builder()
+                .result(couponService.getAllCoupons(pageable))
+                .build();
+    }
 
 }

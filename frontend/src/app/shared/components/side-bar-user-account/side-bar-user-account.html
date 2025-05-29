@@ -1,0 +1,91 @@
+<div class="flex-shrink-0 bg-white" style="width: 250px; min-width: 250px">
+	<div class="d-flex align-items-center">
+		<!-- Avatar -->
+		<div class="flex-shrink-0">
+			<img
+				class="img-account-profile rounded-circle"
+				[src]="this.currentImage"
+			/>
+		</div>
+		<div class="flex-grow-1 ps-3 d-flex flex-column justify-content-center">
+			<span class="fw-semibold" style="font-size: 20px"
+				>{{this.displayName}}</span
+			>
+			<a
+				[routerLink]="['/', routes.profileRoute]"
+				class="text-decoration-none text-secondary"
+				style="font-size: 15px"
+			>
+				<i class="bi bi-pencil-fill me-1"></i>
+				{{label.updateUserProfile}}
+			</a>
+		</div>
+	</div>
+	<ul class="list-unstyled ps-0 pt-4">
+		<li class="mb-1">
+			<button
+				class="btn btn-toggle align-items-center rounded collapsed"
+				data-bs-toggle="collapse"
+				data-bs-target="#home-collapse"
+				aria-expanded="true"
+			>
+				{{label.myAccount}}
+			</button>
+			<div class="collapse show" id="home-collapse">
+				<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+					<li routerLinkActive="active">
+						<a
+							href="#"
+							class="link-dark rounded"
+							[routerLink]="'/' + routes.userRoute + '/' + routes.profileRoute"
+							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.profileRoute) }"
+							>{{label.userProfile}}</a
+						>
+					</li>
+					<li *ngIf="!isOAuthProvider()">
+						<a
+							class="link-dark rounded"
+							[routerLink]="'/' + routes.userRoute + '/' + routes.changePasswordRoute"
+							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.changePasswordRoute) }"
+							>{{label.changePassword}}</a
+						>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li class="mb-1">
+			<button
+				class="btn btn-toggle align-items-center rounded collapsed no-caret"
+				data-bs-toggle="collapse"
+				data-bs-target="#dashboard-collapse"
+				aria-expanded="false"
+			>
+        <a
+					[routerLink]="'/' + routes.userRoute + '/' + routes.orderRoute"
+					[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.orderRoute) }"
+					class="text-decoration-none text-secondary"
+					style="font-size: 15px"
+				>
+					{{label.order}}
+				</a>
+			</button>
+		</li>
+		<li class="mb-1">
+			<button
+				class="btn btn-toggle align-items-center rounded collapsed no-caret"
+				data-bs-toggle="collapse"
+				data-bs-target="#orders-collapse"
+				aria-expanded="false"
+			>
+				<a
+					[routerLink]="'/' + routes.userRoute + '/' + routes.couponRoute"
+					[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.couponRoute) }"
+					class="text-decoration-none text-secondary"
+					style="font-size: 15px"
+				>
+					{{label.couponList}}
+				</a>
+			</button>
+		</li>
+	</ul>
+</div>

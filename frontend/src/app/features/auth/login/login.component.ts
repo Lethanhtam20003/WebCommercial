@@ -1,6 +1,5 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LabelConstants } from '../../../shared/constants/label.constants';
 import { ErrorMessageConstants } from '../../../shared/constants/error-message.constants';
 import { NgClass, NgIf, CommonModule } from '@angular/common';
 import { RouteLink } from '../../../shared/constants/route-link';
@@ -8,6 +7,7 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { PopupMessageService } from '../../../core/service/popup-message.service';
 import { AuthService } from '../../../core/service/auth.service';
 import { AlertService } from '../../../core/service/alert.service';
+import { LabelConstants } from '../../../shared/constants/label.constants';
 
 @Component({
 	selector: 'login-component',

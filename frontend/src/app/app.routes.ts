@@ -49,28 +49,97 @@ const authRoutes: Routes = [
  * Định nghĩa các route được bảo vệ (yêu cầu đăng nhập)
  */
 const protectedRoutes: Routes = [
-  {
-    path: 'home',
-    loadComponent: () => import('./pages/home/home.component')
-      .then(m => m.HomeComponent),
-    title: 'home',
-    // canActivate: [AuthGuard],
-    data: {
-      showHeader: true,
-      showFooter: true,
-    }
-  },
-  {
-    path: RouteLink.profileRoute,
-    loadComponent: () => import('./shared/components/user-profile/user-profile.component').then(m=>m.UserProfileComponent),
-    title: LabelConstants.userProfile,
-    // canActivate: [AuthGuard],
-    data: {
-      showHeader: true,
-      showFooter: true,
-      breadcrumb: LabelConstants.userProfile
-    }
-  }
+	{
+		path: 'home',
+		loadComponent: () =>
+			import('./pages/home/home.component').then(m => m.HomeComponent),
+		title: 'home',
+		// canActivate: [AuthGuard],
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+	},
+	{
+		path: RouteLink.userRoute,
+		loadComponent: () =>
+			import('./shared/components/user-account/user-account.component').then(
+				m => m.UserAccountComponent
+			),
+		children: [
+			{
+				path: RouteLink.profileRoute,
+				loadComponent: () =>
+					import(
+						'./shared/components/user-profile/user-profile.component'
+					).then(m => m.UserProfileComponent),
+				title: LabelConstants.userProfile,
+				// canActivate: [AuthGuard],
+				data: {
+					showHeader: true,
+					showFooter: true,
+					breadcrumb: LabelConstants.userAccount,
+				},
+			},
+			{
+				path: RouteLink.changePasswordRoute,
+				loadComponent: () =>
+					import(
+						'./shared/components/change-password/change-password.component'
+					).then(m => m.ChangePasswordComponent),
+				title: LabelConstants.changePassword,
+				// canActivate: [AuthGuard],
+				data: {
+					showHeader: true,
+					showFooter: true,
+					breadcrumb: LabelConstants.userAccount,
+				},
+			},
+			{
+				path: RouteLink.orderRoute + '/:status',
+				loadComponent: () =>
+					import(
+						'./shared/components/order-management/order-management.component'
+					).then(m => m.OrderMamangementComponent),
+				title: LabelConstants.order,
+				// canActivate: [AuthGuard],
+				data: {
+					showHeader: true,
+					showFooter: true,
+					breadcrumb: LabelConstants.userAccount,
+				},
+			},
+      {
+				path: RouteLink.couponRoute,
+				loadComponent: () =>
+					import(
+						'./shared/components/coupon-list/coupon-list.component'
+					).then(m => m.CouponListComponent),
+				title: LabelConstants.couponList,
+				// canActivate: [AuthGuard],
+				data: {
+					showHeader: true,
+					showFooter: true,
+					breadcrumb: LabelConstants.userAccount,
+				},
+			},
+			{
+				path: '',
+				redirectTo: RouteLink.profileRoute,
+				pathMatch: 'full',
+				data: {
+					showHeader: true,
+					showFooter: true,
+					breadcrumb: LabelConstants.userProfile,
+				},
+			},
+			{
+				path: RouteLink.orderRoute,
+				redirectTo: `${RouteLink.orderRoute}/${RouteLink.allRoute}`,
+				pathMatch: 'full',
+			},
+		],
+	},
 ];
 
 /**
@@ -81,18 +150,16 @@ export const routes: Routes = [
 		path: '',
 		redirectTo: 'home',
 		pathMatch: 'full',
-	},	
+	},
 	...authRoutes,
 	...protectedRoutes,
 	{
-    path: 'admin',
-    loadChildren: () =>
-		import('./features/admin/admin.module').then(
-			m => m.AdminModule
-		),
+		path: 'admin',
+		loadChildren: () =>
+			import('./features/admin/admin.module').then(m => m.AdminModule),
 		title: 'Admin',
 		// canActivate: [AuthGuard],
-  	},
+	},
 	{
 		path: '**',
 		loadComponent: () =>

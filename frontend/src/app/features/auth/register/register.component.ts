@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit{
 	}
 	// Constants
 	ErrorMessage = ErrorMessageConstants;
-	
+
 	registerForm: FormGroup;
 	isLoading: boolean = false;
 	passwordFieldOut = false;
@@ -49,19 +49,19 @@ export class RegisterComponent implements OnInit{
 		const field = this.registerForm.get(fieldName);
 		return field ? field.invalid && (field.dirty || field.touched) : false;
 	}
-	
+
 	isPasswordFieldOut(): void {
 	  this.passwordFieldOut = true;
 	}
-	
+
 	isPasswordFieldIn(): void {
 	  this.passwordFieldOut = false;
 	}
-	
+
 	isReenterPasswordFieldOut(): void {
 	  this.reenterPasswordFieldOut = true;
 	}
-	
+
 	getErrorMessage(fieldName: string): string {
 		switch (fieldName) {
 			case 'username':
@@ -99,14 +99,14 @@ export class RegisterComponent implements OnInit{
 	}
 	getEmailOrPhoneErrorMessage(): string {
 		const emailControl = this.registerForm.get('emailOrPhone');
-	  
+
 		if (emailControl?.hasError('emailOrPhone')) {
 		  return 'Vui lòng nhập đúng định dạng email hoặc số điện thoại';
 		}
-	  
+
 		return '';
 	  }
-	  
+
 	getReEnterPassword(): string{
 		if (this.registerForm.get('reenterpassword')?.hasError('minlength')) {
 			return this.ErrorMessage.passwordHasAtLeast8Characters;
@@ -124,24 +124,24 @@ export class RegisterComponent implements OnInit{
 		if (!this.passwordFieldOut) {
 		  return true; // Đừng hiện lỗi sớm
 		}
-	  
+
 		const password = this.registerForm.get('password')?.value;
 		const reenter = this.registerForm.get('reenterpassword')?.value;
-	  
+
 		if (password && reenter && password !== reenter) {
 		  return false; // KHÔNG KHỚP → Hiện lỗi
 		}
-	  
+
 		return true; // Khớp hoặc chưa nhập đủ → Không lỗi
 	  }
-	  
+
 	ngOnInit(): void {
 	}
 	ngOnsubmit(){
 		this.isLoading = true;
 		if (this.registerForm.invalid) {
 			this.registerForm.markAllAsTouched();
-			this.isLoading = false; 
+			this.isLoading = false;
 			return;
 		}
 		const formData = this.registerForm.value;
@@ -152,11 +152,11 @@ export class RegisterComponent implements OnInit{
 			next: (response) => {
 				if (response.code === 200) {
 					this.alertService.success('Đăng ký thành công!');
-					this.isLoading = false; 
+					this.isLoading = false;
 					this.router.navigate([RouteLink.loginRoute], {
 						state: { username: username, password: password }
 					  });
-					  
+
 				} else {
 					this.isLoading = false;
 					this.alertService.error(response.message || 'Đăng ký thất bại!');
