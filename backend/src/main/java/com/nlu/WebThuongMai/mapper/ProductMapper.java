@@ -38,9 +38,6 @@ public interface ProductMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "categories", expression = "java(toCategorySet(product.getCategoryIds()))")
     @Mapping(target = "images", expression = "java(toProductImageSet(product.getImages()))")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "price", source = "price")
-    @Mapping(target = "description", source = "description")
     Product toProduct(ProductRequest product);
 
     default Set<Category> toCategorySet(Set<Long> ids) {
