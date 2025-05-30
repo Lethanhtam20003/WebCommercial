@@ -1,20 +1,20 @@
 package com.nlu.WebThuongMai.dto.response.OrderResp;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderItemResponse {
-    Long id;
+    long id;
     long productId;
-    String productImage;
-    String productName;
     Integer quantity;
     BigDecimal price;
 }
