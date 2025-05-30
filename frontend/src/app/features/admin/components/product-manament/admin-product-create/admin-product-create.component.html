@@ -1,135 +1,262 @@
-<div class="container mt-3">
-	<div class="card">
-		<div class="card-header bg-light">
-			<h5><i class="bi bi-plus-circle me-2"></i> Thêm mới sản phẩm</h5>
+<div class="admin-product-create">
+	<div class="container-fluid">
+		<div class="main-card card">
+			<!-- Header -->
+			<div class="card-header">
+				<h5>
+					<i class="bi bi-plus-circle-fill"></i>
+					Thêm mới sản phẩm
+				</h5>
+			</div>
+
+			<!-- Form Body -->
+			<div class="card-body">
+				<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+					<div class="row g-2">
+						
+						<!-- Tên sản phẩm -->
+						<div class="col-lg-6 col-md-12">
+							<div class="form-group">
+								<label class="form-label required">Tên sản phẩm</label>
+								<input
+									type="text"
+									class="form-control"
+									[class.is-invalid]="productForm.get('name')?.invalid && productForm.get('name')?.touched"
+									formControlName="name"
+									placeholder="Nhập tên sản phẩm..."
+								/>
+								@if (productForm.get('name')?.hasError('nameTaken')) {
+									<div class="error-message">
+										<i class="bi bi-exclamation-circle"></i>
+										Tên đã tồn tại, vui lòng chọn tên khác.
+									</div>
+								}
+								@if (productForm.get('name')?.hasError('required') && productForm.get('name')?.touched) {
+									<div class="error-message">
+										<i class="bi bi-exclamation-circle"></i>
+										Vui lòng nhập tên sản phẩm.
+									</div>
+								}
+							</div>
+						</div>
+
+						<!-- Giá sản phẩm -->
+						<div class="col-lg-6 col-md-12">
+							<div class="form-group">
+								<label class="form-label">Giá sản phẩm (VNĐ)</label>
+								<input 
+									type="number" 
+									class="form-control" 
+									formControlName="price"
+									placeholder="0"
+									min="0"
+								/>
+							</div>
+						</div>
+
+						<!-- Trạng thái -->
+						<div class="col-lg-6 col-md-12">
+							<div class="form-group">
+								<label class="form-label">Trạng thái</label>
+								<select class="form-select" formControlName="status">
+									<option value="ACTIVE">
+										🟢 Mở bán
+									</option>
+									<option value="INACTIVE">
+										🔴 Ngưng bán
+									</option>
+								</select>
+								
+								<!-- Status Preview -->
+								@if (productForm.get('status')?.value) {
+
+									<div class="mt-1">
+										<span 
+											class="status-indicator"
+											[class.status-active]="productForm.get('status')?.value === 'ACTIVE'"
+											[class.status-inactive]="productForm.get('status')?.value === 'INACTIVE'"
+										>
+											<span class="status-dot"></span>
+											{{ productForm.get('status')?.value === 'ACTIVE' ? 'Đang mở bán' : 'Ngưng bán' }}
+										</span>
+									</div>
+								}
+							</div>
+						</div>
+
+						<!-- Danh mục -->
+						<div class="col-lg-6 col-md-12">
+							<div class="form-group">
+								<label class="form-label">Danh mục sản phẩm</label>
+								<ng-select
+									class="custom-ng-select"
+									[items]="categoryList"
+									bindLabel="name"
+									[multiple]="true"
+									placeholder="Chọn danh mục..."
+									formControlName="categories"
+									[searchable]="true"
+									[clearable]="true"
+									[dropdownPosition]="'auto'"
+									[loading]="false"
+								>
+									<ng-option *ngFor="let category of categoryList" [value]="category.id">
+										<i class="bi bi-tag me-2"></i>{{ category.name }}
+									</ng-option>
+								</ng-select>
+							</div>
+						</div>
+
+						<!-- Mô tả -->
+						<div class="col-12">
+
+
+
+
+
+
+							<div class="form-group">
+								<label class="form-label">Mô tả chi tiết</label>
+								<textarea
+									class="form-control"
+									rows="3"
+									formControlName="description"
+								></textarea>
+							</div>
+						</div>
+
+						<!-- Ảnh -->
+						<div class="col-12">
+
+
+
+							<div class="form-group">
+								<label class="form-label">Ảnh sản phẩm</label>
+								<!-- Input group: URL + Add URL + Open File -->
+								<div class="input-group mb-1">
+									<input
+										#imageUrl
+										type="text"
+										class="form-control"
+										placeholder="Enter image URL"
+										(keyup.enter)="addImageUrl(imageUrl)"
+									/>
+									<button
+										class="btn btn-outline-secondary"
+										type="button"
+										(click)="addImageUrl(imageUrl)"
+									>
+										thêm ảnh
+									</button>
+									<button
+										class="btn btn-outline-primary"
+										type="button"
+										(click)="fileInput.click()"
+									>
+										chọn ảnh
+									</button>
+								</div>
+
+								<!-- Hidden file input -->
+								<input
+
+
+
+
+
+									#fileInput
+									type="file"
+									class="d-none"
+									(change)="onImageSelected($event)"
+									multiple
+								/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+								<!-- Preview images -->
+								<div class="mt-1 d-flex flex-wrap gap-1">
+									<img
+										*ngFor="let img of ImageUrls"
+										[src]="img"
+										width="60"
+										height="60"
+										class="rounded border"
+									/>
+								</div>
+							</div>
+						</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					</div>
+				</form>
+			</div>
 		</div>
-		<div class="card-body">
-			<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-				<div class="row g-3">
-					<!-- Tên sản phẩm -->
-					<div class="col-md-6">
-						<label class="form-label">Tên sản phẩm *</label>
-						<input
-							type="text"
-							class="form-control"
-							formControlName="name"
-							placeholder="Tên sản phẩm"
-						/>
-						<div *ngIf="productForm.get('name')?.hasError('nameTaken')">
-							Tên đã tồn tại, vui lòng chọn tên khác.
-						</div>
-					</div>
+	</div>
 
-					<!-- Giá -->
-					<div class="col-md-6">
-						<label class="form-label">Giá sản phẩm</label>
-						<input type="number" class="form-control" formControlName="price" />
-					</div>
-
-					<!-- Trạng thái -->
-					<div class="col-md-6">
-						<label class="form-label">Trạng thái</label>
-						<select class="form-select" formControlName="status">
-							<option value="mở bán">mở bán</option>
-							<option value="ngưng bán">Ngưng bán</option>
-						</select>
-					</div>
-
-					<!-- Danh mục -->
-					<div class="col-md-6">
-						<label class="form-label">Danh mục</label>
-						<ng-select
-							class="custom-ng-select"
-							[items]="categoryList"
-							bindLabel="name"
-							bindValue="id"
-							[multiple]="true"
-							placeholder="Chọn danh mục..."
-							formControlName="categories"
-							[searchable]="true"
-							[dropdownPosition]="'auto'"
-						>
-						</ng-select>
-					</div>
-
-					<!-- Mô tả -->
-					<div class="col-12">
-						<label class="form-label">Mô tả chi tiết</label>
-						<textarea
-							class="form-control"
-							rows="4"
-							formControlName="description"
-						></textarea>
-					</div>
-
-					<!-- Ảnh -->
-					<div class="col-12">
-						<label class="form-label">Ảnh sản phẩm</label>
-						<!-- Input group: URL + Add URL + Open File -->
-						<div class="input-group mb-2">
-							<input
-								#imageUrl
-								type="text"
-								class="form-control"
-								placeholder="Enter image URL"
-								(keyup.enter)="addImageUrl(imageUrl)"
-							/>
-							<button
-								class="btn btn-outline-secondary"
-								type="button"
-								(click)="addImageUrl(imageUrl)"
-							>
-								thêm ảnh
-							</button>
-							<button
-								class="btn btn-outline-primary"
-								type="button"
-								(click)="fileInput.click()"
-							>
-								chọn ảnh
-							</button>
-						</div>
-
-						<!-- Hidden file input -->
-						<input
-							#fileInput
-							type="file"
-							class="d-none"
-							(change)="onImageSelected($event)"
-							multiple
-						/>
-
-						<!-- Preview images -->
-						<div class="mt-2 d-flex flex-wrap gap-2">
-							<img
-								*ngFor="let img of ImageUrls"
-								[src]="img"
-								width="80"
-								height="80"
-								class="rounded border"
-							/>
-						</div>
-					</div>
-
-					<!-- Nút -->
-					<div class="col-12 text-end mt-3">
-						<button
-							type="submit"
-							class="btn btn-success"
-							[disabled]="productForm.invalid"
-						>
-							💾 Lưu lại
-						</button>
-						<button
-							type="button"
-							class="btn btn-secondary ms-2"
-							(click)="goBack()"
-						>
-							↩ Quay lại
-						</button>
-					</div>
-				</div>
-			</form>
-		</div>
+	<!-- Fixed Action Buttons -->
+	<div class="fixed-action-buttons">
+		<button
+			type="button"
+			class="btn btn-secondary"
+			(click)="goBack()"
+		>
+			↩ Quay lại
+		</button>
+		<button
+			type="submit"
+			class="btn btn-success"
+			[disabled]="productForm.invalid"
+			(click)="onSubmit()"
+		>
+			💾 Lưu lại
+		</button>
 	</div>
 </div>

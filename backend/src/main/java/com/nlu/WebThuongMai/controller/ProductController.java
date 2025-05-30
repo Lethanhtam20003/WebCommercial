@@ -74,9 +74,9 @@ public class ProductController {
     }
 
     @GetMapping("/check-name")
-    ApiResponse<Boolean> checkName(@RequestParam ProductNameRequest request) {
+    ApiResponse<Boolean> checkName(@RequestParam String name) {
         return ApiResponse.<Boolean>builder()
-                .result(productService.checkName(request.getName())).build();
+                .result(productService.checkName(name)).build();
     }
 
     @PostMapping("/getAllProductFromCSVFile")

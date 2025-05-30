@@ -90,8 +90,9 @@ export class AdminProductCreateComponent implements OnInit {
 				status: this.productForm.value.status,
 				categoryIds: this.productForm.value.categories.map((category: category) => category.id),
 				description: this.productForm.value.description,
-				image: this.ImageUrls,
+				images: this.ImageUrls,
 			}
+			console.log(productRequest);
 			this.productService.createProduct(productRequest).subscribe({
 				next: (response: ApiResponse<ProductResponse>) => {
 					this.alertService.success('Thêm sản phẩm thành công');

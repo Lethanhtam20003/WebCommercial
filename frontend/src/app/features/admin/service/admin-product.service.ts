@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ProductResponse } from '../../../core/models/productResponse';
 import { map, Observable, Subject } from 'rxjs';
@@ -31,8 +31,10 @@ export class AdminProductService {
 	}
 
 	checkProductNameExited(name: string): Observable<boolean> {
-		return this.http
-			.get<ApiResponse<boolean>>(`${URL_API.checkProductNameExited}${name}`)
-			.pipe(map(response => !!response.result));
-	}
+	const params = new HttpParams().set('name', name.trim());
+	return this.http
+		.get<ApiResponse<boolean>>(URL_API.checkProductNameExited, { params })
+		.pipe(map(response => !!response.result));
+}
+
 }

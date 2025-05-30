@@ -4,5 +4,5 @@ export interface ProductRequest {
     status: String;
     categoryIds: number[];
     description: String;
-    image: String[];
+    images: String[];
 }
