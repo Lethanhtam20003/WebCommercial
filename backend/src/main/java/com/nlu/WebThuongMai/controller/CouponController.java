@@ -39,17 +39,17 @@ public class CouponController {
                 .build();
     }
 
-    /**
-     * Lấy tất cả các mã giảm giá đã tạo
-     *
-     * @return Danh sách mã giảm giá
-     */
-    @GetMapping("/all")
-    public ApiResponse<List<CouponResponse>> getAllCoupon() {
-        return ApiResponse.<List<CouponResponse>>builder()
-                .result(service.getAllCoupon())
-                .build();
-    }
+//    /**
+//     * Lấy tất cả các mã giảm giá đã tạo
+//     *
+//     * @return Danh sách mã giảm giá
+//     */
+//    @GetMapping("/all")
+//    public ApiResponse<List<CouponResponse>> getAllCoupon() {
+//        return ApiResponse.<List<CouponResponse>>builder()
+//                .result(service.getAllCoupon())
+//                .build();
+//    }
 
     /**
      * Lấy mã giảm giá theo ID
