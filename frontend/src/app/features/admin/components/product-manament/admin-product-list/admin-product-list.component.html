@@ -1,66 +1,98 @@
 <div class="container-fluid mt-3">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-      <button class="btn btn-primary me-2" [routerLink]="['../create-product']"  >+ Thêm mới</button>
-      <!-- <button class="btn btn-danger me-2">Xóa nhiều bản ghi</button> -->
-      <button class="btn btn-success">Xuất ra Excel</button>
-    </div>
-    <div class="d-flex">
-      <input type="text" class="form-control me-2" placeholder="Tên sản phẩm">
-      <select class="form-select me-2">
-        <option value="">Danh mục</option>
-        <!-- thêm option động nếu cần -->
-      </select>
-      <button class="btn btn-primary">Tìm</button>
-    </div>
-  </div>
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<div>
+			<button class="btn btn-primary me-2" [routerLink]="['../create-product']">
+				+ Thêm mới
+			</button>
+			<!-- <button class="btn btn-danger me-2">Xóa nhiều bản ghi</button> -->
+			<button class="btn btn-success">Xuất ra Excel</button>
+		</div>
+		<div class="d-flex">
+			<input type="text" class="form-control me-2" placeholder="Tên sản phẩm" />
+			<select class="form-select me-2">
+				<option value="">Danh mục</option>
+				<!-- thêm option động nếu cần -->
+			</select>
+			<button class="btn btn-primary">Tìm</button>
+		</div>
+	</div>
 
-  <p class="fw-bold">Có tất cả {{ products.length }} sản phẩm</p>
+	<p class="fw-bold">Có tất cả {{ products.length }} sản phẩm</p>
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover text-center align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>STT</th>
-          <th>Ảnh</th>
-          <th>Tên sản phẩm</th>
-          <th>Giá</th>
-          <th>Giá K/M</th>
-          <th>Danh mục</th>
-          <!-- <th>Tình trạng</th> -->
-          <!-- <th>Hot</th> -->
-          <!-- <th>Mới về</th>
+	<div class="table-responsive">
+		<table class="table table-bordered table-hover text-center align-middle">
+			<thead class="table-light">
+				<tr>
+					<th>STT</th>
+					<th>Ảnh</th>
+					<th>Tên sản phẩm</th>
+					<th>Giá</th>
+					<th>Giá K/M</th>
+					<th>Danh mục</th>
+					<th>Tình trạng</th>
+					<!-- <th>Hot</th> -->
+					<!-- <th>Mới về</th>
           <th>Khuyến mãi</th>
           <th>Hiển thị</th>
           <th>Thứ tự</th> -->
-          <th>Hành động</th>
-          <th><input type="checkbox" /></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of products; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td><img [src]="item.images[0]" width="60" /></td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.price }}</td>
-          <td>{{ item.price }}</td>
-          <td>{{ item.categoryIds[0] }}</td>
-          <!-- <td>
+					<th></th>
+					<!-- <th><input type="checkbox" /></th> -->
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let item of products; let i = index">
+					<td>{{ i + 1 }}</td>
+					<td><img [src]="item.images[0]" width="60" /></td>
+					<td>{{ item.name }}</td>
+					<td>{{ item.price }}</td>
+					<td>{{ item.price }}</td>
+					<td>{{ item.categoryIds[0] }}</td>
+					<!-- <td>
             <span class="badge bg-success" *ngIf="item.inStock">Còn hàng</span>
             <span class="badge bg-secondary" *ngIf="!item.inStock">Hết hàng</span>
           </td> -->
-          <!-- <td><span [innerHTML]="item.isHot ? '&#10004;' : '&#10008;'"></span></td>
+					<!-- <td><span [innerHTML]="item.isHot ? '&#10004;' : '&#10008;'"></span></td>
           <td><span [innerHTML]="item.isNew ? '&#10004;' : '&#10008;'"></span></td>
           <td><span [innerHTML]="item.isPromo ? '&#10004;' : '&#10008;'"></span></td>
           <td><span [innerHTML]="item.visible ? '&#10004;' : '&#10008;'"></span></td>
           <td><input type="number" [(ngModel)]="item.order" class="form-control" style="width: 60px; margin: auto;" /></td> -->
-          <td>
-            <button class="btn btn-sm btn-primary me-1">Sửa</button>
-            <button class="btn btn-sm btn-danger">Xóa</button>
-          </td>
-          <td><input type="checkbox" /></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+					<td>
+						<span
+							class="badge bg-success"
+							*ngIf="item.status === ProductStatusType.ACTIVE"
+							>Hoạt động</span
+						>
+						<span
+							class="badge bg-secondary"
+							*ngIf="item.status === ProductStatusType.INACTIVE"
+							>Ngừng hoạt động</span
+						>
+						<span
+							class="badge bg-warning"
+							*ngIf="item.status === ProductStatusType.DELETED"
+							>Đã xóa</span
+						>
+					</td>
+
+					<td>
+						<div class="dropdown">
+							<button
+								class="btn btn-sm btn-secondary dropdown-toggle"
+								type="button"
+								id="actionDropdown"
+								data-bs-toggle="dropdown"
+								aria-expanded="false"
+							>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="actionDropdown">
+								<li><button class="dropdown-item">Sửa</button></li>
+								<li><button class="dropdown-item text-danger">Xóa</button></li>
+							</ul>
+						</div>
+					</td>
+					<!-- <td><input type="checkbox" /></td> -->
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
