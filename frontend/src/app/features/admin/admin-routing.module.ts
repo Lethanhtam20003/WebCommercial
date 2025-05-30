@@ -1,11 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProductManagementComponent } from './pages/product-management/product-management.component';
-import { AdminProductListComponent } from './components/product-manament/admin-product-list/admin-product-list.component';
 import { InventoryManagementComponent } from './pages/inventory-management/inventory-management.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
+const routeData = {
+	showHeader: false,
+	showFooter: false,
+};
 const productManagementRoutes: Routes = [
 	{
 		path: 'product-management',
@@ -17,10 +20,7 @@ const productManagementRoutes: Routes = [
 					import(
 						'./components/product-manament/admin-product-list/admin-product-list.component'
 					).then(m => m.AdminProductListComponent),
-				data: {
-					showHeader: false,
-					showFooter: false,
-				},
+				data : routeData
 			},
 			{
 				path: 'create-product',
@@ -28,10 +28,7 @@ const productManagementRoutes: Routes = [
 					import(
 						'./components/product-manament/admin-product-create/admin-product-create.component'
 					).then(m => m.AdminProductCreateComponent),
-				data: {
-					showHeader: false,
-					showFooter: false,
-				},
+				data : routeData
 			},
 			{
 				path: '',
@@ -41,7 +38,6 @@ const productManagementRoutes: Routes = [
 		],
 	},
 ];
-
 const inventoryManagementRoutes: Routes = [
 	{
 		path: 'inventory-management',
@@ -53,6 +49,7 @@ const inventoryManagementRoutes: Routes = [
 					import(
 						'./components/inventory-management/list-import-order/list-import-order.component'
 					).then(m => m.ListImportOrderComponent),
+					data : routeData
 			},
 			{
 				path: 'create-inventory',
@@ -60,6 +57,7 @@ const inventoryManagementRoutes: Routes = [
 					import(
 						'./components/inventory-management/Import-inventory/Import-inventory.component'
 					).then(m => m.ImportInventoryComponent),
+					data : routeData
 			},
 			{
 				path: '',
@@ -84,7 +82,7 @@ const categoryManagementRoutes: Routes = [
 			showHeader: false,
 			showFooter: false,
 		},
-	}];
+}];
 const reviewManagementRoutes: Routes = [
 	{
 		path: 'review-management',
@@ -92,11 +90,8 @@ const reviewManagementRoutes: Routes = [
 			import(
 				'./pages/review-management/review-management.component'
 			).then(m => m.ReviewManagementComponent),
-		data: {
-			showHeader: false,
-			showFooter: false,
-		},
-	}];
+		data: routeData,
+}];
 const couponsManagementRoutes: Routes = [
 {
 	path: 'coupons-management',
@@ -120,10 +115,7 @@ const routes: Routes = [
 			{
 				path: 'dashboard',
 				component: DashboardComponent,
-				data: {
-					showHeader: false,
-					showFooter: false,
-				},
+				data: routeData
 			},
 			...productManagementRoutes,
 			...inventoryManagementRoutes,
@@ -133,10 +125,7 @@ const routes: Routes = [
 					import('./pages/Order-management/Order-management.component').then(
 						m => m.OrderManagementComponent
 					),
-				data: {
-					showHeader: false,
-					showFooter: false,
-				}
+				data : routeData
 			},
 			{
 				path: 'customer-management',
@@ -144,10 +133,7 @@ const routes: Routes = [
 					import('./pages/customer-management/customer-management.component').then(
 						m => m.CustomerManagementComponent
 					),
-						data: {
-					showHeader: false,
-					showFooter: false,
-				}
+						data : routeData
 			},
 			...categoryManagementRoutes,
 			...reviewManagementRoutes,
@@ -156,10 +142,7 @@ const routes: Routes = [
 				path: '',
 				redirectTo: 'dashboard',
 				pathMatch: 'full',
-				data: {
-					showHeader: false,
-					showFooter: false,
-				},
+				data : routeData
 			},
 		],
 	},

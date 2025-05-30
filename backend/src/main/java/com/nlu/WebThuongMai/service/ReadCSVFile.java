@@ -39,7 +39,7 @@ public class ReadCSVFile {
     }
 
     public void readCSVFile() {
-        String filePath = "D:\\WebCommercial-\\backend\\src\\main\\resources\\db\\migration\\csvFiles\\allProducts.csv";
+        String filePath = "D:\\isDoing\\ChuyenDeWeb\\WebCommercial\\backend\\src\\main\\resources\\db\\migration\\csvFiles\\allProducts.csv";
 
         ArrayList<ProductRequest> listProduct = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(filePath))) {

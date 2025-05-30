@@ -31,38 +31,14 @@
 			<a
 				class="nav-link text-white d-flex justify-content-between align-items-center"
 				data-bs-toggle="collapse"
-				href="#productMenu"
 				role="button"
 				aria-expanded="false"
 				aria-controls="productMenu"
+				[routerLink]="['/admin/product-management/product-list']"
 			>
 				<span><i class="bi bi-box me-2"></i> Product Management</span>
-				<i class="bi bi-caret-down-fill"></i>
 			</a>
-			<div
-				[ngClass]="{ collapse: true, show: isProductMenuOpen }"
-				class="collapse"
-				id="productMenu"
-			>
-				<ul class="nav flex-column ms-4">
-					<li class="nav-item" routerLinkActive="active">
-						<a
-							class="nav-link text-white"
-							[routerLink]="['/admin/product-management/product-list']"
-							routerLinkActive="active"
-							>List Products</a
-						>
-					</li>
-					<li class="nav-item">
-						<a
-							class="nav-link text-white"
-							[routerLink]="['/admin/product-management/create-product']"
-							routerLinkActive="active"
-							>Create Product</a
-						>
-					</li>
-				</ul>
-			</div>
+		
 		</li>
 
 		<!--  Collapsible Dropdown inventory  -->
@@ -70,38 +46,14 @@
 			<a
 				class="nav-link text-white d-flex justify-content-between align-items-center"
 				data-bs-toggle="collapse"
-				href="#inventoryMenu"
 				role="button"
 				aria-expanded="false"
 				aria-controls="inventoryMenu"
+				[routerLink]="['/admin/inventory-management/inventory-list']"
 			>
 				<span><i class="bi bi-archive me-2"></i> Inventory Management</span>
-				<i class="bi bi-caret-down-fill"></i>
 			</a>
-			<div
-				[ngClass]="{ collapse: true, show: isInventoryMenuOpen }"
-				class="collapse"
-				id="inventoryMenu"
-			>
-				<ul class="nav flex-column ms-4">
-					<li class="nav-item" routerLinkActive="active">
-						<a
-							class="nav-link text-white"
-							[routerLink]="['/admin/inventory-management/inventory-list']"
-							routerLinkActive="active"
-							>Inventory List</a
-						>
-					</li>
-					<li class="nav-item">
-						<a
-							class="nav-link text-white"
-							[routerLink]="['/admin/inventory-management/create-inventory']"
-							routerLinkActive="active"
-							>Create Inventory</a
-						>
-					</li>
-				</ul>
-			</div>
+			
 		</li>
 
 		<li class="nav-item">
