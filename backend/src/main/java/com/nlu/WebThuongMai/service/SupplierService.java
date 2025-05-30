@@ -23,6 +23,7 @@ public class SupplierService {
 
     /**
      * kiểm tra nhà cung cấp đã tồn tài chưa ?
+     *
      * @param name tên của nhà cung cấp
      * @return true nếu nhà cung cấp đã tồn tại, false nếu chưa
      */
@@ -33,6 +34,7 @@ public class SupplierService {
 
     /**
      * tạo nhà cung cấp mới
+     *
      * @param request đối tượng chứa thông tin cần tạo
      * @return SupplierResponse chứa thông tin nhà cung cấp mới
      */
@@ -46,6 +48,7 @@ public class SupplierService {
 
     /**
      * lấy danh sách nhà cung cấp
+     *
      * @param pageable số lượng phân trang
      * @return danh sách nhà cung cấp
      */
@@ -57,6 +60,7 @@ public class SupplierService {
 
     /**
      * lấy nhà cung cấp theo id
+     *
      * @param supplierId id nhà cung cấp
      * @return thông tin nhà cung cấp
      */
@@ -68,24 +72,26 @@ public class SupplierService {
 
     /**
      * cập nhật thông tin nhà cung cấp
+     *
      * @param supplierId id nhà cung cấp
-     * @param request thông tin cần cập nhật
+     * @param request    thông tin cần cập nhật
      * @return thông tin nhà cùn cấp sau khi cập nhật
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public SupplierResponse updateSupplier(long supplierId, SupplierRequest request) {
-         Supplier supplier = repository.findById(supplierId)
+        Supplier supplier = repository.findById(supplierId)
                 .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND));
-         if(!request.getName().equals(supplier.getName())){
-             if(checkSupplier(request.getName())){
-                 throw new AppException(ErrorCode.SUPPLIER_NAME_EXISTED);
-             }
-         }
+        if (!request.getName().equals(supplier.getName())) {
+            if (checkSupplier(request.getName())) {
+                throw new AppException(ErrorCode.SUPPLIER_NAME_EXISTED);
+            }
+        }
         return mapper.toSupplierResponse(
                 repository.save(
-                        mapper.toSupplier(supplierId,request)));
+                        mapper.toSupplier(supplierId, request)));
 
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public boolean deleteSupplier(long supplierId) {
         try {
@@ -96,8 +102,9 @@ public class SupplierService {
             return false;
         }
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Supplier findSupplierById(long supplierId){
+    public Supplier findSupplierById(long supplierId) {
         return repository.findById(supplierId)
                 .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND));
     }

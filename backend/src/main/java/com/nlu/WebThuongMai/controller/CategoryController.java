@@ -17,9 +17,10 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryController {
     CategoryService categoryService;
+
     //Lấy danh sách tất cả danh mục có phân trang
     @GetMapping()
-    public List<CategoryResponse> getAll(){
+    public List<CategoryResponse> getAll() {
         return categoryService.getAll();
     }
 

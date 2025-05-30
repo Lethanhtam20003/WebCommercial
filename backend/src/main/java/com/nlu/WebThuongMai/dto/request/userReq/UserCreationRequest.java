@@ -38,6 +38,7 @@ public class UserCreationRequest {
 
     /**
      * Mật khẩu của người dùng
+     *
      * @NotBlank: Không được null hoặc rỗng
      * @Size: Độ dài từ 8-32 ký tự
      */
@@ -52,6 +53,7 @@ public class UserCreationRequest {
 
     /**
      * Ngày sinh của người dùng
+     *
      * @BirthdayConstraint: Kiểm tra tuổi tối thiểu là 18
      */
     @BirthdayConstraint(min = 18, message = "INVALID_BIRTHDAY")
@@ -69,6 +71,7 @@ public class UserCreationRequest {
 
     /**
      * Email của người dùng
+     *
      * @NotBlank: Không được null hoặc rỗng
      */
     @NotBlank

@@ -28,20 +28,37 @@ public enum ErrorCode {
     INVALID_ACCESS_TOKEN(1013, "invalid access token", HttpStatus.BAD_REQUEST),
     PASSWORD_INVALID(1014, "password invalid", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_CORRECT(1015, "password not correct", HttpStatus.BAD_REQUEST),
-    EMAIL_EXISTED(1016,"email existed" , HttpStatus.BAD_REQUEST),
-    PHONE_EXISTED(1017,"phone existed" , HttpStatus.BAD_REQUEST),
-    INVALID_SIGNATURE(1018,"invalid signature" , HttpStatus.BAD_REQUEST),
-    TOKEN_EXPIRED(1019,"token expired" , HttpStatus.BAD_REQUEST),
-    PRODUCT_EXISTED(1020,"product existed" , HttpStatus.BAD_REQUEST),
-    SUPPLIER_EXISTED(1021,"supplier existed" , HttpStatus.BAD_REQUEST  ),
-    SUPPLIER_NOT_FOUND(1022, "supplier not found" ,HttpStatus.BAD_REQUEST),
-    SUPPLIER_NAME_EXISTED(1023,"supplier name existed" , HttpStatus.BAD_REQUEST ),
-    PURCHASE_ORDER_NOT_FOUND( 1024 , "purchase order not found" , HttpStatus.BAD_REQUEST ),
-    QUALITY_PRODUCT_NOT_ENOUGH( 1025 , "quality product not enough" , HttpStatus.BAD_REQUEST ), ;
-
-
-
-
+    EMAIL_EXISTED(1016, "email existed", HttpStatus.BAD_REQUEST),
+    PHONE_EXISTED(1017, "phone existed", HttpStatus.BAD_REQUEST),
+    INVALID_SIGNATURE(1018, "invalid signature", HttpStatus.BAD_REQUEST),
+    TOKEN_EXPIRED(1019, "token expired", HttpStatus.BAD_REQUEST),
+    PRODUCT_EXISTED(1020, "product existed", HttpStatus.BAD_REQUEST),
+    SUPPLIER_EXISTED(1021, "supplier existed", HttpStatus.BAD_REQUEST),
+    SUPPLIER_NOT_FOUND(1022, "supplier not found", HttpStatus.BAD_REQUEST),
+    SUPPLIER_NAME_EXISTED(1023, "supplier name existed", HttpStatus.BAD_REQUEST),
+    PURCHASE_ORDER_NOT_FOUND(1024, "purchase order not found", HttpStatus.BAD_REQUEST),
+    QUALITY_PRODUCT_NOT_ENOUGH(1025, "quality product not enough", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_FOUND_IN_STOCK(1026, "product not found in stock", HttpStatus.BAD_REQUEST),
+    ORDER_NOT_FOUND(1027, "order not found", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_ENOUGH_IN_STOCK(1028, "product not enough in stock", HttpStatus.BAD_REQUEST),
+    ORDER_ALREADY_CONFIRMED(1029, "order already confirmed", HttpStatus.BAD_REQUEST),
+    ORDER_NOT_CONFIRMED(1030, "order not confirmed", HttpStatus.BAD_REQUEST),
+    ORDER_ALREADY_SHIPPED(1031, "order already shipped", HttpStatus.BAD_REQUEST),
+    ORDER_ALREADY_DELIVERED(1032, "order already delivered", HttpStatus.BAD_REQUEST),
+    ORDER_ALREADY_CANCELLED(1033, "order already cancelled", HttpStatus.BAD_REQUEST),
+    ORDER_CAN_NOT_CANCEL_BECAUSE_IT_WAS_CONFIRMED_OR_SHIPPED(1034, "order can not cancel because it was confirmed or shipped", HttpStatus.BAD_REQUEST),
+    COUPON_NOT_FOUND(1035, "coupon not found", HttpStatus.BAD_REQUEST),
+    COUPON_ALREADY_EXISTED(1036, "coupon already existed", HttpStatus.BAD_REQUEST),
+    FIELD_CAN_NOT_BE_NULL(1037, "field can not be null", HttpStatus.BAD_REQUEST),
+    FIELD_COUPONS_SIZE_INVALID_10_40(1038, "field size invalid be at least 10 characters  maximum number of characters is 40", HttpStatus.BAD_REQUEST),
+    DISCOUNT_COUPONS_MUST_BE_POSITIVE(1039, "discount must be positive", HttpStatus.BAD_REQUEST),
+    DESCRIPTION_COUPONS_SIZE_INVALID(1040, "description must be at least 5 characters maximum number of characters is 2555", HttpStatus.BAD_REQUEST),
+    LIMIT_USERS_COUPONS_MUST_BE_POSITIVE(1041, "limit users must be positive", HttpStatus.BAD_REQUEST),
+    EXPIRATION_DATE_COUPONS_MUST_BE_IN_FUTURE(1042, "expiration date must be in future", HttpStatus.BAD_REQUEST),
+    PRICE_CONDITION_COUPONS_MUST_BE_POSITIVE(1043, "price condition must be positive", HttpStatus.BAD_REQUEST),
+    MIN_PRICE_COUPONS_MUST_BE_POSITIVE(1044, "min price must be positive", HttpStatus.BAD_REQUEST),
+    MIN_PRICE_COUPONS_MUST_BE_LESS_THAN_50000(1045, "min price must be less than 50000", HttpStatus.BAD_REQUEST),
+    ;
 
 
     int code;

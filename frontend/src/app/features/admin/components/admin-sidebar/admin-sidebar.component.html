@@ -1,14 +1,18 @@
 <!-- Sidebar -->
 <div
 	id="sidebarMenu"
-	class="admin-sidebar collapse show d-flex flex-column bg-dark text-white p-3 vh-100"
+	class="admin-sidebar collapse show d-flex flex-column bg-dark text-white p-1 vh-100"
 >
 	<a
 		href="/"
-		class="d-flex align-items-center mb-3 text-white text-decoration-none"
+		class="d-flex align-items-center  text-white text-decoration-none"
 	>
-		<span class="fs-4">Dashboard</span>
+		<span class="fs-4 text-center ms-5">FIRE KNIGHT<br><span class="fs-5 fst-italic">sport</span></span>
+		
+  		<!-- <img src="assets/images/shop/logo.png" alt="Logo" class="me-2" style="width: 80px; height: 80px;"> -->
+  
 	</a>
+	
 	<hr />
 
 	<ul class="nav nav-pills flex-column mb-auto">
@@ -101,16 +105,61 @@
 		</li>
 
 		<li class="nav-item">
-			<a href="#" class="nav-link text-white">
+			<a href="#" class="nav-link text-white"
+			[routerLink]="['/admin/order-management']"
+			>
 				<i class="bi bi-table me-2"></i> Orders
 			</a>
 		</li>
 
 		<li class="nav-item">
-			<a href="#" class="nav-link text-white">
+			<a href="#" class="nav-link text-white"
+			[routerLink]="['/admin/customer-management']">
 				<i class="bi bi-people me-2"></i> Customers
 			</a>
 		</li>
+		<li class="nav-item">
+			<a href="#" class="nav-link text-white"
+			[routerLink]="['/admin/category-management']">
+				<i class="bi bi-table me-2"></i> Category 
+			</a>
+		</li>
+		<!-- review -->
+		 <li class="nav-item">
+			<a href="#" class="nav-link text-white"
+			[routerLink]="['/admin/review-management']">
+				<i class="bi bi-chat-left-text me-2"></i> Reviews
+			</a>
+		</li>
+		<!-- coupons -->
+		 <li class="nav-item">
+			<a href="#" class="nav-link text-white"
+			[routerLink]="['/admin/coupons-management']">
+				<i class="bi bi-ticket-perforated me-2"></i> Coupons
+				</a>
+			</li>
 	</ul>
 	<hr />
+	<ng-container *ngIf="isLoggedIn$ | async">
+  <div class="dropdown w-100 text-center mt-auto">
+    <button
+      class="btn btn-outline-light dropdown-toggle w-100 rounded-pill py-2"
+      type="button"
+      id="dropdownMenuButton1"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      <i class="bi bi-person-circle me-2"></i>{{ label.userAccount }}
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+      <li>
+        <a class="dropdown-item" [routerLink]="['/profile']">{{ label.myAccount }}</a>
+      </li>
+      <li>
+        <a class="dropdown-item" (click)="logout()">{{ label.logOut }}</a>
+      </li>
+    </ul>
+  </div>
+</ng-container>
+
 </div>

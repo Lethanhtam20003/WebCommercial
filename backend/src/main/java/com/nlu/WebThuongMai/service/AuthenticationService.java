@@ -66,13 +66,13 @@ public class AuthenticationService {
      * @throws AppException nếu tên đăng nhập đã tồn tại
      */
     public void register(@NotNull RegisterRequest request) {
-        if ( userRepository.existsByUsername(request.getUsername()))
+        if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
-        if(request.getEmail() != null && !request.getEmail().isEmpty())
-            if ( userRepository.existsByEmail(request.getEmail()) && !request.getEmail().isEmpty())
+        if (request.getEmail() != null && !request.getEmail().isEmpty())
+            if (userRepository.existsByEmail(request.getEmail()) && !request.getEmail().isEmpty())
                 throw new AppException(ErrorCode.EMAIL_EXISTED);
         if (request.getPhone() != null && !request.getPhone().isEmpty())
-            if ( userRepository.existsByPhone(request.getPhone()))
+            if (userRepository.existsByPhone(request.getPhone()))
                 throw new AppException(ErrorCode.PHONE_EXISTED);
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -80,16 +80,17 @@ public class AuthenticationService {
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail() == null ? null : request.getEmail())
-                .phone(request.getPhone() == null? null : request.getPhone())
+                .phone(request.getPhone() == null ? null : request.getPhone())
                 .authProvider(AuthProvider.LOCAL)
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
         log.info("Register user successfully");
     }
+
     /**
      * Xác thực người dùng và tạo token JWT
-     * 
+     *
      * @param request Chứa thông tin đăng nhập (username, password)
      * @return AuthenticationResponse chứa token JWT nếu xác thực thành công
      * @throws AppException nếu thông tin đăng nhập không hợp lệ
@@ -111,10 +112,10 @@ public class AuthenticationService {
     /**
      * Đăng xuất người dùng bằng cách vô hiệu hóa token
      * Token bị vô hiệu hóa sẽ được lưu vào bảng invalidatedToken
-     * 
+     *
      * @param request Chứa token cần vô hiệu hóa
      * @throws ParseException nếu không thể parse token
-     * @throws JOSEException nếu có lỗi xử lý JWT
+     * @throws JOSEException  nếu có lỗi xử lý JWT
      */
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
         try {
@@ -133,10 +134,10 @@ public class AuthenticationService {
 
     /**
      * Kiểm tra tính hợp lệ của token
-     * 
+     *
      * @param request Chứa token cần kiểm tra
      * @return IntrospectResponse cho biết token có hợp lệ hay không
-     * @throws JOSEException nếu có lỗi xử lý JWT
+     * @throws JOSEException  nếu có lỗi xử lý JWT
      * @throws ParseException nếu không thể parse token
      */
     public IntrospectResponse introspect(@NotNull IntrospectRequest request) throws JOSEException, ParseException {
@@ -156,7 +157,7 @@ public class AuthenticationService {
      * Tạo token JWT mới cho người dùng
      * Token chứa thông tin username, role và thời gian hết hạn
      * Sử dụng thuật toán HS512 để ký token
-     * 
+     *
      * @param user Thông tin người dùng để tạo token
      * @return Token JWT dạng chuỗi
      */
@@ -183,13 +184,13 @@ public class AuthenticationService {
 
     /**
      * Xác thực và kiểm tra tính hợp lệ của token
-     * 
-     * @param token Token cần xác thực
+     *
+     * @param token     Token cần xác thực
      * @param isRefresh True nếu đang kiểm tra để refresh token
      * @return SignedJWT đã được xác thực
-     * @throws JOSEException nếu có lỗi xử lý JWT
+     * @throws JOSEException  nếu có lỗi xử lý JWT
      * @throws ParseException nếu không thể parse token
-     * @throws AppException nếu token không hợp lệ hoặc đã hết hạn
+     * @throws AppException   nếu token không hợp lệ hoặc đã hết hạn
      */
     public SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(TOKEN_KEY);
@@ -208,10 +209,10 @@ public class AuthenticationService {
     /**
      * Làm mới token JWT
      * Vô hiệu hóa token cũ và tạo token mới
-     * 
+     *
      * @param request Chứa token cần làm mới
      * @return AuthenticationResponse chứa token mới
-     * @throws JOSEException nếu có lỗi xử lý JWT
+     * @throws JOSEException  nếu có lỗi xử lý JWT
      * @throws ParseException nếu không thể parse token
      */
     public AuthenticationResponse refreshToken(@NotNull RefreshRequest request) throws JOSEException, ParseException {

@@ -1,8 +1,12 @@
 package com.nlu.WebThuongMai.mapper;
 
-import com.nlu.WebThuongMai.dto.response.orderResp.OrderItemResponse;
-import com.nlu.WebThuongMai.dto.response.orderResp.OrderResponse;
+import com.nlu.WebThuongMai.dto.response.OrderResp.OrderResponse;
 import com.nlu.WebThuongMai.model.Order;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
+
+
 import com.nlu.WebThuongMai.model.OrderItem;
 import com.nlu.WebThuongMai.model.ProductImage;
 import org.mapstruct.*;
@@ -19,6 +23,7 @@ public interface OrderMapper {
      * @param order thực thể đơn hàng
      * @return đối tượng phản hồi OrderResponse
      */
+    @Mapping(target = "orderItems", source = "orderItems")
     OrderResponse toOrderResponse(Order order);
 
     /**

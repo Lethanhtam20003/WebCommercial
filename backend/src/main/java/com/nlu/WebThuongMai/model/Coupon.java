@@ -1,10 +1,13 @@
 package com.nlu.WebThuongMai.model;
 
+import com.nlu.WebThuongMai.enums.CouponStatus;
+import com.nlu.WebThuongMai.enums.CouponType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -39,7 +42,7 @@ public class Coupon {
      * Phần trăm giảm giá
      * Ví dụ: 10.0 tương đương giảm 10%
      */
-    double discountPercentage;
+    double discount;
 
     /**
      * Mô tả về mã giảm giá
@@ -49,7 +52,7 @@ public class Coupon {
     /**
      * Số lượng người dùng tối đa có thể sử dụng mã
      */
-    int limitUser;
+    int limitUsers;
 
     /**
      * Thời điểm tạo mã giảm giá, tự động cập nhật
@@ -61,4 +64,27 @@ public class Coupon {
      * Thời điểm hết hạn của mã giảm giá
      */
     LocalDateTime expirationDate;
+
+    /**
+     * Trạng thái của mã giảm giá
+     * Mặc định là ACTIVE (trạng thái hoạt động)
+     */
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    CouponStatus status = CouponStatus.ACTIVE;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    CouponType type = CouponType.PERCENTAGE;
+
+    /**
+     * điều kiện áp dụng mã giảm giá
+     */
+    BigDecimal priceCondition;
+    /**
+     * số tiền tối thiểu mà mã giả giá có thể áp dụng
+     */
+    BigDecimal minPrice;
+
+
 }

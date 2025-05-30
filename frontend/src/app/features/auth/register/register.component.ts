@@ -178,6 +178,9 @@ export class RegisterComponent implements OnInit{
 	navigateToLogin(){
 		this.router.navigate([RouteLink.loginRoute]);
 	}
-
-
+	goBack(){
+		this.router.navigate([RouteLink.homeRoute]);
+	}
+		
+	
 }

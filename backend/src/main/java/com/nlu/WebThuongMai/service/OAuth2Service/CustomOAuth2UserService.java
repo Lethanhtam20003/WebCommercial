@@ -35,7 +35,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
      * @param userRequest Chứa thông tin request OAuth2 từ người dùng
      * @return OAuth2User đối tượng chứa thông tin người dùng từ Facebook
      * @throws OAuth2AuthenticationException nếu xác thực thất bại
-     * @throws RuntimeException nếu thiếu provider_id trong response từ OAuth2
+     * @throws RuntimeException              nếu thiếu provider_id trong response từ OAuth2
      */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -58,7 +58,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         if (user == null) {
             // Kiểm tra xem người dùng đã tồn tại trong hệ thống chưa
-            if(userRepository.existsByEmail(email)){
+            if (userRepository.existsByEmail(email)) {
                 throw new OAuth2AuthenticationException(
                         new OAuth2Error("invalid_user", "Email không tồn tại", null)
                 );

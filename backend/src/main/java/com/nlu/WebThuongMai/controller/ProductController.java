@@ -28,6 +28,7 @@ public class ProductController {
 
     /**
      * Lấy danh sách tất cả sản phẩm có phân trang
+     *
      * @param pageable Thông tin phân trang (số trang, số lượng mỗi trang)
      * @return Danh sách sản phẩm được phân trang
      */
@@ -40,6 +41,7 @@ public class ProductController {
 
     /**
      * Lấy thông tin sản phẩm theo ID
+     *
      * @param productId ID của sản phẩm cần tìm
      * @return Thông tin chi tiết của sản phẩm
      */
@@ -52,7 +54,8 @@ public class ProductController {
 
     /**
      * Lấy danh sách sản phẩm theo danh mục có phân trang
-     * @param request Thông tin danh mục cần tìm
+     *
+     * @param request  Thông tin danh mục cần tìm
      * @param pageable Thông tin phân trang (số trang, số lượng mỗi trang)
      * @return Danh sách sản phẩm theo danh mục được phân trang
      */
@@ -62,12 +65,14 @@ public class ProductController {
                 .result(productService.getProductByCategory(request, pageable))
                 .build();
     }
+
     @PostMapping
     ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest request) {
         return ApiResponse.<ProductResponse>builder()
                 .result(productService.createProduct(request))
                 .build();
     }
+
     @GetMapping("/check-name")
     ApiResponse<Boolean> checkName(@RequestParam ProductNameRequest request) {
         return ApiResponse.<Boolean>builder()

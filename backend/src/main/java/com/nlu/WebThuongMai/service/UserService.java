@@ -15,6 +15,7 @@ import com.nlu.WebThuongMai.mapper.UserInfoMapper;
 import com.nlu.WebThuongMai.mapper.UserMapper;
 import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.repository.UserRepository;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -148,6 +149,10 @@ public class UserService {
         return userInfoMapper.toUserResponse(user);
     }
 
+    public User findUserById(@NotNull long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
     /**
      * Cập nhật thông tin cá nhân của người dùng hiện tại.
      *

@@ -11,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 
@@ -26,6 +29,7 @@ public class AuthenticationController {
 
     /**
      * Đăng ký tài khoản mới
+     *
      * @param request Thông tin người dùng mới
      * @return Không có dữ liệu trả về
      */
@@ -35,8 +39,10 @@ public class AuthenticationController {
         return ApiResponse.<AuthenticationResponse>builder()
                 .build();
     }
+
     /**
      * Đăng nhập vào hệ thống
+     *
      * @param request Thông tin đăng nhập (username/password)
      * @return Token xác thực và thông tin người dùng
      */
@@ -49,13 +55,13 @@ public class AuthenticationController {
     }
 
 
-
     /**
      * Đăng xuất khỏi hệ thống
+     *
      * @param request Thông tin token cần hủy
      * @return Không có dữ liệu trả về
      * @throws ParseException Nếu có lỗi khi xử lý token
-     * @throws JOSEException Nếu có lỗi liên quan đến JWT
+     * @throws JOSEException  Nếu có lỗi liên quan đến JWT
      */
     @PostMapping("/logout")
     ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
@@ -66,12 +72,13 @@ public class AuthenticationController {
 
     /**
      * Kiểm tra thông tin token
+     *
      * @param request Token cần kiểm tra
      * @return Thông tin về tính hợp lệ của token
      * @throws ParseException Nếu có lỗi khi xử lý token
-     * @throws JOSEException Nếu có lỗi liên quan đến JWT
+     * @throws JOSEException  Nếu có lỗi liên quan đến JWT
      */
-        @PostMapping("/introspect")
+    @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
@@ -81,10 +88,11 @@ public class AuthenticationController {
 
     /**
      * Làm mới token xác thực
+     *
      * @param request Refresh token
      * @return Token xác thực mới
      * @throws ParseException Nếu có lỗi khi xử lý token
-     * @throws JOSEException Nếu có lỗi liên quan đến JWT
+     * @throws JOSEException  Nếu có lỗi liên quan đến JWT
      */
     @PostMapping("/refresh")
     ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request) throws ParseException, JOSEException {

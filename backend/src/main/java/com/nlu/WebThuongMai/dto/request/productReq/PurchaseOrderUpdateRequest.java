@@ -8,23 +8,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Set;
 
-    @Data
-    @AllArgsConstructor
-    @Builder
-    @FieldDefaults(level = AccessLevel.PRIVATE)
+@Data
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PurchaseOrderUpdateRequest {
     @NotNull
-    long supplierId;
-    @NotNull
-    LocalDateTime createdAt;
-    @NotNull
     PurchaseStatus status;
-    @NotNull
-    BigDecimal totalPrice;
 
-    Set<PurchaseOrderItemRequest> items;
 }

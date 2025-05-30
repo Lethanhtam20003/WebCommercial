@@ -9,22 +9,22 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
-import java.lang.annotation.Target;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ProductMapper.class})
 public interface PurchaseOrderItemMapper {
 
-    @Mapping(target = "product" , source = "productId", qualifiedByName = "mapToProduct")
+    @Mapping(target = "product", source = "productId", qualifiedByName = "mapToProduct")
     PurchaseOrderItem toPurchaseOrderItem(PurchaseOrderItemRequest itemRequest);
 
     PurchaseOrderItemResponse toPurchaseOrderItemResponse(PurchaseOrderItem purchaseOrderItem);
 
 
-    default Set<PurchaseOrderItem> toSetPurchaseOrderItem(Set<PurchaseOrderItemRequest> items){
+    default Set<PurchaseOrderItem> toSetPurchaseOrderItem(Set<PurchaseOrderItemRequest> items) {
         return items.stream().map(this::toPurchaseOrderItem).collect(Collectors.toSet());
     }
+
     @Named("mapToProduct")
     default Product mapToProduct(Long productId) {
         if (productId == null) return null;

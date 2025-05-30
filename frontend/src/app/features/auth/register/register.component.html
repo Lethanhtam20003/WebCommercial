@@ -1,111 +1,132 @@
-<div class="register vh-100 d-flex flex-row align-items-center justify-content-center w-100">
-    <div class="login-container d-flex flex-row justify-content-center align-items-center">
-      
-      <div class="register-container p-4 border border-light rounded  rounded-4 shadow border-opacity-10">
-        <!-- Câu chào mừng -->
-      <div class="welcome-message mb-1">
-        <h1 class="fade-in">Chào mừng đến với <span class="highlight">
-          <div class="fw-bold mb- text-center gradient-text">
-          <h1 class="logo-title">FIREKNIGHT</h1>
-          <h2 class="logo-subtitle">SPORT</h2>
-        </div></span></h1>
-        <p class="fade-in delay-1s">
-          Nơi cung cấp dụng cụ thể thao chất lượng cao, đậm chất chiến binh, tiếp lửa đam mê thể thao của bạn!
-        </p>
-      </div>
-      
-      <!-- Form -->
-      <form [formGroup]="registerForm" class="login-form" (ngSubmit)="ngOnsubmit()">
-        
-        <div class="mb-3">
-          <input
-            class="form-control register-input"
-            id="username"
-            formControlName="username"
-            autocomplete="on"
-            placeholder="Tên đăng nhập"
-          />
-            <small *ngIf="isFieldInvalid('username')" class="text-danger2">
-              {{ getErrorMessage('username') }}
-            </small>
-        </div>
-        <div class="mb-3">
-          <input 
-          type="text" 
-          class="form-control register-input"
-          id="emailOrPhone"
-          formControlName="emailOrPhone"
-          placeholder="Email hoặc số điện thoại"
-          >
-            <small *ngIf="isFieldInvalid('emailOrPhone')" class="text-danger2">
-              {{ getErrorMessage('emailOrPhone') }}  
-            </small>
-        </div>
-        <div class="mb-3">
-          <input
-            type="password"
-            class="form-control register-input"
-            id="password"
-            (blur)="isPasswordFieldOut()"
-            (focus)="isPasswordFieldIn()"
-            formControlName="password"
-            placeholder="Mật khẩu"
-          />
-          <small *ngIf="isFieldInvalid('password')" class="text-danger2">
-            {{ getErrorMessage('password') }}
-          </small>
-        </div>
-        <div class="mb-3">
-          <input
-            type="password"
-            class="form-control register-input"
-            id="reenterpassword"
-            formControlName="reenterpassword"
-            (blur)="isReenterPasswordFieldOut()"
-            placeholder="Nhập lại mật khẩu"
-          />
-          <small *ngIf="isFieldInvalid('reenterpassword') || !isPasswordSame()" class="text-danger2">
-            {{ getErrorMessage('reenterpassword') }}
-          </small>
-        </div>
-        <button
-          type="submit"
-          class="btn btn-primary login-btn w-100 mb-3"
-          [disabled]="registerForm.invalid || isLoading || !isPasswordSame()"
-        >
-          {{ isLoading ? 'Đang thực hiện...' : 'Đăng Ký ' }}
-        </button>
-        <div class="text-center mb-3">
-          <span class="text-light">Đã có tài khoản? <a  (click)="navigateToLogin()" class="register-link">Đăng nhập ngay</a></span>
-        </div>
-  
-        <!-- OR -->
-        <div class="or-divider my-3">
-          <span>HOẶC</span>
-        </div>
-  
-        <!-- Facebook -->
-        <button
-          type="button"
-          class="btn login-btn-fb w-100 mb-2"
-          (click)="loginWithFacebook()"
-          [disabled]="isLoading"
-        >
-          <i class="bi bi-facebook me-2"></i>Đăng ký với Facebook
-        </button>
-  
-        <!-- Google -->
-        <button
-          type="button"
-          class="btn login-btn-gg w-100"
-          (click)="loginWithGoogle()"
-          [disabled]="isLoading"
-        >
-          <i class="bi bi-google me-2"></i>Đăng ký với Google
-        </button>
-      </form>
-      </div>
-      
-    </div>
-  </div>
-  
+<div
+class="register vh-100 d-flex flex-row align-items-center justify-content-center w-100"
+>
+<div class="back-button" (click)="goBack()"><- Quay về</div>
+	<div
+		class="login-container d-flex flex-row justify-content-center align-items-center"
+	>
+
+		<div
+			class="register-container p-4 border border-light rounded rounded-4 shadow border-opacity-10"
+		>
+			<!-- Câu chào mừng -->
+			<div class="welcome-message mb-1">
+				<h1 class="fade-in">
+					Chào mừng đến với
+					<span class="highlight">
+						<div class="fw-bold mb- text-center gradient-text">
+							<h1 class="logo-title">FIREKNIGHT</h1>
+							<h2 class="logo-subtitle">SPORT</h2>
+						</div></span
+					>
+				</h1>
+				<p class="fade-in delay-1s">
+					Nơi cung cấp dụng cụ thể thao chất lượng cao, đậm chất chiến binh,
+					tiếp lửa đam mê thể thao của bạn!
+				</p>
+			</div>
+
+			<!-- Form -->
+			<form
+				[formGroup]="registerForm"
+				class="login-form"
+				(ngSubmit)="ngOnsubmit()"
+			>
+				<div class="mb-3">
+					<input
+						class="form-control register-input"
+						id="username"
+						formControlName="username"
+						autocomplete="on"
+						placeholder="Tên đăng nhập"
+					/>
+					<small *ngIf="isFieldInvalid('username')" class="text-danger2">
+						{{ getErrorMessage('username') }}
+					</small>
+				</div>
+				<div class="mb-3">
+					<input
+						type="text"
+						class="form-control register-input"
+						id="emailOrPhone"
+						formControlName="emailOrPhone"
+						placeholder="Email hoặc số điện thoại"
+					/>
+					<small *ngIf="isFieldInvalid('emailOrPhone')" class="text-danger2">
+						{{ getErrorMessage('emailOrPhone') }}
+					</small>
+				</div>
+				<div class="mb-3">
+					<input
+						type="password"
+						class="form-control register-input"
+						id="password"
+						(blur)="isPasswordFieldOut()"
+						(focus)="isPasswordFieldIn()"
+						formControlName="password"
+						placeholder="Mật khẩu"
+					/>
+					<small *ngIf="isFieldInvalid('password')" class="text-danger2">
+						{{ getErrorMessage('password') }}
+					</small>
+				</div>
+				<div class="mb-3">
+					<input
+						type="password"
+						class="form-control register-input"
+						id="reenterpassword"
+						formControlName="reenterpassword"
+						(blur)="isReenterPasswordFieldOut()"
+						placeholder="Nhập lại mật khẩu"
+					/>
+					<small
+						*ngIf="isFieldInvalid('reenterpassword') || !isPasswordSame()"
+						class="text-danger2"
+					>
+						{{ getErrorMessage('reenterpassword') }}
+					</small>
+				</div>
+				<button
+					type="submit"
+					class="btn btn-primary login-btn w-100 mb-3"
+					[disabled]="registerForm.invalid || isLoading || !isPasswordSame()"
+				>
+					{{ isLoading ? 'Đang thực hiện...' : 'Đăng Ký ' }}
+				</button>
+				<div class="text-center mb-3">
+					<span class="text-light"
+						>Đã có tài khoản?
+						<a (click)="navigateToLogin()" class="register-link"
+							>Đăng nhập ngay</a
+						></span
+					>
+				</div>
+
+				<!-- OR -->
+				<div class="or-divider my-3">
+					<span>HOẶC</span>
+				</div>
+
+				<!-- Facebook -->
+				<button
+					type="button"
+					class="btn login-btn-fb w-100 mb-2"
+					(click)="loginWithFacebook()"
+					[disabled]="isLoading"
+				>
+					<i class="bi bi-facebook me-2"></i>Đăng ký với Facebook
+				</button>
+
+				<!-- Google -->
+				<button
+					type="button"
+					class="btn login-btn-gg w-100"
+					(click)="loginWithGoogle()"
+					[disabled]="isLoading"
+				>
+					<i class="bi bi-google me-2"></i>Đăng ký với Google
+				</button>
+			</form>
+		</div>
+	</div>
+</div>
