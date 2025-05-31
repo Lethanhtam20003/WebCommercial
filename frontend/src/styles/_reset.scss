@@ -1,9 +1,9 @@
-@use './variables.scss';
+@use './variables.scss' as *;;
 
 body {
-  font-family: variables.$font-family;
+  font-family: $font-family;
   font-size: 16px;
   line-height: 1.5;
-  color: variables.$background-text-color;
-  background-color: variables.$background-color;
+  color: $background-text-color;
+  background-color: $background-color;
 }

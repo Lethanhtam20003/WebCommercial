@@ -12,9 +12,7 @@
 			<!-- Form Body -->
 			<div class="card-body">
 				<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-
 					<div class="row g-2">
-						
 						<!-- Tên sản phẩm -->
 						<div class="col-lg-6 col-md-12">
 							<div class="form-group">
@@ -22,7 +20,10 @@
 								<input
 									type="text"
 									class="form-control"
-									[class.is-invalid]="productForm.get('name')?.invalid && productForm.get('name')?.touched"
+									[class.is-invalid]="
+										productForm.get('name')?.invalid &&
+										productForm.get('name')?.touched
+									"
 									formControlName="name"
 									placeholder="Nhập tên sản phẩm..."
 								/>
@@ -32,7 +33,10 @@
 										Tên đã tồn tại, vui lòng chọn tên khác.
 									</div>
 								}
-								@if (productForm.get('name')?.hasError('required') && productForm.get('name')?.touched) {
+								@if (
+									productForm.get('name')?.hasError('required') &&
+									productForm.get('name')?.touched
+								) {
 									<div class="error-message">
 										<i class="bi bi-exclamation-circle"></i>
 										Vui lòng nhập tên sản phẩm.
@@ -45,9 +49,9 @@
 						<div class="col-lg-6 col-md-12">
 							<div class="form-group">
 								<label class="form-label">Giá sản phẩm (VNĐ)</label>
-								<input 
-									type="number" 
-									class="form-control" 
+								<input
+									type="number"
+									class="form-control"
 									formControlName="price"
 									placeholder="0"
 									min="0"
@@ -60,25 +64,28 @@
 							<div class="form-group">
 								<label class="form-label">Trạng thái</label>
 								<select class="form-select" formControlName="status">
-									<option value="ACTIVE">
-										🟢 Mở bán
-									</option>
-									<option value="INACTIVE">
-										🔴 Ngưng bán
-									</option>
+									<option value="ACTIVE">🟢 Mở bán</option>
+									<option value="INACTIVE">🔴 Ngưng bán</option>
 								</select>
-								
+
 								<!-- Status Preview -->
 								@if (productForm.get('status')?.value) {
-
 									<div class="mt-1">
-										<span 
+										<span
 											class="status-indicator"
-											[class.status-active]="productForm.get('status')?.value === 'ACTIVE'"
-											[class.status-inactive]="productForm.get('status')?.value === 'INACTIVE'"
+											[class.status-active]="
+												productForm.get('status')?.value === 'ACTIVE'
+											"
+											[class.status-inactive]="
+												productForm.get('status')?.value === 'INACTIVE'
+											"
 										>
 											<span class="status-dot"></span>
-											{{ productForm.get('status')?.value === 'ACTIVE' ? 'Đang mở bán' : 'Ngưng bán' }}
+											{{
+												productForm.get('status')?.value === 'ACTIVE'
+													? 'Đang mở bán'
+													: 'Ngưng bán'
+											}}
 										</span>
 									</div>
 								}
@@ -101,7 +108,10 @@
 									[dropdownPosition]="'auto'"
 									[loading]="false"
 								>
-									<ng-option *ngFor="let category of categoryList" [value]="category.id">
+									<ng-option
+										*ngFor="let category of categoryList"
+										[value]="category.id"
+									>
 										<i class="bi bi-tag me-2"></i>{{ category.name }}
 									</ng-option>
 								</ng-select>
@@ -110,12 +120,6 @@
 
 						<!-- Mô tả -->
 						<div class="col-12">
-
-
-
-
-
-
 							<div class="form-group">
 								<label class="form-label">Mô tả chi tiết</label>
 								<textarea
@@ -128,9 +132,6 @@
 
 						<!-- Ảnh -->
 						<div class="col-12">
-
-
-
 							<div class="form-group">
 								<label class="form-label">Ảnh sản phẩm</label>
 								<!-- Input group: URL + Add URL + Open File -->
@@ -160,50 +161,12 @@
 
 								<!-- Hidden file input -->
 								<input
-
-
-
-
-
 									#fileInput
 									type="file"
 									class="d-none"
 									(change)="onImageSelected($event)"
 									multiple
 								/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 								<!-- Preview images -->
 								<div class="mt-1 d-flex flex-wrap gap-1">
@@ -217,24 +180,6 @@
 								</div>
 							</div>
 						</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 					</div>
 				</form>
 			</div>
@@ -246,7 +191,7 @@
 		<button
 			type="button"
 			class="btn btn-secondary"
-			(click)="goBack()"
+			[routerLink]="['../product-list']"
 		>
 			↩ Quay lại
 		</button>

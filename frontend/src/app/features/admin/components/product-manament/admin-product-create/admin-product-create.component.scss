@@ -1,13 +1,12 @@
+// ✅ Sửa lại SCSS layout "Thêm mới sản phẩm" với cấu trúc rõ ràng & gọn gàng
 .admin-product-create {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, #faf9f5 0%, #181f29 100%);
   height: 100vh;
   overflow: hidden;
   position: relative;
 
   .container-fluid {
-    height: 100%;
-    overflow-y: auto;
-    padding-bottom: 80px; // Space for fixed buttons
+    padding: 20px;
   }
 
   .main-card {
@@ -15,9 +14,8 @@
     margin: 0 auto;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    border: none;
-    overflow: hidden;
     background: white;
+    overflow: hidden;
 
     .card-header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -46,7 +44,6 @@
     }
   }
 
-  // Form styling - Compact version
   .form-group {
     margin-bottom: 12px;
 
@@ -58,13 +55,14 @@
       display: block;
 
       &.required::after {
-        content: " *";
+        content: ' *';
         color: #e74c3c;
         font-weight: bold;
       }
     }
 
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
       border: 2px solid #e9ecef;
       border-radius: 8px;
       padding: 8px 12px;
@@ -76,7 +74,6 @@
       &:focus {
         border-color: #667eea;
         box-shadow: 0 0 0 0.15rem rgba(102, 126, 234, 0.15);
-        background: white;
       }
 
       &:hover {
@@ -85,7 +82,7 @@
 
       &.is-invalid {
         border-color: #e74c3c;
-        
+
         &:focus {
           box-shadow: 0 0 0 0.15rem rgba(231, 76, 60, 0.15);
         }
@@ -95,41 +92,31 @@
     textarea.form-control {
       resize: vertical;
       min-height: 80px;
-      height: auto;
     }
   }
 
-  // Custom ng-select styling - Compact
   .custom-ng-select {
-    ::ng-deep {
-      .ng-select {
-        border: 2px solid #e9ecef;
-        border-radius: 8px;
-        min-height: 38px;
+    ::ng-deep .ng-select {
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
 
-        &.ng-select-focused {
-          border-color: #667eea;
-          box-shadow: 0 0 0 0.15rem rgba(102, 126, 234, 0.15);
-        }
+      &.ng-select-focused {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.15rem rgba(102, 126, 234, 0.15);
+      }
 
-        .ng-select-container {
-          background: white;
-          border-radius: 6px;
-          min-height: 34px;
-        }
+      .ng-select-container {
+        background: white;
+        border-radius: 6px;
+        min-height: 34px;
+      }
 
-        .ng-placeholder {
-          color: #6c757d;
-        }
-
-        .ng-arrow-wrapper {
-          padding-right: 8px;
-        }
+      .ng-placeholder {
+        color: #6c757d;
       }
     }
   }
 
-  // Compact input group
   .input-group {
     .form-control {
       border-radius: 0;
@@ -163,7 +150,6 @@
     }
   }
 
-  // Error messages - Compact
   .error-message {
     color: #e74c3c;
     font-size: 0.8rem;
@@ -176,7 +162,6 @@
     }
   }
 
-  // Status badge - Compact
   .status-indicator {
     display: inline-flex;
     align-items: center;
@@ -206,7 +191,6 @@
     }
   }
 
-  // Fixed action buttons at bottom right
   .fixed-action-buttons {
     position: fixed;
     bottom: 20px;
@@ -254,11 +238,9 @@
       }
     }
   }
-}
 
-// Responsive design
-@media (max-width: 768px) {
-  .admin-product-create {
+  // Responsive
+  @media (max-width: 768px) {
     .container-fluid {
       padding: 10px;
       padding-bottom: 100px;
@@ -286,7 +268,6 @@
       }
     }
 
-    // Smaller images on mobile
     img {
       width: 50px !important;
       height: 50px !important;
@@ -294,7 +275,7 @@
   }
 }
 
-// Loading animation
+// Global effect
 .loading-spinner {
   display: inline-block;
   width: 20px;
@@ -306,10 +287,11 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-// Smooth transitions
 * {
   transition: all 0.3s ease;
 }
