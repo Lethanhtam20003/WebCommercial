@@ -51,4 +51,10 @@ export class UserStateService {
 			});
 		}
 	}
+
+  /** Xóa sạch thông tin user khỏi state và sessionStorage */
+  clearUser() {
+		this.userSubject.next(null);
+		sessionStorage.removeItem('user');
+	}
 }

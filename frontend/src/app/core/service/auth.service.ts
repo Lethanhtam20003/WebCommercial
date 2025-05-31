@@ -21,6 +21,7 @@ import { LabelConstants } from '../../shared/constants/label.constants';
 import { ErrorMessageConstants } from '../../shared/constants/error-message.constants';
 import { AlertService } from './alert.service';
 import { User } from '../models/user.model';
+import { UserStateService } from './state/user-state.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -32,7 +33,8 @@ export class AuthService {
 
 	constructor(
 		private http: HttpClient,
-		private alertService: AlertService
+		private alertService: AlertService,
+		private userState: UserStateService
 	) {
 		// Kiểm tra trạng thái đăng nhập khi service được khởi tạo
 		this.checkInitialAuthState();
@@ -309,6 +311,7 @@ export class AuthService {
 	logout(): void {
 		this.removeToken();
 		this.updateLoginStatus(false);
+		this.userState.clearUser();
 		this.alertService.success('Đăng xuất thành công!');
 	}
 

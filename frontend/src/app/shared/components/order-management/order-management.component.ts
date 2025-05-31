@@ -73,6 +73,8 @@ export class OrderMamangementComponent implements OnInit {
 
 				this.orderStateService.orders$.subscribe(response => {
 					this.orders = response;
+          console.log(response);
+
 				});
 			});
 	}
