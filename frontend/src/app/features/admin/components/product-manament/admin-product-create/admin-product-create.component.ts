@@ -11,12 +11,12 @@ import { AlertService } from '../../../../../core/service/alert.service';
 import { AdminProductService } from '../../../service/admin-product.service';
 import { ValidNameValidator } from '../../../ValidationCustom/ValidName.validator';
 import { ProductRequest } from '../../../models/ProductRequest';
-import { ProductResponse } from '../../../../../core/models/productResponse';
+import { ProductResponse } from '../../../../../core/models/response/product-response/productResponse';
 import { ApiResponse } from '../../../../../core/models/api-response.model';
 
 @Component({
 	standalone: true,
-	imports: [ReactiveFormsModule, NgFor, NgSelectModule, NgIf, RouterModule],
+	imports: [ReactiveFormsModule, NgFor, NgSelectModule, RouterModule],
 	selector: 'app-admin-product-create',
 	templateUrl: './admin-product-create.component.html',
 	styleUrls: ['./admin-product-create.component.scss'],

@@ -1,11 +1,16 @@
 <div class="container-fluid mt-3">
-	<div class="d-flex justify-content-between align-items-center mb-3">
+	<div
+		class="header-fillter d-flex justify-content-between align-items-center mb-3"
+	>
 		<div>
 			<button class="btn btn-primary me-2" [routerLink]="['../create-product']">
 				+ Thêm mới
 			</button>
 			<!-- <button class="btn btn-danger me-2">Xóa nhiều bản ghi</button> -->
 			<button class="btn btn-success">Xuất ra Excel</button>
+		</div>
+		<div>
+			<h2>Quản Lý Sản Phẩm</h2>
 		</div>
 		<div class="d-flex">
 			<input type="text" class="form-control me-2" placeholder="Tên sản phẩm" />
@@ -19,43 +24,51 @@
 
 	<p class="fw-bold">Có tất cả {{ products.length }} sản phẩm</p>
 
-	<div class="table-responsive">
-		<table class="table table-bordered table-hover text-center align-middle">
+	<div class="table-scroll table-responsive">
+		<table class="table table-bordered table-hover align-middle">
 			<thead class="table-light">
 				<tr>
 					<th>STT</th>
 					<th>Ảnh</th>
-					<th>Tên sản phẩm</th>
-					<th>Giá</th>
-					<th>Giá K/M</th>
-					<th>Danh mục</th>
-					<th>Tình trạng</th>
-					<!-- <th>Hot</th> -->
-					<!-- <th>Mới về</th>
-          <th>Khuyến mãi</th>
-          <th>Hiển thị</th>
-          <th>Thứ tự</th> -->
+					<th (click)="sortBy('name')">
+						Tên sản phẩm
+						<span [ngClass]="getSortIcon('name')"></span>
+					</th>
+					<th (click)="sortBy('price')">
+						Giá
+						<span [ngClass]="getSortIcon('price')"></span>
+					</th>
+					<th (click)="sortBy('name')">
+						Giá K/M
+						<span [ngClass]="getSortIcon('price')"></span>
+					</th>
+					<th (click)="sortBy('categories')">
+						Danh mục
+						<span [ngClass]="getSortIcon('categories')"></span>
+					</th>
+					<th>Hot</th>
+					<th>Mới về</th>
+					<th>Khuyến mãi</th>
+					<th (click)="sortBy('status')">
+						Tình trạng
+						<span [ngClass]="getSortIcon('status')"></span>
+					</th>
 					<th></th>
 					<!-- <th><input type="checkbox" /></th> -->
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="table-group-divider table-striped">
 				<tr *ngFor="let item of products; let i = index">
-					<td>{{ i + 1 }}</td>
+					<td>{{ item.id }}</td>
 					<td><img [src]="item.images[0]" width="60" /></td>
 					<td>{{ item.name }}</td>
 					<td>{{ item.price }}</td>
 					<td>{{ item.price }}</td>
 					<td>{{ item.categoryIds[0] }}</td>
-					<!-- <td>
-            <span class="badge bg-success" *ngIf="item.inStock">Còn hàng</span>
-            <span class="badge bg-secondary" *ngIf="!item.inStock">Hết hàng</span>
-          </td> -->
-					<!-- <td><span [innerHTML]="item.isHot ? '&#10004;' : '&#10008;'"></span></td>
-          <td><span [innerHTML]="item.isNew ? '&#10004;' : '&#10008;'"></span></td>
-          <td><span [innerHTML]="item.isPromo ? '&#10004;' : '&#10008;'"></span></td>
-          <td><span [innerHTML]="item.visible ? '&#10004;' : '&#10008;'"></span></td>
-          <td><input type="number" [(ngModel)]="item.order" class="form-control" style="width: 60px; margin: auto;" /></td> -->
+
+					<td>hot</td>
+					<td>new</td>
+					<td>km</td>
 					<td>
 						<span
 							class="badge bg-success"
@@ -82,8 +95,7 @@
 								id="actionDropdown"
 								data-bs-toggle="dropdown"
 								aria-expanded="false"
-							>
-							</button>
+							></button>
 							<ul class="dropdown-menu" aria-labelledby="actionDropdown">
 								<li><button class="dropdown-item">Sửa</button></li>
 								<li><button class="dropdown-item text-danger">Xóa</button></li>
@@ -95,4 +107,42 @@
 			</tbody>
 		</table>
 	</div>
+
+	<!-- pagination -->
+	<nav class="d-flex justify-content-end mt-3">
+		<ul class="pagination pagination-sm mb-0">
+			<li class="page-item" [class.disabled]="pagedProducts.page.number">
+				<button
+					class="page-link"
+					(click)="changePage(pagedProducts.page.number - 1)"
+				>
+					«
+				</button>
+			</li>
+
+			<li
+				class="page-item"
+				*ngFor="let page of getPageArray()"
+				[class.active]="page === pagedProducts.page.number + 1"
+			>
+				<button class="page-link" (click)="changePage(page)">
+					{{ page }}
+				</button>
+			</li>
+
+			<li
+				class="page-item"
+				[class.disabled]="
+					pagedProducts.page.number === pagedProducts.page.totalPages - 1
+				"
+			>
+				<button
+					class="page-link"
+					(click)="changePage(pagedProducts.page.number + 1)"
+				>
+					»
+				</button>
+			</li>
+		</ul>
+	</nav>
 </div>
