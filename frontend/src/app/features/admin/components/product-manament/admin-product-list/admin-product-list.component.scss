@@ -9,6 +9,7 @@
 			background-color: #f4f6f9; // màu nền nhẹ
 			border-bottom: 2px solid #dee2e6; // đường phân cách rõ ràng
 			th {
+				text-align: center; // căn giữa chữ
 				padding: 12px 16px; // khoảng cách thoáng hơn
 				font-weight: 600; // chữ đậm hơn một chút
 				color: #333; // màu chữ trung tính
@@ -53,4 +54,38 @@
 		border-color: #667eea;
 		color: #fff;
 	}
+}
+.custom-ng-select {
+  .ng-select-container {
+    background-color: #ffffff; // 🔧 Màu nền trắng rõ ràng
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 4px 10px;
+    min-height: 40px;
+    height: auto !important;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 14px;
+    z-index: 2;
+  }
+
+  .ng-dropdown-panel {
+    background-color: #ffffff; // ✅ Nền trắng cho panel dropdown
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 9999; // Đảm bảo luôn nổi trên các phần khác
+  }
+
+  .ng-option {
+    background-color: #ffffff; // ✅ Mỗi item cũng nền trắng
+    color: #212529;
+  }
+
+  .ng-option:hover,
+  .ng-option-selected {
+    background-color: #e9ecef; // ✅ Hover có màu nhẹ
+    color: #000;
+  }
 }

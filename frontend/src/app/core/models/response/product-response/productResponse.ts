@@ -1,3 +1,5 @@
+import { PromotionResponse } from "./PromotionResponse";
+
 export interface ProductResponse {
   id: number;
   name: string;
@@ -6,6 +8,8 @@ export interface ProductResponse {
   categoryIds: number[];
   description: string;
   images: string[];
+  hot: number;
+  promotions: PromotionResponse[];
 }
 
     

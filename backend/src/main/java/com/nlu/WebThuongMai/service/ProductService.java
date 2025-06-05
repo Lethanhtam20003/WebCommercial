@@ -55,13 +55,12 @@ public class ProductService {
             );
         }
 
-        if (filter.getCategoryId() != null) {
+        if (filter.getCategoryId() != null && filter.getCategoryId().length > 0) { // Hoặc !filter.getCategoryIds().isEmpty() nếu là List
             spec = spec.and((root, query, cb) -> {
                 Join<Product, Category> join = root.join("categories");
-                return cb.equal(join.get("id"), filter.getCategoryId());
+                return join.get("id").in(filter.getCategoryId());
             });
         }
-
 
         if (filter.getStatus() != null) {
             spec = spec.and((root, query, cb) ->

@@ -1,7 +1,5 @@
 <div class="container-fluid mt-3">
-	<div
-		class="header-fillter d-flex justify-content-between align-items-center mb-3"
-	>
+	<div class="header-fillter d-flex justify-content-between align-items-center mb-3">
 		<div>
 			<button class="btn btn-primary me-2" [routerLink]="['../create-product']">
 				+ Thêm mới
@@ -34,25 +32,55 @@
 						Tên sản phẩm
 						<span [ngClass]="getSortIcon('name')"></span>
 					</th>
-					<th (click)="sortBy('price')">
+					<th>
 						Giá
-						<span [ngClass]="getSortIcon('price')"></span>
+						<span [ngClass]="getSortIcon('price')" (click)="sortBy('price')"></span>
+						<!-- Nút mở dropdown lọc -->
+						<span class="ms-1" style="cursor: pointer" data-bs-toggle="dropdown">
+							<i class="bi bi-funnel-fill"></i>
+							<!-- Icon lọc từ Bootstrap Icons -->
+						</span>
+
+						<!-- Dropdown menu dùng Bootstrap -->
+						<div class="dropdown-menu p-3" style="min-width: 220px">
+							<div class="mb-2">
+								<label for="minPrice" class="form-label mb-1">Giá Min</label>
+								<input id="minPrice" type="number" class="form-control" [(ngModel)]="filterMinPrice" />
+							</div>
+							<div class="mb-2">
+								<label for="maxPrice" class="form-label mb-1">Giá Max</label>
+								<input id="maxPrice" type="number" class="form-control" [(ngModel)]="filterMaxPrice" />
+							</div>
+							<button class="btn btn-primary w-100" (click)="applyPriceFilter()">
+								Lọc
+							</button>
+						</div>
 					</th>
-					<th (click)="sortBy('price')">
-						Giá K/M
-						<span [ngClass]="getSortIcon('price')"></span>
-					</th>
-					<th (click)="sortBy('categories')">
+					<th class=" dropdown">
 						Danh mục
-						<span [ngClass]="getSortIcon('categories')"></span>
+						<span class="ms-1" style="cursor: pointer;" data-bs-toggle="dropdown"
+							data-bs-auto-close="outside" 
+							>
+							<i class="bi bi-funnel-fill"></i>
+						</span>
+
+						<div class="dropdown-menu p-3" style="min-width: 250px;">
+							<button class="btn btn-primary w-100 mt-2" (click)="applyCategoryFilter()">
+								Áp dụng
+							</button>
+
+							<ng-select class="custom-ng-select w-100" [items]="categoryList" bindLabel="name"
+								bindValue="id" [multiple]="true" [closeOnSelect]="false" placeholder="Chọn danh mục"
+								[(ngModel)]="filterCategoryIds">
+							</ng-select>
+
+							
+						</div>
 					</th>
+
 					<th>Hot</th>
-					<th>Mới về</th>
 					<th>Khuyến mãi</th>
-					<th (click)="fillBy('status')">
-						Tình trạng
-						<span [ngClass]="getSortIcon('status')"></span>
-					</th>
+					<th>Tình trạng</th>
 					<th></th>
 					<!-- <th><input type="checkbox" /></th> -->
 				</tr>
@@ -60,42 +88,26 @@
 			<tbody class="table-group-divider table-striped">
 				<tr *ngFor="let item of products; let i = index">
 					<td>{{ item.id }}</td>
-					<td><img [src]="item.images[0]"/></td>
+					<td><img [src]="item.images[0]" /></td>
 					<td>{{ item.name }}</td>
-					<td>{{ item.price }}</td>
 					<td>{{ item.price }}</td>
 					<td>{{ item.categoryIds[0] }}</td>
 
-					<td>hot</td>
-					<td>new</td>
-					<td>km</td>
+					<td>{{ item.hot }}</td>
 					<td>
-						<span
-							class="badge bg-success"
-							*ngIf="item.status === ProductStatusType.ACTIVE"
-							>Hoạt động</span
-						>
-						<span
-							class="badge bg-secondary"
-							*ngIf="item.status === ProductStatusType.INACTIVE"
-							>Ngừng hoạt động</span
-						>
-						<span
-							class="badge bg-warning"
-							*ngIf="item.status === ProductStatusType.DELETED"
-							>Đã xóa</span
-						>
+						<span class="badge bg-warning">{{ item.promotions.length > 0 ? item.promotions[0].name : 'Không có' }}</span>
+					</td>
+					<td>
+						<span class="badge bg-success" *ngIf="item.status === ProductStatusType.ACTIVE">Hoạt động</span>
+						<span class="badge bg-secondary" *ngIf="item.status === ProductStatusType.INACTIVE">Ngừng hoạt
+							động</span>
+						<span class="badge bg-warning" *ngIf="item.status === ProductStatusType.DELETED">Đã xóa</span>
 					</td>
 
 					<td>
 						<div class="dropdown">
-							<button
-								class="btn btn-sm btn-secondary dropdown-toggle"
-								type="button"
-								id="actionDropdown"
-								data-bs-toggle="dropdown"
-								aria-expanded="false"
-							></button>
+							<button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="actionDropdown"
+								data-bs-toggle="dropdown" aria-expanded="false"></button>
 							<ul class="dropdown-menu" aria-labelledby="actionDropdown">
 								<li><button class="dropdown-item">Sửa</button></li>
 								<li><button class="dropdown-item text-danger">Xóa</button></li>
@@ -117,35 +129,23 @@
 	<!-- pagination -->
 	<nav class="d-flex justify-content-end mt-3">
 		<ul class="pagination pagination-sm mb-0">
-			<li class="page-item" [class.disabled]="pagedProducts.page.number">
-				<button
-					class="page-link"
-					(click)="changePage(pagedProducts.page.number - 1)"
-				>
+			<li class="page-item" [class.disabled]="pagedProducts.page.number === 0">
+				<button class="page-link" (click)="changePage(pagedProducts.page.number - 1)">
 					«
 				</button>
 			</li>
 
-			<li
-				class="page-item"
-				*ngFor="let page of getPageArray()"
-				[class.active]="page === pagedProducts.page.number + 1"
-			>
+			<li class="page-item" *ngFor="let page of getPageArray()"
+				[class.active]="page === pagedProducts.page.number + 1">
 				<button class="page-link" (click)="changePage(page)">
 					{{ page }}
 				</button>
 			</li>
 
-			<li
-				class="page-item"
-				[class.disabled]="
-					pagedProducts.page.number === pagedProducts.page.totalPages - 1
-				"
-			>
-				<button
-					class="page-link"
-					(click)="changePage(pagedProducts.page.number + 1)"
-				>
+			<li class="page-item" [class.disabled]="
+					pagedProducts.page.number >= pagedProducts.page.totalPages - 1
+				">
+				<button class="page-link" (click)="changePage(pagedProducts.page.number + 1)">
 					»
 				</button>
 			</li>

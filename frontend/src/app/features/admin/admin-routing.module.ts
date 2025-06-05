@@ -104,6 +104,20 @@ const couponsManagementRoutes: Routes = [
 		showFooter: false,
 	},
 }]
+const promotionsManagementRoutes: Routes = [
+	{
+		path: 'promotions-management',
+		loadComponent: () =>
+			import(
+				'./pages/promotion-management/promotion-management.component'
+			).then(m => m.PromotionManagementComponent),
+		data: {
+			showHeader: false,
+			showFooter: false,
+		},
+	},
+];
+
 /**
  * Định nghĩa các route cho module admin
  **/
@@ -138,6 +152,7 @@ const routes: Routes = [
 			...categoryManagementRoutes,
 			...reviewManagementRoutes,
 			...couponsManagementRoutes,
+			...promotionsManagementRoutes,
 			{
 				path: '',
 				redirectTo: 'dashboard',

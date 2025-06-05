@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductFillterRequest {
     String name; // Tìm kiếm gần đúng (LIKE %keyword%).
-    Long categoryId; // Lọc theo ID danh mục,
+    Long[] categoryId; // Lọc theo ID danh mục,
     ProductStatus status; //  enum ProductStatus như ACTIVE, INACTIVE.
     Double minPrice; // Lọc theo khoảng giá min - max.
     Double maxPrice; //Lọc theo khoảng giá min - max.

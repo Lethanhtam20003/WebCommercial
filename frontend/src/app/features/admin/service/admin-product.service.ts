@@ -31,6 +31,13 @@ export class AdminProductService {
 					params = params.append('sort', `${field},${direction}`);
 				});
 		}
+		if (pageRequest.filterMap) {
+			Object.entries(pageRequest.filterMap)
+				.filter(([_, value]) => value !== null)
+				.forEach(([key, value]) => {
+					params = params.append(key, value);
+				});
+		}
 
 		return this.http
 			.get<
