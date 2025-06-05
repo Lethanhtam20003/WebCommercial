@@ -1,4 +1,4 @@
-package com.nlu.WebThuongMai.dto.response.OrderResp;
+package com.nlu.WebThuongMai.dto.response.orderResp;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,10 +15,10 @@ import java.math.BigDecimal;
 public class OrderItemResponse {
     long id;
     long productId;
+    String productName;
+    String productImage;
     Integer quantity;
     BigDecimal price;
-    String productImage;
-    String productName;
-
+    BigDecimal totalItemPrice;
 }
 

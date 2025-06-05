@@ -2,7 +2,7 @@ package com.nlu.WebThuongMai.controller;
 
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.service.OrderItemService;
-import com.nlu.WebThuongMai.dto.response.OrderResp.OrderItemResponse;
+import com.nlu.WebThuongMai.dto.response.orderResp.OrderItemResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
