@@ -1,10 +1,12 @@
 package com.nlu.WebThuongMai.mapper;
 
+import com.nlu.WebThuongMai.dto.request.productReq.ProductCreatetionRequest;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.model.Category;
 import com.nlu.WebThuongMai.model.Product;
 import com.nlu.WebThuongMai.model.ProductImage;
+import com.nlu.WebThuongMai.model.ProductStatistic;
 import org.mapstruct.*;
 import org.springframework.data.domain.Page;
 
@@ -18,6 +20,7 @@ public interface ProductMapper {
 
     @Mapping(target = "categoryIds", expression = "java(mapCategoriesToIds(product.getCategories()))")
     @Mapping(target = "images", source = "images")
+    @Mapping(target = "hot" , source = "statistic.hot")
     ProductResponse toProductResponse(Product product);
 
     default Set<Long> mapCategoriesToIds(Set<Category> categories) {
@@ -38,7 +41,14 @@ public interface ProductMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "categories", expression = "java(toCategorySet(product.getCategoryIds()))")
     @Mapping(target = "images", expression = "java(toProductImageSet(product.getImages()))")
-    Product toProduct(ProductRequest product);
+    @Mapping(target = "statistic", ignore = true)
+    Product productRequestToProduct(ProductRequest product);
+
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "categories", expression = "java(toCategorySet(product.getCategoryIds()))")
+    @Mapping(target = "images", expression = "java(toProductImageSet(product.getImages()))")
+    Product productCreationRequestToProduct(ProductCreatetionRequest product);
 
     default Set<Category> toCategorySet(Set<Long> ids) {
         if (ids == null) return new HashSet<>();
@@ -77,5 +87,6 @@ public interface ProductMapper {
                     .forEach(img -> img.setProduct(product));
         }
     }
+
 
 }

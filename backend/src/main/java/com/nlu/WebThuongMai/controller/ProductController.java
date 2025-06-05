@@ -1,10 +1,9 @@
 package com.nlu.WebThuongMai.controller;
 
-import com.nlu.WebThuongMai.dto.request.productReq.CategoryRequest;
-import com.nlu.WebThuongMai.dto.request.productReq.ProductNameRequest;
-import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
+import com.nlu.WebThuongMai.dto.request.productReq.*;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
+import com.nlu.WebThuongMai.enums.ProductStatus;
 import com.nlu.WebThuongMai.service.ProductService;
 import com.nlu.WebThuongMai.service.ReadCSVFile;
 import lombok.AccessLevel;
@@ -14,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Slf4j
 
@@ -33,9 +34,11 @@ public class ProductController {
      * @return Danh sách sản phẩm được phân trang
      */
     @GetMapping
-    ApiResponse<Page<ProductResponse>> getAllProduct(Pageable pageable) {
+    ApiResponse<Page<ProductResponse>> getAllProduct(
+            @ModelAttribute ProductFillterRequest request,
+            Pageable pageable) {
         return ApiResponse.<Page<ProductResponse>>builder()
-                .result(productService.getAllProduct(pageable))
+                .result(productService.getAllProduct(request, pageable))
                 .build();
     }
 
@@ -55,7 +58,7 @@ public class ProductController {
     /**
      * Lấy danh sách sản phẩm theo danh mục có phân trang
      *
-     * @param request  Thông tin danh mục cần tìm
+     * @param category  id danh mục cần tìm
      * @param pageable Thông tin phân trang (số trang, số lượng mỗi trang)
      * @return Danh sách sản phẩm theo danh mục được phân trang
      */
@@ -67,7 +70,7 @@ public class ProductController {
     }
 
     @PostMapping
-    ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest request) {
+    ApiResponse<ProductResponse> createProduct(@RequestBody ProductCreatetionRequest request) {
         return ApiResponse.<ProductResponse>builder()
                 .result(productService.createProduct(request))
                 .build();

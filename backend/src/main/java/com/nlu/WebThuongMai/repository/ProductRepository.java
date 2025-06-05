@@ -4,6 +4,7 @@ import com.nlu.WebThuongMai.model.Product;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
     Boolean existsByName(String name);
+
+
+    @EntityGraph(attributePaths = {
+            "statistic",
+            "categories",
+            "images",
+            "promotions"
+    })
+    Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 }
