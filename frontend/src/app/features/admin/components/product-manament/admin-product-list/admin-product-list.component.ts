@@ -60,7 +60,12 @@ export class AdminProductListComponent implements OnInit {
 		);
 	}
 	// Chuyển trang
-	changePage(page: number): void {}
+	changePage(page: number): void {
+		console.log('changePage', page);
+		this.pageRequest.page = page -1; // Giảm 1 vì API thường bắt đầu từ trang 0
+		this.loadData();
+		
+	}
 
 	// sortMap: { [key: string]: 'asc' | 'desc' | 'none' } = {
 	// 	name: 'none',
@@ -79,6 +84,10 @@ export class AdminProductListComponent implements OnInit {
 		// Cập nhật sort trong pageRequest
 		this.loadData(); // Gọi API hoặc load lại dữ liệu
 	}
+	fillBy(field: string)  {
+		
+	}
+
 	
 	getSortIcon(field: string): string {
 		if (this.sortMap[field] === 'none') {

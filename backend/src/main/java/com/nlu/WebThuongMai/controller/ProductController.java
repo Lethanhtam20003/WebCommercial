@@ -60,9 +60,9 @@ public class ProductController {
      * @return Danh sách sản phẩm theo danh mục được phân trang
      */
     @GetMapping("/category")
-    ApiResponse<Page<ProductResponse>> getProductByCategory(@RequestBody CategoryRequest request, Pageable pageable) {
+    ApiResponse<Page<ProductResponse>> getProductByCategory(@RequestParam String category, Pageable pageable) {
         return ApiResponse.<Page<ProductResponse>>builder()
-                .result(productService.getProductByCategory(request, pageable))
+                .result(productService.getProductByCategory(category, pageable))
                 .build();
     }
 

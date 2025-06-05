@@ -38,7 +38,7 @@
 						Giá
 						<span [ngClass]="getSortIcon('price')"></span>
 					</th>
-					<th (click)="sortBy('name')">
+					<th (click)="sortBy('price')">
 						Giá K/M
 						<span [ngClass]="getSortIcon('price')"></span>
 					</th>
@@ -49,7 +49,7 @@
 					<th>Hot</th>
 					<th>Mới về</th>
 					<th>Khuyến mãi</th>
-					<th (click)="sortBy('status')">
+					<th (click)="fillBy('status')">
 						Tình trạng
 						<span [ngClass]="getSortIcon('status')"></span>
 					</th>
@@ -60,7 +60,7 @@
 			<tbody class="table-group-divider table-striped">
 				<tr *ngFor="let item of products; let i = index">
 					<td>{{ item.id }}</td>
-					<td><img [src]="item.images[0]" width="60" /></td>
+					<td><img [src]="item.images[0]"/></td>
 					<td>{{ item.name }}</td>
 					<td>{{ item.price }}</td>
 					<td>{{ item.price }}</td>
@@ -104,9 +104,15 @@
 					</td>
 					<!-- <td><input type="checkbox" /></td> -->
 				</tr>
+				<tr *ngIf="products.length === 0">
+					<td colspan="11" class="text-center text-muted py-3">
+						Không có sản phẩm nào được tìm thấy.
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
+	<!--  -->
 
 	<!-- pagination -->
 	<nav class="d-flex justify-content-end mt-3">

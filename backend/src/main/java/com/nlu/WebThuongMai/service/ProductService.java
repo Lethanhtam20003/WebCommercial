@@ -47,8 +47,8 @@ public class ProductService {
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND)));
     }
 
-    public Page<ProductResponse> getProductByCategory(CategoryRequest request, Pageable pageable) {
-        return productMapper.toPageProductResponse(productRepository.findByCategoryName(request.getCategory(), pageable));
+    public Page<ProductResponse> getProductByCategory(String category, Pageable pageable) {
+        return productMapper.toPageProductResponse(productRepository.findByCategoryName(category, pageable));
     }
 
     public Boolean checkName(String name) {

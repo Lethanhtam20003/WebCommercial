@@ -40,8 +40,17 @@
 	}
 }
 
-.pagination .page-item.active .page-link {
-	background-color: #667eea;
-	border-color: #667eea;
-	color: #fff;
+.pagination {
+	position: fixed; // Giúp phần tử này cố định ở một vị trí trên màn hình, không bị trôi khi cuộn trang
+	bottom: 0; // Cách mép dưới của màn hình 0px => sát dưới cùng
+	right: 0; // Cách mép phải của màn hình 0px => sát bên phải
+	z-index: 999; // Ưu tiên hiển thị lớp trên cùng, tránh bị các phần khác đè lên
+	background-color: #fff; // Giúp nội dung dễ đọc nếu bên dưới có nền tối hoặc rối
+	padding: 0.5rem 1rem; // Khoảng cách bên trong để phần tử không bị dính sát chữ
+	// box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); // Tạo bóng giúp phần phân trang nổi bật
+	.page-item.active .page-link {
+		background-color: #667eea;
+		border-color: #667eea;
+		color: #fff;
+	}
 }
