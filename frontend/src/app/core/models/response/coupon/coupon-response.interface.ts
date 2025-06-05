@@ -1,4 +1,4 @@
-export interface GetAllCouponResponse {
+export interface CouponResponse {
 	id: number;
 	code: string;
 	discountPercentage: number;

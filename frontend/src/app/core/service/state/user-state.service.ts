@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { UserProfile } from '../../models/response/user-profile-response.model';
+import { UserProfile } from '../../models/response/user/user-profile-response.model';
 import { UserService } from '../user.service';
 import { HttpClient } from '@angular/common/http';
 import { URL_API } from '../../../shared/constants/url-api.constants';

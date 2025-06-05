@@ -74,7 +74,7 @@ const protectedRoutes: Routes = [
 						'./shared/components/user-profile/user-profile.component'
 					).then(m => m.UserProfileComponent),
 				title: LabelConstants.userProfile,
-				// canActivate: [AuthGuard],
+				canActivate: [AuthGuard],
 				data: {
 					showHeader: true,
 					showFooter: true,
@@ -88,7 +88,7 @@ const protectedRoutes: Routes = [
 						'./shared/components/change-password/change-password.component'
 					).then(m => m.ChangePasswordComponent),
 				title: LabelConstants.changePassword,
-				// canActivate: [AuthGuard],
+				canActivate: [AuthGuard],
 				data: {
 					showHeader: true,
 					showFooter: true,
@@ -102,7 +102,7 @@ const protectedRoutes: Routes = [
 						'./shared/components/order-management/order-management.component'
 					).then(m => m.OrderMamangementComponent),
 				title: LabelConstants.order,
-				// canActivate: [AuthGuard],
+				canActivate: [AuthGuard],
 				data: {
 					showHeader: true,
 					showFooter: true,
@@ -116,7 +116,7 @@ const protectedRoutes: Routes = [
 						'./shared/components/coupon-list/coupon-list.component'
 					).then(m => m.CouponListComponent),
 				title: LabelConstants.couponList,
-				// canActivate: [AuthGuard],
+				canActivate: [AuthGuard],
 				data: {
 					showHeader: true,
 					showFooter: true,

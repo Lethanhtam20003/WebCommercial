@@ -3,9 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, take } from 'rxjs';
 import { OrderStatus } from '../../../core/enum/order-status.enum';
-import { OrderFilterRequest } from '../../../core/models/request/order-filter-request.interface';
-import { OrderDetailResponse } from '../../../core/models/response/order-item-response.interface';
-import { OrderResponse } from '../../../core/models/response/order-response.interface';
+import { OrderFilterRequest } from '../../../core/models/request/order/order-filter-request.interface';
+import { OrderResponse } from '../../../core/models/response/order/order-response.interface';
 import { AlertService } from '../../../core/service/alert.service';
 import { OrderDetailService } from '../../../core/service/order-detail.service';
 import { OrderStateService } from '../../../core/service/state/order-state.service';
@@ -13,8 +12,9 @@ import { UserStateService } from '../../../core/service/state/user-state.service
 import { UtitlyService } from '../../../core/service/utility.service';
 import { ErrorMessageConstants } from '../../constants/error-message.constants';
 import { LabelConstants } from '../../constants/label.constants';
-import { OrderDetailComponent } from '../order-detail/order-detail.component';
-import { OrderListComponent } from '../order-list/order-list.component';
+import { OrderDetailComponent } from '../../features/order-detail/order-detail.component';
+import { OrderListComponent } from '../../features/order-list/order-list.component';
+import { OrderDetailResponse } from '../../../core/models/response/order/order-item-response.interface';
 
 @Component({
 	standalone: true,

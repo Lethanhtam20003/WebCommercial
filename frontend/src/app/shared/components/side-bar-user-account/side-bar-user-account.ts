@@ -12,7 +12,7 @@ import { RouteLink } from '../../constants/route-link';
 import { AuthService } from '../../../core/service/auth.service';
 import { ErrorMessageConstants } from '../../constants/error-message.constants';
 import { UserService } from '../../../core/service/user.service';
-import { UserProfile } from '../../../core/models/response/user-profile-response.model';
+import { UserProfile } from '../../../core/models/response/user/user-profile-response.model';
 import { UserStateService } from '../../../core/service/state/user-state.service';
 import { AlertService } from '../../../core/service/alert.service';
 import { UtitlyService } from '../../../core/service/utility.service';

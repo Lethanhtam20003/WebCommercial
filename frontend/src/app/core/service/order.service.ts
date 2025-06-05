@@ -1,12 +1,12 @@
-import { OrderStatus } from './../enum/order-status.enum';
-import { ApiResponse } from './../models/api-response.model';
-import { OrderFilterRequest } from '../models/request/order-filter-request.interface';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { OrderResponse } from '../models/response/order-response.interface';
-import { URL_API } from '../../shared/constants/url-api.constants';
 import { Observable } from 'rxjs';
+import { URL_API } from '../../shared/constants/url-api.constants';
+import { GetAllOrdersAdminRequest } from '../models/request/order/get-all-orders-admin-request.interface';
+import { OrderFilterRequest } from '../models/request/order/order-filter-request.interface';
+import { OrderResponse } from '../models/response/order/order-response.interface';
 import { Page } from '../models/response/page-response.interface';
+import { ApiResponse } from './../models/api-response.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -32,20 +32,17 @@ export class OrderService {
 			.set('userId', userId.toString())
 			.set('page', page.toString())
 			.set('size', size.toString());
-		return this.http.get<ApiResponse<Page<OrderResponse>>>(
-			URL_API.getOrders,
-			{ params }
-		);
+		return this.http.get<ApiResponse<Page<OrderResponse>>>(URL_API.getOrders, {
+			params,
+		});
 	}
 
-	// getOrdersAdmin(
-	// 	request: OrderFilterRequest
-	// ): Observable<ApiResponse<OrderResponse[]>> {
-	// 	return this.http.get<ApiResponse<OrderResponse[]>>(
-	// 		`${URL_API.getOrdersAdmin}`,
-	// 		{
-	// 			params: request as any,
-	// 		}
-	// 	);
-	// }
+	getOrdersAdmin(
+		request: GetAllOrdersAdminRequest
+	): Observable<ApiResponse<Page<OrderResponse>>> {
+		return this.http.post<ApiResponse<Page<OrderResponse>>>(
+			`${URL_API.getOrdersAdmin}`,
+			request
+		);
+	}
 }

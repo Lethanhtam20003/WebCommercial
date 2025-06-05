@@ -77,38 +77,41 @@ const categoryManagementRoutes: Routes = [
 	{
 		path: 'category-management',
 		loadComponent: () =>
-			import(
-				'./pages/category-management/category-management.component'
-			).then(m => m.CategoryManagementComponent),
+			import('./pages/category-management/category-management.component').then(
+				m => m.CategoryManagementComponent
+			),
 		data: {
 			showHeader: false,
 			showFooter: false,
 		},
-	}];
+	},
+];
 const reviewManagementRoutes: Routes = [
 	{
 		path: 'review-management',
 		loadComponent: () =>
-			import(
-				'./pages/review-management/review-management.component'
-			).then(m => m.ReviewManagementComponent),
+			import('./pages/review-management/review-management.component').then(
+				m => m.ReviewManagementComponent
+			),
 		data: {
 			showHeader: false,
 			showFooter: false,
 		},
-	}];
-const couponsManagementRoutes: Routes = [
-{
-	path: 'coupons-management',
-	loadComponent: () =>
-		import(
-			'./pages/coupons-management/coupons-management.component'
-		).then(m => m.CouponsManagementComponent),
-	data: {
-		showHeader: false,
-		showFooter: false,
 	},
-}]
+];
+const couponsManagementRoutes: Routes = [
+	{
+		path: 'coupons-management',
+		loadComponent: () =>
+			import('./pages/coupons-management/coupons-management.component').then(
+				m => m.CouponsManagementComponent
+			),
+		data: {
+			showHeader: false,
+			showFooter: false,
+		},
+	},
+];
 /**
  * Định nghĩa các route cho module admin
  **/
@@ -133,21 +136,65 @@ const routes: Routes = [
 					import('./pages/Order-management/Order-management.component').then(
 						m => m.OrderManagementComponent
 					),
+				children: [
+					{
+						path: 'order-list',
+						loadComponent: () =>
+							import(
+								'../order/order-list-tab/order-list-tab.component'
+							).then(m => m.OrderListTabComponent),
+						data: {
+							showHeader: false,
+							showFooter: false,
+						},
+					},
+					// {
+					// 	path: 'payment-list',
+					// 	loadComponent: () =>
+					// 		import('../payment-list/payment-list.component').then(
+					// 			m => m.PaymentListComponent
+					// 		),
+					// 	data: {
+					// 		showHeader: false,
+					// 		showFooter: false,
+					// 	},
+					// },
+					{
+						path: 'refund-list',
+						loadComponent: () =>
+							import('../refund-list/refund-list.component').then(
+								m => m.RefundListComponent
+							),
+						data: {
+							showHeader: false,
+							showFooter: false,
+						},
+					},
+					{
+						path: '',
+						redirectTo: 'order-list',
+						pathMatch: 'full',
+						data: {
+							showHeader: false,
+							showFooter: false,
+						},
+					},
+				],
 				data: {
 					showHeader: false,
 					showFooter: false,
-				}
+				},
 			},
 			{
 				path: 'customer-management',
 				loadComponent: () =>
-					import('./pages/customer-management/customer-management.component').then(
-						m => m.CustomerManagementComponent
-					),
-						data: {
+					import(
+						'./pages/customer-management/customer-management.component'
+					).then(m => m.CustomerManagementComponent),
+				data: {
 					showHeader: false,
 					showFooter: false,
-				}
+				},
 			},
 			...categoryManagementRoutes,
 			...reviewManagementRoutes,

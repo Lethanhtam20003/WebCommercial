@@ -1,0 +1,51 @@
+<table class="table table-bordered table-hover">
+	<thead class="table-dark">
+		<tr>
+			<th>#</th>
+			<th>Mã đơn</th>
+			<th>Người đặt</th>
+			<th>Ngày đặt</th>
+			<th>Trạng thái</th>
+			<th>Tổng tiền</th>
+			<th>Giá sau giảm</th>
+			<th>Ghi chú</th>
+			<th>Mã giảm giá</th>
+			<th>Thao tác</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let order of orders; index as i">
+			<td>{{ i + 1 }}</td>
+			<td>{{ order.id }}</td>
+			<td>{{ order.userName || '-' }}</td>
+			<td>{{ order.createdDate | date: 'dd/MM/yyyy' }}</td>
+			<td>
+				<span
+					class="badge"
+					[ngClass]="{
+						'bg-warning': order.status === 'PENDING',
+						'bg-info': order.status === 'SHIPPED',
+						'bg-success': order.status === 'DELIVERED',
+						'bg-danger': order.status === 'CANCELLED',
+					}"
+				>
+					{{ order.status }}
+				</span>
+			</td>
+			<td>{{ order.totalPrice | currency: 'VND' }}</td>
+			<td>{{ order.discountedPrice | currency: 'VND' }}</td>
+			<td>{{ order.note || '-' }}</td>
+			<td>
+				<span *ngIf="order.coupon; else emptyCoupon">
+					{{ order.coupon.code }}
+				</span>
+				<ng-template #emptyCoupon>-</ng-template>
+			</td>
+			<td>
+				<button class="btn btn-sm btn-primary btn-order-detail" (click)="onView(order.id)">
+					Xem
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>

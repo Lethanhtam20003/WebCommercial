@@ -8,11 +8,11 @@
 		class="d-flex align-items-center  text-white text-decoration-none"
 	>
 		<span class="fs-4 text-center ms-5">FIRE KNIGHT<br><span class="fs-5 fst-italic">sport</span></span>
-		
+
   		<!-- <img src="assets/images/shop/logo.png" alt="Logo" class="me-2" style="width: 80px; height: 80px;"> -->
-  
+
 	</a>
-	
+
 	<hr />
 
 	<ul class="nav nav-pills flex-column mb-auto">
@@ -105,11 +105,35 @@
 		</li>
 
 		<li class="nav-item">
-			<a href="#" class="nav-link text-white"
-			[routerLink]="['/admin/order-management']"
+			<a class="nav-link text-white d-flex justify-content-between align-items-center"
+				data-bs-toggle="collapse"
+				href="#orderMenu"
+				role="button"
+				aria-expanded="false"
+				aria-controls="orderMenu"
 			>
-				<i class="bi bi-table me-2"></i> Orders
+				<span><i class="bi bi-table me-2"></i> Orders</span>
+				<i class="bi bi-caret-down-fill"></i>
 			</a>
+      <div class="collapse" id="orderMenu">
+				<ul class="nav flex-column ms-4">
+					<li class="nav-item">
+						<a class="nav-link text-white" [routerLink]="['/admin/order-management/order-list']" routerLinkActive="active">
+							Order List
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-white" [routerLink]="['/admin/order-management/refund-list']" routerLinkActive="active">
+							Refund List
+						</a>
+					</li>
+          <!-- <li class="nav-item">
+						<a class="nav-link text-white" [routerLink]="['/admin/order-management/payment-list']" routerLinkActive="active">
+							Payment List
+						</a>
+					</li> -->
+				</ul>
+			</div>
 		</li>
 
 		<li class="nav-item">
@@ -121,7 +145,7 @@
 		<li class="nav-item">
 			<a href="#" class="nav-link text-white"
 			[routerLink]="['/admin/category-management']">
-				<i class="bi bi-table me-2"></i> Category 
+				<i class="bi bi-table me-2"></i> Category
 			</a>
 		</li>
 		<!-- review -->

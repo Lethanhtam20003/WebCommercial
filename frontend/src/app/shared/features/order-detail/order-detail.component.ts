@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { OrderResponse } from "../../../core/models/response/order-response.interface";
+import { OrderResponse } from "../../../core/models/response/order/order-response.interface";
 import { CommonModule } from "@angular/common";
-import { OrderDetailResponse } from "../../../core/models/response/order-item-response.interface";
+import { OrderDetailResponse } from "../../../core/models/response/order/order-item-response.interface";
 
 @Component({
   imports: [CommonModule],

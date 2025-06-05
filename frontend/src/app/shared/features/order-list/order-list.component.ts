@@ -1,6 +1,6 @@
 import { CommonModule, CurrencyPipe, DatePipe, NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { OrderResponse } from '../../../core/models/response/order-response.interface';
+import { OrderResponse } from '../../../core/models/response/order/order-response.interface';
 import { UtitlyService } from '../../../core/service/utility.service';
 
 @Component({
