@@ -1,6 +1,5 @@
 package com.nlu.WebThuongMai.dto.response.productResp;
 
-import com.nlu.WebThuongMai.model.Promotion;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,7 +17,7 @@ public class ProductResponse {
     String name;
     double price;
     String status;
-    Set<Long> categoryIds;
+    Set<CategoryResponse> categories;
     String description;
     Set<String> images;
     int hot;

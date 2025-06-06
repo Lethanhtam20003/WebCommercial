@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
         uses = {ProductImageMapper.class})
 public interface ProductMapper {
 
-    @Mapping(target = "categoryIds", expression = "java(mapCategoriesToIds(product.getCategories()))")
+//    @Mapping(target = "category", expression = "java(mapCategoriesToIds(product.getCategories()))")
     @Mapping(target = "images", source = "images")
     @Mapping(target = "hot" , source = "statistic.hot")
     ProductResponse toProductResponse(Product product);

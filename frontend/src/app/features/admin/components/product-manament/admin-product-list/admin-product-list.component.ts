@@ -22,7 +22,6 @@ import { category } from '../../../models/category';
 		RouterLink,
 		RouterModule,
 		NgIf,
-		CommonModule,
 		NgSelectModule,
 	],
 	selector: 'app-admin-product-list',
@@ -55,6 +54,7 @@ export class AdminProductListComponent implements OnInit {
 	filterMap: { [key: string]: any } = {
 		categoryId: null, // Lọc theo categoryId nếu cần
 	};
+	productNameSearch: string = ''; // Biến để lưu giá trị tìm kiếm theo tên sản phẩm
 
 	ngOnInit() {
 		this.pageRequest = {
@@ -136,6 +136,7 @@ export class AdminProductListComponent implements OnInit {
 		this.pageRequest.filterMap = this.filterMap; // Cập nhật filterMap trong pageRequest
 		this.loadData(); // Gọi lại API để lấy dữ liệu đã lọc
 	}
+
 	// lọc theo danh mục
 
 	filterCategoryIds: number[] = [];
@@ -147,6 +148,12 @@ export class AdminProductListComponent implements OnInit {
 		document.body.click();
 	
 		this.loadData(); // gọi lại API
+	}
+	searchProducts() {
+		console.log('Tìm kiếm sản phẩm với tên:', this.productNameSearch);
+		this.filterMap['name'] = this.productNameSearch; // Thêm điều kiện tìm kiếm vào filterMap
+		this.pageRequest.filterMap = this.filterMap; // Cập nhật filterMap trong pageRequest
+		this.loadData(); // Gọi lại API để lấy dữ liệu đã lọc
 	}
 
 	

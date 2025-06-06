@@ -11,16 +11,16 @@
 			<h2>Quản Lý Sản Phẩm</h2>
 		</div>
 		<div class="d-flex">
-			<input type="text" class="form-control me-2" placeholder="Tên sản phẩm" />
 			<select class="form-select me-2">
 				<option value="">Danh mục</option>
 				<!-- thêm option động nếu cần -->
 			</select>
-			<button class="btn btn-primary">Tìm</button>
+			<input type="text" class="form-control me-2" placeholder="Tên sản phẩm" [(ngModel)]="productNameSearch" />
+			<button class="btn btn-primary" (click)="searchProducts()">Tìm</button>
 		</div>
 	</div>
 
-	<p class="fw-bold">Có tất cả {{ products.length }} sản phẩm</p>
+	<p class="fw-bold">Có tất cả {{ pagedProducts.page.totalElements }} sản phẩm</p>
 
 	<div class="table-scroll table-responsive">
 		<table class="table table-bordered table-hover align-middle">
@@ -91,7 +91,7 @@
 					<td><img [src]="item.images[0]" /></td>
 					<td>{{ item.name }}</td>
 					<td>{{ item.price }}</td>
-					<td>{{ item.categoryIds[0] }}</td>
+					<td>{{ item.categories[0].name }}</td>
 
 					<td>{{ item.hot }}</td>
 					<td>
