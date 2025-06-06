@@ -1,0 +1,26 @@
+::ng-deep .ng-select.custom-ng-select {
+  width: 300px;               // 👈 Cố định chiều rộng
+}
+
+::ng-deep .ng-select.custom-ng-select .ng-select-container {
+  height: 48px;               // 👈 Cố định chiều cao
+  max-height: 48px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;    // 👈 Hiện ... nếu quá dài
+  display: flex;
+  align-items: center;
+  padding-right: 30px;        // 👈 Chừa chỗ cho nút "x"
+}
+
+::ng-deep .ng-select.custom-ng-select .ng-value-container {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex-wrap: nowrap !important;
+}
+
+::ng-deep .ng-select.custom-ng-select .ng-value {
+  margin-right: 4px;
+  white-space: nowrap;
+}

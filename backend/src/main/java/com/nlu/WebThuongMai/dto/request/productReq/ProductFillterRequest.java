@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductFillterRequest {
+    long id;
     String name; // Tìm kiếm gần đúng (LIKE %keyword%).
     Long[] categoryId; // Lọc theo ID danh mục,
     ProductStatus status; //  enum ProductStatus như ACTIVE, INACTIVE.

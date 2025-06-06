@@ -1,0 +1,22 @@
+<ng-select
+  class="custom-ng-select"
+  [items]="items"
+  [bindLabel]="bindLabel"
+  [bindValue]="bindValue"
+  [placeholder]="placeholder"
+  [multiple]="multiple"
+  [clearable]="clearable"
+  [searchable]="searchable"
+  [closeOnSelect]="closeOnSelect"
+  [disabled]="disabled"
+  [(ngModel)]="model"
+  (ngModelChange)="onModelChange($event)"
+>
+  <ng-template ng-option-tmp let-item="item">
+    <i class="bi bi-check2-square me-1"></i> {{ item[bindLabel] }}
+  </ng-template>
+
+  <ng-template ng-label-tmp let-item="item">
+    <span class="badge bg-info text-dark">{{ item[bindLabel] }}</span>
+  </ng-template>
+</ng-select>

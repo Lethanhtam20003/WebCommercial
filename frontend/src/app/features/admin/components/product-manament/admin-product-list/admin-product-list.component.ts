@@ -13,6 +13,7 @@ import {
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CategoryService } from '../../../service/admin-category.service';
 import { category } from '../../../models/category';
+import { CustomNgSelectComponent } from '../../../../../shared/components/custom-ng-select/custom-ng-select.component';
 
 @Component({
 	standalone: true,
@@ -23,6 +24,7 @@ import { category } from '../../../models/category';
 		RouterModule,
 		NgIf,
 		NgSelectModule,
+		CustomNgSelectComponent,
 	],
 	selector: 'app-admin-product-list',
 	templateUrl: './admin-product-list.component.html',
@@ -30,33 +32,24 @@ import { category } from '../../../models/category';
 	encapsulation: ViewEncapsulation.None, // Để sử dụng Bootstrap styles
 })
 export class AdminProductListComponent implements OnInit {
+	pagedProducts!: PageResponse<ProductResponse>;
+	products: ProductResponse[] = [];
+	categoryList: category[] = [];
+	pageRequest!: PageRequest;
+
+	ProductStatusType = ProductStatusType;
+
 	constructor(
 		private adminProductService: AdminProductService,
 		private categoryService: CategoryService,
 		private router: Router
 	) {}
-
-	
-	pagedProducts!: PageResponse<ProductResponse>;
-	products: ProductResponse[] = [];
-
-	categoryList: category[] = [];
-
-	ProductStatusType = ProductStatusType;
-
-	pageRequest!: PageRequest;
-
-	sortMap: { [key: string]: SortDirection } = {
-		name: 'none',
-		price: 'none',
-		categories: 'none',
-	};
-	filterMap: { [key: string]: any } = {
-		categoryId: null, // Lọc theo categoryId nếu cần
-	};
-	productNameSearch: string = ''; // Biến để lưu giá trị tìm kiếm theo tên sản phẩm
-
 	ngOnInit() {
+		this.categoryService.getAll().subscribe(categories => {
+			this.categoryList = categories;
+			console.log('categoryList', this.categoryList);
+		});
+
 		this.pageRequest = {
 			page: 0, // Bắt đầu từ trang 0
 			size: 30, // Số lượng sản phẩm trên mỗi trang
@@ -68,60 +61,48 @@ export class AdminProductListComponent implements OnInit {
 			this.pagedProducts = data;
 			this.products = data.content;
 		});
-		this.categoryService.getAll().subscribe(categories => {
-			this.categoryList = categories;
-			console.log('categoryList', this.categoryList);
-		});
 	}
+	productNameSearch: string = ''; // Biến để lưu giá trị tìm kiếm theo tên sản phẩm
+	filterMinPrice: number | null = null; // Biến để lưu giá trị lọc giá tối thiểu
+	filterMaxPrice: number | null = null; // Biến để lưu giá trị lọc giá tối đa
+	filterCategoryIds: number[] = []; // Biến để lưu danh sách các categoryId đã chọn
+	productStatusSelected:String='';
+	softOptions = [
+		{ key: 'name', label: 'Tên' },
+		{ key: 'price', label: 'Giá' },
+		{ key: 'id', label: 'ID' },
+	]; // Danh sách các tùy chọn sắp xếp
+	typeSoftOptions = [
+		{ key: 'asc', label: 'Tăng dần' },
+		{ key: 'desc', label: 'Giảm dần' },
+	]; // Các giá trị sắp xếp có thể chọn
+
+	softOptionSelected: string = '';
+	typeSoft: SortDirection = 'none'; // Biến để lưu giá trị sắp xếp theo tên, giá hoặc id
+
+	sortMap: { [key: string]: SortDirection } = {
+		name: 'none',
+		price: 'none',
+		id: 'none',
+	};
+	filterMap: { [key: string]: any } = {
+		categoryId: null, // Lọc theo categoryId nếu cần
+		name: null, // Lọc theo tên sản phẩm
+	};
+
 	loadData() {
 		this.adminProductService.getAll(this.pageRequest).subscribe(data => {
 			this.pagedProducts = data;
 			this.products = data.content;
 		});
 	}
-	// mảng chứa các trang
-	getPageArray(): number[] {
-		return Array.from(
-			{ length: this.pagedProducts.page.totalPages },
-			(_, i) => i + 1
-		);
-	}
-	// Chuyển trang
-	changePage(page: number): void {
-		console.log('changePage', page);
-		this.pageRequest.page = page - 1; // Giảm 1 vì API thường bắt đầu từ trang 0
-		this.loadData();
+	searchProducts() {
+		this.filterMap['name'] = this.productNameSearch; // Thêm điều kiện tìm kiếm vào filterMap
+		this.pageRequest.filterMap = this.filterMap; // Cập nhật filterMap trong pageRequest
+		this.loadData(); // Gọi lại API để lấy dữ liệu đã lọc
 	}
 
-	// sortMap: { [key: string]: 'asc' | 'desc' | 'none' } = {
-	// 	name: 'none',
-	// 	price: 'none',
-	// 	createdDate: 'none',
-	// };
-
-	sortBy(field: string) {
-		if (this.sortMap[field] === 'none') {
-			this.sortMap[field] = 'asc';
-		} else if (this.sortMap[field] === 'asc') {
-			this.sortMap[field] = 'desc';
-		} else {
-			this.sortMap[field] = 'none';
-		}
-		// Cập nhật sort trong pageRequest
-		this.loadData(); // Gọi API hoặc load lại dữ liệu
-	}
-	fillBy(field: string) {}
-
-	getSortIcon(field: string): string {
-		if (this.sortMap[field] === 'none') {
-			return 'bi bi-chevron-expand';
-		}
-		return this.sortMap[field] === 'asc' ? 'bi bi-sort-up' : 'bi bi-sort-down';
-	}
-
-	// lọc theo giá
-	filterMinPrice: number | null = null;
-	filterMaxPrice: number | null = null;
+	
 
 	applyPriceFilter() {
 		const min = this.filterMinPrice ?? 0;
@@ -137,24 +118,38 @@ export class AdminProductListComponent implements OnInit {
 		this.loadData(); // Gọi lại API để lấy dữ liệu đã lọc
 	}
 
-	// lọc theo danh mục
-
-	filterCategoryIds: number[] = [];
-
 	applyCategoryFilter() {
 		console.log('Danh mục được chọn:', this.filterCategoryIds);
 		this.filterMap['categoryId'] = this.filterCategoryIds;
 		this.pageRequest.filterMap = this.filterMap;
 		document.body.click();
-	
+
 		this.loadData(); // gọi lại API
 	}
-	searchProducts() {
-		console.log('Tìm kiếm sản phẩm với tên:', this.productNameSearch);
-		this.filterMap['name'] = this.productNameSearch; // Thêm điều kiện tìm kiếm vào filterMap
-		this.pageRequest.filterMap = this.filterMap; // Cập nhật filterMap trong pageRequest
-		this.loadData(); // Gọi lại API để lấy dữ liệu đã lọc
+	applyProductStatusFilter() {
+		console.log('Danh mục được chọn:', this.productStatusSelected);
+		this.filterMap['status'] = this.productStatusSelected;
+		this.pageRequest.filterMap = this.filterMap;
+		this.loadData();
 	}
 
-	
+	applySort() {
+		this.sortMap[this.softOptionSelected] = this.typeSoft;
+		this.pageRequest.sortMap = this.sortMap;
+		this.loadData();
+	}
+
+	// mảng chứa các trang
+	getPageArray(): number[] {
+		return Array.from(
+			{ length: this.pagedProducts.page.totalPages },
+			(_, i) => i + 1
+		);
+	}
+	// Chuyển trang
+	changePage(page: number): void {
+		console.log('changePage', page);
+		this.pageRequest.page = page - 1; // Giảm 1 vì API thường bắt đầu từ trang 0
+		this.loadData();
+	}
 }

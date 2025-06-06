@@ -1,5 +1,7 @@
 <div class="container-fluid mt-3">
-	<div class="header-fillter d-flex justify-content-between align-items-center mb-3">
+	<div
+		class="header-fillter d-flex justify-content-between align-items-center mb-3"
+	>
 		<div>
 			<button class="btn btn-primary me-2" [routerLink]="['../create-product']">
 				+ Thêm mới
@@ -11,16 +13,72 @@
 			<h2>Quản Lý Sản Phẩm</h2>
 		</div>
 		<div class="d-flex">
-			<select class="form-select me-2">
-				<option value="">Danh mục</option>
-				<!-- thêm option động nếu cần -->
-			</select>
-			<input type="text" class="form-control me-2" placeholder="Tên sản phẩm" [(ngModel)]="productNameSearch" />
+			
+
+			<input
+				type="text"
+				class="form-control me-2"
+				placeholder="Tên sản phẩm"
+				[(ngModel)]="productNameSearch"
+			/>
 			<button class="btn btn-primary" (click)="searchProducts()">Tìm</button>
 		</div>
 	</div>
 
-	<p class="fw-bold">Có tất cả {{ pagedProducts.page.totalElements }} sản phẩm</p>
+	<p class="fw-bold">
+		Có tất cả {{ pagedProducts.page.totalElements }} sản phẩm
+	</p>
+	<!-- Bộ lọc và sắp xếp -->
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<div class="d-flex align-items-center">
+			<!-- Sắp xếp theo -->
+			<label class="me-2 fw-semibold">Sắp xếp theo:</label>
+			<select
+				class="form-select form-select-sm me-2"
+				style="width: 160px"
+				[(ngModel)]="softOptionSelected"
+
+				
+			>
+				<option *ngFor="let option of softOptions" [ngValue]="option.key">{{ option.label }}</option>
+			</select>
+
+			<!-- Thứ tự -->
+			<select
+				class="form-select form-select-sm"
+				style="width: 110px"
+				[(ngModel)]="typeSoft"
+			>
+				<option *ngFor="let option of typeSoftOptions" [ngValue]="option.key">{{ option.label }}</option>
+			</select>
+			<button class="btn btn-secondary ms-2" (click)="applySort()">
+				sắp xếp
+			</button>
+		</div>
+
+		<!-- Lọc trạng thái -->
+		<div class="d-flex align-items-center">
+			<label class="me-2 fw-semibold">Lọc trạng thái:</label>
+			<select class="form-select form-select-sm" style="width: 160px"
+				[(ngModel)]="productStatusSelected"
+				(change)="applyProductStatusFilter()"
+			>
+				<option value="">Tất cả</option>
+				<option [value]="ProductStatusType.ACTIVE">Hoạt động</option>
+				<option [value]="ProductStatusType.INACTIVE">Ngừng</option>
+				<option [value]="ProductStatusType.DELETED">Đã xóa</option>
+			</select>
+		</div>
+		<app-custom-ng-select
+				[items]="categoryList"
+				[(model)]="filterCategoryIds"
+				placeholder="Chọn danh mục"
+				[multiple]="true"
+			/>
+		<button class="btn btn-secondary" (click)="applyCategoryFilter()">
+			Lọc
+		</button>
+	</div>
 
 	<div class="table-scroll table-responsive">
 		<table class="table table-bordered table-hover align-middle">
@@ -28,55 +86,9 @@
 				<tr>
 					<th>STT</th>
 					<th>Ảnh</th>
-					<th (click)="sortBy('name')">
-						Tên sản phẩm
-						<span [ngClass]="getSortIcon('name')"></span>
-					</th>
-					<th>
-						Giá
-						<span [ngClass]="getSortIcon('price')" (click)="sortBy('price')"></span>
-						<!-- Nút mở dropdown lọc -->
-						<span class="ms-1" style="cursor: pointer" data-bs-toggle="dropdown">
-							<i class="bi bi-funnel-fill"></i>
-							<!-- Icon lọc từ Bootstrap Icons -->
-						</span>
-
-						<!-- Dropdown menu dùng Bootstrap -->
-						<div class="dropdown-menu p-3" style="min-width: 220px">
-							<div class="mb-2">
-								<label for="minPrice" class="form-label mb-1">Giá Min</label>
-								<input id="minPrice" type="number" class="form-control" [(ngModel)]="filterMinPrice" />
-							</div>
-							<div class="mb-2">
-								<label for="maxPrice" class="form-label mb-1">Giá Max</label>
-								<input id="maxPrice" type="number" class="form-control" [(ngModel)]="filterMaxPrice" />
-							</div>
-							<button class="btn btn-primary w-100" (click)="applyPriceFilter()">
-								Lọc
-							</button>
-						</div>
-					</th>
-					<th class=" dropdown">
-						Danh mục
-						<span class="ms-1" style="cursor: pointer;" data-bs-toggle="dropdown"
-							data-bs-auto-close="outside" 
-							>
-							<i class="bi bi-funnel-fill"></i>
-						</span>
-
-						<div class="dropdown-menu p-3" style="min-width: 250px;">
-							<button class="btn btn-primary w-100 mt-2" (click)="applyCategoryFilter()">
-								Áp dụng
-							</button>
-
-							<ng-select class="custom-ng-select w-100" [items]="categoryList" bindLabel="name"
-								bindValue="id" [multiple]="true" [closeOnSelect]="false" placeholder="Chọn danh mục"
-								[(ngModel)]="filterCategoryIds">
-							</ng-select>
-
-							
-						</div>
-					</th>
+					<th>Tên sản phẩm</th>
+					<th>Giá</th>
+					<th class="dropdown">Danh mục</th>
 
 					<th>Hot</th>
 					<th>Khuyến mãi</th>
@@ -95,19 +107,37 @@
 
 					<td>{{ item.hot }}</td>
 					<td>
-						<span class="badge bg-warning">{{ item.promotions.length > 0 ? item.promotions[0].name : 'Không có' }}</span>
+						<span class="badge bg-warning">{{
+							item.promotions.length > 0 ? item.promotions[0].name : 'Không có'
+						}}</span>
 					</td>
 					<td>
-						<span class="badge bg-success" *ngIf="item.status === ProductStatusType.ACTIVE">Hoạt động</span>
-						<span class="badge bg-secondary" *ngIf="item.status === ProductStatusType.INACTIVE">Ngừng hoạt
-							động</span>
-						<span class="badge bg-warning" *ngIf="item.status === ProductStatusType.DELETED">Đã xóa</span>
+						<span
+							class="badge bg-success"
+							*ngIf="item.status === ProductStatusType.ACTIVE"
+							>Hoạt động</span
+						>
+						<span
+							class="badge bg-secondary"
+							*ngIf="item.status === ProductStatusType.INACTIVE"
+							>Ngừng hoạt động</span
+						>
+						<span
+							class="badge bg-warning"
+							*ngIf="item.status === ProductStatusType.DELETED"
+							>Đã xóa</span
+						>
 					</td>
 
 					<td>
 						<div class="dropdown">
-							<button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="actionDropdown"
-								data-bs-toggle="dropdown" aria-expanded="false"></button>
+							<button
+								class="btn btn-sm btn-secondary dropdown-toggle"
+								type="button"
+								id="actionDropdown"
+								data-bs-toggle="dropdown"
+								aria-expanded="false"
+							></button>
 							<ul class="dropdown-menu" aria-labelledby="actionDropdown">
 								<li><button class="dropdown-item">Sửa</button></li>
 								<li><button class="dropdown-item text-danger">Xóa</button></li>
@@ -130,22 +160,34 @@
 	<nav class="d-flex justify-content-end mt-3">
 		<ul class="pagination pagination-sm mb-0">
 			<li class="page-item" [class.disabled]="pagedProducts.page.number === 0">
-				<button class="page-link" (click)="changePage(pagedProducts.page.number - 1)">
+				<button
+					class="page-link"
+					(click)="changePage(pagedProducts.page.number - 1)"
+				>
 					«
 				</button>
 			</li>
 
-			<li class="page-item" *ngFor="let page of getPageArray()"
-				[class.active]="page === pagedProducts.page.number + 1">
+			<li
+				class="page-item"
+				*ngFor="let page of getPageArray()"
+				[class.active]="page === pagedProducts.page.number + 1"
+			>
 				<button class="page-link" (click)="changePage(page)">
 					{{ page }}
 				</button>
 			</li>
 
-			<li class="page-item" [class.disabled]="
+			<li
+				class="page-item"
+				[class.disabled]="
 					pagedProducts.page.number >= pagedProducts.page.totalPages - 1
-				">
-				<button class="page-link" (click)="changePage(pagedProducts.page.number + 1)">
+				"
+			>
+				<button
+					class="page-link"
+					(click)="changePage(pagedProducts.page.number + 1)"
+				>
 					»
 				</button>
 			</li>

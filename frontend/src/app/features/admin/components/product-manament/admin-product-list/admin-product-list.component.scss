@@ -34,10 +34,10 @@
 	}
 
 	thead th {
-		position: sticky;
-		top: 0;
+		position: sticky; // Giúp header luôn nằm cố định khi cuộn
+		top: 0; // Giúp header luôn nằm cố định khi cuộn
 		background: #f8f9fa; // nền cố định của header bảng
-		z-index: 2;
+		z-index: 0; // Đảm bảo header luôn nổi trên các phần khác
 	}
 }
 
