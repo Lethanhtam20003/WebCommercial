@@ -6,7 +6,7 @@ import { OrderResponse } from '../../../core/models/response/order/order-respons
 @Component({
 	imports: [NgClass, CommonModule],
 	standalone: true,
-	selector: 'order-list',
+	selector: 'order-list-admin',
 	templateUrl: './order-list.component.html',
 	styleUrl: './order-list.component.scss',
 })

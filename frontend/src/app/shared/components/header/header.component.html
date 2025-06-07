@@ -147,6 +147,11 @@
 										label.logOut
 									}}</a>
 								</li>
+								<li *ngIf="isAdmin">
+									<a class="dropdown-item" [routerLink]="route.adminRoute"
+										>Trang quản lý</a
+									>
+								</li>
 							</ul>
 						</div>
 					</ng-template>

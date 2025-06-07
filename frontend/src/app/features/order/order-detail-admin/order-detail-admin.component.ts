@@ -6,9 +6,9 @@ import { OrderDetailResponse } from "../../../core/models/response/order/order-i
 @Component({
   imports: [CommonModule],
   standalone: true,
-  selector: 'order-detail',
-  templateUrl: './order-detail.component.html',
-  styleUrl: './order-detail.component.scss',
+  selector: 'order-detail-admin',
+  templateUrl: './order-detail-admin.component.html',
+  styleUrl: './order-detail-admin.component.scss',
 })
 export class OrderDetailComponent {
   @Input() order!: OrderResponse;

@@ -133,7 +133,7 @@ const routes: Routes = [
 			{
 				path: 'order-management',
 				loadComponent: () =>
-					import('./pages/Order-management/Order-management.component').then(
+					import('./pages/order-management/order-management-admin.component').then(
 						m => m.OrderManagementComponent
 					),
 				children: [

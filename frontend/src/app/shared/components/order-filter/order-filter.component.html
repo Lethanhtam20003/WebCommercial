@@ -1,0 +1,55 @@
+<form
+	[formGroup]="filterForm"
+	class="row g-3 align-items-end p-3 bg-light rounded shadow-sm order-filter-admin-width"
+	(ngSubmit)="applyFilter()"
+>
+	<div class="col-md-2">
+		<label class="form-label">Trạng thái</label>
+		<select class="form-select" formControlName="status">
+			<option [value]="''">Tất cả trạng thái</option>
+
+			<!-- Duyệt qua orderStatusList đã được lấy từ enum OrderStatus -->
+
+			<option *ngFor="let stt of orderStatusList" [value]="stt">
+				{{ this.utitlyService.mapStatusToVietnamese(stt) }}
+			</option>
+		</select>
+	</div>
+	<div class="col-md-2">
+		<label class="form-label">Người đặt</label>
+		<input
+			type="text"
+			class="form-control"
+			placeholder="Tên tài khoản"
+			formControlName="username"
+		/>
+	</div>
+	<div class="col-md-2">
+		<label class="form-label">Từ ngày</label>
+		<input type="date" class="form-control" formControlName="createdDateFrom" />
+	</div>
+	<div class="col-md-2">
+		<label class="form-label">Đến ngày</label>
+		<input type="date" class="form-control" formControlName="createdDateTo" />
+	</div>
+	<div class="col-md-2">
+		<label class="form-label">Tổng tiền tối thiểu</label>
+		<input
+			type="number"
+			class="form-control"
+			min="0"
+			placeholder="VND"
+			formControlName="totalPrice"
+		/>
+	</div>
+	<div class="col-md-2 d-flex gap-2">
+		<button type="submit" class="btn btn-primary w-100">Lọc</button>
+		<button
+			type="button"
+			class="btn btn-secondary w-100"
+			(click)="clearFilter()"
+		>
+			Xóa
+		</button>
+	</div>
+</form>
