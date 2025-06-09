@@ -1,26 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import {
-	NavigationEnd,
-	Router,
-	RouterLink,
-	RouterLinkActive,
-} from '@angular/router';
+import { Component } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { CommonModule, NgClass } from '@angular/common';
+import { UserProfile } from '../../../core/models/response/user/user-profile-response.model';
+import { AlertService } from '../../../core/service/alert.service';
+import { UserStateService } from '../../../core/service/state/user-state.service';
+import { UtitlyService } from '../../../core/service/utility.service';
+import { ErrorMessageConstants } from '../../constants/error-message.constants';
 import { LabelConstants } from '../../constants/label.constants';
 import { RouteLink } from '../../constants/route-link';
-import { AuthService } from '../../../core/service/auth.service';
-import { ErrorMessageConstants } from '../../constants/error-message.constants';
-import { UserService } from '../../../core/service/user.service';
-import { UserProfile } from '../../../core/models/response/user/user-profile-response.model';
-import { UserStateService } from '../../../core/service/state/user-state.service';
-import { AlertService } from '../../../core/service/alert.service';
-import { UtitlyService } from '../../../core/service/utility.service';
 
 @Component({
 	selector: 'side-bar-user-account',
-	standalone: true,
-	imports: [RouterLink, NgClass, CommonModule],
+  standalone: false,
 	styleUrl: './side-bar-user-account.scss',
 	templateUrl: './side-bar-user-account.html',
 })

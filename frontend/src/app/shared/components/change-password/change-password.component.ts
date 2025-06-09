@@ -19,7 +19,7 @@ import { ResponseMessage } from '../../constants/response-message.constants';
 
 @Component({
 	selector: 'change-password',
-	imports: [NgIf, CommonModule, ReactiveFormsModule],
+  standalone: false,
 	templateUrl: './change-password.component.html',
 	styleUrl: './change-password.component.scss',
 })

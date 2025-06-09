@@ -1,13 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject, switchMap } from 'rxjs';
 import { ApiResponse } from '../../../core/models/api-response.model';
+import { OrderFilterRequest } from '../../../core/models/request/order/order-filter-request.interface';
+import { CouponResponse } from '../../../core/models/response/coupon/coupon-response.interface';
 import { OrderResponse } from '../../../core/models/response/order/order-response.interface';
 import { Page } from '../../../core/models/response/page-response.interface';
 import { OrderService } from '../../../core/service/order.service';
-import { OrderDetailComponent } from '../order-detail-admin/order-detail-admin.component';
-import { OrderListComponent } from '../order-list/order-list.component';
+import { OrderDetailComponent } from '../../../shared/components/order-detail/order-detail.component';
 import { OrderFilterComponent } from '../../../shared/components/order-filter/order-filter.component';
-import { OrderFilterRequest } from '../../../core/models/request/order/order-filter-request.interface';
+import { OrderListColumn } from '../../../shared/components/order-list/order-list-column.interface';
+import { OrderListComponent } from '../../../shared/components/order-list/order-list.component';
 
 /**
  * Component hiển thị tab danh sách đơn hàng cho admin.
@@ -28,70 +31,63 @@ import { OrderFilterRequest } from '../../../core/models/request/order/order-fil
 	styleUrl: './order-list-tab.component.scss',
 })
 export class OrderListTabComponent implements OnInit {
-	/** Danh sách đơn hàng lấy từ API */
+	private filter$ = new BehaviorSubject<Partial<OrderFilterRequest>>({});
 	orders: OrderResponse[] = [];
-
-	/** Đơn hàng đang được chọn để xem chi tiết (nếu có) */
 	selectedOrder: OrderResponse | null = null;
-
-	/** Bộ lọc đơn hàng hiện tại (truyền cho API khi loadOrders) */
-	filter: Partial<OrderFilterRequest> = {};
-
 	/**
-	 * Inject OrderService để thao tác với API đơn hàng
-	 * @param orderService Service quản lý đơn hàng
+	 * Cấu hình các cột hiển thị trong bảng danh sách đơn hàng.
 	 */
+	readonly adminOrderColumns: OrderListColumn[] = [
+		{ key: 'index', label: '#', type: 'index' },
+		{ key: 'id', label: 'Mã đơn', type: 'text' },
+		{ key: 'userName', label: 'Người đặt', type: 'text' },
+		{ key: 'createdDate', label: 'Ngày đặt', type: 'date' },
+		{ key: 'status', label: 'Trạng thái', type: 'status' },
+		{ key: 'totalPrice', label: 'Tổng tiền', type: 'currency' },
+		{ key: 'discountedPrice', label: 'Giá sau giảm', type: 'currency' },
+		{ key: 'note', label: 'Ghi chú', type: 'text' },
+		{
+			key: 'coupon',
+			label: 'Mã giảm giá',
+			type: 'text',
+			formatFn: (value: CouponResponse) => (value ? value.code : ''),
+		},
+		{ key: 'action', label: 'Thao tác', type: 'action' },
+	];
 	constructor(private orderService: OrderService) {}
-
-	/**
-	 * Lifecycle hook khởi tạo component, gọi loadOrders lần đầu.
-	 */
-	ngOnInit() {
-		this.loadOrders();
-	}
-
-	/**
-	 * Gọi API lấy danh sách đơn hàng với bộ lọc hiện tại.
-	 * Kết quả lưu vào this.orders.
-	 */
-	loadOrders() {
-		this.orderService
-			.getOrdersAdmin({ page: 0, size: 20 })
-			.subscribe((res: ApiResponse<Page<OrderResponse>>) => {
-				this.orders = res.result.content || [];
-			});
-	}
-
+  ngOnInit(): void {
+    this.filter$
+      .pipe(
+        switchMap(filter =>
+          this.orderService.getOrdersAdmin({ ...filter, page: 0, size: 20 })
+        )
+      )
+      .subscribe((res: ApiResponse<Page<OrderResponse>>) => {
+        this.orders = res.result.content || [];
+      });
+  }
 	/**
 	 * Xử lý khi người dùng chọn xem chi tiết một đơn hàng.
-	 * Nếu đơn hàng đã có trong danh sách, set vào selectedOrder để hiển thị chi tiết.
-	 * Nếu chưa có, có thể gọi API lấy chi tiết đơn hàng tại đây.
-	 * @param orderId id của đơn hàng cần xem
+	 * Nếu đơn hàng đã có trong danh sách, set vào `selectedOrder`.
+	 * Nếu chưa có, có thể mở rộng để gọi API lấy chi tiết đơn.
+	 * @param orderId ID của đơn hàng được chọn
 	 */
 	onViewOrder(orderId: number) {
-		const found = this.orders.find(o => o.id === orderId);
-		if (found) {
-			this.selectedOrder = found;
-		} else {
-			// Use for call api order detail
-		}
+		const order = this.orders.find(o => o.id === orderId);
+    if (order) {
+      this.selectedOrder = order;
+    } else {
+      // Optional: gọi API lấy chi tiết
+    }
 	}
-
 	/**
-	 * Xử lý khi người dùng nhấn "Quay lại" từ màn chi tiết đơn hàng.
-	 * Đặt lại selectedOrder về null để quay về danh sách.
+	 * Xử lý khi người dùng nhấn nút "Quay lại" từ trang chi tiết đơn hàng.
+	 * Reset `selectedOrder` về null để hiển thị lại danh sách đơn hàng.
 	 */
 	onBackFromDetail() {
 		this.selectedOrder = null;
 	}
-
-	/**
-	 * Xử lý khi bộ lọc thay đổi từ component con OrderFilterComponent.
-	 * Cập nhật filter và load lại danh sách đơn hàng.
-	 * @param filterData object filter từ order-filter component
-	 */
-	onFilterChanged(filterData: Partial<OrderFilterRequest>) {
-		this.filter = filterData;
-		this.loadOrders();
-	}
+	onFilterChanged(newFilter: Partial<OrderFilterRequest>): void {
+    this.filter$.next(newFilter);
+  }
 }

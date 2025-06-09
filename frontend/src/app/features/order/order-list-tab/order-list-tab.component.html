@@ -1,17 +1,17 @@
 <div *ngIf="!selectedOrder">
-	<order-filter
-		class="w-25"
-		(filterChanged)="onFilterChanged($event)"
-	></order-filter>
-	<order-list-admin
-		[orders]="orders"
-		(viewOrder)="onViewOrder($event)"
-	></order-list-admin>
+  <order-filter class="w-25" (filterChanged)="onFilterChanged($event)"></order-filter>
+  <order-list
+    [orders]="orders"
+    [columns]="adminOrderColumns"
+    (viewOrder)="onViewOrder($event)"
+  ></order-list>
 </div>
-<div *ngIf="selectedOrder">
-	<order-detail-admin
-		[order]="selectedOrder"
-		[orderItems]="selectedOrder.orderItems"
-		(back)="onBackFromDetail()"
-	></order-detail-admin>
+
+<div *ngIf="selectedOrder as order">
+  <order-detail
+    [order]="order"
+    [orderItems]="order.orderItems"
+    [isAdmin]="true"
+    (back)="onBackFromDetail()"
+  ></order-detail>
 </div>

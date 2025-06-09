@@ -10,8 +10,7 @@ import { Page } from '../../../core/models/response/page-response.interface';
 
 @Component({
   selector: 'coupon-list',
-  standalone: true,
-  imports: [CommonModule, CouponComponent],
+  standalone: false,
   templateUrl: './coupon-list.component.html'
 })
 export class CouponListComponent implements OnInit{

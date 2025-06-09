@@ -1,14 +1,20 @@
-<div class="container mt-4 vh-100">
-	<ng-container *ngIf="!selectedOrder; else detailTemplate">
-		<h2 class="mb-4">Quản lý đơn hàng</h2>
-		<order-list
-			[orders]="orders"
-			(viewOrder)="onViewOrder($event)"
-		></order-list>
-	</ng-container>
-	<ng-template #detailTemplate>
-		<ng-container *ngIf="selectedOrder as order">
-			<order-detail [order]="order" [orderItems]="selectedOrderItems" (back)="onBack()"></order-detail>
+<ng-container *ngIf="orders$ | async as orders">
+	<h2 class="mb-4">Quản lý đơn hàng</h2>
+	<order-list
+		[orders]="orders"
+		[columns]="userOrderColumns"
+		(viewOrder)="onViewOrder($event)"
+	></order-list>
+</ng-container>
+
+<ng-template #detailTemplate>
+	<ng-container *ngIf="selectedOrder$ | async as order">
+		<ng-container *ngIf="safeSelectedOrderItems$ | async as items">
+			<order-detail
+				[order]="order"
+				[orderItems]="items"
+				(back)="onBack()"
+			></order-detail>
 		</ng-container>
-	</ng-template>
-</div>
+	</ng-container>
+</ng-template>

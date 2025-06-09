@@ -25,10 +25,11 @@ import { AuthService } from '../../../core/service/auth.service';
 
 @Component({
 	selector: 'user-profile',
-	imports: [CommonModule, ReactiveFormsModule],
 	providers: [CloudinaryUploadService],
+  standalone: false,
 	templateUrl: './user-profile.component.html',
-	styleUrl: './user-profile.component.scss',
+	// styleUrl: './user-profile.component.scss',
+	styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
 	updateInformationForm!: FormGroup;
