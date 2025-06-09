@@ -1,13 +1,13 @@
-import { UserProfile } from './../../../core/models/response/user/user-profile-response.model';
+import { UserProfile } from '../../../../core/models/response/user/user-profile-response.model';
 import { Routes } from '@angular/router';
-import { AuthGuard } from '../../../core/guards/auth.guard';
-import { UserAccountComponent } from '../../../shared/components/user-account/user-account.component';
-import { LabelConstants } from '../../../shared/constants/label.constants';
-import { RouteLink } from '../../../shared/constants/route-link';
-import { UserProfileComponent } from '../../../shared/components/user-profile/user-profile.component';
-import { ChangePasswordComponent } from '../../../shared/components/change-password/change-password.component';
-import { OrderManagementComponent } from '../../admin/pages/order-management/order-management-admin.component';
-import { CouponListComponent } from '../../../shared/components/coupon-list/coupon-list.component';
+import { AuthGuard } from '../../../../core/guards/auth.guard';
+import { UserAccountComponent } from '../../../../shared/components/user-account/user-account.component';
+import { LabelConstants } from '../../../../shared/constants/label.constants';
+import { RouteLink } from '../../../../shared/constants/route-link';
+import { UserProfileComponent } from '../../../../shared/components/user-profile/user-profile.component';
+import { ChangePasswordComponent } from '../../../../shared/components/change-password/change-password.component';
+import { OrderManagementComponent } from '../../../admin/pages/order-management/order-management-admin.component';
+import { CouponListComponent } from '../../../../shared/components/coupon-list/coupon-list.component';
 
 export const userAccountRoutes: Routes = [
 	{

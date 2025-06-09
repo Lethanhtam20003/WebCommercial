@@ -63,7 +63,7 @@ const protectedRoutes: Routes = [
 	{
 		path: RouteLink.userRoute,
 		loadChildren: () =>
-			import('./features/user/user-account/user-account.module').then(
+			import('./features/user/page/user-account/user-account.module').then(
 				m => m.UserAccountModule
 			),
 		canActivate: [AuthGuard],

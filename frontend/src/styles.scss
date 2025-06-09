@@ -77,3 +77,23 @@ ul {
   border-color: var(--primary-color);
   color: var(--accent-text-color);
 }
+
+.primary-white-color-black-background-button{
+  background-color: var(--surface-text-color);
+  border-color: var(--surface-text-color);
+  color: var(--accent-text-color);
+}
+
+.primary-white-color-black-background-button:focus,
+.primary-white-color-black-background-button:hover,
+.primary-white-color-black-background-button:active {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--accent-text-color);
+}
+
+.container {
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}

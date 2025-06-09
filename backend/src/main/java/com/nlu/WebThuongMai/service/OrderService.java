@@ -222,7 +222,7 @@ public class OrderService {
         }
 
         if (request.getTotalPrice() != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("totalPrice"), request.getTotalPrice()));
+            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("totalPrice"), request.getTotalPrice()));
         }
 
         if (request.getStatus() != null) {

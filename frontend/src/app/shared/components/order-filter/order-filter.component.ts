@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { OrderStatus } from '../../../core/enum/order-status.enum';
 import { UtitlyService } from './../../../core/service/utility.service';
+import { GetAllOrdersAdminRequest } from '../../../core/models/request/order/get-all-orders-admin-request.interface';
 
 /**
  * Component filter đơn hàng cho admin, gồm các trường:
@@ -26,7 +27,9 @@ export class OrderFilterComponent implements OnInit {
 	 * Sự kiện phát ra khi người dùng nhấn nút "Lọc" hoặc "Xóa".
 	 * Trả về object chứa các trường filter phù hợp với GetAllOrderAdminRequest.
 	 */
-	@Output() filterChanged = new EventEmitter<any>();
+	@Output() filterChanged = new EventEmitter<
+		Partial<GetAllOrdersAdminRequest>
+	>();
 
 	/** Trạng thái đơn hàng (giá trị là code backend, ví dụ: PENDING, SHIPPED, ...) */
 	status: OrderStatus | '' = '';
@@ -74,14 +77,30 @@ export class OrderFilterComponent implements OnInit {
 	 */
 	applyFilter() {
 		const raw = this.filterForm.value;
-		const backendStatus = this.utitlyService.mapStatusToBackend(raw.status);
-		this.filterChanged.emit({
+
+		const parseVnd = (val: string): number | undefined => {
+			if (!val) return undefined;
+
+			// Xóa ký tự không phải số
+			const cleaned = val.replace(/[^\d]/g, '');
+
+			const parsed = parseInt(cleaned, 10);
+			return isNaN(parsed) ? undefined : parsed;
+		};
+
+		const backendStatus = this.utitlyService.mapStatusToBackend(
+			raw.status
+		) as OrderStatus;
+
+		const request: GetAllOrdersAdminRequest = {
 			status: backendStatus || undefined,
 			username: raw.username || undefined,
 			createdDateFrom: raw.createdDateFrom || undefined,
 			createdDateTo: raw.createdDateTo || undefined,
-			totalPrice: raw.totalPrice || undefined,
-		});
+			totalPrice: parseVnd(raw.totalPrice),
+		};
+
+		this.filterChanged.emit(request);
 	}
 
 	/**
@@ -97,12 +116,4 @@ export class OrderFilterComponent implements OnInit {
 		});
 		this.applyFilter();
 	}
-}
-
-interface OrderAdminFilter {
-	status: string;
-	username: string;
-	createdDateFrom: string;
-	createdDateTo: string;
-	totalPrice: string | number;
 }

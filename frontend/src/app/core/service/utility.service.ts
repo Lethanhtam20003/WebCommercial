@@ -63,8 +63,14 @@ export class UtitlyService {
 			case 'confirmed':
 				return 'CONFIRMED';
 
+      case 'Tất cả':
+      case 'Tất cả trạng thái':
+      case 'tất cả trạng thái':
+      case 'toàn bộ':
+        return '';
+
 			default:
-				return 'PENDING';
+				return '';
 		}
 	}
 

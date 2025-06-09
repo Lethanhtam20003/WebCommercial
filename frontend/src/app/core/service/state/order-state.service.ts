@@ -36,11 +36,4 @@ export class OrderStateService {
 		});
 	}
 
-	// loadOrdersForAdmin(request: OrderFilterRequest): void {
-	// 	this.orderService.getOrdersAdmin(request).subscribe({
-	// 		next: orders => this.ordersSubject.next(orders.result),
-	// 		error: err =>
-	// 			console.error(ErrorMessageConstants.errorWhenLoadingAdminOrder, err),
-	// 	});
-	// }
 }

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
-  standalone: true,
-  imports: [RouterOutlet],
+  standalone: false,
 	selector: 'app-Order-management',
 	templateUrl: './order-management-admin.component.html',
   styleUrls: [],

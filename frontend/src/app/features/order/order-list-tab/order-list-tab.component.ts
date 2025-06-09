@@ -2,15 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, switchMap } from 'rxjs';
 import { ApiResponse } from '../../../core/models/api-response.model';
-import { OrderFilterRequest } from '../../../core/models/request/order/order-filter-request.interface';
 import { CouponResponse } from '../../../core/models/response/coupon/coupon-response.interface';
 import { OrderResponse } from '../../../core/models/response/order/order-response.interface';
 import { Page } from '../../../core/models/response/page-response.interface';
 import { OrderService } from '../../../core/service/order.service';
-import { OrderDetailComponent } from '../../../shared/components/order-detail/order-detail.component';
-import { OrderFilterComponent } from '../../../shared/components/order-filter/order-filter.component';
 import { OrderListColumn } from '../../../shared/components/order-list/order-list-column.interface';
-import { OrderListComponent } from '../../../shared/components/order-list/order-list.component';
+import { GetAllOrdersAdminRequest } from '../../../core/models/request/order/get-all-orders-admin-request.interface';
 
 /**
  * Component hiển thị tab danh sách đơn hàng cho admin.
@@ -20,18 +17,13 @@ import { OrderListComponent } from '../../../shared/components/order-list/order-
  * - Khi chọn đơn, sẽ hiển thị chi tiết; khi quay lại sẽ trả về danh sách.
  */
 @Component({
+  standalone: false,
 	selector: 'app-order-list-tab',
-	imports: [
-		CommonModule,
-		OrderListComponent,
-		OrderDetailComponent,
-		OrderFilterComponent,
-	],
 	templateUrl: './order-list-tab.component.html',
-	styleUrl: './order-list-tab.component.scss',
+	styleUrls: ['./order-list-tab.component.scss'],
 })
 export class OrderListTabComponent implements OnInit {
-	private filter$ = new BehaviorSubject<Partial<OrderFilterRequest>>({});
+	private filter$ = new BehaviorSubject<Partial<GetAllOrdersAdminRequest>>({});
 	orders: OrderResponse[] = [];
 	selectedOrder: OrderResponse | null = null;
 	/**
@@ -59,7 +51,7 @@ export class OrderListTabComponent implements OnInit {
     this.filter$
       .pipe(
         switchMap(filter =>
-          this.orderService.getOrdersAdmin({ ...filter, page: 0, size: 20 })
+          this.orderService.getOrdersAdmin({ ...filter, page: 0, size: 10 })
         )
       )
       .subscribe((res: ApiResponse<Page<OrderResponse>>) => {
@@ -87,7 +79,7 @@ export class OrderListTabComponent implements OnInit {
 	onBackFromDetail() {
 		this.selectedOrder = null;
 	}
-	onFilterChanged(newFilter: Partial<OrderFilterRequest>): void {
+	onFilterChanged(newFilter: Partial<GetAllOrdersAdminRequest>): void {
     this.filter$.next(newFilter);
   }
 }
