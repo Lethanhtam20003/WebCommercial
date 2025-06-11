@@ -1,9 +1,7 @@
 package com.nlu.WebThuongMai.service;
 
-import com.nlu.WebThuongMai.dto.request.productReq.CategoryRequest;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductCreatetionRequest;
-import com.nlu.WebThuongMai.dto.request.productReq.ProductFillterRequest;
-import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
+import com.nlu.WebThuongMai.dto.request.productReq.ProductFilterRequest;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
@@ -46,7 +44,7 @@ public class ProductService {
                 .save(p));
     }
 
-    public Page<ProductResponse> getAllProduct(ProductFillterRequest filter, Pageable pageable) {
+    public Page<ProductResponse> getAllProduct(ProductFilterRequest filter, Pageable pageable) {
         Specification<Product> spec = Specification.where(null);
 
         if (filter.getName() != null && !filter.getName().isEmpty()) {
@@ -97,7 +95,7 @@ public class ProductService {
     }
 
     public Product findProductById(Long id) {
-        return productRepository.findById(id)
+        return productRepository.findByIdWithAllRelations(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 }

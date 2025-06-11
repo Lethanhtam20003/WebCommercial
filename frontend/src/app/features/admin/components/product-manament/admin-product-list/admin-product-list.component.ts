@@ -14,6 +14,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { CategoryService } from '../../../service/admin-category.service';
 import { category } from '../../../models/category';
 import { CustomNgSelectComponent } from '../../../../../shared/components/custom-ng-select/custom-ng-select.component';
+import { Page } from '../../../models/product-response/Page.interface';
 
 @Component({
 	standalone: true,
@@ -47,7 +48,6 @@ export class AdminProductListComponent implements OnInit {
 	ngOnInit() {
 		this.categoryService.getAll().subscribe(categories => {
 			this.categoryList = categories;
-			console.log('categoryList', this.categoryList);
 		});
 
 		this.pageRequest = {
@@ -57,7 +57,6 @@ export class AdminProductListComponent implements OnInit {
 			filterMap: this.filterMap, // Thêm filterMap vào pageRequest
 		};
 		this.adminProductService.getAll(this.pageRequest).subscribe(data => {
-			console.log('data', data);
 			this.pagedProducts = data;
 			this.products = data.content;
 		});
@@ -66,7 +65,7 @@ export class AdminProductListComponent implements OnInit {
 	filterMinPrice: number | null = null; // Biến để lưu giá trị lọc giá tối thiểu
 	filterMaxPrice: number | null = null; // Biến để lưu giá trị lọc giá tối đa
 	filterCategoryIds: number[] = []; // Biến để lưu danh sách các categoryId đã chọn
-	productStatusSelected:String='';
+	productStatusSelected: String = '';
 	softOptions = [
 		{ key: 'name', label: 'Tên' },
 		{ key: 'price', label: 'Giá' },
@@ -75,9 +74,10 @@ export class AdminProductListComponent implements OnInit {
 	typeSoftOptions = [
 		{ key: 'asc', label: 'Tăng dần' },
 		{ key: 'desc', label: 'Giảm dần' },
+		{ key: 'none', label: 'Không sắp xếp' },
 	]; // Các giá trị sắp xếp có thể chọn
 
-	softOptionSelected: string = '';
+	softOptionSelected: string = 'id';
 	typeSoft: SortDirection = 'none'; // Biến để lưu giá trị sắp xếp theo tên, giá hoặc id
 
 	sortMap: { [key: string]: SortDirection } = {
@@ -102,41 +102,37 @@ export class AdminProductListComponent implements OnInit {
 		this.loadData(); // Gọi lại API để lấy dữ liệu đã lọc
 	}
 
-	
-
 	applyPriceFilter() {
 		const min = this.filterMinPrice ?? 0;
 		const max = this.filterMaxPrice ?? Number.MAX_VALUE;
 
 		console.log(`Lọc giá từ ${min} đến ${max}`);
-		// Gọi API hoặc xử lý filter danh sách
-		this.filterMap = {
-			minPrice: min,
-			maxPrice: max,
-		};
-		this.pageRequest.filterMap = this.filterMap; // Cập nhật filterMap trong pageRequest
-		this.loadData(); // Gọi lại API để lấy dữ liệu đã lọc
+		this.filterMap['minPrice'] = min;
+		this.filterMap['maxPrice'] = max;
 	}
 
 	applyCategoryFilter() {
 		console.log('Danh mục được chọn:', this.filterCategoryIds);
 		this.filterMap['categoryId'] = this.filterCategoryIds;
-		this.pageRequest.filterMap = this.filterMap;
 		document.body.click();
-
-		this.loadData(); // gọi lại API
 	}
 	applyProductStatusFilter() {
 		console.log('Danh mục được chọn:', this.productStatusSelected);
 		this.filterMap['status'] = this.productStatusSelected;
-		this.pageRequest.filterMap = this.filterMap;
-		this.loadData();
 	}
 
 	applySort() {
 		this.sortMap[this.softOptionSelected] = this.typeSoft;
+	}
+	applyAllFilters() {
+		this.applyPriceFilter();
+		this.applyCategoryFilter();
+		this.applyProductStatusFilter();
+		this.applySort();
 		this.pageRequest.sortMap = this.sortMap;
-		this.loadData();
+		this.pageRequest.filterMap = this.filterMap;
+
+		this.loadData(); // Gọi lại API để lấy dữ liệu đã lọc
 	}
 
 	// mảng chứa các trang
@@ -151,5 +147,11 @@ export class AdminProductListComponent implements OnInit {
 		console.log('changePage', page);
 		this.pageRequest.page = page - 1; // Giảm 1 vì API thường bắt đầu từ trang 0
 		this.loadData();
+	}
+
+	showFilter = false;
+
+	toggleFilterVisible() {
+		this.showFilter = !this.showFilter;
 	}
 }

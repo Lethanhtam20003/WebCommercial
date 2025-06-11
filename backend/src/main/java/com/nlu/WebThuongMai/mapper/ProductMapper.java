@@ -28,10 +28,6 @@ public interface ProductMapper {
         return categories.stream().map(Category::getId).collect(Collectors.toSet());
     }
 
-    default Set<String> mapProductImagesToUrls(Set<ProductImage> images) {
-        if (images == null) return new HashSet<>();
-        return images.stream().map(ProductImage::getImage).collect(Collectors.toSet());
-    }
 
     default Page<ProductResponse> toPageProductResponse(Page<Product> products) {
         return products.map(this::toProductResponse);

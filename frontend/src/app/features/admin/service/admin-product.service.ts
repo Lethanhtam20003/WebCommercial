@@ -60,4 +60,7 @@ export class AdminProductService {
 			.get<ApiResponse<boolean>>(URL_API.checkProductNameExited, { params })
 			.pipe(map(response => !!response.result));
 	}
+	getProductById(id: number): Observable<ApiResponse<ProductResponse>> {
+		return this.http.get<ApiResponse<ProductResponse>>(`${URL_API.productsUrl}/${id}`);
+	}
 }

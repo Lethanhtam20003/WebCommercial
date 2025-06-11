@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT DISTINCT p FROM Product p" +
@@ -34,4 +36,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "promotions"
     })
     Page<Product> findAll(Specification<Product> spec, Pageable pageable);
+
+    @EntityGraph(attributePaths = {
+            "images",
+            "categories",
+            "product_statistics",
+            "promotions"
+    })
+    @Query("SELECT p FROM Product p WHERE p.id = :id")
+    Optional<Product> findByIdWithAllRelations(@Param("id") Long id);
+
 }

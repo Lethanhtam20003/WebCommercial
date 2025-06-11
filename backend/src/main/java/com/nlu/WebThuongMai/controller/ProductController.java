@@ -3,7 +3,6 @@ package com.nlu.WebThuongMai.controller;
 import com.nlu.WebThuongMai.dto.request.productReq.*;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
-import com.nlu.WebThuongMai.enums.ProductStatus;
 import com.nlu.WebThuongMai.service.ProductService;
 import com.nlu.WebThuongMai.service.ReadCSVFile;
 import lombok.AccessLevel;
@@ -13,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Slf4j
 
@@ -35,7 +32,7 @@ public class ProductController {
      */
     @GetMapping
     ApiResponse<Page<ProductResponse>> getAllProduct(
-            @ModelAttribute ProductFillterRequest request,
+            @ModelAttribute ProductFilterRequest request,
             Pageable pageable) {
         return ApiResponse.<Page<ProductResponse>>builder()
                 .result(productService.getAllProduct(request, pageable))
@@ -45,13 +42,13 @@ public class ProductController {
     /**
      * Lấy thông tin sản phẩm theo ID
      *
-     * @param productId ID của sản phẩm cần tìm
+     * @param id ID của sản phẩm cần tìm
      * @return Thông tin chi tiết của sản phẩm
      */
-    @GetMapping("/id")
-    ApiResponse<ProductResponse> getProductById(@RequestBody long productId) {
+    @GetMapping("/{id}")
+    ApiResponse<ProductResponse> getProductById(@PathVariable("id") long id) {
         return ApiResponse.<ProductResponse>builder()
-                .result(productService.getProductById(productId))
+                .result(productService.getProductById(id))
                 .build();
     }
 

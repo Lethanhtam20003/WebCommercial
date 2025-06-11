@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductFillterRequest {
+public class ProductFilterRequest {
     long id;
     String name; // Tìm kiếm gần đúng (LIKE %keyword%).
     Long[] categoryId; // Lọc theo ID danh mục,
