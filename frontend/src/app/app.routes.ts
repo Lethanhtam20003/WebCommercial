@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LabelConstants } from './shared/constants/label.constants';
 import { RouteLink } from './shared/constants/route-link';
+import { AdminGuard } from './core/guards/admin.guard';
 
 /**
  * Định nghĩa các route cho module Auth
@@ -71,6 +72,21 @@ const protectedRoutes: Routes = [
 	},
 ];
 
+const errorRouter: Routes = [
+	{
+		path: '403',
+		loadComponent: () =>
+			import('./shared/components/error/custom403/custom403.component').then(
+				m => m.Custom403Component
+			),
+		title: '403',
+		data: {
+			showHeader: false,
+			showFooter: true,
+		},
+	}
+]
+
 /**
  * Routes chính của ứng dụng
  */
@@ -82,12 +98,13 @@ export const routes: Routes = [
 	},
 	...authRoutes,
 	...protectedRoutes,
+	...errorRouter,
 	{
 		path: 'admin',
 		loadChildren: () =>
 			import('./features/admin/admin.module').then(m => m.AdminModule),
 		title: 'Admin',
-		// canActivate: [AuthGuard],
+		canActivate: [AdminGuard],
 	},
 	{
 		path: '**',
