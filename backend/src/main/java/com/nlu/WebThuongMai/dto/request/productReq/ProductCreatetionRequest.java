@@ -1,5 +1,5 @@
-package com.nlu.WebThuongMai.dto.response.productResp;
-
+package com.nlu.WebThuongMai.dto.request.productReq;
+import com.nlu.WebThuongMai.model.ProductStatistic;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,14 +12,12 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductResponse {
-    long id;
+public class ProductCreatetionRequest {
     String name;
-    double price;
+    Double price;
     String status;
-    Set<CategoryResponse> categories;
+    Set<Long> categoryIds;
     String description;
     Set<String> images;
-    int hot;
-    Set<PromotionResponse> promotions;
+    ProductStatistic statistic;
 }

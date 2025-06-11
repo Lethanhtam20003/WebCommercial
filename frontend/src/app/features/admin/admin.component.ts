@@ -8,14 +8,13 @@ import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.
   standalone: true,
   imports: [RouterOutlet, CommonModule, RouterModule, AdminSidebarComponent],
   template: `
-  <div class="d-flex">
+  <div class="d-flex vh-100 overflow-hidden" >
     <app-admin-sidebar></app-admin-sidebar>
-    <div class="flex-grow-1">
+    <div class="flex-grow-1  overflow-auto">
       <router-outlet></router-outlet>
     </div>
   </div>
-
-  <pre>
+  <!-- <pre>
      📊 Dashboard	Thống kê, biểu đồ tổng quan hệ thống
     👤 User Management	Danh sách người dùng, vai trò, trạng thái, reset password
     📦 Product Management	CRUD sản phẩm, danh mục, hình ảnh
@@ -24,7 +23,7 @@ import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.
     🧑‍💻 Admin Account Mgmt	Quản lý tài khoản quản trị khác (nếu hệ thống có nhiều admin)
     ⚙️ Settings / Config	Cấu hình hệ thống, API key, SMTP... (nếu có)
     🔒 Role & Permission
-</pre>
+</pre> -->
   `,
   styleUrls: ['./admin.component.scss'],
 

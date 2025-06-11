@@ -1,3 +1,5 @@
+@use "sass:color"; 
+
 .register {
 	background: linear-gradient(
 		to right top,
@@ -16,7 +18,7 @@
 		transition: color 0.3s ease; // Chuyển màu mượt trong 0.3 giây khi hover
 
 		&:hover {
-			color: lighten(#fe6118, 10%); // Khi hover, làm sáng màu cam lên 10%
+			color: color.adjust(#fe6118, $lightness: 10%); // Khi hover, làm sáng màu cam lên 10%
 		}
 	}
 	.register-container {
@@ -88,7 +90,7 @@
 		transition: color 0.3s ease;
 
 		&:hover {
-			color: lighten(#fe6118, 10%);
+			color: color.adjust(#fe6118, $lightness: 10%);
 			text-decoration: underline;
 		}
 	}

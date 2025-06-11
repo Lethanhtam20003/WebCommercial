@@ -3,14 +3,12 @@
 	id="sidebarMenu"
 	class="admin-sidebar collapse show d-flex flex-column bg-dark text-white p-1 vh-100"
 >
-	<a
-		href="/"
-		class="d-flex align-items-center  text-white text-decoration-none"
-	>
-		<span class="fs-4 text-center ms-5">FIRE KNIGHT<br><span class="fs-5 fst-italic">sport</span></span>
+	<a href="/" class="d-flex align-items-center text-white text-decoration-none">
+		<span class="fs-4 text-center ms-5"
+			>FIRE KNIGHT<br /><span class="fs-5 fst-italic">sport</span></span
+		>
 
-  		<!-- <img src="assets/images/shop/logo.png" alt="Logo" class="me-2" style="width: 80px; height: 80px;"> -->
-
+		<!-- <img src="assets/images/shop/logo.png" alt="Logo" class="me-2" style="width: 80px; height: 80px;"> -->
 	</a>
 
 	<hr />
@@ -31,38 +29,14 @@
 			<a
 				class="nav-link text-white d-flex justify-content-between align-items-center"
 				data-bs-toggle="collapse"
-				href="#productMenu"
 				role="button"
 				aria-expanded="false"
 				aria-controls="productMenu"
+				[routerLink]="['/admin/product-management/product-list']"
+				[routerLinkActive]="['active']"
 			>
 				<span><i class="bi bi-box me-2"></i> Product Management</span>
-				<i class="bi bi-caret-down-fill"></i>
 			</a>
-			<div
-				[ngClass]="{ collapse: true, show: isProductMenuOpen }"
-				class="collapse"
-				id="productMenu"
-			>
-				<ul class="nav flex-column ms-4">
-					<li class="nav-item" routerLinkActive="active">
-						<a
-							class="nav-link text-white"
-							[routerLink]="['/admin/product-management/product-list']"
-							routerLinkActive="active"
-							>List Products</a
-						>
-					</li>
-					<li class="nav-item">
-						<a
-							class="nav-link text-white"
-							[routerLink]="['/admin/product-management/create-product']"
-							routerLinkActive="active"
-							>Create Product</a
-						>
-					</li>
-				</ul>
-			</div>
 		</li>
 
 		<!--  Collapsible Dropdown inventory  -->
@@ -70,47 +44,22 @@
 			<a
 				class="nav-link text-white d-flex justify-content-between align-items-center"
 				data-bs-toggle="collapse"
-				href="#inventoryMenu"
 				role="button"
 				aria-expanded="false"
 				aria-controls="inventoryMenu"
+				[routerLink]="['/admin/inventory-management/inventory-list']"
+				[routerLinkActive]="['active']"
 			>
 				<span><i class="bi bi-archive me-2"></i> Inventory Management</span>
-				<i class="bi bi-caret-down-fill"></i>
 			</a>
-			<div
-				[ngClass]="{ collapse: true, show: isInventoryMenuOpen }"
-				class="collapse"
-				id="inventoryMenu"
-			>
-				<ul class="nav flex-column ms-4">
-					<li class="nav-item" routerLinkActive="active">
-						<a
-							class="nav-link text-white"
-							[routerLink]="['/admin/inventory-management/inventory-list']"
-							routerLinkActive="active"
-							>Inventory List</a
-						>
-					</li>
-					<li class="nav-item">
-						<a
-							class="nav-link text-white"
-							[routerLink]="['/admin/inventory-management/create-inventory']"
-							routerLinkActive="active"
-							>Create Inventory</a
-						>
-					</li>
-				</ul>
-			</div>
 		</li>
 
 		<li class="nav-item">
-			<a class="nav-link text-white d-flex justify-content-between align-items-center"
-				data-bs-toggle="collapse"
-				href="#orderMenu"
-				role="button"
-				aria-expanded="false"
-				aria-controls="orderMenu"
+			<a
+				href="#"
+				class="nav-link text-white"
+				[routerLink]="['/admin/order-management']"
+				[routerLinkActive]="['active']"
 			>
 				<span><i class="bi bi-table me-2"></i> Orders</span>
 				<i class="bi bi-caret-down-fill"></i>
@@ -137,53 +86,83 @@
 		</li>
 
 		<li class="nav-item">
-			<a href="#" class="nav-link text-white"
-			[routerLink]="['/admin/customer-management']">
+			<a
+				href="#"
+				class="nav-link text-white"
+				[routerLink]="['/admin/customer-management']"
+				[routerLinkActive]="['active']"
+			>
 				<i class="bi bi-people me-2"></i> Customers
 			</a>
 		</li>
 		<li class="nav-item">
-			<a href="#" class="nav-link text-white"
-			[routerLink]="['/admin/category-management']">
+			<a
+				href="#"
+				class="nav-link text-white"
+				[routerLink]="['/admin/category-management']"
+				[routerLinkActive]="['active']"
+			>
 				<i class="bi bi-table me-2"></i> Category
 			</a>
 		</li>
 		<!-- review -->
-		 <li class="nav-item">
-			<a href="#" class="nav-link text-white"
-			[routerLink]="['/admin/review-management']">
+		<li class="nav-item">
+			<a
+				href="#"
+				class="nav-link text-white"
+				[routerLink]="['/admin/review-management']"
+				[routerLinkActive]="['active']"
+			>
 				<i class="bi bi-chat-left-text me-2"></i> Reviews
 			</a>
 		</li>
 		<!-- coupons -->
-		 <li class="nav-item">
-			<a href="#" class="nav-link text-white"
-			[routerLink]="['/admin/coupons-management']">
+		<li class="nav-item">
+			<a
+				href="#"
+				class="nav-link text-white"
+				[routerLink]="['/admin/coupons-management']"
+				[routerLinkActive]="['active']"
+			>
 				<i class="bi bi-ticket-perforated me-2"></i> Coupons
-				</a>
-			</li>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a
+				href="#"
+				class="nav-link text-white"
+				[routerLink]="['/admin/promotions-management']"
+				[routerLinkActive]="['active']"
+			>
+				<i class="bi bi-patch-check me-2"></i> Promotions
+			</a>
+		</li>
 	</ul>
 	<hr />
 	<ng-container *ngIf="isLoggedIn$ | async">
-  <div class="dropdown w-100 text-center mt-auto">
-    <button
-      class="btn btn-outline-light dropdown-toggle w-100 rounded-pill py-2"
-      type="button"
-      id="dropdownMenuButton1"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
-    >
-      <i class="bi bi-person-circle me-2"></i>{{ label.userAccount }}
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-      <li>
-        <a class="dropdown-item" [routerLink]="['/profile']">{{ label.myAccount }}</a>
-      </li>
-      <li>
-        <a class="dropdown-item" (click)="logout()">{{ label.logOut }}</a>
-      </li>
-    </ul>
-  </div>
-</ng-container>
-
+		<div class="dropdown w-100 text-center mt-auto">
+			<button
+				class="btn btn-outline-light dropdown-toggle w-100 rounded-pill py-2"
+				type="button"
+				id="dropdownMenuButton1"
+				data-bs-toggle="dropdown"
+				aria-expanded="false"
+			>
+				<i class="bi bi-person-circle me-2"></i>{{ label.userAccount }}
+			</button>
+			<ul
+				class="dropdown-menu dropdown-menu-end"
+				aria-labelledby="dropdownMenuButton1"
+			>
+				<li>
+					<a class="dropdown-item" [routerLink]="['/profile']">{{
+						label.myAccount
+					}}</a>
+				</li>
+				<li>
+					<a class="dropdown-item" (click)="logout()">{{ label.logOut }}</a>
+				</li>
+			</ul>
+		</div>
+	</ng-container>
 </div>

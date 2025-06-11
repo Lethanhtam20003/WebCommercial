@@ -1,0 +1,91 @@
+.table-scroll {
+	max-height: 530px; // hoặc chiều cao bạn mong muốn
+	overflow-y: auto;
+	border-radius: 8px;
+	border: 1px solid #dee2e6;
+
+	table {
+		thead {
+			background-color: #f4f6f9; // màu nền nhẹ
+			border-bottom: 2px solid #dee2e6; // đường phân cách rõ ràng
+			th {
+				text-align: center; // căn giữa chữ
+				padding: 12px 16px; // khoảng cách thoáng hơn
+				font-weight: 600; // chữ đậm hơn một chút
+				color: #333; // màu chữ trung tính
+				text-transform: uppercase; // viết hoa nếu muốn chuyên nghiệp
+				font-size: 14px; // cỡ chữ đồng nhất
+				white-space: nowrap; // tránh chữ bị gãy dòng
+				background-color: #f8f9fa; // nền sáng
+				vertical-align: middle; // căn giữa chiều dọc
+			}
+		}
+		margin-bottom: 0; // tránh table đẩy content ra ngoài
+		img {
+			width: 80px; // Đặt chiều rộng cố định cho hình ảnh
+			height: 80px; // Đặt chiều cao cố định cho hình ảnh
+			object-fit: cover; // Đảm bảo hình ảnh không bị méo
+		}
+		tbody {
+			tr {
+				height: 96px; // Đảm bảo dòng nào cũng đều và không bị vỡ bố cục
+			}
+		}
+	}
+
+	thead th {
+		position: sticky; // Giúp header luôn nằm cố định khi cuộn
+		top: 0; // Giúp header luôn nằm cố định khi cuộn
+		background: #f8f9fa; // nền cố định của header bảng
+		z-index: 0; // Đảm bảo header luôn nổi trên các phần khác
+	}
+}
+
+.pagination {
+	position: fixed; // Giúp phần tử này cố định ở một vị trí trên màn hình, không bị trôi khi cuộn trang
+	bottom: 0; // Cách mép dưới của màn hình 0px => sát dưới cùng
+	right: 0; // Cách mép phải của màn hình 0px => sát bên phải
+	z-index: 999; // Ưu tiên hiển thị lớp trên cùng, tránh bị các phần khác đè lên
+	background-color: #fff; // Giúp nội dung dễ đọc nếu bên dưới có nền tối hoặc rối
+	padding: 0.5rem 1rem; // Khoảng cách bên trong để phần tử không bị dính sát chữ
+	// box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); // Tạo bóng giúp phần phân trang nổi bật
+	.page-item.active .page-link {
+		background-color: #667eea;
+		border-color: #667eea;
+		color: #fff;
+	}
+}
+.custom-ng-select {
+  .ng-select-container {
+    background-color: #ffffff; // 🔧 Màu nền trắng rõ ràng
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 4px 10px;
+    min-height: 40px;
+    height: auto !important;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 14px;
+    z-index: 2;
+  }
+
+  .ng-dropdown-panel {
+    background-color: #ffffff; // ✅ Nền trắng cho panel dropdown
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 9999; // Đảm bảo luôn nổi trên các phần khác
+  }
+
+  .ng-option {
+    background-color: #ffffff; // ✅ Mỗi item cũng nền trắng
+    color: #212529;
+  }
+
+  .ng-option:hover,
+  .ng-option-selected {
+    background-color: #e9ecef; // ✅ Hover có màu nhẹ
+    color: #000;
+  }
+}
