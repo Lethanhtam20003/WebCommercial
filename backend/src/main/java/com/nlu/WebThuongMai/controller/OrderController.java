@@ -1,8 +1,9 @@
 package com.nlu.WebThuongMai.controller;
 
+import com.nlu.WebThuongMai.dto.request.orderReq.GetAllOrderAdminRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.OrderCreateRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.OrderUpdateRequest;
-import com.nlu.WebThuongMai.dto.response.OrderResp.OrderResponse;
+import com.nlu.WebThuongMai.dto.response.orderResp.OrderResponse;
 import com.nlu.WebThuongMai.dto.request.orderReq.OrderFilterRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.service.OrderService;
@@ -96,7 +97,7 @@ class OrderController {
 
     // tìm kiếm đơn hàng theo tên
 
- @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping()
     public ApiResponse<Page<OrderResponse>> getOrdersForUser(
             @RequestParam Long userId,
@@ -125,10 +126,13 @@ class OrderController {
      * @return ApiResponse chứa danh sách các đơn hàng phù hợp.
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/filter/admin")
-    public ApiResponse<List<OrderResponse>> getAdminOrders(@RequestBody OrderFilterRequest request) {
-        return ApiResponse.<List<OrderResponse>>builder()
-                .result(service.filterOrdersByAdmin(request))
+    @PostMapping("/filter/admin")
+    public ApiResponse<Page<OrderResponse>> getAdminOrders(
+            @RequestBody GetAllOrderAdminRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<Page<OrderResponse>>builder()
+                .result(service.filterOrdersByAdmin(request, page, size))
                 .build();
     }
 }

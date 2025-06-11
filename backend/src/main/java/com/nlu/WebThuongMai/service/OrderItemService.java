@@ -4,6 +4,7 @@ import com.nlu.WebThuongMai.dto.response.OrderResp.OrderItemResponse;
 import com.nlu.WebThuongMai.mapper.OrderMapper;
 import com.nlu.WebThuongMai.model.OrderItem;
 import com.nlu.WebThuongMai.repository.OrderItemRepository;
+import com.nlu.WebThuongMai.dto.response.orderResp.OrderItemResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

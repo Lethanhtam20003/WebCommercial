@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
 import { ProductManagementComponent } from './pages/product-management/product-management.component';
 import { InventoryManagementComponent } from './pages/inventory-management/inventory-management.component';
+import { OrderManagementComponent } from './pages/order-management/order-management-admin.component';
+import { OrderListTabComponent } from '../order/order-list-tab/order-list-tab.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 const routeData = {
@@ -79,6 +81,57 @@ const inventoryManagementRoutes: Routes = [
 		},
 	},
 ];
+const orderManagementRoutes: Routes = [
+	{
+		path: 'order-management',
+		component: OrderManagementComponent,
+		children: [
+			{
+				path: 'order-list',
+				component: OrderListTabComponent,
+				data: {
+					showHeader: false,
+					showFooter: false,
+				},
+			},
+			// {
+			// 	path: 'payment-list',
+			// 	loadComponent: () =>
+			// 		import('../payment-list/payment-list.component').then(
+			// 			m => m.PaymentListComponent
+			// 		),
+			// 	data: {
+			// 		showHeader: false,
+			// 		showFooter: false,
+			// 	},
+			// },
+			{
+				path: 'refund-list',
+				loadComponent: () =>
+					import('../refund-list/refund-list.component').then(
+						m => m.RefundListComponent
+					),
+				data: {
+					showHeader: false,
+					showFooter: false,
+				},
+			},
+			{
+				path: '',
+				redirectTo: 'order-list',
+				pathMatch: 'full',
+				data: {
+					showHeader: false,
+					showFooter: false,
+				},
+			},
+		],
+		data: {
+			showHeader: false,
+			showFooter: false,
+		},
+	},
+];
 const categoryManagementRoutes: Routes = [
 	{
 		path: 'category-management',
@@ -128,7 +181,6 @@ const promotionsManagementRoutes: Routes = [
 		},
 	},
 ];
-
 /**
  * Định nghĩa các route cho module admin
  **/
@@ -144,14 +196,7 @@ const routes: Routes = [
 			},
 			...productManagementRoutes,
 			...inventoryManagementRoutes,
-			{
-				path: 'order-management',
-				loadComponent: () =>
-					import('./pages/Order-management/Order-management.component').then(
-						m => m.OrderManagementComponent
-					),
-				data: routeData,
-			},
+			...orderManagementRoutes,
 			{
 				path: 'customer-management',
 				loadComponent: () =>

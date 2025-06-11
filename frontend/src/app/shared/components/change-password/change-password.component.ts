@@ -13,13 +13,13 @@ import { CommonModule, NgIf } from '@angular/common';
 import { LabelConstants } from '../../constants/label.constants';
 import { ErrorMessageConstants } from '../../constants/error-message.constants';
 import { UserStateService } from '../../../core/service/state/user-state.service';
-import { UserChangePasswordRequest } from '../../../core/models/request/user-change-password-request.inteface';
+import { UserChangePasswordRequest } from '../../../core/models/request/user/user-change-password-request.inteface';
 import { UserService } from '../../../core/service/user.service';
 import { ResponseMessage } from '../../constants/response-message.constants';
 
 @Component({
 	selector: 'change-password',
-	imports: [NgIf, CommonModule, ReactiveFormsModule],
+  standalone: false,
 	templateUrl: './change-password.component.html',
 	styleUrl: './change-password.component.scss',
 })

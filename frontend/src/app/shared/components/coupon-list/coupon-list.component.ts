@@ -1,21 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CouponComponent } from '../coupon/coupon.component';
-import { GetAllCouponResponse } from '../../../core/models/response/get-all-coupon-response.interface';
+import { CouponResponse } from '../../../core/models/response/coupon/coupon-response.interface';
 import { CouponService } from '../../../core/service/coupon.service';
-import { GetAllCouponRequest } from '../../../core/models/request/get-all-coupon-request.interface';
+import { GetAllCouponRequest } from '../../../core/models/request/coupon/get-all-coupon-request.interface';
 import { finalize } from 'rxjs';
 import { ApiResponse } from '../../../core/models/api-response.model';
 import { Page } from '../../../core/models/response/page-response.interface';
 
 @Component({
   selector: 'coupon-list',
-  standalone: true,
-  imports: [CommonModule, CouponComponent],
+  standalone: false,
   templateUrl: './coupon-list.component.html'
 })
 export class CouponListComponent implements OnInit{
-  coupons: GetAllCouponResponse[] = [];
+  coupons: CouponResponse[] = [];
   isLoading = false;
   errorMsg = '';
 
@@ -34,7 +33,7 @@ export class CouponListComponent implements OnInit{
     this.couponService.getAllCoupons(request)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
-        next: (response: ApiResponse<Page<GetAllCouponResponse>>) => {
+        next: (response: ApiResponse<Page<CouponResponse>>) => {
           this.coupons = response.result.content;
         },
         error: (err) => {

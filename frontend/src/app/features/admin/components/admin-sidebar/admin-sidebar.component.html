@@ -61,8 +61,28 @@
 				[routerLink]="['/admin/order-management']"
 				[routerLinkActive]="['active']"
 			>
-				<i class="bi bi-table me-2"></i> Orders
+				<span><i class="bi bi-table me-2"></i> Orders</span>
+				<i class="bi bi-caret-down-fill"></i>
 			</a>
+      <div class="collapse" id="orderMenu">
+				<ul class="nav flex-column ms-4">
+					<li class="nav-item">
+						<a class="nav-link text-white" [routerLink]="['/admin/order-management/order-list']" routerLinkActive="active">
+							Order List
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-white" [routerLink]="['/admin/order-management/refund-list']" routerLinkActive="active">
+							Refund List
+						</a>
+					</li>
+          <!-- <li class="nav-item">
+						<a class="nav-link text-white" [routerLink]="['/admin/order-management/payment-list']" routerLinkActive="active">
+							Payment List
+						</a>
+					</li> -->
+				</ul>
+			</div>
 		</li>
 
 		<li class="nav-item">

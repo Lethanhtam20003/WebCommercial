@@ -1,7 +1,7 @@
 package com.nlu.WebThuongMai.mapper;
 
-import com.nlu.WebThuongMai.dto.response.OrderResp.OrderItemResponse;
-import com.nlu.WebThuongMai.dto.response.OrderResp.OrderResponse;
+import com.nlu.WebThuongMai.dto.response.orderResp.OrderResponse;
+import com.nlu.WebThuongMai.dto.response.orderResp.OrderItemResponse;
 import com.nlu.WebThuongMai.model.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,7 +17,6 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface OrderMapper {
-
     /**
      * Chuyển đổi một Order sang OrderResponse
      *
@@ -25,6 +24,8 @@ public interface OrderMapper {
      * @return đối tượng phản hồi OrderResponse
      */
     @Mapping(target = "orderItems", source = "orderItems")
+    @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "userName", source = "user.username")
     OrderResponse toOrderResponse(Order order);
 
     /**

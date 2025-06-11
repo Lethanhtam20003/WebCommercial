@@ -26,7 +26,7 @@ public class ReadCSVFile {
     CategoryService categoryService;
 
     public static void main(String[] args) {
-        String fileName = "D:\\isDoing\\ChuyenDeWeb\\WebCommercial\\backend\\src\\main\\resources\\db\\migration\\csvFiles\\allProducts.csv";
+        String fileName = "D:\\WebCommercial-\\backend\\src\\main\\resources\\db\\migration\\csvFiles\\allProducts.csv";
         try (CSVReader reader = new CSVReader(new FileReader(fileName))) {
             List<String[]> records = reader.readAll();
             records.stream()

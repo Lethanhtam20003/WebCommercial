@@ -62,83 +62,12 @@ const protectedRoutes: Routes = [
 	},
 	{
 		path: RouteLink.userRoute,
-		loadComponent: () =>
-			import('./shared/components/user-account/user-account.component').then(
-				m => m.UserAccountComponent
+		loadChildren: () =>
+			import('./features/user/page/user-account/user-account.module').then(
+				m => m.UserAccountModule
 			),
-		children: [
-			{
-				path: RouteLink.profileRoute,
-				loadComponent: () =>
-					import(
-						'./shared/components/user-profile/user-profile.component'
-					).then(m => m.UserProfileComponent),
-				title: LabelConstants.userProfile,
-				// canActivate: [AuthGuard],
-				data: {
-					showHeader: true,
-					showFooter: true,
-					breadcrumb: LabelConstants.userAccount,
-				},
-			},
-			{
-				path: RouteLink.changePasswordRoute,
-				loadComponent: () =>
-					import(
-						'./shared/components/change-password/change-password.component'
-					).then(m => m.ChangePasswordComponent),
-				title: LabelConstants.changePassword,
-				// canActivate: [AuthGuard],
-				data: {
-					showHeader: true,
-					showFooter: true,
-					breadcrumb: LabelConstants.userAccount,
-				},
-			},
-			{
-				path: RouteLink.orderRoute + '/:status',
-				loadComponent: () =>
-					import(
-						'./shared/components/order-management/order-management.component'
-					).then(m => m.OrderMamangementComponent),
-				title: LabelConstants.order,
-				// canActivate: [AuthGuard],
-				data: {
-					showHeader: true,
-					showFooter: true,
-					breadcrumb: LabelConstants.userAccount,
-				},
-			},
-      {
-				path: RouteLink.couponRoute,
-				loadComponent: () =>
-					import(
-						'./shared/components/coupon-list/coupon-list.component'
-					).then(m => m.CouponListComponent),
-				title: LabelConstants.couponList,
-				// canActivate: [AuthGuard],
-				data: {
-					showHeader: true,
-					showFooter: true,
-					breadcrumb: LabelConstants.userAccount,
-				},
-			},
-			{
-				path: '',
-				redirectTo: RouteLink.profileRoute,
-				pathMatch: 'full',
-				data: {
-					showHeader: true,
-					showFooter: true,
-					breadcrumb: LabelConstants.userProfile,
-				},
-			},
-			{
-				path: RouteLink.orderRoute,
-				redirectTo: `${RouteLink.orderRoute}/${RouteLink.allRoute}`,
-				pathMatch: 'full',
-			},
-		],
+		canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
 	},
 ];
 

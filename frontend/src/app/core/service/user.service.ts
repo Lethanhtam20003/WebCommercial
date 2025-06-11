@@ -4,10 +4,10 @@ import { URL_API } from '../../shared/constants/url-api.constants';
 import { ErrorMessageConstants } from '../../shared/constants/error-message.constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserProfile } from '../models/response/user-profile-response.model';
-import { UserUpdateRequest } from '../models/request/user-update-request.inteface';
-import { UserResponse } from '../models/response/user-response.interface';
-import { UserChangePasswordRequest } from '../models/request/user-change-password-request.inteface';
+import { UserProfile } from '../models/response/user/user-profile-response.model';
+import { UserUpdateRequest } from '../models/request/user/user-update-request.inteface';
+import { UserResponse } from '../models/response/user/user-response.interface';
+import { UserChangePasswordRequest } from '../models/request/user/user-change-password-request.inteface';
 
 @Injectable({
 	providedIn: 'root',

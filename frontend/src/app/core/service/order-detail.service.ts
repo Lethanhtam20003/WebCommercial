@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { getOrderDetailByOrderId } from '../models/request/get-order-detail-request.interface';
+import { getOrderDetailByOrderId } from '../models/request/order/get-order-detail-request.interface';
 import { map, Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { Page } from '../models/response/page-response.interface';
-import { OrderDetailResponse } from '../models/response/order-item-response.interface';
 import { URL_API } from '../../shared/constants/url-api.constants';
+import { OrderDetailResponse } from '../models/response/order/order-item-response.interface';
 
 @Injectable({
 	providedIn: 'root',

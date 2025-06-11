@@ -1,29 +1,28 @@
-import { CommonModule, CurrencyPipe, DatePipe, NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { OrderResponse } from '../../../core/models/response/order-response.interface';
+import { OrderResponse } from '../../../core/models/response/order/order-response.interface';
 import { UtitlyService } from '../../../core/service/utility.service';
+import { OrderListColumn } from './order-list-column.interface';
 
 @Component({
-	imports: [NgClass, CommonModule],
-	standalone: true,
 	selector: 'order-list',
+  imports: [CommonModule, NgClass],
+  standalone: true,
 	templateUrl: './order-list.component.html',
-	styleUrl: './order-list.component.scss',
+	styleUrls: ['./order-list.component.scss'],
 })
 export class OrderListComponent {
+	constructor(public utility: UtitlyService) {}
+
 	@Input() orders: OrderResponse[] = [];
+	@Input() columns: OrderListColumn[] = [];
+
 	@Output() viewOrder = new EventEmitter<number>();
 
-  constructor(protected utility: UtitlyService){}
 	onView(orderId: number) {
 		this.viewOrder.emit(orderId);
 	}
-}
 
-export interface OrderItem {
-  productName: string;
-  productImage: string;
-  quantity: number;
-  price: number; // giá tại thời điểm thanh toán
+	trackById = (_: number, order: OrderResponse) => order.id;
+	trackByKey = (_: number, col: OrderListColumn) => col.key;
 }
-

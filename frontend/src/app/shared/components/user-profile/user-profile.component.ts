@@ -15,9 +15,9 @@ import { AlertService } from '../../../core/service/alert.service';
 import { CloudinaryUploadService } from '../../../features/admin/service/cloudinary-upload.service';
 import { UserStateService } from '../../../core/service/state/user-state.service';
 import { Subject, takeUntil, timeout } from 'rxjs';
-import { UserProfile } from '../../../core/models/response/user-profile-response.model';
+import { UserProfile } from '../../../core/models/response/user/user-profile-response.model';
 import { UtitlyService } from '../../../core/service/utility.service';
-import { UserUpdateRequest } from '../../../core/models/request/user-update-request.inteface';
+import { UserUpdateRequest } from '../../../core/models/request/user/user-update-request.inteface';
 import { ResponseMessage } from '../../constants/response-message.constants';
 import { UserService } from '../../../core/service/user.service';
 import { Gender } from '../../../core/enum/gender.enum';
@@ -25,10 +25,11 @@ import { AuthService } from '../../../core/service/auth.service';
 
 @Component({
 	selector: 'user-profile',
-	imports: [CommonModule, ReactiveFormsModule],
 	providers: [CloudinaryUploadService],
+  standalone: false,
 	templateUrl: './user-profile.component.html',
-	styleUrl: './user-profile.component.scss',
+	// styleUrl: './user-profile.component.scss',
+	styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
 	updateInformationForm!: FormGroup;

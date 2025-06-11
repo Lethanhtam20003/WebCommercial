@@ -1,8 +1,9 @@
 package com.nlu.WebThuongMai.service;
 
+import com.nlu.WebThuongMai.dto.request.orderReq.GetAllOrderAdminRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.OrderCreateRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.OrderUpdateRequest;
-import com.nlu.WebThuongMai.dto.response.OrderResp.OrderResponse;
+import com.nlu.WebThuongMai.dto.response.orderResp.OrderResponse;
 import com.nlu.WebThuongMai.enums.OrderStatus;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
@@ -17,9 +18,13 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import java.math.BigDecimal;
@@ -186,17 +191,54 @@ public class OrderService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<OrderResponse> filterOrdersByAdmin(OrderFilterRequest request) {
-        List<Order> orders;
+    public Page<OrderResponse> filterOrdersByAdmin(GetAllOrderAdminRequest request, int page, int size) {
+        // Xử lý logic default và ưu tiên
+        LocalDate dateFrom = request.getCreatedDateFrom();
+        LocalDate dateTo = request.getCreatedDateTo();
 
-        if (request.getStatus() != null) {
-            orders = repository.findOrdersByStatus(request.getStatus());
-        } else {
-            orders = repository.findAll();
+        // Nếu cả hai đều null => fetch toàn bộ
+        // Nếu chỉ dateFrom null, lấy dateTo (hoặc now nếu dateTo cũng null)
+        if (dateFrom == null && dateTo != null) {
+            dateFrom = dateTo;
+        }
+        // Nếu dateTo null, set dateTo = hôm nay
+        if (dateTo == null && dateFrom != null) {
+            dateTo = LocalDate.now();
+        }
+        // Nếu cả hai null, để nguyên không filter
+
+        Specification<Order> spec = Specification.where(null);
+
+        if (dateFrom != null && dateTo != null) {
+            LocalDateTime from = dateFrom.atStartOfDay();
+            LocalDateTime to = dateTo.atTime(23,59,59);
+            spec = spec.and((root, query, cb) -> cb.between(root.get("createdDate"), from, to));
         }
 
-        return mapper.toOrderResponseList(orders);
+        if (request.getUsername() != null && !request.getUsername().isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("user").get("username")), "%" + request.getUsername().toLowerCase() + "%")
+            );
+        }
+
+        if (request.getTotalPrice() != null) {
+            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("totalPrice"), request.getTotalPrice()));
+        }
+
+        if (request.getStatus() != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), request.getStatus()));
+        }
+
+        // Ưu tiên sắp xếp: ngày tạo DESC > username ASC > totalPrice DESC > status ASC
+        Pageable pageable = PageRequest.of(page, size, Sort.by(
+                Sort.Order.desc("createdDate"),
+                Sort.Order.asc("user.username"),
+                Sort.Order.desc("totalPrice"),
+                Sort.Order.asc("status")
+        ));
+
+        Page<Order> orderPage = repository.findAll(spec, pageable);
+        Page<OrderResponse> responsePage = orderPage.map(order -> mapper.toOrderResponse(order));
+        return responsePage;
     }
-
-
 }

@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { OrderStatus } from '../enum/order-status.enum';
+import { OrderResponse } from '../models/response/order/order-response.interface';
+import { CouponResponse } from '../models/response/coupon/coupon-response.interface';
 
 @Injectable({
 	providedIn: 'root',
@@ -34,9 +37,7 @@ export class UtitlyService {
 		return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
 	}
 
-	mapStatusToBackend(
-		status: string
-	): 'PENDING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | null {
+	mapStatusToBackend(status: string): OrderStatus | string {
 		switch (status.toLowerCase()) {
 			case 'chờ xác nhận':
 			case 'pending':
@@ -56,14 +57,24 @@ export class UtitlyService {
 			case 'canceled':
 				return 'CANCELLED';
 
+			case 'Đã xác nhận':
+			case 'đã xác nhận':
+			case 'confirm':
+			case 'confirmed':
+				return 'CONFIRMED';
+
+      case 'Tất cả':
+      case 'Tất cả trạng thái':
+      case 'tất cả trạng thái':
+      case 'toàn bộ':
+        return '';
+
 			default:
-				return null;
+				return '';
 		}
 	}
 
-	mapStatusToVietnamese(
-		status: 'PENDING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED'
-	): string {
+	mapStatusToVietnamese(status: OrderStatus | string): string {
 		switch (status) {
 			case 'PENDING':
 				return 'Chờ xác nhận';
@@ -73,8 +84,26 @@ export class UtitlyService {
 				return 'Đã giao';
 			case 'CANCELLED':
 				return 'Đã huỷ';
+			case 'CONFIRMED':
+				return 'Đã xác nhận';
 			default:
 				return status;
 		}
+	}
+
+	getCellValue(row: any, key: string): any {
+		if (!row || !key) return '-';
+
+		const value = row[key];
+
+		if (key === 'coupon') {
+			return (value as CouponResponse)?.code || '-';
+		}
+
+		if (typeof value === 'object') {
+			return JSON.stringify(value); // fallback nếu quên xử lý
+		}
+
+		return value ?? '-';
 	}
 }

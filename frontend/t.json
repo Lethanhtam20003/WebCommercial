@@ -1,0 +1,204 @@
+{
+  "code": 200,
+  "message": "Success",
+  "result": {
+    "content": [
+      {
+        "id": 22,
+        "userId": "3",
+        "userName": "tan",
+        "totalPrice": 2000000,
+        "discountedPrice": 1800000,
+        "status": "CONFIRMED",
+        "note": "Giao hàng nhanh",
+        "createdDate": "2025-05-30T19:48:59.492617",
+        "coupon": {
+          "id": 5,
+          "code": "SUMMER2025",
+          "discount": 15,
+          "description": "Ưu đãi mùa hè 2025, giảm 15%",
+          "limitUsers": 200,
+          "createdAt": "2025-05-30T19:23:11.421847",
+          "expirationDate": "2025-08-31T23:59:59",
+          "status": "ACTIVE",
+          "type": "PERCENTAGE",
+          "priceCondition": 2000000,
+          "minPrice": 1000000
+        },
+        "orderItems": [
+          {
+            "id": 16,
+            "productId": 0,
+            "productName": "Giày Cầu Lông Động Lực Promax \"Navy\" PR-241023-02 - Hàng Chính Hãng",
+            "productImage": "https://bizweb.dktcdn.net/thumb/medium/100/485/982/products/a5-0-jpeg-1712570979038.jpg",
+            "quantity": 1,
+            "price": 800000,
+            "totalItemPrice": null
+          },
+          {
+            "id": 17,
+            "productId": 0,
+            "productName": "Giày Cầu Lông Động Lực Promax \"Tím\" PR-241023-03 - Hàng Chính Hãng",
+            "productImage": "https://bizweb.dktcdn.net/thumb/medium/100/485/982/products/a4-0-jpeg-1712571019110.jpg",
+            "quantity": 1,
+            "price": 200000,
+            "totalItemPrice": null
+          },
+          {
+            "id": 15,
+            "productId": 0,
+            "productName": "Giày Cầu Lông Nam Động Lực Jogarbola Kira \"Xanh Navy\" JG-220420-04 - Hàng Chính Hãng",
+            "productImage": "https://bizweb.dktcdn.net/thumb/medium/100/485/982/products/1-5-1712571761344.jpg",
+            "quantity": 2,
+            "price": 600000,
+            "totalItemPrice": null
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "userId": "3",
+        "userName": "tan",
+        "totalPrice": 1500000,
+        "discountedPrice": 1500000,
+        "status": "CANCELLED",
+        "note": "Khách đổi ý không mua",
+        "createdDate": "2025-05-30T19:48:59.492617",
+        "coupon": {
+          "id": 8,
+          "code": "EXPIRED2024",
+          "discount": 5,
+          "description": "Mã giảm giá đã hết hạn",
+          "limitUsers": 100,
+          "createdAt": "2025-05-30T19:23:11.421847",
+          "expirationDate": "2024-12-31T23:59:59",
+          "status": "INACTIVE",
+          "type": "PERCENTAGE",
+          "priceCondition": 500000,
+          "minPrice": 200000
+        },
+        "orderItems": [
+          {
+            "id": 20,
+            "productId": 0,
+            "productName": "Giày Cầu Lông Động Lực Promax \"Đỏ\" PR-241023-01 - Hàng Chính Hãng",
+            "productImage": "https://bizweb.dktcdn.net/thumb/medium/100/485/982/products/a6-5-jpeg-1712570809130.jpg",
+            "quantity": 1,
+            "price": 900000,
+            "totalItemPrice": null
+          },
+          {
+            "id": 21,
+            "productId": 0,
+            "productName": "Giày Cầu Lông Nam Động Lực Jogarbola Kira \"Xanh Navy\" JG-220420-04 - Hàng Chính Hãng",
+            "productImage": "https://bizweb.dktcdn.net/thumb/medium/100/485/982/products/1-5-1712571761344.jpg",
+            "quantity": 1,
+            "price": 600000,
+            "totalItemPrice": null
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "userId": "3",
+        "userName": "tan",
+        "totalPrice": 1200000,
+        "discountedPrice": 1100000,
+        "status": "PENDING",
+        "note": "Khách muốn giao buổi sáng",
+        "createdDate": "2025-05-30T19:48:59.492617",
+        "coupon": {
+          "id": 4,
+          "code": "WELCOME10",
+          "discount": 10,
+          "description": "Giảm 10% cho đơn hàng đầu tiên",
+          "limitUsers": 100,
+          "createdAt": "2025-05-30T19:23:11.421847",
+          "expirationDate": "2025-12-31T23:59:59",
+          "status": "ACTIVE",
+          "type": "PERCENTAGE",
+          "priceCondition": 1000000,
+          "minPrice": 500000
+        },
+        "orderItems": [
+          {
+            "id": 12,
+            "productId": 0,
+            "productName": "Giày Cầu Lông Nam Động Lực Jogarbola Kira \"Đỏ - Đen\" JG-220420-05 - Hàng Chính Hãng",
+            "productImage": "https://bizweb.dktcdn.net/thumb/medium/100/485/982/products/4-7-1712571806288.jpg",
+            "quantity": 2,
+            "price": 300000,
+            "totalItemPrice": null
+          },
+          {
+            "id": 14,
+            "productId": 0,
+            "productName": "Giày Cầu Lông Nam Nữ Động Lực Jogarbola Kira \"Xanh lá\" JG-220420-03 - Hàng Chính Hãng",
+            "productImage": "https://bizweb.dktcdn.net/100/485/982/products/7-1712571612659.jpg",
+            "quantity": 1,
+            "price": 300000,
+            "totalItemPrice": null
+          },
+          {
+            "id": 13,
+            "productId": 0,
+            "productName": "Giày Cầu Lông Nam Động Lực Jogarbola Kira \"Xanh Navy\" JG-220420-04 - Hàng Chính Hãng",
+            "productImage": "https://bizweb.dktcdn.net/thumb/medium/100/485/982/products/1-5-1712571761344.jpg",
+            "quantity": 1,
+            "price": 600000,
+            "totalItemPrice": null
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "userId": "3",
+        "userName": "tan",
+        "totalPrice": 800000,
+        "discountedPrice": 720000,
+        "status": "DELIVERED",
+        "note": "Khách nhận hàng tại cửa hàng",
+        "createdDate": "2025-05-30T19:48:59.492617",
+        "coupon": {
+          "id": 6,
+          "code": "FIXED100K",
+          "discount": 100000,
+          "description": "Giảm trực tiếp 100.000 VNĐ cho đơn hàng từ 1 triệu",
+          "limitUsers": 50,
+          "createdAt": "2025-05-30T19:23:11.421847",
+          "expirationDate": "2025-09-30T23:59:59",
+          "status": "ACTIVE",
+          "type": "AMOUNT",
+          "priceCondition": 1000000,
+          "minPrice": 1000000
+        },
+        "orderItems": [
+          {
+            "id": 18,
+            "productId": 0,
+            "productName": "Giày Cầu Lông Nam Động Lực Jogarbola Kira \"Đỏ - Đen\" JG-220420-05 - Hàng Chính Hãng",
+            "productImage": "https://bizweb.dktcdn.net/thumb/medium/100/485/982/products/4-7-1712571806288.jpg",
+            "quantity": 1,
+            "price": 300000,
+            "totalItemPrice": null
+          },
+          {
+            "id": 19,
+            "productId": 0,
+            "productName": "Giày Cầu Lông Nam Nữ Động Lực Jogarbola Kira \"Xanh lá\" JG-220420-03 - Hàng Chính Hãng",
+            "productImage": "https://bizweb.dktcdn.net/100/485/982/products/7-1712571612659.jpg",
+            "quantity": 2,
+            "price": 250000,
+            "totalItemPrice": null
+          }
+        ]
+      }
+    ],
+    "page": {
+      "size": 10,
+      "number": 0,
+      "totalElements": 4,
+      "totalPages": 1
+    }
+  }
+}

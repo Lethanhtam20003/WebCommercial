@@ -1,40 +1,51 @@
 <table class="table table-bordered table-hover">
 	<thead class="table-dark">
 		<tr>
-			<th>#</th>
-			<th>Mã đơn</th>
-			<th>Ngày đặt</th>
-			<th>Trạng thái</th>
-			<th>Tổng tiền</th>
-			<th>Thao tác</th>
+			<th
+				*ngFor="let col of columns; trackBy: trackByKey"
+				[style.width]="col.width || null"
+			>
+				{{ col.label }}
+			</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr *ngFor="let order of orders; index as i">
-			<td>{{ i + 1 }}</td>
-			<td>{{ order.id }}</td>
-			<td>{{ order.createdDate | date: 'dd/MM/yyyy' }}</td>
-			<td>
-				<span
-					class="badge"
-					[ngClass]="{
-						'bg-warning': order.status === 'PENDING',
-						'bg-info': order.status === 'SHIPPED',
-						'bg-success': order.status === 'DELIVERED',
-						'bg-danger': order.status === 'CANCELLED',
-					}"
-				>
-					{{ this.utility.mapStatusToVietnamese(order.status) }}
-				</span>
-			</td>
-			<td>{{ order.totalPrice | currency: 'VND' }}</td>
-			<td>
-				<button
-					class="btn btn-sm btn-primary btn-order-detail"
-					(click)="onView(order.id)"
-				>
-					Xem
-				</button>
+		<tr *ngFor="let order of orders; index as i; trackBy: trackById">
+			<td *ngFor="let col of columns">
+				<ng-container [ngSwitch]="col.type">
+					<ng-container *ngSwitchCase="'index'">{{ i + 1 }}</ng-container>
+					<ng-container *ngSwitchCase="'date'">
+						{{ utility.getCellValue(order, col.key) | date: 'dd/MM/yyyy' }}
+					</ng-container>
+					<ng-container *ngSwitchCase="'currency'">
+						{{ utility.getCellValue(order, col.key) | currency: 'VND' }}
+					</ng-container>
+					<ng-container *ngSwitchCase="'status'">
+						<span
+							class="badge"
+							[ngClass]="{
+								'bg-warning': order.status === 'PENDING',
+								'bg-info': order.status === 'SHIPPED',
+								'bg-success': order.status === 'DELIVERED',
+								'bg-danger': order.status === 'CANCELLED',
+								'bg-primary': order.status === 'CONFIRMED',
+							}"
+						>
+							{{ utility.mapStatusToVietnamese(order.status) }}
+						</span>
+					</ng-container>
+					<ng-container *ngSwitchCase="'action'">
+						<button
+							class="btn btn-sm btn-primary btn-order-detail"
+							(click)="onView(order.id)"
+						>
+							Xem
+						</button>
+					</ng-container>
+					<ng-container *ngSwitchDefault>
+						{{ utility.getCellValue(order, col.key) || '-' }}
+					</ng-container>
+				</ng-container>
 			</td>
 		</tr>
 	</tbody>

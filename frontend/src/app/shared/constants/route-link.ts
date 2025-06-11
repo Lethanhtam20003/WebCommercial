@@ -25,5 +25,11 @@ export const RouteLink = {
   shippedRoute: 'shipped',
   deliveredRoute: 'delivered',
   canceledRoute: 'canceled',
-  couponRoute: 'coupon-list'
+  couponRoute: 'coupon-list',
+
+  /**
+   * admin
+   */
+  adminRoute: 'admin',
+
 } as const;
