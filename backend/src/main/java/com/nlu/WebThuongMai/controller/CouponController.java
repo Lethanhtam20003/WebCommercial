@@ -104,11 +104,9 @@ public class CouponController {
                 .build();
     }
 
-
-
     @GetMapping()
     @PreAuthorize("hasAuthority('USER')")
-    public ApiResponse<Page<GetAllCouponResponse>> getOrderItems(
+    public ApiResponse<Page<GetAllCouponResponse>> getAllCoupon(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -117,5 +115,4 @@ public class CouponController {
                 .result(service.getAllCoupons(pageable))
                 .build();
     }
-
 }
