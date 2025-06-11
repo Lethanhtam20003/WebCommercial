@@ -10,7 +10,7 @@
 @use 'bootstrap/scss/bootstrap';
 @use "bootstrap-icons/font/bootstrap-icons.css";
 
-@use "sass:color"; 
+@use "sass:color";
 
 :root {
 	--primary-color: #141d22;
@@ -94,6 +94,5 @@ ul {
 
 .container {
   max-width: 100vw;
-  overflow-x: hidden;
   box-sizing: border-box;
 }
