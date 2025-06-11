@@ -3,8 +3,6 @@ package com.nlu.WebThuongMai.dto.response.productResp;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @ToString
@@ -12,14 +10,12 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductResponse {
-    long id;
+public class PromotionResponse {
+    Long promotionId;
+
     String name;
-    double price;
-    String status;
-    Set<CategoryResponse> categories;
-    String description;
-    Set<String> images;
-    int hot;
-    Set<PromotionResponse> promotions;
+
+    Double discountPercent;
+
+    String image;
 }

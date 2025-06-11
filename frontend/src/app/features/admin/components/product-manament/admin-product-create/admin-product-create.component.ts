@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { category } from '../../../models/category';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { CategoryService } from '../../../service/admin-category.service';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -11,11 +11,12 @@ import { AlertService } from '../../../../../core/service/alert.service';
 import { AdminProductService } from '../../../service/admin-product.service';
 import { ValidNameValidator } from '../../../ValidationCustom/ValidName.validator';
 import { ProductRequest } from '../../../models/ProductRequest';
-import { ProductResponse } from '../../../../../core/models/productResponse';
+import { ProductResponse } from '../../../../../core/models/response/product-response/productResponse';
 import { ApiResponse } from '../../../../../core/models/api-response.model';
+
 @Component({
 	standalone: true,
-	imports: [ReactiveFormsModule, NgFor, NgSelectModule, NgIf],
+	imports: [ReactiveFormsModule, NgFor, NgSelectModule, RouterModule],
 	selector: 'app-admin-product-create',
 	templateUrl: './admin-product-create.component.html',
 	styleUrls: ['./admin-product-create.component.scss'],
@@ -88,10 +89,13 @@ export class AdminProductCreateComponent implements OnInit {
 				name: this.productForm.value.name,
 				price: this.productForm.value.price,
 				status: this.productForm.value.status,
-				categoryIds: this.productForm.value.categories.map((category: category) => category.id),
+				categoryIds: this.productForm.value.categories.map(
+					(category: category) => category.id
+				),
 				description: this.productForm.value.description,
-				image: this.ImageUrls,
-			}
+				images: this.ImageUrls,
+			};
+			console.log(productRequest);
 			this.productService.createProduct(productRequest).subscribe({
 				next: (response: ApiResponse<ProductResponse>) => {
 					this.alertService.success('Thêm sản phẩm thành công');
@@ -99,7 +103,7 @@ export class AdminProductCreateComponent implements OnInit {
 				},
 				error: error => {
 					this.alertService.error('Thêm sản phẩm thất bại');
-				}
+				},
 			});
 		}
 	}

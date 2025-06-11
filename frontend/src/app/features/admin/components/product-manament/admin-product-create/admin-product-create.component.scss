@@ -1,0 +1,297 @@
+// ✅ Sửa lại SCSS layout "Thêm mới sản phẩm" với cấu trúc rõ ràng & gọn gàng
+.admin-product-create {
+  background: linear-gradient(135deg, #faf9f5 0%, #181f29 100%);
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+
+  .container-fluid {
+    padding: 20px;
+  }
+
+  .main-card {
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    background: white;
+    overflow: hidden;
+
+    .card-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 25px;
+      border: none;
+
+      h5 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+
+        i {
+          font-size: 1.5rem;
+          margin-right: 10px;
+          opacity: 0.9;
+        }
+      }
+    }
+
+    .card-body {
+      padding: 20px 25px;
+      background: #fafbfc;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+
+    .form-label {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+      display: block;
+
+      &.required::after {
+        content: ' *';
+        color: #e74c3c;
+        font-weight: bold;
+      }
+    }
+
+    .form-control,
+    .form-select {
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      background: white;
+      height: 38px;
+
+      &:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.15rem rgba(102, 126, 234, 0.15);
+      }
+
+      &:hover {
+        border-color: #ced4da;
+      }
+
+      &.is-invalid {
+        border-color: #e74c3c;
+
+        &:focus {
+          box-shadow: 0 0 0 0.15rem rgba(231, 76, 60, 0.15);
+        }
+      }
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 80px;
+    }
+  }
+
+  .custom-ng-select {
+    ::ng-deep .ng-select {
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+
+      &.ng-select-focused {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.15rem rgba(102, 126, 234, 0.15);
+      }
+
+      .ng-select-container {
+        background: white;
+        border-radius: 6px;
+        min-height: 34px;
+      }
+
+      .ng-placeholder {
+        color: #6c757d;
+      }
+    }
+  }
+
+  .input-group {
+    .form-control {
+      border-radius: 0;
+      border-right: 1px solid #e9ecef;
+    }
+
+    .btn {
+      border: none;
+      padding: 8px 15px;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+
+      &.btn-outline-secondary {
+        background: #6c757d;
+        color: white;
+
+        &:hover {
+          background: #5a6268;
+        }
+      }
+
+      &.btn-outline-primary {
+        background: #667eea;
+        color: white;
+
+        &:hover {
+          background: #5a67d8;
+        }
+      }
+    }
+  }
+
+  .error-message {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 4px;
+    }
+  }
+
+  .status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    &.status-active {
+      background: rgba(86, 171, 47, 0.1);
+      color: #56ab2f;
+      border: 1px solid rgba(86, 171, 47, 0.3);
+    }
+
+    &.status-inactive {
+      background: rgba(231, 76, 60, 0.1);
+      color: #e74c3c;
+      border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+  }
+
+  .fixed-action-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+      &.btn-success {
+        background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+        color: white;
+
+        &:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(86, 171, 47, 0.4);
+        }
+
+        &:disabled {
+          background: #6c757d;
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+
+      &.btn-secondary {
+        background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);
+        color: white;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(44, 62, 80, 0.4);
+        }
+      }
+    }
+  }
+
+  // Responsive
+  @media (max-width: 768px) {
+    .container-fluid {
+      padding: 10px;
+      padding-bottom: 100px;
+    }
+
+    .main-card {
+      margin: 0;
+      border-radius: 10px;
+
+      .card-body {
+        padding: 15px;
+      }
+    }
+
+    .fixed-action-buttons {
+      bottom: 15px;
+      right: 15px;
+      flex-direction: column;
+
+      .btn {
+        width: 120px;
+        justify-content: center;
+        font-size: 0.85rem;
+        padding: 8px 15px;
+      }
+    }
+
+    img {
+      width: 50px !important;
+      height: 50px !important;
+    }
+  }
+}
+
+// Global effect
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+* {
+  transition: all 0.3s ease;
+}
