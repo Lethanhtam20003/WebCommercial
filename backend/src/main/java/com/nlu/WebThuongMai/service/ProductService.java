@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 /**
  * Service xử lý các chức năng liên quan đến sản phẩm.
  * Cung cấp các phương thức để truy xuất và quản lý thông tin sản phẩm,
@@ -56,7 +58,7 @@ public class ProductService {
         if (filter.getCategoryId() != null && filter.getCategoryId().length > 0) { // Hoặc !filter.getCategoryIds().isEmpty() nếu là List
             spec = spec.and((root, query, cb) -> {
                 Join<Product, Category> join = root.join("categories");
-                return join.get("id").in(filter.getCategoryId());
+                return join.get("id").in(Arrays.asList(filter.getCategoryId()));
             });
         }
 

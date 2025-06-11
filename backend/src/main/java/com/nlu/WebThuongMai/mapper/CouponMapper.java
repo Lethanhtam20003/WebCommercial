@@ -20,6 +20,7 @@ public interface CouponMapper {
     List<CouponResponse> toListCouponResponse(List<Coupon> all);
 
     Coupon couponResponseToCoupon(CouponResponse couponResponse);
+
     GetAllCouponResponse toGetAllCouponResponse(Coupon coupon);
 
     List<GetAllCouponResponse> toGetAllCouponResponseList(List<Coupon> coupons);
