@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ProductListComponent } from '../../features/product/product-list/product-list.component';
 import { OutstandingProductCatalogComponent } from '../../features/category/OutstandingProductCatalog/OutstandingProductCatalog.component';
+import { BannerModule } from '../../shared/components/banner/banner.module';
 @Component({
 	selector: 'app-home',
 	standalone: true,
@@ -9,6 +10,7 @@ import { OutstandingProductCatalogComponent } from '../../features/category/Outs
 		RouterModule,
 		ProductListComponent,
 		OutstandingProductCatalogComponent,
+		BannerModule,
 	],
 	template: `
 		<pre>
@@ -17,7 +19,7 @@ import { OutstandingProductCatalogComponent } from '../../features/category/Outs
       Dẫn tới sản phẩm hot / flash sale / bộ sưu tập mới
     </pre
 		>
-
+		<app-banner></app-banner>
 		<app-OutstandingProductCatalog></app-OutstandingProductCatalog>
 		<app-product-list></app-product-list>
 		<!-- <app-product-list2></app-product-list2> -->

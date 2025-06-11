@@ -138,17 +138,33 @@
 								<li>
 									<a
 										class="dropdown-item"
+										[class.non-bg-color]="isMyAccountPressed"
+										(mousedown)="onPress('myAccount')"
+										(mouseup)="onRelease('myAccount')"
+										(mouseleave)="onRelease('myAccount')"
 										[routerLink]="route.userRoute + '/' + route.profileRoute"
 										>{{ label.myAccount }}</a
 									>
 								</li>
 								<li>
-									<a class="dropdown-item" (click)="logout()">{{
-										label.logOut
-									}}</a>
+									<a
+										class="dropdown-item"
+										(click)="logout()"
+										[class.non-bg-color]="isLogoutPressed"
+										(mousedown)="onPress('logout')"
+										(mouseup)="onRelease('logout')"
+										(mouseleave)="onRelease('logout')"
+										>{{ label.logOut }}</a
+									>
 								</li>
 								<li *ngIf="isAdmin">
-									<a class="dropdown-item" [routerLink]="route.adminRoute"
+									<a
+										class="dropdown-item"
+										[routerLink]="route.adminRoute"
+										[class.non-bg-color]="isAdminPressed"
+										(mousedown)="onPress('admin')"
+										(mouseup)="onRelease('admin')"
+										(mouseleave)="onRelease('admin')"
 										>Trang quản lý</a
 									>
 								</li>

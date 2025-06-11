@@ -23,6 +23,9 @@ import { Role } from '../../../core/enum/role.enum';
 	styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+	protected isMyAccountPressed: boolean = false;
+	protected isLogoutPressed: boolean = false;
+	protected isAdminPressed: boolean = false;
 	logo: string = 'assets/images/shop/logo.png';
 	searchForm!: FormGroup;
 	protected readonly route = RouteLink;
@@ -97,5 +100,26 @@ export class HeaderComponent implements OnInit {
 		this.authService.isLoggedIn$.subscribe(isLoggedIn => {
 			console.log('isLoggedIn:', isLoggedIn);
 		});
+	}
+
+
+	onPress(button: 'myAccount' | 'admin' | 'logout'): void {
+		if (button === 'myAccount') {
+			this.isMyAccountPressed = true;
+		} else if (button === 'admin') {
+			this.isAdminPressed = true;
+    } else if (button === 'logout') {
+      this.isLogoutPressed = true;
+    }
+	}
+
+	onRelease(button: 'myAccount' | 'admin' | 'logout'): void {
+		if (button === 'myAccount') {
+			this.isMyAccountPressed = false;
+		} else if (button === 'admin') {
+			this.isAdminPressed = false;
+    } else if (button === 'logout') {
+      this.isLogoutPressed = false;
+    }
 	}
 }

@@ -65,10 +65,12 @@
 				role="button"
 				aria-expanded="false"
 				aria-controls="orderMenu"
-        (click)="toggleCollapse()"
+				(click)="toggleCollapse()"
 			>
 				<span><i class="bi bi-table me-2"></i> Orders</span>
-        <i [ngClass]="isCollapsed ? 'bi-caret-right-fill' : 'bi-caret-down-fill'"></i>
+				<i
+					[ngClass]="isCollapsed ? 'bi-caret-right-fill' : 'bi-caret-down-fill'"
+				></i>
 			</a>
 			<div class="collapse" id="orderMenu">
 				<ul class="nav flex-column ms-4">
@@ -169,9 +171,11 @@
 				aria-labelledby="dropdownMenuButton1"
 			>
 				<li>
-					<a class="dropdown-item" [routerLink]="['/profile']">{{
-						label.myAccount
-					}}</a>
+					<a
+						class="dropdown-item"
+						[routerLink]="'/' + routes.userRoute + '/' + routes.profileRoute"
+						>{{ label.myAccount }}</a
+					>
 				</li>
 				<li>
 					<a class="dropdown-item" (click)="logout()">{{ label.logOut }}</a>
