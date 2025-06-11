@@ -1,7 +1,6 @@
 package com.nlu.WebThuongMai.mapper;
-import com.nlu.WebThuongMai.dto.response.orderResp.OrderItemResponse;
 
-import com.nlu.WebThuongMai.dto.response.OrderResp.OrderItemResponse;
+import com.nlu.WebThuongMai.dto.response.orderResp.OrderItemResponse;
 import com.nlu.WebThuongMai.model.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

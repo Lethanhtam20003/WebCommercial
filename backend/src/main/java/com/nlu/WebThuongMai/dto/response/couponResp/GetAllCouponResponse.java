@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class GetAllCouponResponse {
     Long id;
     String code;
-    double discountPercentage;
+    double discount;
     String description;
     LocalDateTime expirationDate;
 }
