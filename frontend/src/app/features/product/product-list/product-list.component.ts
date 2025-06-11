@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { ProductService } from '../../../core/service/product.service';
-import { ProductResponse } from '../../../core/models/productResponse';
+import { ProductResponse } from '../../../core/models/response/product-response/productResponse';
 import { RouterLink } from '@angular/router';
 
 @Component({

@@ -1,0 +1,27 @@
+thực hiện lọc và xắp xếp sản phẩm:
+ 1. Lọc sản phẩm (Filtering)
+(Filter products based on criteria)
+
+Các tiêu chí lọc phổ biến:
+Theo tên sản phẩm (name):
+Tìm kiếm gần đúng (LIKE %keyword%).
+
+Theo danh mục (categories):
+Lọc theo ID danh mục, sử dụng JOIN với bảng product_categories.
+
+Theo trạng thái sản phẩm (status):
+Dựa trên enum ProductStatus như ACTIVE, INACTIVE.
+
+Theo khoảng giá (price):
+Lọc theo khoảng giá min - max.
+
+
+✅ 2. Sắp xếp sản phẩm (Sorting)
+(Sort products by fields)
+
+Các trường sắp xếp thường dùng:
+Theo tên sản phẩm (name): A–Z hoặc Z–A
+
+Theo giá (price): tăng dần hoặc giảm dần
+
+Theo trạng thái (status): dùng Enum comparator nếu cần

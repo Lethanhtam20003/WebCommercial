@@ -1,10 +1,12 @@
 package com.nlu.WebThuongMai.mapper;
 
+import com.nlu.WebThuongMai.dto.request.productReq.ProductCreatetionRequest;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.model.Category;
 import com.nlu.WebThuongMai.model.Product;
 import com.nlu.WebThuongMai.model.ProductImage;
+import com.nlu.WebThuongMai.model.ProductStatistic;
 import org.mapstruct.*;
 import org.springframework.data.domain.Page;
 
@@ -16,8 +18,9 @@ import java.util.stream.Collectors;
         uses = {ProductImageMapper.class})
 public interface ProductMapper {
 
-    @Mapping(target = "categoryIds", expression = "java(mapCategoriesToIds(product.getCategories()))")
+//    @Mapping(target = "category", expression = "java(mapCategoriesToIds(product.getCategories()))")
     @Mapping(target = "images", source = "images")
+    @Mapping(target = "hot" , source = "statistic.hot")
     ProductResponse toProductResponse(Product product);
 
     default Set<Long> mapCategoriesToIds(Set<Category> categories) {
@@ -25,10 +28,6 @@ public interface ProductMapper {
         return categories.stream().map(Category::getId).collect(Collectors.toSet());
     }
 
-    default Set<String> mapProductImagesToUrls(Set<ProductImage> images) {
-        if (images == null) return new HashSet<>();
-        return images.stream().map(ProductImage::getImage).collect(Collectors.toSet());
-    }
 
     default Page<ProductResponse> toPageProductResponse(Page<Product> products) {
         return products.map(this::toProductResponse);
@@ -38,7 +37,14 @@ public interface ProductMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "categories", expression = "java(toCategorySet(product.getCategoryIds()))")
     @Mapping(target = "images", expression = "java(toProductImageSet(product.getImages()))")
-    Product toProduct(ProductRequest product);
+    @Mapping(target = "statistic", ignore = true)
+    Product productRequestToProduct(ProductRequest product);
+
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "categories", expression = "java(toCategorySet(product.getCategoryIds()))")
+    @Mapping(target = "images", expression = "java(toProductImageSet(product.getImages()))")
+    Product productCreationRequestToProduct(ProductCreatetionRequest product);
 
     default Set<Category> toCategorySet(Set<Long> ids) {
         if (ids == null) return new HashSet<>();
@@ -77,5 +83,6 @@ public interface ProductMapper {
                     .forEach(img -> img.setProduct(product));
         }
     }
+
 
 }

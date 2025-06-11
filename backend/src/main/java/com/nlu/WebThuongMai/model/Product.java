@@ -69,4 +69,18 @@ public class Product {
     )
     Set<Category> categories = new HashSet<>();
 
+    @Builder.Default
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    ProductStatistic statistic = new ProductStatistic();
+
+
+    @ManyToMany
+    @Builder.Default
+    @JoinTable(
+            name = "product_promotions",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "promotion_id")
+    )
+    Set<Promotion> promotions = new HashSet<>();
+
 }

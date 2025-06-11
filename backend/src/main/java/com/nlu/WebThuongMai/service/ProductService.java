@@ -1,19 +1,23 @@
 package com.nlu.WebThuongMai.service;
 
-import com.nlu.WebThuongMai.dto.request.productReq.CategoryRequest;
-import com.nlu.WebThuongMai.dto.request.productReq.ProductRequest;
+import com.nlu.WebThuongMai.dto.request.productReq.ProductCreatetionRequest;
+import com.nlu.WebThuongMai.dto.request.productReq.ProductFilterRequest;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.mapper.ProductMapper;
+import com.nlu.WebThuongMai.model.Category;
 import com.nlu.WebThuongMai.model.Product;
+import com.nlu.WebThuongMai.model.ProductStatistic;
 import com.nlu.WebThuongMai.repository.ProductRepository;
+import jakarta.persistence.criteria.Join;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,17 +33,52 @@ public class ProductService {
     ProductRepository productRepository;
     ProductMapper productMapper;
 
-    public ProductResponse createProduct(ProductRequest request) {
+    public ProductResponse createProduct(ProductCreatetionRequest request) {
         log.info("Create product: {}", request);
         if (productRepository.existsByName(request.getName())) {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
         }
+        Product p = productMapper.productCreationRequestToProduct(request);
+        p.setStatistic(ProductStatistic.builder().product(p).build());
         return productMapper.toProductResponse(productRepository
-                .save(productMapper.toProduct(request)));
+                .save(p));
     }
 
-    public Page<ProductResponse> getAllProduct(Pageable pageable) {
-        return productMapper.toPageProductResponse(productRepository.findAll(pageable));
+    public Page<ProductResponse> getAllProduct(ProductFilterRequest filter, Pageable pageable) {
+        Specification<Product> spec = Specification.where(null);
+
+        if (filter.getName() != null && !filter.getName().isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("name")), "%" + filter.getName().toLowerCase() + "%")
+            );
+        }
+
+        if (filter.getCategoryId() != null && filter.getCategoryId().length > 0) { // Hoặc !filter.getCategoryIds().isEmpty() nếu là List
+            spec = spec.and((root, query, cb) -> {
+                Join<Product, Category> join = root.join("categories");
+                return join.get("id").in(filter.getCategoryId());
+            });
+        }
+
+        if (filter.getStatus() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("status"), filter.getStatus())
+            );
+        }
+
+        if (filter.getMinPrice() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.ge(root.get("price"), filter.getMinPrice())
+            );
+        }
+
+        if (filter.getMaxPrice() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.le(root.get("price"), filter.getMaxPrice())
+            );
+        }
+
+        return productMapper.toPageProductResponse(productRepository.findAll(spec,pageable));
     }
 
     public ProductResponse getProductById(long request) {
@@ -47,8 +86,8 @@ public class ProductService {
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND)));
     }
 
-    public Page<ProductResponse> getProductByCategory(CategoryRequest request, Pageable pageable) {
-        return productMapper.toPageProductResponse(productRepository.findByCategoryName(request.getCategory(), pageable));
+    public Page<ProductResponse> getProductByCategory(String category, Pageable pageable) {
+        return productMapper.toPageProductResponse(productRepository.findByCategoryName(category, pageable));
     }
 
     public Boolean checkName(String name) {
@@ -56,7 +95,7 @@ public class ProductService {
     }
 
     public Product findProductById(Long id) {
-        return productRepository.findById(id)
+        return productRepository.findByIdWithAllRelations(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 }

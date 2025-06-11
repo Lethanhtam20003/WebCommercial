@@ -1,0 +1,32 @@
+// Áp dụng CSS cho component ng-select có class 'custom-ng-select'
+::ng-deep .ng-select.custom-ng-select {
+  width: 180px;               // 👈 Giảm chiều rộng cho gọn, phù hợp layout Bootstrap
+  font-size: 0.875rem;        // 👈 Nhỏ hơn bình thường, tương đương .form-select-sm trong Bootstrap
+}
+
+// Vùng container chính bao quanh input
+::ng-deep .ng-select.custom-ng-select .ng-select-container {
+  height: 36px;               // 👈 Chiều cao thấp hơn mặc định (~40px) → đồng bộ với input nhỏ
+  padding: 0 1rem 0 0.75rem;  // 👈 Padding phải lớn hơn để chừa chỗ cho nút clear (x)
+  display: flex;              // 👈 Dàn các phần tử con theo hàng ngang
+  align-items: center;        // 👈 Căn giữa theo chiều dọc
+  border-radius: 0.25rem;     // 👈 Bo tròn viền giống input Bootstrap
+  border: 1px solid #ced4da;  // 👈 Màu viền giống form-control
+}
+
+// Phần hiển thị giá trị đã chọn
+::ng-deep .ng-select.custom-ng-select .ng-value-container {
+  overflow: hidden;           // 👈 Ẩn phần tràn
+  white-space: nowrap;        // 👈 Không cho xuống dòng
+  text-overflow: ellipsis;    // 👈 Thêm dấu "..." nếu nội dung quá dài
+  flex-wrap: nowrap !important; // 👈 Ép không cho wrap trong chế độ multiple
+  display: flex;              // 👈 Cần flex để item align giữa
+  align-items: center;
+}
+
+// Mỗi giá trị đã chọn (hiển thị dạng tag trong chế độ multiple)
+::ng-deep .ng-select.custom-ng-select .ng-value {
+  margin-right: 4px;          // 👈 Cách nhau 1 chút giữa các tag
+  white-space: nowrap;        // 👈 Không cho chữ trong tag xuống dòng
+  font-size: 0.875rem;        // 👈 Đồng bộ với text xung quanh
+}
