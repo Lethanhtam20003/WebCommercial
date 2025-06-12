@@ -6,7 +6,7 @@ import { URL_API } from '../../../shared/constants/url-api.constants';
 import { ApiResponse } from '../../../core/models/api-response.model';
 import { AdminModule } from '../admin.module';
 import { ProductRequest } from '../models/ProductRequest';
-import { PageResponse } from '../models/product-response/page-response.interface';
+import { PageResponse } from '../../../core/models/response/product-response/product-response/page-response.interface';
 import { PageRequest } from '../models/request/pageRequest.interface';
 
 @Injectable({

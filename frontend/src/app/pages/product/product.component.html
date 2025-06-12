@@ -1,0 +1,115 @@
+<section class="background-gradient">
+	<section>
+		<div class="card mb-4 shadow-sm">
+			<div
+				class="card-header d-flex justify-content-between align-items-center"
+			>
+				<h5 class="mb-0">Bộ lọc sản phẩm</h5>
+				<button
+					class="btn btn-link text-decoration-none"
+					(click)="isCollapsed = !isCollapsed"
+				>
+					{{ isCollapsed ? 'Hiển thị bộ lọc ▲' : 'Ẩn bộ lọc ▼' }}
+				</button>
+			</div>
+
+			<div class="card-body" *ngIf="!isCollapsed">
+				<form [formGroup]="filterForm" (ngSubmit)="applyFilters()">
+					<div class="row g-3">
+						<!-- Search theo tên -->
+						<div class="col-md-4">
+							<label for="name" class="form-label">Tên sản phẩm</label>
+							<input
+								type="text"
+								id="name"
+								formControlName="name"
+								class="form-control"
+								placeholder="Nhập tên sản phẩm"
+							/>
+						</div>
+
+						<!-- Lọc theo giá -->
+						<div class="col-md-2">
+							<label for="minPrice" class="form-label">Giá từ</label>
+							<input
+								type="number"
+								id="minPrice"
+								formControlName="minPrice"
+								class="form-control"
+							/>
+						</div>
+						<div class="col-md-2">
+							<label for="maxPrice" class="form-label">Giá đến</label>
+							<input
+								type="number"
+								id="maxPrice"
+								formControlName="maxPrice"
+								class="form-control"
+							/>
+						</div>
+
+						<!-- Lọc theo danh mục -->
+						<div class="col-md-4">
+							<label class="form-label">Danh mục</label>
+							<select formControlName="categoryId" class="form-select" multiple>
+								<option
+									*ngFor="let category of categories"
+									[value]="category.id"
+								>
+									{{ category.name }}
+								</option>
+							</select>
+						</div>
+
+						<!-- Khuyến mãi -->
+						<div class="col-md-4">
+							<label for="promotionId" class="form-label">Khuyến mãi</label>
+							<select formControlName="promotionId" class="form-select">
+								<option value="">-- Tất cả --</option>
+								<option
+									*ngFor="let promo of promotions"
+									[value]="promo.promotionId"
+								>
+									{{ promo.name }}
+								</option>
+							</select>
+						</div>
+
+						<!-- Trạng thái sản phẩm -->
+						<div class="col-md-4">
+							<label class="form-label">Trạng thái</label>
+							<select formControlName="status" class="form-select">
+								<option value="">-- Tất cả --</option>
+								<option value="ACTIVE">Đang bán</option>
+								<option value="INACTIVE">Ngừng bán</option>
+							</select>
+						</div>
+
+						<!-- Sắp xếp theo giá -->
+						<div class="col-md-4">
+							<label class="form-label">Sắp xếp</label>
+							<select formControlName="sortByPrice" class="form-select">
+								<option value="">-- Không sắp xếp --</option>
+								<option value="asc">Giá tăng dần</option>
+								<option value="desc">Giá giảm dần</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="mt-4 d-flex justify-content-end gap-2">
+						<button
+							class="btn btn-secondary"
+							type="button"
+							(click)="resetFilters()"
+						>
+							Xóa lọc
+						</button>
+						<button class="btn btn-primary" type="submit">Áp dụng</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+
+	<app-product-list></app-product-list>
+</section>

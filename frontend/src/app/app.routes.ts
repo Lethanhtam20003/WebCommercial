@@ -3,6 +3,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { LabelConstants } from './shared/constants/label.constants';
 import { RouteLink } from './shared/constants/route-link';
 import { AdminGuard } from './core/guards/admin.guard';
+import { Title } from '@angular/platform-browser';
 
 /**
  * Định nghĩa các route cho module Auth
@@ -72,6 +73,9 @@ const protectedRoutes: Routes = [
 	},
 ];
 
+/**
+ * Định nghĩa các route trang lỗi
+ */
 const errorRouter: Routes = [
 	{
 		path: '403',
@@ -84,8 +88,20 @@ const errorRouter: Routes = [
 			showHeader: false,
 			showFooter: true,
 		},
-	}
-]
+	},
+];
+
+const productRoutes: Routes = [
+	{
+		path: 'product',
+		loadComponent: () =>
+			import('./pages/product/product.component').then(m => m.ProductComponent),
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+	},
+];
 
 /**
  * Routes chính của ứng dụng
@@ -98,7 +114,20 @@ export const routes: Routes = [
 	},
 	...authRoutes,
 	...protectedRoutes,
+	...productRoutes,
 	...errorRouter,
+	{
+		path: 'product/:id',
+		loadComponent: () =>
+			import('./features/product/product-detail/product-detail.component').then(
+				m => m.ProductDetailComponent
+			),
+		title: 'chi tiết sản phẩm',
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+	},
 	{
 		path: 'admin',
 		loadChildren: () =>
