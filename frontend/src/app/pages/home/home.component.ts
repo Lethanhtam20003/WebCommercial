@@ -13,12 +13,6 @@ import { BannerModule } from '../../shared/components/banner/banner.module';
 		BannerModule,
 	],
 	template: `
-		<pre>
-      Banner chính / Slider khuyến mãi
-      Slide ảnh lớn ở đầu trang
-      Dẫn tới sản phẩm hot / flash sale / bộ sưu tập mới
-    </pre
-		>
 		<app-banner></app-banner>
 		<app-OutstandingProductCatalog></app-OutstandingProductCatalog>
 		<app-product-list></app-product-list>
