@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.scheduler;
 
+import com.nlu.WebThuongMai.enums.AuthProvider;
 import com.nlu.WebThuongMai.enums.Role;
 import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.repository.UserRepository;
@@ -22,15 +23,16 @@ public class ApplicationIntConfig {
     @Bean
     public ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
-            if (userRepository.findByUsername("admin").isEmpty()) {
+            if (userRepository.findByUsername("admin123").isEmpty()) {
                 Role role = Role.ADMIN;
                 userRepository.save(User.builder()
-                        .username("admin")
-                        .password(passwordEncoder.encode("admin"))
+                        .username("admin123")
+                        .password(passwordEncoder.encode("admin123"))
                         .email("tam1442k3@gmail.com")
                         .role(role)
+                        .authProvider(AuthProvider.LOCAL)
                         .build());
-                log.warn("admin user was created with default password: admin, please change it!");
+                log.warn("admin user was created with default password: admin123, please change it!");
             }
         };
     }
