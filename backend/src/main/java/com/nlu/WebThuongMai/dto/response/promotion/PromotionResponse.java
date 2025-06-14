@@ -1,7 +1,9 @@
-package com.nlu.WebThuongMai.dto.response.productResp;
+package com.nlu.WebThuongMai.dto.response.promotion;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -18,4 +20,7 @@ public class PromotionResponse {
     Double discountPercent;
 
     String image;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
 }
