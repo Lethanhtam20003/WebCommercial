@@ -6,7 +6,7 @@ import { URL_API } from '../../../shared/constants/url-api.constants';
 import { AdminModule } from '../admin.module';
 
 @Injectable({
-  providedIn: AdminModule
+  providedIn: 'root'
 })
 export class CategoryService {
 

@@ -1,10 +1,10 @@
 <section class="background-gradient">
-	<section>
-		<div class="card mb-4 shadow-sm">
+	<section class="product-filter" aria-labelledby="product-filter-heading">
+		<div class="card shadow-sm">
 			<div
 				class="card-header d-flex justify-content-between align-items-center"
 			>
-				<h5 class="mb-0">Bộ lọc sản phẩm</h5>
+				<h5 class="mb-0" id="product-filter-heading">Bộ lọc sản phẩm</h5>
 				<button
 					class="btn btn-link text-decoration-none"
 					(click)="isCollapsed = !isCollapsed"
@@ -51,14 +51,18 @@
 						<!-- Lọc theo danh mục -->
 						<div class="col-md-4">
 							<label class="form-label">Danh mục</label>
-							<select formControlName="categoryId" class="form-select" multiple>
-								<option
-									*ngFor="let category of categories"
-									[value]="category.id"
-								>
-									{{ category.name }}
-								</option>
-							</select>
+							<app-custom-ng-select
+								[items]="categories"
+								[bindLabel]="'name'"
+								[bindValue]="'id'"
+								[placeholder]="'Chọn danh mục'"
+								formControlName="categoryId"
+								[multiple]="true"
+								[clearable]="true"
+								[searchable]="true"
+								[closeOnSelect]="false"
+							>
+							</app-custom-ng-select>
 						</div>
 
 						<!-- Khuyến mãi -->
@@ -111,5 +115,6 @@
 		</div>
 	</section>
 
-	<app-product-list></app-product-list>
+	<app-product-list [productFilter]="productFilter"></app-product-list>
+	
 </section>

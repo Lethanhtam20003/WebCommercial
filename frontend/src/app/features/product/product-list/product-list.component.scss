@@ -17,20 +17,22 @@ $overlay-bg-touch: rgba(255, 255, 255, 0.7);
 	align-items: center;
 }
 .product-wrapper {
-  border: 1px solid #ddd;      // hoặc bỏ nếu dùng shadow
-  border-radius: 0.5rem;
-  background-color: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05); // đổ bóng nhẹ
-  transition: transform 0.2s ease-in-out;
+	border: 1px solid #ddd; // hoặc bỏ nếu dùng shadow
+	border-radius: 0.5rem;
+	background-color: #fff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); // đổ bóng nhẹ
+	transition: transform 0.2s ease-in-out;
+	max-width: 300px;	
+	margin: 10px;
 }
 
 .product-wrapper:hover {
-  transform: translateY(-4px); // hiệu ứng hover nhẹ
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+	transform: translateY(-4px); // hiệu ứng hover nhẹ
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 .background-gradient {
-  background: linear-gradient(to top right, #19202A, #5D616B);
-  color: white;
+	background: linear-gradient(to top right, #19202a, #5d616b);
+	color: white;
 }
 
 .product-card {
@@ -39,7 +41,9 @@ $overlay-bg-touch: rgba(255, 255, 255, 0.7);
 	transition: transform 0.3s;
 	position: relative;
 	overflow: hidden;
-	margin-bottom: 10px;
+	max-width: 300px;
+	max-height: fit-content;
+	margin: 6px auto 6px auto;
 
 	&:hover {
 		transform: scale(1.03);

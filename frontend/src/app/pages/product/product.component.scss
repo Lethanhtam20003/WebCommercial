@@ -2,3 +2,69 @@
   background: linear-gradient(to top right, #19202A, #5D616B);
   color: white;
 }
+section.product-filter {
+	padding: 2rem 1rem;
+	// margin-bottom: 2rem;
+
+	.card {
+		border: 1px solid #e0e0e0;
+		border-radius: 0.5rem;
+	}
+
+	.card-header {
+		background-color: #f8f9fa;
+		border-bottom: 1px solid #dee2e6;
+
+		h5 {
+			font-size: 1.25rem;
+			font-weight: 600;
+			margin-bottom: 0;
+		}
+
+		button {
+			font-weight: 500;
+			color: #007bff;
+			cursor: pointer;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.card-body {
+		background-color: #fff;
+	}
+
+	form {
+		.row {
+			margin-bottom: 1rem;
+
+			.col-md-4,
+			.col-md-2 {
+				label {
+					font-weight: 500;
+					margin-bottom: 0.5rem;
+				}
+
+				input,
+				select {
+					border-radius: 0.25rem;
+					border: 1px solid #ced4da;
+
+					&:focus {
+						border-color: #80bdff;
+						box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+					}
+				}
+			}
+		}
+
+		.mt-4 {
+			button {
+				min-width: 120px;
+				font-weight: 500;
+			}
+		}
+	}
+}

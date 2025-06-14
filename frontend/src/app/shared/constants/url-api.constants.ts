@@ -17,5 +17,6 @@ export const URL_API = {
     getOrderDetails: 'http://localhost:8080/api/v1/order-items',
     getOrdersAdmin: 'http://localhost:8080/api/v1/orders/filter/admin',
     getAllCoupons: 'http://localhost:8080/api/v1/coupons',
-    checkRoleAdmin: 'http://localhost:8080/api/v1/auth/checkRoleAdmin'
+    checkRoleAdmin: 'http://localhost:8080/api/v1/auth/checkRoleAdmin',
+    promotionUrl:  'http://localhost:8080/api/v1/promotions',
 } as const;
