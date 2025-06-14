@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { ProductListComponent } from '../../features/product/product-list/product-list.component';
 import { OutstandingProductCatalogComponent } from '../../features/category/OutstandingProductCatalog/OutstandingProductCatalog.component';
 import { BannerModule } from '../../shared/components/banner/banner.module';
+import { PromotionListModule } from '../../shared/components/promotion-list/promotion-list.module';
 @Component({
 	selector: 'app-home',
 	standalone: true,
@@ -11,48 +12,14 @@ import { BannerModule } from '../../shared/components/banner/banner.module';
 		ProductListComponent,
 		OutstandingProductCatalogComponent,
 		BannerModule,
+    PromotionListModule
 	],
 	template: `
 		<app-banner></app-banner>
+    <app-promotion-list></app-promotion-list>
 		<app-OutstandingProductCatalog></app-OutstandingProductCatalog>
 		<app-product-list></app-product-list>
 		<!-- <app-product-list2></app-product-list2> -->
-
-		<pre>
-
-
-3. 🛍 Danh sách sản phẩm nổi bật
-Grid sản phẩm: ảnh, tên, giá, giảm giá, nút mua
-
-Có thể phân nhóm:
-
-🔥 Bán chạy
-
-🆕 Hàng mới
-
-⏰ Flash sale
-
-4. 📢 Chương trình khuyến mãi
-Dạng thẻ hoặc banner nhỏ
-
-Mô tả ngắn + nút "Xem thêm"
-
-5. ⭐ Feedback khách hàng / Đánh giá
-Hiển thị bình luận thật
-
-Avatar, tên, đánh giá, ảnh chụp thực tế
-
-6. 📰 Blog / tin tức (tùy chọn)
-Giúp SEO tốt hơn
-
-Bài viết như “Cách chọn son phù hợp”, “Top 5 điện thoại giá rẻ”
-
-7. 📞 Thông tin hỗ trợ & hotline
-Cuối trang: Hotline, Chat, Email
-
-Nút “Hỗ trợ ngay” hoặc Chatbox nổi
-    </pre
-		>
 	`,
 	styleUrl: './home.component.scss',
 })

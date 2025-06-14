@@ -1,5 +1,4 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { Carousel } from 'bootstrap';
 
 @Component({
 	selector: 'app-banner',
@@ -13,11 +12,19 @@ export class BannerComponent implements AfterViewInit {
 	protected banner3: string = 'assets/images/shop/banner-3.jpg';
 
 	ngAfterViewInit(): void {
-		const element = document.querySelector('#carouselExampleAutoplaying');
-		if (element) {
-			new Carousel(element, {
-				interval: 1000,
+		const el = document.getElementById('carouselExampleAutoplaying');
+		if (el && (window as any).bootstrap?.Carousel) {
+			const carousel = new (window as any).bootstrap.Carousel(el, {
+				interval: 5000,
 				ride: 'carousel',
+			});
+
+			el.addEventListener('slid.bs.carousel', (e: any) => {
+				// Nếu quay lại slide đầu thì reset gì đó nếu cần
+				if (e.to === 0) {
+					// Gợi ý: có thể gọi lại carousel.cycle() nếu nó dừng
+					carousel.cycle();
+				}
 			});
 		}
 	}

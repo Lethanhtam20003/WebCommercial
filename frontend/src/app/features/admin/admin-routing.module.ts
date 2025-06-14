@@ -6,6 +6,7 @@ import { InventoryManagementComponent } from './pages/inventory-management/inven
 import { OrderManagementComponent } from './pages/order-management/order-management-admin.component';
 import { OrderListTabComponent } from '../order/order-list-tab/order-list-tab.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { CouponsManagementComponent } from './pages/coupons-management/coupons-management.component';
 
 const routeData = {
 	showHeader: false,
@@ -158,10 +159,7 @@ const reviewManagementRoutes: Routes = [
 const couponsManagementRoutes: Routes = [
 	{
 		path: 'coupons-management',
-		loadComponent: () =>
-			import('./pages/coupons-management/coupons-management.component').then(
-				m => m.CouponsManagementComponent
-			),
+    component: CouponsManagementComponent,
 		data: {
 			showHeader: false,
 			showFooter: false,

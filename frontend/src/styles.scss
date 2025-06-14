@@ -29,31 +29,6 @@
 	--background-text-color: #141d22;
 	--facebook-logo-color: #1877f2;
 	--google-green-color: #34a853;
-	--p-inputtext-focus-ring-color: var(--primary-color);
-	--p-button-primary-background: var(--primary-color);
-	--p-button-primary-color: var(--primary-text-color);
-	--p-button-primary-border-color: var(--primary-color);
-	--p-button-primary-hover-background: var(--accent-color);
-	--p-button-primary-hover-border-color: var(--accent-color);
-}
-
-p-floatlabel {
-	input:focus {
-		border: 1px solid #cbd5e1 !important;
-	}
-	p-password,
-	input {
-		div {
-			width: 100% !important;
-
-			input {
-				width: 100% !important;
-				input.p-inputtext {
-					width: 100% !important;
-				}
-			}
-		}
-	}
 }
 
 ul {
@@ -66,9 +41,13 @@ ul {
 
 .primary-color-button,
 .primary-color-button:hover {
-	background-color: var(--accent-color);
-	border-color: var(--accent-color);
-	color: var(--accent-text-color);
+	background-color: var(--accent-color) !important;
+	border-color: var(--accent-color) !important;
+	color: var(--accent-text-color) !important;
+  box-shadow: none !important;
+  background-image: none !important;
+  border-image: none !important;
+
 }
 
 .primary-color-button.pressed,
