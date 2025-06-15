@@ -64,9 +64,7 @@ public enum ErrorCode {
     DISCOUNT_PERCENT_NOT_NULL(1049, "discount percent not null", HttpStatus.BAD_REQUEST),
     START_DATE_NOT_NULL(1050, "start date not null", HttpStatus.BAD_REQUEST),
     END_DATE_NOT_NULL(1051, "end date not null", HttpStatus.BAD_REQUEST),
-
-
-    ;
+    CATEGORY_NOT_FOUND(1052,"category not found",HttpStatus.NOT_FOUND) ;
 
 
     int code;
