@@ -22,7 +22,7 @@ export class CouponService {
 			.set('size', request.size.toString());
 
 		return this.http.get<ApiResponse<Page<CouponResponse>>>(
-			URL_API.getAllCoupons,
+			URL_API.getAllCouponsUser,
 			{ params }
 		);
 	}
@@ -35,7 +35,7 @@ export class CouponService {
 			.set('size', request.size.toString());
 
 		return this.http.get<ApiResponse<Page<AdminCouponResponse>>>(
-			URL_API.getAllCoupons,
+			URL_API.getAllCouponsAdmin,
 			{ params }
 		);
 	}

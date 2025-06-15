@@ -97,4 +97,5 @@ export const LabelConstants = {
 	loginFails: 'Đăng nhập thất bại',
 
   newPassword: 'Mật khẩu mới',
+  adminPage: 'Trang quản lý',
 } as const;

@@ -69,6 +69,15 @@ const protectedRoutes: Routes = [
 		canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
 	},
+  {
+    path: RouteLink.cartRoute,
+    loadChildren: () =>
+      import('./features/user/page/cart/cart.module').then(
+        m => m.CartModule
+      ),
+    canActivate: [AuthGuard],
+    data: { showHeader: true, showFooter: true },
+  }
 ];
 
 /**

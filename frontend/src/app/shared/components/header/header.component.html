@@ -138,7 +138,7 @@
 								<li>
 									<a
 										class="dropdown-item"
-										[class.non-bg-color]="isMyAccountPressed"
+										[class.non-bg-color]="isPressed.myAccount"
 										(mousedown)="onPress('myAccount')"
 										(mouseup)="onRelease('myAccount')"
 										(mouseleave)="onRelease('myAccount')"
@@ -150,22 +150,22 @@
 									<a
 										class="dropdown-item"
 										(click)="logout()"
-										[class.non-bg-color]="isLogoutPressed"
+										[class.non-bg-color]="isPressed.logout"
 										(mousedown)="onPress('logout')"
 										(mouseup)="onRelease('logout')"
 										(mouseleave)="onRelease('logout')"
 										>{{ label.logOut }}</a
 									>
 								</li>
-								<li *ngIf="isAdmin">
+								<li *ngIf="(user$ | async)?.role?.includes('ADMIN')">
 									<a
 										class="dropdown-item"
 										[routerLink]="route.adminRoute"
-										[class.non-bg-color]="isAdminPressed"
+										[class.non-bg-color]="isPressed.admin"
 										(mousedown)="onPress('admin')"
 										(mouseup)="onRelease('admin')"
 										(mouseleave)="onRelease('admin')"
-										>Trang quản lý</a
+										>{{ label.adminPage }}</a
 									>
 								</li>
 							</ul>
