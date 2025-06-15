@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,12 @@ public class CategoryController {
     @GetMapping()
     public List<CategoryResponse> getAll() {
         return categoryService.getAll();
+    }
+
+    // lấy danh mục theo id
+    @GetMapping("/{id}")
+    public CategoryResponse getById( @PathVariable("id") long id){
+        return categoryService.getCategoryById(id);
     }
 
 }

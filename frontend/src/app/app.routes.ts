@@ -102,6 +102,19 @@ const productRoutes: Routes = [
 		},
 	},
 ];
+const categoryRoutes: Routes = [
+	{
+		path: 'categories/:id',
+		loadComponent: () =>
+			import('./pages/category/category.component').then(
+				m => m.CategoryComponent
+				),
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+	},
+];
 
 /**
  * Routes chính của ứng dụng
@@ -115,6 +128,7 @@ export const routes: Routes = [
 	...authRoutes,
 	...protectedRoutes,
 	...productRoutes,
+	...categoryRoutes,
 	...errorRouter,
 	{
 		path: 'product/:id',

@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ProductListComponent } from '../../features/product/product-list/product-list.component';
 import { OutstandingProductCatalogComponent } from '../../features/category/OutstandingProductCatalog/OutstandingProductCatalog.component';
+import { User_catgory_listComponent } from '../../features/category/user_catgory_list/user_catgory_list.component';
 @Component({
 	selector: 'app-home',
 	standalone: true,
 	imports: [
 		RouterModule,
 		ProductListComponent,
-		OutstandingProductCatalogComponent,
+		User_catgory_listComponent,
 	],
 	template: `
 		<pre>
@@ -18,7 +19,8 @@ import { OutstandingProductCatalogComponent } from '../../features/category/Outs
     </pre
 		>
 
-		<app-OutstandingProductCatalog></app-OutstandingProductCatalog>
+		<app-user_catgory_list></app-user_catgory_list>
+
 		<app-product-list></app-product-list>
 		<!-- <app-product-list2></app-product-list2> -->
 
