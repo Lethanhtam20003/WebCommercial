@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { ProductService } from '../../../core/service/product.service';
 import { ProductResponse } from '../../../core/models/response/product-response/productResponse';
@@ -33,7 +33,12 @@ export class ProductListComponent implements OnInit {
 			this.pageProducts = data;
 		});
 	}
-
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['productFilter'] && this.productFilter) {
+			this.productFilter.page = this.productFilter.page || 0;
+			this.productService.fetchProducts(this.productFilter);
+		}
+	}
 	/**
 	 * Thêm sản phẩm vào giỏ hàng
 	 * @param product Sản phẩm được chọn
