@@ -1,6 +1,8 @@
 package com.nlu.WebThuongMai.service;
 
 import com.nlu.WebThuongMai.dto.response.productResp.CategoryResponse;
+import com.nlu.WebThuongMai.enums.exception.ErrorCode;
+import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.mapper.CategoryMapper;
 import com.nlu.WebThuongMai.model.Category;
 import com.nlu.WebThuongMai.repository.CategoryRepository;
@@ -41,4 +43,8 @@ public class CategoryService {
     }
 
 
+    public CategoryResponse getCategoryById(long id) {
+        return categoryMapper.toCategoryResponse(categoryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
+    }
 }

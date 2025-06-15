@@ -1,0 +1,51 @@
+<div class="category-container">
+  <h2 class="mb-4 fw-bold text-center">Danh mục sản phẩm</h2>
+
+  <!-- Dòng 1: 4 danh mục đầu -->
+  <div class="category-row category-row-4">
+    <div 
+      class="category-item" 
+      *ngFor="let category of categories.slice(0, 4)"
+    >
+     <a 
+        [routerLink]="['/categories', category.id]"
+        class="text-decoration-none text-dark w-100"
+      >
+      <div class="card shadow-sm category-card">
+        <img 
+          [src]="category.imageUrl || defaultImage" 
+          alt="{{ category.name }}" 
+          class="card-img-top category-img"
+        >
+        <div class="card-body text-center">
+          <h6 class="card-title mb-0">{{ category.name }}</h6>
+        </div>
+      </div>
+       </a>
+    </div>
+  </div>
+
+  <!-- Dòng 2: 3 danh mục tiếp theo -->
+  <div class="category-row category-row-3">
+    <div 
+      class="category-item" 
+      *ngFor="let category of categories.slice(4, 7)"
+    >
+    <a 
+        [routerLink]="['/categories', category.id]"
+        class="text-decoration-none text-dark w-100"
+      >
+      <div class="card shadow-sm category-card">
+        <img 
+          [src]="category.imageUrl || defaultImage" 
+          alt="{{ category.name }}" 
+          class="card-img-top category-img"
+        >
+        <div class="card-body text-center">
+          <h6 class="card-title mb-0">{{ category.name }}</h6>
+        </div>
+      </div>
+       </a>
+    </div>
+  </div>
+</div>
