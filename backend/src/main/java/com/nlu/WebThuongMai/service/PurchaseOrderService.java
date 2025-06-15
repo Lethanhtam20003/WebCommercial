@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,9 +41,13 @@ public class PurchaseOrderService {
         var order = PurchaseOrder.builder()
                 .supplier(supplier)
                 .createdAt(request.getCreatedAt())
-                .totalPrice(request.getTotalPrice())
                 .status(request.getStatus())
                 .build();
+        BigDecimal total = request.getItems().stream()
+                .map(item -> item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        order.setTotalPrice(total);
+
         var items = itemMapper.toSetPurchaseOrderItem(request.getItems()).stream()
                 .map(item -> {
                     // kiểm tra sản phẩm
@@ -58,7 +63,7 @@ public class PurchaseOrderService {
 
         return mapper.toPurchaseOrderResponse(repository.save(order));
     }
-
+    @Transactional
     public List<PurchaseOrderResponse> getAllPurchaseOrder() {
         return repository.findAll().stream()
                 .map(mapper::toPurchaseOrderResponse)
@@ -70,19 +75,20 @@ public class PurchaseOrderService {
                 .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND)));
     }
 
+    @Transactional
     public Boolean deletePurchaseOrder(long orderId) {
-        try {
-            var order = repository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND));
-            if (order.getStatus() == PurchaseStatus.RECEIVED)
-                order.getPurchaseOrderItems().forEach(item -> {
-                    inventoryService.updateInventory(item.getProduct(), -item.getQuantity());
-                });
-            repository.deleteById(orderId);
-            return true;
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND);
+        var order = repository.findById(orderId)
+                .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND));
+
+        if (order.getStatus() == PurchaseStatus.RECEIVED) {
+            order.getPurchaseOrderItems().forEach(item ->
+                    inventoryService.exportInventory(item.getProduct().getId(), item.getQuantity()));
         }
+
+        repository.delete(order);
+        return true;
     }
+
 
     @Transactional
     public PurchaseOrderResponse updatePurchaseOrder(long orderId, PurchaseOrderUpdateRequest request) {
@@ -93,17 +99,27 @@ public class PurchaseOrderService {
         // xác nhận nhập hàng
         if (order.getStatus() == PurchaseStatus.PENDING && request.getStatus() == PurchaseStatus.RECEIVED) {
             order.getPurchaseOrderItems().forEach(item -> {
-                inventoryService.updateInventory(item.getProduct(), item.getQuantity());
+                inventoryService.importInventory(item.getProduct().getId(), item.getQuantity());
             });
         }
         // hũy nhập hàng khi sau khi xác nhận nhập hàng
         if (order.getStatus() == PurchaseStatus.RECEIVED && request.getStatus() == PurchaseStatus.CANCELLED) {
             order.getPurchaseOrderItems().forEach(item -> {
-                inventoryService.updateInventory(item.getProduct(), -item.getQuantity());
+                inventoryService.exportInventory(item.getProduct().getId(), item.getQuantity());
             });
         }
         // hũy nhập hàng khi chưa xác nhận nhập hàng
         order.setStatus(request.getStatus());
         return mapper.toPurchaseOrderResponse(repository.save(order));
     }
+
+    private void validateStatusTransition(PurchaseStatus oldStatus, PurchaseStatus newStatus) {
+        if (oldStatus == PurchaseStatus.CANCELLED) {
+            throw new AppException(ErrorCode.CANNOT_UPDATE_CANCELLED_ORDER);
+        }
+        if (oldStatus == PurchaseStatus.RECEIVED && newStatus == PurchaseStatus.PENDING) {
+            throw new AppException(ErrorCode.INVALID_STATUS_TRANSITION);
+        }
+    }
+
 }
