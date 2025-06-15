@@ -3,6 +3,7 @@ package com.nlu.WebThuongMai.controller;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
+import com.nlu.WebThuongMai.dto.response.couponResp.AdminCouponResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
 import com.nlu.WebThuongMai.service.CouponService;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 import com.nlu.WebThuongMai.dto.response.couponResp.GetAllCouponResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -104,8 +106,7 @@ public class CouponController {
                 .build();
     }
 
-    @GetMapping()
-    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/user")
     public ApiResponse<Page<GetAllCouponResponse>> getAllCoupon(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
@@ -113,6 +114,17 @@ public class CouponController {
         Pageable pageable = PageRequest.of(page, size);
         return ApiResponse.<Page<GetAllCouponResponse>>builder()
                 .result(service.getAllCoupons(pageable))
+                .build();
+    }
+
+    @GetMapping("/admin")
+    public ApiResponse<Page<AdminCouponResponse>> getAllCouponAdmin(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ApiResponse.<Page<AdminCouponResponse>>builder()
+                .result(service.getAllAdminCoupons(pageable))
                 .build();
     }
 }
