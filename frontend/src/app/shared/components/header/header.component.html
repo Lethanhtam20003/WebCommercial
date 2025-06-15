@@ -65,9 +65,12 @@
 						>
 					</li>
 					<li>
-						<a href="#" class="nav-link px-2 text-white">{{
-							label.newProduct
-						}}</a>
+						<a
+							href="#"
+							class="nav-link px-2 text-white"
+							[routerLink]="route.product"
+							>{{ label.product }}</a
+						>
 					</li>
 					<li>
 						<a href="#" class="nav-link px-2 text-white">{{ label.sport }}</a>
@@ -82,14 +85,7 @@
 							label.pickleball
 						}}</a>
 					</li>
-					<li>
-						<a
-							class="nav-link px-2 text-white"
-							(click)="logg()"
-							type="button"
-							>{{ label.cart }}</a
-						>
-					</li>
+					
 				</ul>
 
 				<form
@@ -105,6 +101,23 @@
 						aria-label="Search"
 					/>
 				</form>
+				<div class="me-2">
+					<div class="action-buttons d-flex gap-3">
+						<a
+							routerLink="/cart"
+							class="btn btn-outline-primary d-flex align-items-center gap-2"
+						>
+							<i class="bi bi-cart-fill"></i>
+						</a>
+
+						<a
+							routerLink="/orders"
+							class="btn btn-outline-success d-flex align-items-center gap-2"
+						>
+							<i class="bi bi-box-seam"></i>
+						</a>
+					</div>
+				</div>
 
 				<div class="text-end">
 					<ng-container *ngIf="!(isLoggedIn$ | async); else notLogIn">

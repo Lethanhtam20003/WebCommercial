@@ -1,0 +1,100 @@
+// product-detail.component.scss
+
+// Giới hạn chiều cao tổng thể (tùy chỉnh nếu cần)
+.container {
+  max-width: 1200px;
+}
+
+// Cột hình ảnh sản phẩm
+.col-md-6:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// Ảnh chính
+img.img-fluid {
+  width: 40vw;  // 40% chiều ngang của viewport
+  height: 60vh; // 60% chiều dọc của viewport
+  object-fit: contain;
+  border: 1px solid #dee2e6;
+}
+
+// Danh sách ảnh thu nhỏ
+.d-flex.mt-3 {
+  max-width: 40vw;
+  overflow-x: auto;
+  padding: 4px 0;
+
+  img.img-thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: border 0.2s;
+
+    &:hover {
+      border: 2px solid #dc3545;
+    }
+
+    &.border-danger {
+      border: 2px solid #dc3545 !important;
+    }
+  }
+}
+.product-detail {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 24px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+  margin: 20px auto;
+
+  h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+    border-left: 4px solid #007bff;
+    padding-left: 8px;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 24px;
+
+    li {
+      font-size: 16px;
+      color: #444;
+      margin-bottom: 8px;
+
+      strong {
+        color: #222;
+      }
+    }
+  }
+}
+
+
+// Responsive fallback (mobile)
+@media (max-width: 768px) {
+  img.img-fluid {
+    width: 100%;
+    height: auto;
+  }
+
+  .d-flex.mt-3 {
+    max-width: 100%;
+    justify-content: start;
+  }
+}
