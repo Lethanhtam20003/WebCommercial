@@ -62,7 +62,7 @@ const inventoryManagementRoutes: Routes = [
 				data: routeData,
 			},
 			{
-				path: 'create-inventory',
+				path: 'create',
 				loadComponent: () =>
 					import(
 						'./components/inventory-management/Import-inventory/Import-inventory.component'

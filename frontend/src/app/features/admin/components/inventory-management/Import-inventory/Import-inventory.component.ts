@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 interface ProductItem {
 	productId: number | null;
 	quantity: number;
@@ -8,80 +9,74 @@ interface ProductItem {
 }
 @Component({
 	standalone: true,
-	imports: [CommonModule, FormsModule],
+	imports: [CommonModule, FormsModule,
+    ReactiveFormsModule,],
 	selector: 'app-Import-inventory',
 	templateUrl: './Import-inventory.component.html',
 	styleUrls: ['./Import-inventory.component.scss'],
 })
 export class ImportInventoryComponent implements OnInit {
-	today: Date = new Date();
-	message: string = '';
+	 
+ purchaseForm!: FormGroup;
+  suppliers: any[] = [];
+  products: any[] = [];
 
-	suppliers = [
-		{ id: 1, name: 'Nhà cung cấp A' },
-		{ id: 2, name: 'Nhà cung cấp B' },
-		{ id: 3, name: 'Nhà cung cấp C' },
-	];
+  constructor(private fb: FormBuilder, private http: HttpClient) {}
 
-	products = [
-		{ id: 101, name: 'Sản phẩm X' },
-		{ id: 102, name: 'Sản phẩm Y' },
-		{ id: 103, name: 'Sản phẩm Z' },
-	];
+  ngOnInit(): void {
+    this.purchaseForm = this.fb.group({
+      supplierId: [null, Validators.required],
+      createdAt: [new Date().toISOString().slice(0, 16), Validators.required],
+      status: ['PENDING', Validators.required],
+      items: this.fb.array([])
+    });
 
-	formData = {
-		supplier: null as number | null,
-		items: [{ productId: null, quantity: 1, importPrice: 0 } as ProductItem],
-		note: '',
-	};
+    this.loadSuppliers();
+    this.loadProducts();
+    this.addItem();
+  }
 
-	constructor() {}
+  get items(): FormArray {
+    return this.purchaseForm.get('items') as FormArray;
+  }
 
-	ngOnInit(): void {}
+  addItem(): void {
+    this.items.push(this.fb.group({
+      productId: [null, Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]],
+      unitPrice: [0, [Validators.required, Validators.min(0)]]
+    }));
+  }
 
-	addItem(): void {
-		this.formData.items.push({ productId: null, quantity: 1, importPrice: 0 });
-	}
+  removeItem(index: number): void {
+    this.items.removeAt(index);
+  }
 
-	removeItem(index: number): void {
-		this.formData.items.splice(index, 1);
-	}
+  loadSuppliers() {
+    this.http.get<any[]>('/v1/suppliers').subscribe(data => this.suppliers = data);
+  }
 
-	onSubmit(): void {
-		if (!this.formData.supplier || this.formData.items.length === 0) {
-			this.message = 'Vui lòng chọn nhà cung cấp và ít nhất 1 sản phẩm.';
-			return;
-		}
+  loadProducts() {
+    this.http.get<any[]>('/v1/products').subscribe(data => this.products = data);
+  }
 
-		// Validate từng item
-		const isValid = this.formData.items.every(
-			item => item.productId && item.quantity > 0 && item.importPrice >= 0
-		);
+  get totalPrice(): number {
+    return this.items.controls.reduce((sum, ctrl) => {
+      const quantity = ctrl.get('quantity')?.value || 0;
+      const unitPrice = ctrl.get('unitPrice')?.value || 0;
+      return sum + quantity * unitPrice;
+    }, 0);
+  }
 
-		if (!isValid) {
-			this.message = 'Vui lòng điền đầy đủ thông tin cho từng sản phẩm.';
-			return;
-		}
+  submit(): void {
+    if (this.purchaseForm.invalid) return;
 
-		// Gửi dữ liệu đi (API giả lập)
-		console.log('Dữ liệu nhập kho:', this.formData);
-		this.message = '✅ Nhập kho thành công!';
+    const formData = this.purchaseForm.value;
+    formData.totalPrice = this.totalPrice;
 
-		// Reset form nếu muốn
-		// this.resetForm();
-	}
-
-	onImportExcel(): void {
-		// Mở hộp thoại tải Excel hoặc gọi API xử lý file Excel
-		alert('🚧 Tính năng nhập từ Excel đang được phát triển.');
-	}
-
-	resetForm(): void {
-		this.formData = {
-			supplier: null,
-			items: [{ productId: null, quantity: 1, importPrice: 0 }],
-			note: '',
-		};
-		this.message = '';
-	}
+    this.http.post(`/v1/purchase-orders?supplierId=${formData.supplierId}`, formData)
+      .subscribe(result => {
+        console.log('Đơn nhập đã tạo:', result);
+      });
+  }
 }
