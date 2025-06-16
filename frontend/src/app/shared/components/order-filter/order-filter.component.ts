@@ -23,6 +23,8 @@ import { GetAllOrdersAdminRequest } from '../../../core/models/request/order/get
 	styleUrl: './order-filter.component.scss',
 })
 export class OrderFilterComponent implements OnInit {
+	protected isFilterButtonPressed: boolean = false;
+	protected isRemoveButtonPressed: boolean = false;
 	/**
 	 * Sự kiện phát ra khi người dùng nhấn nút "Lọc" hoặc "Xóa".
 	 * Trả về object chứa các trường filter phù hợp với GetAllOrderAdminRequest.
@@ -115,5 +117,21 @@ export class OrderFilterComponent implements OnInit {
 			totalPrice: '',
 		});
 		this.applyFilter();
+	}
+
+	onPress(button: 'filter' | 'remove'): void {
+		if (button === 'filter') {
+			this.isFilterButtonPressed = true;
+		} else if (button === 'remove') {
+			this.isRemoveButtonPressed = true;
+		}
+	}
+
+	onRelease(button: 'filter' | 'remove'): void {
+		if (button === 'filter') {
+			this.isFilterButtonPressed = false;
+		} else if (button === 'remove') {
+			this.isRemoveButtonPressed = false;
+		}
 	}
 }

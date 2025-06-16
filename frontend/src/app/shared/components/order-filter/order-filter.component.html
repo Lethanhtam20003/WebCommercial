@@ -42,10 +42,23 @@
 		/>
 	</div>
 	<div class="col-md-2 d-flex gap-2">
-		<button type="submit" class="btn btn-primary primary-color-button w-100">Lọc</button>
+		<button
+			type="submit"
+			class="btn btn-primary primary-color-button w-100"
+			[class.pressed]="isFilterButtonPressed"
+			(mousedown)="onPress('filter')"
+			(mouseup)="onRelease('filter')"
+			(mouseleave)="onRelease('filter')"
+		>
+			Lọc
+		</button>
 		<button
 			type="button"
 			class="btn btn-secondary w-100 primary-white-color-black-background-button"
+			[class.pressed]="isRemoveButtonPressed"
+			(mousedown)="onPress('remove')"
+			(mouseup)="onRelease('remove')"
+			(mouseleave)="onRelease('remove')"
 			(click)="clearFilter()"
 		>
 			Xóa

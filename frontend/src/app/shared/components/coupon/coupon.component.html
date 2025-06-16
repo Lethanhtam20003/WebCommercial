@@ -1,27 +1,31 @@
 <div class="card d-flex flex-row p-0 shadow-sm border rounded overflow-hidden">
-  <!-- Left panel -->
-  <div
-    class="d-flex flex-column text-white text-center justify-content-center px-2 bg-danger"
-    style="min-width: 90px;"
-  >
-    <div>
-      <i class="bi bi-tag-fill fs-4"></i>
-    </div>
-    <div class="badge bg-light text-dark mt-2 small">COUPON</div>
-  </div>
+	<!-- Left panel -->
+	<div
+		class="d-flex flex-column text-white text-center justify-content-center px-2 bg-danger"
+		style="min-width: 90px"
+	>
+		<div>
+			<i class="bi bi-tag-fill fs-4"></i>
+		</div>
+		<div class="badge bg-light text-dark mt-2 small">COUPON</div>
+	</div>
 
-  <!-- Middle content -->
-  <div class="flex-grow-1 px-3 py-2">
-    <div class="fw-bold small">Giảm {{ coupon.discountPercentage }}%</div>
-    <div class="text-muted small">{{ coupon.description }}</div>
-    <div class="d-flex justify-content-between mt-1 small text-muted">
-      <div>HSD: {{ coupon.expirationDate | date: 'dd/MM/yyyy' }}</div>
-    </div>
-  </div>
+	<!-- Middle content -->
+	<div class="flex-grow-1 px-3 py-2">
+		<div class="fw-bold small">Giảm {{ coupon.discountPercentage }}%</div>
+		<div class="text-muted small">{{ coupon.description }}</div>
+		<div class="d-flex justify-content-between mt-1 small text-muted">
+			<div>HSD: {{ coupon.expirationDate | date: 'dd/MM/yyyy' }}</div>
+		</div>
+	</div>
 
-  <!-- Right panel -->
-  <div class="d-flex flex-column justify-content-between align-items-center p-2">
-    <button class="btn btn-sm primary-color-button">Dùng Ngay</button>
-    <small class="text-muted mt-2">Mã: {{ coupon.code }}</small>
-  </div>
+	<!-- Right panel -->
+	<div
+		class="d-flex flex-column justify-content-between align-items-center p-2"
+	>
+		<button class="btn btn-sm primary-color-button align-self-end">
+			Dùng Ngay
+		</button>
+		<small class="text-muted mt-2">Mã: {{ coupon.code }}</small>
+	</div>
 </div>

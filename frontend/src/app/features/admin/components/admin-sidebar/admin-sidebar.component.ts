@@ -26,6 +26,7 @@ export class AdminSidebarComponent implements OnInit {
 		this.showCollapse(router);
 	}
 	label = LabelConstants;
+  protected routes = RouteLink;
 
 	ngOnInit() {}
 

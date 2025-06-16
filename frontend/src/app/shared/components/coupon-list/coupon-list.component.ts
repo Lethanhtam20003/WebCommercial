@@ -9,38 +9,38 @@ import { ApiResponse } from '../../../core/models/api-response.model';
 import { Page } from '../../../core/models/response/page-response.interface';
 
 @Component({
-  selector: 'coupon-list',
-  standalone: false,
-  templateUrl: './coupon-list.component.html'
+	selector: 'coupon-list',
+	standalone: false,
+	templateUrl: './coupon-list.component.html',
 })
-export class CouponListComponent implements OnInit{
-  coupons: CouponResponse[] = [];
-  isLoading = false;
-  errorMsg = '';
+export class CouponListComponent implements OnInit {
+	coupons: CouponResponse[] = [];
+	isLoading = false;
+	errorMsg = '';
 
-  constructor(private couponService: CouponService) {}
+	constructor(private couponService: CouponService) {}
 
-  ngOnInit() {
-    this.loadCoupons();
-  }
+	ngOnInit() {
+		this.loadCoupons();
+	}
 
-  loadCoupons() {
-    this.isLoading = true;
-    this.errorMsg = '';
+	loadCoupons() {
+		this.isLoading = true;
+		this.errorMsg = '';
 
-    const request: GetAllCouponRequest = { page: 0, size: 10 };
+		const request: GetAllCouponRequest = { page: 0, size: 10 };
 
-    this.couponService.getAllCoupons(request)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe({
-        next: (response: ApiResponse<Page<CouponResponse>>) => {
-          this.coupons = response.result.content;
-        },
-        error: (err) => {
-          this.errorMsg = 'Lỗi khi tải coupon';
-          console.error(err);
-        }
-      });
-  }
-
+		this.couponService
+			.getAllCoupons(request)
+			.pipe(finalize(() => (this.isLoading = false)))
+			.subscribe({
+				next: (response: ApiResponse<Page<CouponResponse>>) => {
+					this.coupons = response.result.content;
+				},
+				error: err => {
+					this.errorMsg = 'Lỗi khi tải coupon';
+					console.error(err);
+				},
+			});
+	}
 }

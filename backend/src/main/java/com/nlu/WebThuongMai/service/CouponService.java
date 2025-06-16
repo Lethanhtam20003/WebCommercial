@@ -3,17 +3,24 @@ package com.nlu.WebThuongMai.service;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponUpdateRequest;
+import com.nlu.WebThuongMai.dto.response.couponResp.AdminCouponResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
 import com.nlu.WebThuongMai.enums.CouponType;
+import com.nlu.WebThuongMai.enums.Role;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.dto.response.couponResp.GetAllCouponResponse;
 import com.nlu.WebThuongMai.mapper.CouponMapper;
 import com.nlu.WebThuongMai.model.Coupon;
+import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.repository.CouponRepository;
+import com.nlu.WebThuongMai.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +28,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -30,6 +40,7 @@ import java.util.List;
 public class CouponService {
     CouponRepository repository;
     CouponMapper mapper;
+    UserService userService;
 
 
     public CouponResponse createCoupon(CouponCreateRequest request) {
@@ -91,7 +102,39 @@ public class CouponService {
 
         return total.subtract(discountAmount).max(BigDecimal.ZERO);
     }
+
+    @PreAuthorize("hasAuthority('USER')")
     public Page<GetAllCouponResponse> getAllCoupons(Pageable pageable) {
-    Page<Coupon> couponPage = repository.findAll(pageable);
-    return couponPage.map(mapper::toGetAllCouponResponse);}
+        var context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+
+        User user = userService.findUserByUsername(username);
+
+        List<String> couponCodes = Optional.ofNullable(user.getCoupons())
+                .map(couponsStr -> Arrays.stream(couponsStr.split(";"))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .toList())
+                .orElse(List.of());
+
+        if (couponCodes.isEmpty()) {
+            return Page.empty(pageable);
+        }
+
+        List<Coupon> coupons = repository.findByCodeIn(couponCodes);
+
+        List<GetAllCouponResponse> responses = Optional.ofNullable(coupons)
+                .orElse(List.of())
+                .stream()
+                .map(mapper::toGetAllCouponResponse)
+                .toList();
+
+        return new PageImpl<>(responses, pageable, responses.size());
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Page<AdminCouponResponse> getAllAdminCoupons(Pageable pageable) {
+        Page<Coupon> couponPage = repository.findAll(pageable);
+        return couponPage.map(mapper::toAdminCouponResponse);
+    }
 }

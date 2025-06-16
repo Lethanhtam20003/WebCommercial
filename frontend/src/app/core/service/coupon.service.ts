@@ -6,6 +6,7 @@ import { Page } from '../models/response/page-response.interface';
 import { CouponResponse } from '../models/response/coupon/coupon-response.interface';
 import { URL_API } from '../../shared/constants/url-api.constants';
 import { Observable } from 'rxjs';
+import { AdminCouponResponse } from '../models/response/coupon/admin-coupon-response.interface';
 
 @Injectable({
 	providedIn: 'root',
@@ -21,7 +22,20 @@ export class CouponService {
 			.set('size', request.size.toString());
 
 		return this.http.get<ApiResponse<Page<CouponResponse>>>(
-			URL_API.getAllCoupons,
+			URL_API.getAllCouponsUser,
+			{ params }
+		);
+	}
+
+  getAllCouponsForAdmin(
+		request: GetAllCouponRequest
+	): Observable<ApiResponse<Page<AdminCouponResponse>>> {
+		const params = new HttpParams()
+			.set('page', request.page.toString())
+			.set('size', request.size.toString());
+
+		return this.http.get<ApiResponse<Page<AdminCouponResponse>>>(
+			URL_API.getAllCouponsAdmin,
 			{ params }
 		);
 	}
