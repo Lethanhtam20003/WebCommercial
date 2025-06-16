@@ -5,16 +5,16 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AdminProductService } from '../../../service/admin-product.service';
 import { ProductResponse } from '../../../../../core/models/response/product-response/productResponse';
 import { ProductStatusType } from '../../../models/product-status.enum';
-import { PageResponse } from '../../../models/product-response/page-response.interface';
+import { PageResponse } from '../../../../../core/models/response/product-response/product-response/page-response.interface';
 import {
 	PageRequest,
 	SortDirection,
 } from '../../../models/request/pageRequest.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CategoryService } from '../../../service/admin-category.service';
-import { category } from '../../../models/category';
+import { category } from '../../../../../core/models/response/product-response/category';
 import { CustomNgSelectComponent } from '../../../../../shared/components/custom-ng-select/custom-ng-select.component';
-import { Page } from '../../../models/product-response/Page.interface';
+import { Page } from '../../../../../core/models/response/product-response/product-response/Page.interface';
 
 @Component({
 	standalone: true,

@@ -28,6 +28,12 @@ export const RouteLink = {
   couponRoute: 'coupon-list',
 
   /**
+   * product
+   */
+  product: 'product',
+  productDetail: 'product-detail',
+
+  /**
    * admin
    */
   adminRoute: 'admin',

@@ -30,3 +30,28 @@
   white-space: nowrap;        // 👈 Không cho chữ trong tag xuống dòng
   font-size: 0.875rem;        // 👈 Đồng bộ với text xung quanh
 }
+// Màu nền dropdown
+::ng-deep .ng-select.custom-ng-select .ng-dropdown-panel {
+  background-color: #f8f9fa;       // 👈 Màu nền nhẹ giống Bootstrap light
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+// Mỗi item trong dropdown
+::ng-deep .ng-select.custom-ng-select .ng-dropdown-panel .ng-option {
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+// Khi hover option
+::ng-deep .ng-select.custom-ng-select .ng-dropdown-panel .ng-option:hover {
+  background-color: #e9ecef;       // 👈 Hiệu ứng hover nhẹ
+}
+
+// Khi item được chọn
+::ng-deep .ng-select.custom-ng-select .ng-dropdown-panel .ng-option-selected {
+  background-color: #007bff;
+  color: white;
+}

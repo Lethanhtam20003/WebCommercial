@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.dto.response.productResp;
 
+import com.nlu.WebThuongMai.dto.response.promotion.PromotionResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

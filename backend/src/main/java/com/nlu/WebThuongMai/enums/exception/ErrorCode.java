@@ -58,7 +58,13 @@ public enum ErrorCode {
     PRICE_CONDITION_COUPONS_MUST_BE_POSITIVE(1043, "price condition must be positive", HttpStatus.BAD_REQUEST),
     MIN_PRICE_COUPONS_MUST_BE_POSITIVE(1044, "min price must be positive", HttpStatus.BAD_REQUEST),
     MIN_PRICE_COUPONS_MUST_BE_LESS_THAN_50000(1045, "min price must be less than 50000", HttpStatus.BAD_REQUEST),
-    ;
+    NAME_NOT_NULL(1046, "name not null", HttpStatus.BAD_REQUEST),
+    DATE_VALID_ERROR(1048, "date valid error", HttpStatus.BAD_REQUEST),
+    NOT_NULL(1047, "not null", HttpStatus.BAD_REQUEST),
+    DISCOUNT_PERCENT_NOT_NULL(1049, "discount percent not null", HttpStatus.BAD_REQUEST),
+    START_DATE_NOT_NULL(1050, "start date not null", HttpStatus.BAD_REQUEST),
+    END_DATE_NOT_NULL(1051, "end date not null", HttpStatus.BAD_REQUEST),
+    CATEGORY_NOT_FOUND(1052,"category not found",HttpStatus.NOT_FOUND) ;
 
 
     int code;

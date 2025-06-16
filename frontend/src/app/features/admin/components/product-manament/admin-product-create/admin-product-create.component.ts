@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { category } from '../../../models/category';
+import { category } from '../../../../../core/models/response/product-response/category';
 import { Router, RouterModule } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { CategoryService } from '../../../service/admin-category.service';

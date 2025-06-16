@@ -1,37 +1,73 @@
-<div class="container py-4">
-  <!-- Product Grid -->
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
-    <!-- Item -->
-    <div class="col" *ngFor="let product of products" >
-      <div class="card h-100 text-center border-0 product-card " [routerLink]="['/product', product.id]">
-        <div class="position-relative">
-          <img [src]="product.images[0]" class="card-img-top p-3" alt="...">
-           <!-- Hover overlay -->
-          <div class="hover-overlay">
-            <div class="d-flex justify-content-center gap-2 ">
-              <i class="bi bi-cart btn-outline-dark btn-sm " (click)="addToCart(product)"></i>
-              <i class="bi bi-heart cursor-pointer" (click)="addToWishlist(product)" title="Yêu thích"></i>
-            </div>
-          </div>
-          <span *ngIf="product.name" class="position-absolute top-0 end-0 badge  m-2 text-uppercase">
-            {{ product.name }}
-          </span>
-        </div>
-        <div class="card-body">
-          <h6 class="card-title mb-1">{{ product.name }}</h6>
-          <p class="card-text">
-            <!-- <span *ngIf="product.price">
+<div class="container p-4">
+	<!-- Product Grid -->
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+		<!-- Item -->
+		<div class="col" *ngFor="let product of pageProducts?.content">
+			<div class="product-wrapper rounded shadow-sm">
+				<div class="card h-100 text-center border-0 product-card">
+					<div class="position-relative">
+						<img
+							[src]="product.images[0]"
+							class="card-img-top p-3"
+							alt="..."
+							[routerLink]="['/product', product.id]"
+						/>
+						<!-- Hover overlay -->
+						<div class="hover-overlay">
+							<div class="d-flex justify-content-center gap-2">
+								<i
+									class="bi bi-cart btn-outline-dark btn-sm background-gradient"
+									(click)="addToCart(product)"
+								></i>
+								<i
+									class="bi bi-heart cursor-pointer background-gradient"
+									(click)="addToWishlist(product)"
+									title="Yêu thích"
+								></i>
+							</div>
+						</div>
+						<span
+							*ngIf="product.name"
+							class="position-absolute top-0 end-0 badge m-2 text-uppercase"
+						>
+							{{ product.name }}
+						</span>
+					</div>
+					<div class="card-body" [routerLink]="['/product', product.id]">
+						<h6 class="card-title mb-1">{{ product.name }}</h6>
+						<p class="card-text">
+							<!-- <span *ngIf="product.price">
               <del class="text-muted">${{ product.price }}</del>
               <span class="text-danger fw-bold">${{ product.discountedPrice }}</span>
             </span> -->
-            <span *ngIf="product.price">
-              {{ product.price }}
-            </span>
-          </p>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+							<span *ngIf="product.price">
+								{{ product.price | number: '1.0-0' }} VND
+							</span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
 
+		<!-- Thanh phân trang -->
+		<nav *ngIf="showPagination()">
+			<ul class="pagination justify-content-sm-start mt-4">
+				<li class="page-item" [class.disabled]="canPrevious()">
+					<a class="page-link" (click)="goToPage(-1)">«</a>
+				</li>
+
+				<li
+					class="page-item"
+					*ngFor="let pageNum of getPageNumbers()"
+					[class.active]="pageNum === pageProducts?.page?.number"
+				>
+					<a class="page-link" (click)="goToPage(pageNum)">{{ pageNum + 1 }}</a>
+				</li>
+
+				<li class="page-item" [class.disabled]="!canNext()">
+					<a class="page-link" (click)="goToPage(-2)">»</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</div>

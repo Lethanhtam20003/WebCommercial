@@ -1,3 +1,10 @@
+const productLabel = {
+	product: 'sản phẩm',
+	newProduct: 'Hàng mới',
+	sport: 'Môn thể thao',
+	badminton: 'Cầu lông',
+	pickleball: 'Pickle ball',
+};
 export const LabelConstants = {
 	logIn: 'Đăng nhập',
 	logOut: 'Đăng xuất',
@@ -40,10 +47,6 @@ export const LabelConstants = {
 	logInWithGoogle: 'Đăng nhập bằng google',
 	signUpWithGoogle: 'Đăng ký bằng google',
 	home: 'Trang chủ',
-	newProduct: 'Hàng mới',
-	sport: 'Môn thể thao',
-	badminton: 'Cầu lông',
-	pickleball: 'Pickle ball',
 	or: 'hoặc',
 	signInWithGoogle: 'Đăng nhập bằng Google',
 	signInWithFacebook: 'Đăng nhập bằng Facebook',
@@ -98,4 +101,9 @@ export const LabelConstants = {
 
   newPassword: 'Mật khẩu mới',
   adminPage: 'Trang quản lý',
+  /**
+   * product label
+   */
+...productLabel,
 } as const;
+

@@ -1,0 +1,107 @@
+<div class="container my-5">
+	<div class="row">
+		<!-- Hình ảnh sản phẩm -->
+		<div class="col-md-6">
+			<img
+				[src]="selectedImage"
+				class="img-fluid border rounded"
+				alt="Sản phẩm"
+			/>
+			<div class="d-flex mt-3 overflow-auto">
+				<img
+					*ngFor="let img of product?.images"
+					[src]="img"
+					alt="thumbnail"
+					class="img-thumbnail me-2"
+					[class.border-danger]="img === selectedImage"
+					(click)="selectedImage = img"
+					style="width: 80px; height: 80px; object-fit: cover; cursor: pointer"
+				/>
+			</div>
+		</div>
+
+		<!-- Thông tin sản phẩm -->
+		<div class="col-md-6">
+			<h3 class="fw-bold">{{ product?.name }}</h3>
+			<p class="text-danger fs-4 fw-semibold">
+				{{ product?.price | currency: 'VND' : 'symbol' : '1.0-0' }}
+			</p>
+			<p>
+				<strong>Danh mục:</strong>
+				<span
+					class="badge bg-primary me-1"
+					*ngFor="let c of product?.categories"
+					>{{ c.name }}</span
+				>
+			</p>
+			<p>
+				<strong>Tình trạng:</strong>
+				<span class="text-success" *ngIf="product?.status === 'ACTIVE'"
+					>Còn hàng</span
+				>
+				<span class="text-danger" *ngIf="product?.status !== 'ACTIVE'"
+					>Hết hàng</span
+				>
+			</p>
+
+			<div class="d-flex align-items-center my-3">
+				<button
+					class="btn btn-outline-secondary btn-sm me-2"
+					(click)="decreaseQty()"
+				>
+					-
+				</button>
+				<span class="fw-bold">{{ quantity }}</span>
+				<button
+					class="btn btn-outline-secondary btn-sm ms-2"
+					(click)="increaseQty()"
+				>
+					+
+				</button>
+			</div>
+
+			<button class="btn btn-danger btn-lg mt-2">
+				<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+			</button>
+		</div>
+	</div>
+	<div class="product-detail" *ngIf="productDescription">
+  <div *ngIf="productDescription.usage">
+    <h4>Công dụng</h4>
+    <p>{{ productDescription.usage }}</p>
+  </div>
+
+  <div *ngIf="productDescription.style">
+    <h4>Kiểu dáng</h4>
+    <p>{{ productDescription.style }}</p>
+  </div>
+
+  <div *ngIf="productDescription.highlights && productDescription.highlights.length > 0">
+    <h4>Đặc điểm nổi bật</h4>
+    <ul>
+      <li *ngFor="let item of productDescription.highlights">{{ item }}</li>
+    </ul>
+  </div>
+
+  <div *ngIf="productDescription.specifications.material || productDescription.specifications.colors || productDescription.specifications.sizes">
+    <h4>Thông số kỹ thuật</h4>
+    <ul>
+      <li *ngIf="productDescription.specifications.material">
+        <strong>Chất liệu:</strong> {{ productDescription.specifications.material }}
+      </li>
+      <li *ngIf="productDescription.specifications.colors">
+        <strong>Màu sắc:</strong> {{ productDescription.specifications.colors }}
+      </li>
+      <li *ngIf="productDescription.specifications.sizes">
+        <strong>Kích thước:</strong> {{ productDescription.specifications.sizes }}
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="productDescription.moreInfo">
+    <h4>Thông tin thêm</h4>
+    <p>{{ productDescription.moreInfo }}</p>
+  </div>
+</div>
+
+</div>
