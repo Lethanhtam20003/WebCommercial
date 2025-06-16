@@ -1,32 +1,37 @@
 import { Component, OnInit } from '@angular/core';
 import { CartItem } from '../../../core/models/response/cart/cart-response.interface';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'app-cart',
 	standalone: false,
 	templateUrl: './cart.component.html',
-	styleUrl: './cart.component.scss',
+	styleUrls: ['./cart.component.scss'],
 })
 export class CartComponent implements OnInit {
 	cartItems: CartItem[] = [];
 	total: number = 0;
 
 	ngOnInit(): void {
+		console.log('🧨 CartComponent initialized');
 		this.cartItems = [
 			{
-				id: 1,
-				name: 'Áo thể thao',
-				price: 250000,
+				id: 13,
+				name: 'Áo Phông Cầu Lông Nam Động Lực Promax "Vàng - Xanh" DL-AP1369-10 - Hàng Chính Hãng',
+				price: 175000,
 				quantity: 2,
-				productImg: 'https://via.placeholder.com/80x80?text=Aó',
+				productImg:
+					'https://bizweb.dktcdn.net/thumb/medium/100/485/982/products/ao-nam-vang-xanh-4-1714116630289.jpg',
 				category: 'Thời trang',
 			},
 			{
-				id: 2,
-				name: 'Bóng đá Futsal',
-				price: 190000,
+				id: 140,
+				name: 'Giày bóng đá cỏ nhân tạo Nam Động Lực Jogarbola Racer JG-2223 "Cam" JG-2223-04 - Hàng Chính Hãng',
+				price: 668000,
 				quantity: 1,
-				productImg: 'https://via.placeholder.com/80x80?text=Bóng',
+				productImg:
+					'https://bizweb.dktcdn.net/thumb/medium/100/485/982/products/tun-3871-46e95fa25c8a40dbaadd364-1703152503845.jpg',
 				category: 'Bóng đá',
 			},
 		];
@@ -62,5 +67,17 @@ export class CartComponent implements OnInit {
 
 	checkout() {
 		alert('Tính năng thanh toán chưa được hỗ trợ.');
+	}
+
+	increaseQuantity(item: CartItem) {
+		item.quantity++;
+		this.updateTotal();
+	}
+
+	decreaseQuantity(item: CartItem) {
+		if (item.quantity > 1) {
+			item.quantity--;
+			this.updateTotal();
+		}
 	}
 }

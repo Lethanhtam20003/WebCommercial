@@ -85,7 +85,6 @@
 							label.pickleball
 						}}</a>
 					</li>
-					
 				</ul>
 
 				<form
@@ -104,7 +103,7 @@
 				<div class="me-2">
 					<div class="action-buttons d-flex gap-3">
 						<a
-							routerLink="/cart"
+							[routerLink]="'/' + route.cartRoute"
 							class="btn btn-outline-primary d-flex align-items-center gap-2"
 						>
 							<i class="bi bi-cart-fill"></i>

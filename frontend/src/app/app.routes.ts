@@ -46,7 +46,6 @@ const authRoutes: Routes = [
 		},
 	},
 ];
-
 /**
  * Định nghĩa các route được bảo vệ (yêu cầu đăng nhập)
  */
@@ -71,15 +70,13 @@ const protectedRoutes: Routes = [
 		canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
 	},
-  {
-    path: RouteLink.cartRoute,
-    loadChildren: () =>
-      import('./features/user/page/cart/cart.module').then(
-        m => m.CartModule
-      ),
-    canActivate: [AuthGuard],
-    data: { showHeader: true, showFooter: true },
-  }
+	{
+		path: `${RouteLink.cartRoute}`,
+		loadChildren: () =>
+			import('./features/user/page/cart/cart.module').then(m => m.CartModule),
+		canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
+	},
 ];
 
 /**
@@ -117,7 +114,7 @@ const categoryRoutes: Routes = [
 		loadComponent: () =>
 			import('./pages/category/category.component').then(
 				m => m.CategoryComponent
-				),
+			),
 		data: {
 			showHeader: true,
 			showFooter: true,
