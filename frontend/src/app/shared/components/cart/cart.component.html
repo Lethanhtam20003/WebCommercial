@@ -1,5 +1,5 @@
-<div class="container custom-container my-5">
-	<h2 class="mb-4">Giỏ hàng người dùng</h2>
+<div class="container custom-container my-5 vh-100">
+	<h2 class="mb-4">Giỏ hàng</h2>
 
 	<div *ngIf="cartItems.length === 0" class="alert alert-info">
 		Giỏ hàng của bạn đang trống.
@@ -50,14 +50,30 @@
 
 			<!-- Cột nút xoá -->
 			<div class="col-auto d-flex align-items-center justify-content-end">
-				<button class="btn btn-danger" (click)="removeItem(item)">Xoá</button>
+				<button
+					class="btn primary-color-button"
+					(click)="removeItem(item)"
+					(pointerdown)="onPress(item.id)"
+					(pointerup)="onRelease(item.id)"
+					[class.pressed]="buttonStates[item.id]"
+				>
+					Xoá
+				</button>
 			</div>
 		</div>
 
 		<div class="text-end mt-4">
 			<h4 class="mb-3">Tổng cộng: {{ getTotal() | currency: 'VND' }}</h4>
-			<button class="btn btn-primary btn-lg" (click)="checkout()">
-				Thanh toán
+			<button
+				class="btn primary-color-button btn-lg"
+				(click)="order()"
+				(pointerdown)="onPress(999)"
+				(pointerup)="onRelease(999)"
+				(touchstart)="onPress(999)"
+				(touchend)="onRelease(999)"
+				[class.pressed]="buttonStates[999]"
+			>
+				Đặt hàng
 			</button>
 		</div>
 	</div>

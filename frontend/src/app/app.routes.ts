@@ -71,9 +71,16 @@ const protectedRoutes: Routes = [
 		data: { showHeader: true, showFooter: true },
 	},
 	{
-		path: `${RouteLink.cartRoute}`,
+		path: RouteLink.cartRoute,
 		loadChildren: () =>
 			import('./features/user/page/cart/cart.module').then(m => m.CartModule),
+		canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
+	},
+	{
+		path: RouteLink.orderRoute,
+		loadChildren: () =>
+			import('./features/user/page/order/order.module').then(m => m.OrderModule),
 		canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
 	},

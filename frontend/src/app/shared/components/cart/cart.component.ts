@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CartItem } from '../../../core/models/response/cart/cart-response.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AlertService } from '../../../core/service/alert.service';
+import { ResponseMessage } from '../../constants/response-message.constants';
+import { Router } from '@angular/router';
+import { RouteLink } from '../../constants/route-link';
 
 @Component({
 	selector: 'app-cart',
@@ -12,7 +16,12 @@ import { FormsModule } from '@angular/forms';
 export class CartComponent implements OnInit {
 	cartItems: CartItem[] = [];
 	total: number = 0;
+	buttonStates: { [couponId: number]: boolean } = {};
 
+	constructor(
+		private alert: AlertService,
+		private router: Router
+	) {}
 	ngOnInit(): void {
 		console.log('🧨 CartComponent initialized');
 		this.cartItems = [
@@ -65,8 +74,14 @@ export class CartComponent implements OnInit {
 		this.total = 0;
 	}
 
-	checkout() {
-		alert('Tính năng thanh toán chưa được hỗ trợ.');
+	order() {
+		// this.alert.loading(
+		// 	ResponseMessage.navigatingToOrderPagePleaseWaitAMinute,
+		// 	ResponseMessage.navigateToOrderPage
+		// );
+		this.router.navigate([RouteLink.orderRoute], {
+			state: { cartItems: this.cartItems },
+		});
 	}
 
 	increaseQuantity(item: CartItem) {
@@ -79,5 +94,13 @@ export class CartComponent implements OnInit {
 			item.quantity--;
 			this.updateTotal();
 		}
+	}
+
+	onPress(couponId: number): void {
+		this.buttonStates[couponId] = true;
+	}
+
+	onRelease(couponId: number): void {
+		this.buttonStates[couponId] = false;
 	}
 }

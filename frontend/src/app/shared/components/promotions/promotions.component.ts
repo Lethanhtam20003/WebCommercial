@@ -12,15 +12,19 @@ export class PromotionsComponent {
 
 	ngOnInit(): void {
 		setInterval(() => {
-		  this.coupons = this.coupons.map((c) => {
-		    const diff = c.expireAt - Date.now();
-		    if (diff <= 0) {
-		      return { ...c, expire: true, remainingTime: 'Đã hết hạn' };
-		    }
-		    const m = Math.floor(diff / 60000);
-		    const s = Math.floor((diff % 60000) / 1000);
-		    return { ...c, expire: false, remainingTime: `${this.pad(m)}:${this.pad(s)}` };
-		  });
+			this.coupons = this.coupons.map(c => {
+				const diff = c.expireAt - Date.now();
+				if (diff <= 0) {
+					return { ...c, expire: true, remainingTime: 'Đã hết hạn' };
+				}
+				const m = Math.floor(diff / 60000);
+				const s = Math.floor((diff % 60000) / 1000);
+				return {
+					...c,
+					expire: false,
+					remainingTime: `${this.pad(m)}:${this.pad(s)}`,
+				};
+			});
 		}, 1000);
 	}
 
