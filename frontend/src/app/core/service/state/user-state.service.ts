@@ -8,7 +8,11 @@ import { URL_API } from '../../../shared/constants/url-api.constants';
 @Injectable({ providedIn: 'root' })
 export class UserStateService {
 	private userSubject = new BehaviorSubject<UserProfile | null>(null);
-	readonly user$ = this.userSubject.asObservable();
+	user$ = this.userSubject.asObservable();
+
+	// setUser(user: UserProfile): void {
+	// 	this.userSubject.next(user);
+	// }
 
 	constructor(
 		private userService: UserService,
@@ -34,10 +38,10 @@ export class UserStateService {
 	}
 
 	loadUserFromStorageOrAPI(): void {
-		const sessionData  = sessionStorage.getItem('user');
-		if (sessionData ) {
-			const parsed  = JSON.parse(sessionData );
-      const user = parsed.result ? parsed.result : parsed;
+		const sessionData = sessionStorage.getItem('user');
+		if (sessionData) {
+			const parsed = JSON.parse(sessionData);
+			const user = parsed.result ? parsed.result : parsed;
 			this.userSubject.next(user);
 		} else {
 			this.http.get<UserProfile>(URL_API.myInfo).subscribe({
@@ -52,8 +56,8 @@ export class UserStateService {
 		}
 	}
 
-  /** Xóa sạch thông tin user khỏi state và sessionStorage */
-  clearUser() {
+	/** Xóa sạch thông tin user khỏi state và sessionStorage */
+	clearUser() {
 		this.userSubject.next(null);
 		sessionStorage.removeItem('user');
 	}

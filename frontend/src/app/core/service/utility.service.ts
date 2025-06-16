@@ -86,6 +86,12 @@ export class UtitlyService {
 				return 'Đã huỷ';
 			case 'CONFIRMED':
 				return 'Đã xác nhận';
+			case 'ACTIVE':
+				return 'Có thể sử dụng';
+			case 'INACTIVE':
+				return 'Hết hạn';
+			case 'DELETED':
+				return 'Đã bị xoá';
 			default:
 				return status;
 		}

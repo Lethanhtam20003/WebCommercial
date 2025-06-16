@@ -7,7 +7,7 @@ import {
 	ReactiveFormsModule,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, Observable, Subject, takeUntil } from 'rxjs';
 import { LabelConstants } from '../../../shared/constants/label.constants';
 import { RouteLink } from '../../../shared/constants/route-link';
 import { AuthService } from '../../../core/service/auth.service';
@@ -23,13 +23,19 @@ import { Role } from '../../../core/enum/role.enum';
 	styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+	protected isPressed = {
+		myAccount: false,
+		admin: false,
+		logout: false,
+	};
 	logo: string = 'assets/images/shop/logo.png';
 	searchForm!: FormGroup;
 	protected readonly route = RouteLink;
 	protected readonly label = LabelConstants;
-	isLoggedIn$: Observable<boolean>;
-	private user$: Observable<UserProfile | null>;
-	protected isAdmin: boolean = false;
+	isLoggedIn$!: Observable<boolean>;
+	private destroy$ = new Subject<void>();
+	protected user$!: Observable<UserProfile | null>;
+	protected isAdmin$!: Observable<boolean>;
 	protected user: UserProfile | null = null;
 
 	constructor(
@@ -38,28 +44,29 @@ export class HeaderComponent implements OnInit {
 		private router: Router,
 		private authService: AuthService,
 		private userStateService: UserStateService
-	) {
-		this.isLoggedIn$ = this.authService.isLoggedIn$;
-		this.user$ = this.userStateService.user$;
-	}
+	) {}
 
 	ngOnInit(): void {
 		this.searchForm = this.fb.group({
 			searchInput: [''],
 		});
+		this.isLoggedIn$ = this.authService.isLoggedIn$;
+		this.user$ = this.userStateService.user$;
+    this.userStateService.fetchUserInfo();
 
-		/** Load user info from session or API on init */
-		this.userStateService.loadUserFromStorageOrAPI();
+		this.isAdmin$ = this.user$.pipe(
+			map(user => user?.role === 'ADMIN'),
+      distinctUntilChanged(),
+			filter(Boolean)
+		);
 
-		/** Theo dõi user và cập nhật biến user, isAdmin */
-		this.user$.subscribe(user => {
+		this.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
 			this.user = user;
-			this.isAdmin = !!user?.role.includes(Role.ADMIN);
 		});
 
-		// this.authService.isLoggedIn$.subscribe(loggedIn => {
-		// 	this.isLoggedIn = loggedIn;
-		// });
+		this.isAdmin$.pipe(takeUntil(this.destroy$)).subscribe(isAdmin => {
+			console.log(`Is admin: ${isAdmin}`);
+		});
 	}
 
 	/**
@@ -97,5 +104,18 @@ export class HeaderComponent implements OnInit {
 		this.authService.isLoggedIn$.subscribe(isLoggedIn => {
 			console.log('isLoggedIn:', isLoggedIn);
 		});
+	}
+
+	onPress(button: keyof typeof this.isPressed): void {
+		this.isPressed[button] = true;
+	}
+
+	onRelease(button: keyof typeof this.isPressed): void {
+		this.isPressed[button] = false;
+	}
+
+	ngOnDestroy(): void {
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }

@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -175,7 +176,7 @@ public class OrderService {
         return true;
     }
 
-     @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public Page<OrderResponse> findOrdersByUserIdAndStatus(OrderFilterRequest orderFilterRequest) {
         Pageable pageable = PageRequest.of(orderFilterRequest.getPage(), orderFilterRequest.getSize());
         Page<Order> orders = repository.findOrdersByUserIdAndStatus(orderFilterRequest.getUserId(), orderFilterRequest.getStatus(), pageable);
@@ -190,6 +191,7 @@ public class OrderService {
         return orders.map(mapper::toOrderResponse);
     }
 
+    @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('ADMIN')")
     public Page<OrderResponse> filterOrdersByAdmin(GetAllOrderAdminRequest request, int page, int size) {
         // Xử lý logic default và ưu tiên
@@ -211,7 +213,7 @@ public class OrderService {
 
         if (dateFrom != null && dateTo != null) {
             LocalDateTime from = dateFrom.atStartOfDay();
-            LocalDateTime to = dateTo.atTime(23,59,59);
+            LocalDateTime to = dateTo.atTime(23, 59, 59);
             spec = spec.and((root, query, cb) -> cb.between(root.get("createdDate"), from, to));
         }
 
@@ -238,7 +240,10 @@ public class OrderService {
         ));
 
         Page<Order> orderPage = repository.findAll(spec, pageable);
-        Page<OrderResponse> responsePage = orderPage.map(order -> mapper.toOrderResponse(order));
+        Page<OrderResponse> responsePage = orderPage.map(order -> {
+            order.getOrderItems().size();
+            return mapper.toOrderResponse(order);
+        });
         return responsePage;
     }
 }

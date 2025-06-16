@@ -1,0 +1,43 @@
+<table class="table table-striped table-bordered text-center">
+	<thead class="table-dark">
+		<tr>
+			<th>#</th>
+			<th>Mã</th>
+			<th>Phần trăm giảm</th>
+			<th>Mô tả</th>
+			<th>Giới hạn người dùng</th>
+			<th>Ngày tạo</th>
+			<th>Ngày hết hạn</th>
+			<th>Trạng thái</th>
+			<th>Loại mã</th>
+			<th>Điều kiện giá</th>
+			<th>Giá tối thiểu</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let coupon of coupons; index as i">
+			<td>{{ i + 1 }}</td>
+			<td>{{ coupon.code }}</td>
+			<td>{{ coupon.discount }}%</td>
+			<td>{{ coupon.description }}</td>
+			<td>{{ coupon.limitUsers }}</td>
+			<td>{{ coupon.createdAt | date: 'short' }}</td>
+			<td>{{ coupon.expirationDate | date: 'short' }}</td>
+			<td>
+				<span
+					class="badge"
+					[ngClass]="{
+						'bg-success': coupon.status === 'ACTIVE',
+						'bg-warning': coupon.status === 'INACTIVE',
+						'bg-danger': coupon.status === 'DELETED',
+					}"
+				>
+					{{ this.utility.mapStatusToVietnamese(coupon.status) }}
+				</span>
+			</td>
+			<td>{{ coupon.type }}</td>
+			<td>{{ coupon.priceCondition | number: '1.0-0' }}</td>
+			<td>{{ coupon.minPrice | number: '1.0-0' }}</td>
+		</tr>
+	</tbody>
+</table>

@@ -125,7 +125,6 @@ class OrderController {
      * @param request Đối tượng chứa trạng thái đơn hàng để lọc (có thể null).
      * @return ApiResponse chứa danh sách các đơn hàng phù hợp.
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/filter/admin")
     public ApiResponse<Page<OrderResponse>> getAdminOrders(
             @RequestBody GetAllOrderAdminRequest request,
