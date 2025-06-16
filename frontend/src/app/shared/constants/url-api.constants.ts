@@ -21,5 +21,7 @@ export const URL_API = {
     checkRoleAdmin: 'http://localhost:8080/api/v1/auth/checkRoleAdmin',
     promotionUrl:  'http://localhost:8080/api/v1/promotions',
     purchaseOrders: 'http://localhost:8080/api/v1/purchase-orders',
+    suppliers: 'http://localhost:8080/api/v1/supplier',
+
 
 } as const;

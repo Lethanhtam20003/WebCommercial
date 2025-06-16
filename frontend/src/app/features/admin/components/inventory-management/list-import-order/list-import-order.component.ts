@@ -1,7 +1,7 @@
 import { Component, NgModule, OnInit } from '@angular/core';
 import { OrderService } from '../../../../../core/service/order.service';
 import { PurchaseOrderResponse } from '../../../../../core/models/response/purchase-order/purchaseOrderResponse';
-import { Admin_purchase_orderService } from '../../../../../core/service/purchaseOrder/Admin_purchase_order.service';
+import { AdminPurchaseOrderService } from '../../../../../core/service/purchaseOrder/Admin_purchase_order.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouteLink } from '../../../../../shared/constants/route-link';
@@ -19,7 +19,7 @@ import { RouterModule } from '@angular/router';
 	styleUrls: ['./list-import-order.component.scss'],
 })
 export class ListImportOrderComponent implements OnInit {
-	constructor(private purchaseOrderService: Admin_purchase_orderService) {}
+	constructor(private purchaseOrderService: AdminPurchaseOrderService) {}
 	purchaseOrders: PurchaseOrderResponse[] = [];
   
 

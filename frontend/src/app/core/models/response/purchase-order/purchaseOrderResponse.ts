@@ -1,6 +1,6 @@
+import { PurchaseStatus } from "../../../enum/PurchaseStatus";
 import { SupplierResponse } from "../supplier-response/SupplierResponse";
 import { PurchaseOrderItemResponse } from "./PurchaseOrderItemResponse";
-import { PurchaseStatus } from "./PurchaseStatus";
 
 export interface PurchaseOrderResponse {
     id: number;
