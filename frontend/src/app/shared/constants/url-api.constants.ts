@@ -20,4 +20,5 @@ export const URL_API = {
     getAllCouponsAdmin: 'http://localhost:8080/api/v1/coupons/admin',
     checkRoleAdmin: 'http://localhost:8080/api/v1/auth/checkRoleAdmin',
     promotionUrl:  'http://localhost:8080/api/v1/promotions',
+    avtivePromotionUrl:  'http://localhost:8080/api/v1/promotions/active-promotions',
 } as const;

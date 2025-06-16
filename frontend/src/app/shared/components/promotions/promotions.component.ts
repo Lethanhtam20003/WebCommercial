@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { PromotionResponse } from '../../../core/models/response/promotions/promotion-response.interface';
 
 @Component({
 	selector: 'app-promotions',
@@ -7,20 +8,22 @@ import { Component, Input } from '@angular/core';
 	styleUrl: './promotions.component.scss',
 })
 export class PromotionsComponent {
-	@Input() coupons: any[] = [];
+	@Input() promotions: PromotionResponse[] = [];
 	buttonStates: { [couponId: string]: boolean } = {};
 
 	ngOnInit(): void {
 		setInterval(() => {
-			this.coupons = this.coupons.map(c => {
-				const diff = c.expireAt - Date.now();
+			this.promotions = this.promotions.map(promotion  => {
+				const diff = new Date(promotion.endDate).getTime() - Date.now();
 				if (diff <= 0) {
-					return { ...c, expire: true, remainingTime: 'Đã hết hạn' };
+					return { ...promotion , expire: true, remainingTime: 'Đã hết hạn' };
 				}
+
 				const m = Math.floor(diff / 60000);
 				const s = Math.floor((diff % 60000) / 1000);
+
 				return {
-					...c,
+					...promotion ,
 					expire: false,
 					remainingTime: `${this.pad(m)}:${this.pad(s)}`,
 				};
@@ -28,20 +31,21 @@ export class PromotionsComponent {
 		}, 1000);
 	}
 
+
 	pad(n: number): string {
 		return n < 10 ? '0' + n : '' + n;
 	}
 
-	saveCoupon(coupon: any) {
+	saveCoupon(promotion: PromotionResponse) {
 		// Giả lập lưu coupon
-		coupon.saved = true;
+		promotion.saved = true;
 	}
 
-	onPress(couponId: string): void {
-		this.buttonStates[couponId] = true;
+	onPress(promotionId: number): void {
+		this.buttonStates[promotionId] = true;
 	}
 
-	onRelease(couponId: string): void {
-		this.buttonStates[couponId] = false;
+	onRelease(promotionId: number): void {
+		this.buttonStates[promotionId] = false;
 	}
 }
