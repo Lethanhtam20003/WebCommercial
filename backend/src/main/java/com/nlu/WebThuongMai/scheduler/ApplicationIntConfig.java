@@ -23,16 +23,24 @@ public class ApplicationIntConfig {
     @Bean
     public ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
-            if (userRepository.findByUsername("admin123").isEmpty()) {
+            String defaultUsername = "admin123";
+            String defaultEmail = "tam1442k3@gmail.com";
+
+            boolean usernameExists = userRepository.findByUsername(defaultUsername).isPresent();
+            boolean emailExists = userRepository.existsByEmail(defaultEmail);
+
+            if (!usernameExists && !emailExists) {
                 Role role = Role.ADMIN;
                 userRepository.save(User.builder()
-                        .username("admin123")
+                        .username(defaultUsername)
                         .password(passwordEncoder.encode("admin123"))
-                        .email("tam1442k3@gmail.com")
+                        .email(defaultEmail)
                         .role(role)
                         .authProvider(AuthProvider.LOCAL)
                         .build());
                 log.warn("admin user was created with default password: admin123, please change it!");
+            } else {
+                log.info("Admin user already exists. Skipping creation.");
             }
         };
     }
