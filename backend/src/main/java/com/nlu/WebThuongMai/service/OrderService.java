@@ -184,6 +184,7 @@ public class OrderService {
         return orders.map(mapper::toOrderResponse);
     }
 
+    @Transactional
     @PreAuthorize("hasAuthority('USER')")
     public Page<OrderResponse> getOrdersById(Long userId, Pageable pageable) {
         Page<Order> orders = repository.findOrdersByUserId(userId, pageable);

@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class OrderItemService {
     OrderItemRepository orderItemRepository;
     OrderMapper orderMapper;
 
+    @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('USER')")
     public Page<OrderItemResponse> getOrderItemByOrderId(Long orderId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

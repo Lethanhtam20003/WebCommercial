@@ -1,6 +1,8 @@
 package com.nlu.WebThuongMai.service;
 
+import com.nlu.WebThuongMai.dto.request.promotion.FilterPromotionRequest;
 import com.nlu.WebThuongMai.dto.request.promotion.PromotionRequest;
+import com.nlu.WebThuongMai.dto.response.promotion.PromotionAdminResponse;
 import com.nlu.WebThuongMai.dto.response.promotion.PromotionResponse;
 import com.nlu.WebThuongMai.mapper.PromotionMapper;
 import com.nlu.WebThuongMai.model.Promotion;
@@ -10,12 +12,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,9 +37,8 @@ public class PromotionService {
     PromotionMapper mapper;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Page<PromotionResponse> getListPromotion(Pageable pageable) {
-        Page<Promotion> promotions = repo.findAll(pageable);
-        return promotions.map(mapper::promotionToPromotionResp);
+    public List<PromotionResponse> getListPromotion() {
+        return mapper.promotionToPromotionResp(repo.findAll());
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -47,5 +56,61 @@ public class PromotionService {
 
         return mapper.promotionToPromotionResp(activePromotions);
 
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Page<PromotionAdminResponse> filterPromotionsByAdmin(
+            FilterPromotionRequest request,
+            Pageable pageable
+    ) {
+        Specification<Promotion> spec = Specification.where(null);
+
+        // Lọc theo tên
+        String name = request.getName();
+        if (name != null && !name.trim().isEmpty()) {
+            String finalName = name.trim().toLowerCase(); // biến final để dùng trong lambda
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("name")), "%" + finalName + "%")
+            );
+        }
+
+        // Lọc theo ngày bắt đầu
+        if (request.getStartDateFrom() != null && !request.getStartDateFrom().trim().isEmpty()) {
+            try {
+                LocalDate startDate = LocalDate.parse(request.getStartDateFrom().trim());
+                spec = spec.and((root, query, cb) ->
+                        cb.greaterThanOrEqualTo(root.get("startDate"), startDate)
+                );
+            } catch (DateTimeParseException ignored) {
+                // Nếu sai format thì bỏ qua filter này
+            }
+        }
+
+        // Lọc theo ngày kết thúc
+        if (request.getEndDateTo() != null && !request.getEndDateTo().trim().isEmpty()) {
+            try {
+                LocalDate endDate = LocalDate.parse(request.getEndDateTo().trim());
+                spec = spec.and((root, query, cb) ->
+                        cb.lessThanOrEqualTo(root.get("endDate"), endDate.atTime(23, 59, 59))
+                );
+            } catch (DateTimeParseException ignored) {
+                // Bỏ qua nếu format sai
+            }
+        }
+
+        // Lọc theo giá trị giảm giá tối thiểu
+        if (request.getMinDiscount() != null && !request.getMinDiscount().trim().isEmpty()) {
+            try {
+                BigDecimal minDiscount = new BigDecimal(request.getMinDiscount().trim());
+                spec = spec.and((root, query, cb) ->
+                        cb.greaterThanOrEqualTo(root.get("discountPercent"), minDiscount)
+                );
+            } catch (NumberFormatException ignored) {
+                // Không filter nếu không parse được
+            }
+        }
+
+        Page<Promotion> pageResult = repo.findAll(spec, pageable);
+        return pageResult.map(mapper::promotionToPromotionAdminResp);
     }
 }
