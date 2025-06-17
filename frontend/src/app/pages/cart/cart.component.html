@@ -53,9 +53,9 @@
 				<button
 					class="btn primary-color-button"
 					(click)="removeItem(item)"
-					(pointerdown)="onPress(item.id)"
-					(pointerup)="onRelease(item.id)"
-					[class.pressed]="buttonStates[item.id]"
+					(pointerdown)="onPress(item.ProductId)"
+					(pointerup)="onRelease(item.ProductId)"
+					[class.pressed]="buttonStates[item.ProductId]"
 				>
 					Xoá
 				</button>

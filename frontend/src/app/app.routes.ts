@@ -72,15 +72,15 @@ const protectedRoutes: Routes = [
 	},
 	{
 		path: RouteLink.cartRoute,
-		loadChildren: () =>
-			import('./features/user/page/cart/cart.module').then(m => m.CartModule),
+		loadComponent: () =>
+			import('./pages/cart/cart.component').then(m => m.CartComponent),
 		canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
 	},
 	{
 		path: RouteLink.orderRoute,
-		loadChildren: () =>
-			import('./features/user/page/order/order.module').then(m => m.OrderModule),
+		loadComponent: () =>
+			import('./pages/order/order.component').then(m => m.OrderComponent),
 		canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
 	},

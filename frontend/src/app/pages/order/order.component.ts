@@ -1,18 +1,22 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertService } from '../../../core/service/alert.service';
-import { CartItem } from '../../../core/models/response/cart/cart-response.interface';
+import { AlertService } from '../../core/service/alert.service';
+import { CartItem } from '../../core/models/response/cart/cart-response.interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
 	selector: 'app-order',
-	standalone: false,
+	standalone: true,
+	imports: [
+		CommonModule,
+		
+	],
 	templateUrl: './order.component.html',
 	styleUrl: './order.component.scss',
 })
 export class OrderComponent {
 	cartItems: CartItem[] = [];
 	total: number = 0;
-	buttonStates: { [key: number]: boolean } = {};
 
 	constructor(
 		private router: Router,
@@ -38,6 +42,9 @@ export class OrderComponent {
 			)
 			.then(() => this.router.navigate(['/order-success']));
 	}
+
+	
+	buttonStates: { [key: number]: boolean } = {};
 
 	onPress(id: number) {
 		this.buttonStates[id] = true;
