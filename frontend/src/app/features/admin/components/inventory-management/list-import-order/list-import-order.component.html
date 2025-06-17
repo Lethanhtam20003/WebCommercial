@@ -1,9 +1,16 @@
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h5 class="mb-0">Danh sách đơn nhập hàng</h5>
-    <button class="btn btn-success" [routerLink]="['../create']">
+    <button class="btn btn-warning" [routerLink]="['../inventory']">
+      <i class="bi bi-box "></i> kho hàng
+    </button>
+    <button class="btn btn-success" [routerLink]="['../importExcel']">
+      <i class="bi bi-file-earmark-excel"></i> import excel
+    </button>
+    <button class="btn btn-primary" [routerLink]="['../create']">
       <i class="bi bi-plus-circle"></i> Tạo mới
     </button>
+
   </div>
 
   <div class="table-responsive">

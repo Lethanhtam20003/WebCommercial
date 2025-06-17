@@ -1,0 +1,79 @@
+<div class="container py-4">
+  <!-- Filter + Sort -->
+  <div class="row mb-4 g-2">
+    <div class="col-md-8">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Tìm kiếm theo tên sản phẩm..."
+        [(ngModel)]="searchTerm"
+        (input)="filterInventory()"
+      />
+    </div>
+    <div class="col-md-4">
+      <select class="form-select" [(ngModel)]="sortBy" (change)="filterInventory()">
+        <option value="id">Sắp xếp theo ID</option>
+        <option value="quantity">Sắp xếp theo số lượng</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!filteredInventory.length" class="text-center text-muted py-5">
+    Không có sản phẩm nào trong kho
+  </div>
+
+  <!-- Danh sách chia 2 cột -->
+ <!-- Wrapper có border ngoài -->
+<div class="card shadow-sm">
+  <div class="card-body">
+    <!-- Danh sách chia 2 cột -->
+    <div class="row" *ngIf="filteredInventory.length">
+      <!-- Cột trái -->
+      <div class="col-md-6">
+        <div *ngFor="let item of leftColumn" class="card mb-3">
+          <div class="row g-0">
+            <div class="col-4">
+              <img [src]="item.product.images[0]" class="img-fluid rounded-start" alt="{{ item.product.name }}">
+            </div>
+            <div class="col-8">
+              <div class="card-body">
+                <h2 class="card-title h6">{{ item.product.name }}</h2>
+                <p class="card-text text-success fw-bold">
+                  {{ item.product.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi' }}
+                </p>
+                <p class="card-text">
+                  <small class="text-muted">Số lượng: {{ item.quantity }}</small>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cột phải -->
+      <div class="col-md-6">
+        <div *ngFor="let item of rightColumn" class="card mb-3">
+          <div class="row g-0">
+            <div class="col-4">
+              <img [src]="item.product.images[0]" class="img-fluid rounded-start" alt="{{ item.product.name }}">
+            </div>
+            <div class="col-8">
+              <div class="card-body">
+                <h2 class="card-title h6">{{ item.product.name }}</h2>
+                <p class="card-text text-success fw-bold">
+                  {{ item.product.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi' }}
+                </p>
+                <p class="card-text">
+                  <small class="text-muted">Số lượng: {{ item.quantity }}</small>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

@@ -22,6 +22,7 @@ export const URL_API = {
     promotionUrl:  'http://localhost:8080/api/v1/promotions',
     purchaseOrders: 'http://localhost:8080/api/v1/purchase-orders',
     suppliers: 'http://localhost:8080/api/v1/supplier',
+    inventory: 'http://localhost:8080/api/v1/inventory',
 
 
 } as const;

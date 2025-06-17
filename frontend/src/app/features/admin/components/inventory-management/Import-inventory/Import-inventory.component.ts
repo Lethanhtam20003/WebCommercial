@@ -18,6 +18,7 @@ import { ProductResponse } from '../../../../../core/models/response/product-res
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ProductFilter } from '../../../../../core/models/request/filter/productFilter';
 import { AdminPurchaseOrderService } from '../../../../../core/service/purchaseOrder/Admin_purchase_order.service';
+import { AlertService } from '../../../../../core/service/alert.service';
 
 interface ProductItem {
 	productId: number | null;
@@ -43,7 +44,8 @@ export class ImportInventoryComponent implements OnInit {
 		private http: HttpClient,
 		private productService: ProductService,
 		private supplierService: AdminSupplierService,
-		private purchaseService: AdminPurchaseOrderService
+		private purchaseService: AdminPurchaseOrderService,
+		private alertService: AlertService
 	) {}
 
 	ngOnInit(): void {
@@ -115,7 +117,12 @@ export class ImportInventoryComponent implements OnInit {
 		
 		this.purchaseService.createPurchaseOrder(formData).subscribe(
 			{
-				next: res => {},
+				next: res => {
+					this.purchaseForm.reset();
+					this.items.clear();
+					this.addItem();
+					this.alertService.success('Tạo đơn hàng thành công');
+				},
 				error: err => {
 					console.error('Lỗi khi tạo đơn hàng:', err);
 				},

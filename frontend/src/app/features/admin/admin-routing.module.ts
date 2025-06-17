@@ -71,6 +71,23 @@ const inventoryManagementRoutes: Routes = [
 				data: routeData,
 			},
 			{
+				path: 'view/:id',
+				loadComponent: () =>
+					import(
+						'./components/inventory-management/purchase-order-detail/purchase-order-detail.component'
+					).then(m => m.PurchaseOrderDetailComponent),
+				data: routeData,
+			},
+			{
+				path: 'inventory',
+				loadComponent: () =>
+					import(
+						'./components/inventory-management/inventory-list/inventory-list.component'
+					).then(m => m.InventoryListComponent),
+				data: routeData,
+
+			},
+			{
 				path: '',
 				redirectTo: 'inventory-list',
 				pathMatch: 'full',
