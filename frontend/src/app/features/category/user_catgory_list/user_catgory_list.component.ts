@@ -1,30 +1,31 @@
 import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CategoryResponse } from '../../../core/models/response/product-response/CategoryResponse';
+import { CategoryService } from '../../admin/service/admin-category.service';
 
 @Component({
-  standalone: true,
-  imports: [NgFor,RouterModule],
-  selector: 'app-user_catgory_list',
-  templateUrl: './user_catgory_list.component.html',
-  styleUrls: ['./user_catgory_list.component.scss']
+	standalone: true,
+	imports: [NgFor, RouterModule],
+	selector: 'app-user_catgory_list',
+	templateUrl: './user_catgory_list.component.html',
+	styleUrls: ['./user_catgory_list.component.scss'],
 })
 export class User_catgory_listComponent implements OnInit {
+	categories!: CategoryResponse[];
 
-  constructor() { }
+	constructor(
+    private categoryService: CategoryService,
+  ) {}
 
-  ngOnInit() {
+	ngOnInit() {
+    this.categoryService.getAll().subscribe(data => {
+      this.categories = data;
+    });
   }
-    defaultImage = 'https://bizweb.dktcdn.net/100/485/982/themes/918620/assets/img_3banner_2.jpg?1749455998723';
+	defaultImage =
+		'https://bizweb.dktcdn.net/100/485/982/themes/918620/assets/img_3banner_2.jpg?1749455998723';
 
-  categories = [
-    { id: 1, name: 'Bi-a', imageUrl: null, description: null },
-    { id: 2, name: 'Bóng chuyền', imageUrl: null, description: null },
-    { id: 3, name: 'Pickleball', imageUrl: null, description: null },
-    { id: 4, name: 'Chạy bộ', imageUrl: null, description: null },
-    { id: 5, name: 'Bóng đá & Futsal', imageUrl: null, description: null },
-    { id: 6, name: 'Bóng rổ', imageUrl: null, description: null },
-    { id: 7, name: 'Cầu lông', imageUrl: null, description: null },
-  ];
 
 }
+  

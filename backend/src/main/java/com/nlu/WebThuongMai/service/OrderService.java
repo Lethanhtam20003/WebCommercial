@@ -56,7 +56,7 @@ public class OrderService {
      * @return phản hồi chứa thông tin chi tiết của đơn hàng đã tạo như ID đơn hàng,
      * tổng giá trị, giá sau khi giảm, trạng thái và danh sách sản phẩm trong đơn hàng
      */
-
+    @Transactional
     public OrderResponse createOrder(OrderCreateRequest request) {
         var user = userService.findUserById(request.getUserId());
         // tạo đơn hàng
@@ -76,8 +76,10 @@ public class OrderService {
             BigDecimal itemPrice = BigDecimal.valueOf(product.getPrice())
                     .multiply(BigDecimal.valueOf(item.getQuantity()));
             totalPrice.updateAndGet(t -> t.add(itemPrice));
-
-            inventoryService.updateInventory(product, -item.getQuantity());
+            if (!inventoryService.hasEnoughStock(product.getId(), item.getQuantity())) {
+                throw new AppException(ErrorCode.PRODUCT_NOT_ENOUGH_IN_STOCK);
+            }
+            inventoryService.exportInventory(product.getId(), item.getQuantity());
             return OrderItem.builder()
                     .product(product)
                     .quantity(item.getQuantity())
@@ -166,13 +168,19 @@ public class OrderService {
         order.setStatus(request.getStatus());
         return mapper.toOrderResponse(repository.save(order));
     }
-
+    @Transactional
     public Boolean deleteOrder(long orderId) {
         var order = repository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
-        order.getOrderItems().forEach(item -> {
-            inventoryService.updateInventory(item.getProduct(), item.getQuantity());
-        });
-        repository.deleteById(orderId);
+        // Chỉ cho phép huỷ đơn PENDING
+        if (!order.getStatus().equals(OrderStatus.PENDING)) {
+            throw new AppException(ErrorCode.ORDER_CAN_NOT_CANCEL_BECAUSE_IT_WAS_CONFIRMED_OR_SHIPPED);
+        }
+
+        // Trả hàng về kho
+        order.getOrderItems().forEach(item ->
+                inventoryService.importInventory(item.getProduct().getId(), item.getQuantity())
+        );
+        repository.delete(order);
         return true;
     }
 

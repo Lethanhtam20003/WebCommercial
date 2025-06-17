@@ -6,56 +6,56 @@ $primary-bg: #d1e7dd;
 $primary-text: #0f5132;
 
 .ng-select {
-  font-size: 14px;
+	font-size: 14px;
 
-  .ng-select-container {
-    border: 1px solid #ced4da;
-    border-radius: 8px;
-    min-height: 40px;
-    padding-left: 10px;
-    transition: all 0.2s ease-in-out;
-  }
+	.ng-select-container {
+		max-height: 220px;
+		border: 1px solid #ced4da;
+		border-radius: 8px;
+		min-height: 40px;
+		padding-left: 10px;
+		transition: all 0.2s ease-in-out;
+	}
 
-  &.ng-select-focused .ng-select-container {
-    border-color: $primary;
-    box-shadow: 0 0 0 0.15rem rgba($primary, 0.25);
-  }
+	&.ng-select-focused .ng-select-container {
+		border-color: $primary;
+		box-shadow: 0 0 0 0.15rem rgba($primary, 0.25);
+	}
 
-  .ng-value {
-    background-color: $primary-bg;
-    color: $primary-text;
-    border-radius: 20px;
-    padding: 2px 10px;
-    margin: 2px 4px 2px 0;
-    font-size: 0.85rem;
-  }
-  
-  
-  // .ng-dropdown-panel {
-  //   max-height: 220px;
-  //   overflow-y: auto;
-  //   border-radius: 8px;
-  //   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  //   border: 1px solid #ccc;
-  // }
+	.ng-value {
+		background-color: $primary-bg;
+		color: $primary-text;
+		border-radius: 20px;
+		padding: 2px 10px;
+		margin: 2px 4px 2px 0;
+		font-size: 0.85rem;
+	}
 
-  .ng-option {
-    padding: 8px 12px;
-    cursor: pointer;
+	.ng-dropdown-panel {
+		max-height: 220px;
+		border-radius: 8px;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+		border: 1px solid #ccc;
+	}
 
-    &.ng-option-marked {
-      background-color: $primary-light;
-    }
+	.ng-option {
+		padding: 8px 12px;
+		cursor: pointer;
+        background-color: #999;
 
-    &.ng-option-selected {
-      background-color: color.scale($primary, $lightness: 40%);
-      font-weight: 500;
-      color: #fff;
-    }
-  }
+		&.ng-option-marked {
+			background-color: $primary-light;
+		}
 
-  .ng-placeholder {
-    color: #999;
-    font-style: italic;
-  }
+		&.ng-option-selected {
+			background-color: color.scale($primary, $lightness: 40%);
+			font-weight: 500;
+			color: #fff;
+		}
+	}
+
+	.ng-placeholder {
+		color: #999;
+		font-style: italic;
+	}
 }
