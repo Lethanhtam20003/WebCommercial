@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,7 +56,7 @@ public class OrderService {
      * @return phản hồi chứa thông tin chi tiết của đơn hàng đã tạo như ID đơn hàng,
      * tổng giá trị, giá sau khi giảm, trạng thái và danh sách sản phẩm trong đơn hàng
      */
-
+    @Transactional
     public OrderResponse createOrder(OrderCreateRequest request) {
         var user = userService.findUserById(request.getUserId());
         // tạo đơn hàng
@@ -75,8 +76,10 @@ public class OrderService {
             BigDecimal itemPrice = BigDecimal.valueOf(product.getPrice())
                     .multiply(BigDecimal.valueOf(item.getQuantity()));
             totalPrice.updateAndGet(t -> t.add(itemPrice));
-
-            inventoryService.updateInventory(product, -item.getQuantity());
+            if (!inventoryService.hasEnoughStock(product.getId(), item.getQuantity())) {
+                throw new AppException(ErrorCode.PRODUCT_NOT_ENOUGH_IN_STOCK);
+            }
+            inventoryService.exportInventory(product.getId(), item.getQuantity());
             return OrderItem.builder()
                     .product(product)
                     .quantity(item.getQuantity())
@@ -165,17 +168,23 @@ public class OrderService {
         order.setStatus(request.getStatus());
         return mapper.toOrderResponse(repository.save(order));
     }
-
+    @Transactional
     public Boolean deleteOrder(long orderId) {
         var order = repository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
-        order.getOrderItems().forEach(item -> {
-            inventoryService.updateInventory(item.getProduct(), item.getQuantity());
-        });
-        repository.deleteById(orderId);
+        // Chỉ cho phép huỷ đơn PENDING
+        if (!order.getStatus().equals(OrderStatus.PENDING)) {
+            throw new AppException(ErrorCode.ORDER_CAN_NOT_CANCEL_BECAUSE_IT_WAS_CONFIRMED_OR_SHIPPED);
+        }
+
+        // Trả hàng về kho
+        order.getOrderItems().forEach(item ->
+                inventoryService.importInventory(item.getProduct().getId(), item.getQuantity())
+        );
+        repository.delete(order);
         return true;
     }
 
-     @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public Page<OrderResponse> findOrdersByUserIdAndStatus(OrderFilterRequest orderFilterRequest) {
         Pageable pageable = PageRequest.of(orderFilterRequest.getPage(), orderFilterRequest.getSize());
         Page<Order> orders = repository.findOrdersByUserIdAndStatus(orderFilterRequest.getUserId(), orderFilterRequest.getStatus(), pageable);
@@ -190,6 +199,7 @@ public class OrderService {
         return orders.map(mapper::toOrderResponse);
     }
 
+    @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('ADMIN')")
     public Page<OrderResponse> filterOrdersByAdmin(GetAllOrderAdminRequest request, int page, int size) {
         // Xử lý logic default và ưu tiên
@@ -211,7 +221,7 @@ public class OrderService {
 
         if (dateFrom != null && dateTo != null) {
             LocalDateTime from = dateFrom.atStartOfDay();
-            LocalDateTime to = dateTo.atTime(23,59,59);
+            LocalDateTime to = dateTo.atTime(23, 59, 59);
             spec = spec.and((root, query, cb) -> cb.between(root.get("createdDate"), from, to));
         }
 
@@ -238,7 +248,10 @@ public class OrderService {
         ));
 
         Page<Order> orderPage = repository.findAll(spec, pageable);
-        Page<OrderResponse> responsePage = orderPage.map(order -> mapper.toOrderResponse(order));
+        Page<OrderResponse> responsePage = orderPage.map(order -> {
+            order.getOrderItems().size();
+            return mapper.toOrderResponse(order);
+        });
         return responsePage;
     }
 }

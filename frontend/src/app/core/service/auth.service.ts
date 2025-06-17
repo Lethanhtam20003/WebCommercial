@@ -19,6 +19,7 @@ import { URL_API } from '../../shared/constants/url-api.constants';
 import { ErrorMessageConstants } from '../../shared/constants/error-message.constants';
 import { AlertService } from './alert.service';
 import { UserStateService } from './state/user-state.service';
+import { UserService } from './user.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -31,7 +32,8 @@ export class AuthService {
 	constructor(
 		private http: HttpClient,
 		private alertService: AlertService,
-		private userState: UserStateService
+		private userState: UserStateService,
+    private userService: UserService,
 	) {
 		// Kiểm tra trạng thái đăng nhập khi service được khởi tạo
 		this.checkInitialAuthState();
@@ -282,6 +284,12 @@ export class AuthService {
 					if (res.code === 200) {
 						localStorage.setItem(this.TOKEN_KEY, res.result.token);
 						this.updateLoginStatus(true);
+
+            this.userService.getCurrentInfo().pipe(
+              tap(user => {
+                this.userState.updateUserInfo(user);
+              })
+            ).subscribe();
 					}
 				}),
 				catchError((error: HttpErrorResponse) => {

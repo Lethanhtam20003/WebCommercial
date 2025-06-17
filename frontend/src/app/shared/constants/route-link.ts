@@ -37,5 +37,6 @@ export const RouteLink = {
    * admin
    */
   adminRoute: 'admin',
+  cartRoute: 'cart',
 
 } as const;

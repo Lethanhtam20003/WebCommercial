@@ -1,6 +1,7 @@
 package com.nlu.WebThuongMai.mapper;
 
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
+import com.nlu.WebThuongMai.dto.response.couponResp.AdminCouponResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.GetAllCouponResponse;
 import com.nlu.WebThuongMai.model.Coupon;
@@ -22,6 +23,8 @@ public interface CouponMapper {
     Coupon couponResponseToCoupon(CouponResponse couponResponse);
 
     GetAllCouponResponse toGetAllCouponResponse(Coupon coupon);
+
+    AdminCouponResponse toAdminCouponResponse(Coupon coupon);
 
     List<GetAllCouponResponse> toGetAllCouponResponseList(List<Coupon> coupons);
 }

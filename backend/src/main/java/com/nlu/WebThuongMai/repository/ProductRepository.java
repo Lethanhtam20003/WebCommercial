@@ -49,7 +49,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @EntityGraph(attributePaths = {
             "images",
             "categories",
-            "product_statistics",
+            "statistic",
             "promotions"
     })
     @Query("SELECT p FROM Product p WHERE p.id = :id")

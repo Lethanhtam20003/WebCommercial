@@ -153,6 +153,7 @@ public class UserService {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
+
     /**
      * Cập nhật thông tin cá nhân của người dùng hiện tại.
      *
@@ -192,5 +193,17 @@ public class UserService {
         userChangePasswordMapper.toUserChangePassword(u, request);
 
         return userChangePasswordMapper.toUserChangePasswordResponse(userRepository.save(u));
+    }
+
+    /**
+     * Tìm người dùng trong hệ thống dựa trên tên đăng nhập (username).
+     *
+     * @param username tên đăng nhập của người dùng (không được null hoặc rỗng)
+     * @return thực thể {@link User} tương ứng với username
+     * @throws AppException nếu không tìm thấy người dùng, ném ra {@link ErrorCode#USER_NOT_FOUND}
+     */
+    public User findUserByUsername(@NotNull String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 }

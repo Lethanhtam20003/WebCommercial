@@ -9,10 +9,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./inventory-management.component.css']
 })
 export class InventoryManagementComponent implements OnInit {
-  
-  constructor() { }
-
-  ngOnInit() {
+  ngOnInit(): void {
   }
-
+ 
 }

@@ -5,6 +5,45 @@ const productLabel = {
 	badminton: 'Cầu lông',
 	pickleball: 'Pickle ball',
 };
+
+const uerProfileLabel = {
+	imageFileNoLargerThan5Mb:
+		'File có đuôi JPG hoặc PNG có kích thước không vượt quá 5 MB',
+	uploadNewImage: 'Tải hình ảnh lên',
+	address: 'Địa chỉ',
+	birthDay: 'Ngày sinh',
+	saveChanges: 'Lưu lại thay đổi',
+	enterYourBirthday: 'Nhập ngày sinh',
+	enterYourPhoneNumber: 'Nhập số điện thoại',
+	enterYourEmailAddress: 'Nhập địa chỉ email',
+	enterYourLocation: 'Nhập địa chỉ',
+	enterYourOrganizationName: 'Nhập địa chỉ',
+
+	gender: 'Giới tính',
+	male: 'Nam',
+	female: 'Nữ',
+	other: 'Khác',
+
+	profilePicture: 'Hình ảnh đại diện',
+	onWorkingProcess: 'Đang trong quá trình thực hiện',
+	pleaseWaitAMinute: 'Vui lòng đợi một chút',
+
+	myAccount: 'Tài khoản của tôi',
+	updateUserProfile: 'Sửa hồ sơ',
+	changePassword: 'Đổi mật khẩu',
+};
+
+const orderLabel = {
+	all: 'tất cả',
+	pending: 'đang giải quyết',
+	shipped: 'đã vận chuyển',
+	delivered: 'đã giao hàng',
+	canceled: 'đã huỷ',
+	invoice: 'hoá đơn',
+	order: 'đặt hàng',
+	cart: 'Giỏ hàng',
+};
+
 export const LabelConstants = {
 	logIn: 'Đăng nhập',
 	logOut: 'Đăng xuất',
@@ -41,7 +80,8 @@ export const LabelConstants = {
 	cityAndCountry: 'Thành phố Thủ Đức, Tp. Hồ Chí Minh',
 	organizationEmail: '21130530@st.hcmuaf.edu.vn',
 	organizationPhoneNumber: '+842 3456 7890',
-	description: 'Fire Knight Sport là cửa hàng chuyên về bán dụng cụ thể thao như cầu lông, đá banh, bóng chuyền, tenis, bóng bàn các loại.',
+	description:
+		'Fire Knight Sport là cửa hàng chuyên về bán dụng cụ thể thao như cầu lông, đá banh, bóng chuyền, tenis, bóng bàn các loại.',
 	userProfile: 'Hồ sơ của tôi',
 	searchProduct: 'Tìm kiếm sản phẩm',
 	logInWithGoogle: 'Đăng nhập bằng google',
@@ -52,57 +92,28 @@ export const LabelConstants = {
 	signInWithFacebook: 'Đăng nhập bằng Facebook',
 	ProcessingLogin: 'Đăng nhập bằng Github',
 	userAccount: 'Tài khoản',
-	order: 'Hoá đơn',
 	coupon: 'Mã giảm giá',
 	couponList: 'Kho vouchers',
-	cart: 'Giỏ hàng',
 	firstName: 'tên',
-  lastName: 'họ',
+	lastName: 'họ',
 
-  /**
-   * user profile
-   */
+	/**
+	 * user profile
+	 */
+	...uerProfileLabel,
 
-	imageFileNoLargerThan5Mb: 'File có đuôi JPG hoặc PNG có kích thước không vượt quá 5 MB',
-	uploadNewImage: 'Tải hình ảnh lên',
-	address: 'Địa chỉ',
-	birthDay: 'Ngày sinh',
-	saveChanges: 'Lưu lại thay đổi',
-	enterYourBirthday: 'Nhập ngày sinh',
-	enterYourPhoneNumber: 'Nhập số điện thoại',
-	enterYourEmailAddress: 'Nhập địa chỉ email',
-	enterYourLocation: 'Nhập địa chỉ',
-	enterYourOrganizationName: 'Nhập địa chỉ',
-
-	gender: 'Giới tính',
-	male: 'Nam',
-	female: 'Nữ',
-	other: 'Khác',
-
-	profilePicture: 'Hình ảnh đại diện',
-	onWorkingProcess: 'Đang trong quá trình thực hiện',
-	pleaseWaitAMinute: 'Vui lòng đợi một chút',
-
-  myAccount: 'Tài khoản của tôi',
-	updateUserProfile: 'Sửa hồ sơ',
-	changePassword: 'Đổi mật khẩu',
-
-  /**
-   * dành cho hoá đơn
-   */
-	all: 'tất cả',
-  pending: 'đang giải quyết',
-	shipped: 'đã vận chuyển',
-  delivered: 'đã giao hàng',
-	canceled: 'đã huỷ',
+	/**
+	 * dành cho hoá đơn
+	 */
+	...orderLabel,
 
 	logoutSuccess: 'Đăng xuất thành công',
 	loginFails: 'Đăng nhập thất bại',
 
-  newPassword: 'Mật khẩu mới',
-  /**
-   * product label
-   */
-...productLabel,
+	newPassword: 'Mật khẩu mới',
+	adminPage: 'Trang quản lý',
+	/**
+	 * product label
+	 */
+	...productLabel,
 } as const;
-

@@ -1,3 +1,4 @@
+import { CouponsManagementModule } from './pages/coupons-management/coupons-management.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminComponent } from './admin.component';
@@ -23,6 +24,7 @@ import { OrderListTabComponent } from '../order/order-list-tab/order-list-tab.co
 		OrderListComponent,
 		OrderDetailComponent,
 		OrderFilterComponent,
+    CouponsManagementModule
 	],
 })
 export class AdminModule {}
