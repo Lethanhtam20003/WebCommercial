@@ -10,28 +10,11 @@ import { catchError, of } from 'rxjs';
 	styleUrl: './promotion-list.component.scss',
 })
 export class PromotionListComponent implements OnInit {
-	promotionCoupons: PromotionResponse[] = [
-		// {
-		//   promotionId: 'CPN01',
-		//   title: 'Giảm 30k đơn từ 199k',
-		//   description: 'Áp dụng cho toàn bộ sản phẩm',
-		//   condition: 'Hết hạn trong vòng 10 phút',
-		//   expireAt: Date.now() + 10 * 60 * 1000,
-		//   saved: false,
-		// },
-		// {
-		//   promotionId: 'CPN02',
-		//   title: 'Freeship đơn từ 99k',
-		//   description: 'Dành riêng cho khách mới',
-		//   condition: 'Hết hạn trong vòng 5 phút',
-		//   expireAt: Date.now() + 5 * 60 * 1000,
-		//   saved: false,
-		// },
-	];
+	promotionCoupons: PromotionResponse[] = [];
 	constructor(private promotionService: PromotionService) {}
 	ngOnInit(): void {
 		this.promotionService
-			.getAllPromotions()
+			.getActivePromotions()
 			.pipe(
 				catchError(err => {
 					console.error('❌ Lỗi khi lấy danh sách khuyến mãi:', err);
@@ -39,11 +22,18 @@ export class PromotionListComponent implements OnInit {
 				})
 			)
 			.subscribe(data => {
-				this.promotionCoupons = data.result.map(coupon => ({
-					...coupon,
-					expired: false,
-					remainingTime: this.getRemainingTime(coupon.endDate),
-				}));
+				this.promotionCoupons = data.result.map(coupon => {
+					const endTimestamp = new Date(coupon.endDate).getTime();
+					const remainingTime = this.getRemainingTime(endTimestamp);
+					const expired = endTimestamp <= Date.now();
+
+					return {
+						...coupon,
+						expired,
+						remainingTime,
+						saved: false,
+					};
+				});
 			});
 	}
 

@@ -2,12 +2,14 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { URL_API } from '../../shared/constants/url-api.constants';
 import { ErrorMessageConstants } from '../../shared/constants/error-message.constants';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserProfile } from '../models/response/user/user-profile-response.model';
 import { UserUpdateRequest } from '../models/request/user/user-update-request.inteface';
 import { UserResponse } from '../models/response/user/user-response.interface';
 import { UserChangePasswordRequest } from '../models/request/user/user-change-password-request.inteface';
+import { Page } from '../models/response/page-response.interface';
+import { GetAllUserAdminRequest } from '../models/request/user/get-all-user-request.interface';
 
 @Injectable({
 	providedIn: 'root',
@@ -58,6 +60,24 @@ export class UserService {
 		return this.http.put<ApiResponse<UserResponse>>(
 			`${URL_API.changePassword}/${userId}`,
 			request
+		);
+	}
+
+	getAllUsersAdmin(
+		request: GetAllUserAdminRequest
+	): Observable<ApiResponse<Page<UserResponse>>> {
+		const params = new HttpParams()
+			.set('page', request.page.toString())
+			.set('size', request.size.toString());
+
+		const { page, size, ...body } = request;
+
+		return this.http.post<ApiResponse<Page<UserResponse>>>(
+			URL_API.userFilterAdmin,
+			body,
+			{
+				params,
+			}
 		);
 	}
 }

@@ -1,3 +1,59 @@
-<p>
-  promotion-management works!
-</p>
+<app-generic-filter
+	[fields]="promotionFilterFields"
+	(filterChanged)="onFilterChanged($event)"
+></app-generic-filter>
+
+<table class="table table-bordered table-hover align-middle text-center mt-3">
+	<thead class="table-dark">
+		<tr>
+			<th scope="col" style="width: 100px">Hình ảnh</th>
+			<th scope="col">Tên khuyến mãi</th>
+			<th scope="col">Giảm (%)</th>
+			<th scope="col">Từ ngày</th>
+			<th scope="col">Đến ngày</th>
+			<th scope="col">Mô tả</th>
+			<th scope="col" style="width: 150px">Tình trạng</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let promo of promotions">
+			<td>
+				<img
+					[src]="promo.image"
+					[alt]="promo.name"
+					width="80"
+					height="80"
+					style="object-fit: cover; border-radius: 8px"
+				/>
+			</td>
+			<td>{{ promo.name }}</td>
+			<td>{{ promo.discountPercent }}%</td>
+			<td>{{ promo.startDate | date: 'dd/MM/yyyy' }}</td>
+			<td>{{ promo.endDate | date: 'dd/MM/yyyy' }}</td>
+			<td class="text-start">{{ promo.description }}</td>
+			<td>
+				<span
+					class="badge px-2 py-1"
+					[ngClass]="promo.expired ? 'bg-secondary' : 'bg-success'"
+				>
+					{{ promo.expired ? 'Hết hạn' : 'Còn hiệu lực' }}
+				</span>
+				<div *ngIf="!promo.expired" class="small text-muted mt-1">
+					{{ promo.remainingTime }}
+				</div>
+			</td>
+		</tr>
+		<tr *ngIf="promotions.length === 0">
+			<td colspan="7" class="text-center text-muted py-4">
+				Không có khuyến mãi nào
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<app-pagination
+	class="mt-3 d-flex justify-content-center"
+	[currentPage]="currentPage"
+	[totalPages]="totalPages"
+	(pageChange)="onPageChange($event)"
+></app-pagination>

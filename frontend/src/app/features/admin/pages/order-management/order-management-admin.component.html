@@ -1,1 +1,21 @@
-<router-outlet></router-outlet>
+<div *ngIf="!selectedOrder">
+	<order-filter
+		class="w-25"
+		(filterChanged)="onFilterChanged($event)"
+	></order-filter>
+
+	<order-list
+		[orders]="orders"
+		[columns]="adminOrderColumns"
+		(viewOrder)="onViewOrder($event)"
+	></order-list>
+</div>
+
+<div *ngIf="selectedOrder as order">
+	<order-detail
+		[order]="order"
+		[orderItems]="order.orderItems"
+		[isAdmin]="true"
+		(back)="onBackFromDetail()"
+	></order-detail>
+</div>

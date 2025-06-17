@@ -1,13 +1,13 @@
-export interface PromotionResponse {
+export interface PromotionAdminResponse {
   promotionId: number;
   name: string;
-  description: string;
   discountPercent: number;
-  image: string;
   startDate: string;
   endDate: string;
+  description: string;
+  image: string;
 
-  saved?: boolean;
+  // Các trường phụ trợ để dễ thao tác UI (nếu cần)
   expired?: boolean;
   remainingTime?: string;
 }

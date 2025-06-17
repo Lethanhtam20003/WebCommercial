@@ -1,0 +1,40 @@
+form {
+	margin-bottom: 1rem;
+}
+
+form.filter-width {
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+
+  //  #actions {
+  //    height: 40px !important;
+  // }
+
+  @media (max-width: 1199.98px) and (min-width: 1024px) {
+    max-width: 900px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  @media (max-width: 1023.98px) and (min-width: 992px) {
+    max-width: 700px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  @media (max-width: 991.98px) {
+    max-width: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+    flex-direction: column !important;
+    gap: 0 !important;
+    > [class^="col-"] {
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: 0 0 100% !important;
+    }
+  }
+}
