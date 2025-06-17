@@ -35,6 +35,7 @@ public class Promotion {
     String image;
 
 
+    @Builder.Default
     @ManyToMany(mappedBy = "promotions")
     Set<Product> products = new HashSet<>();
 }

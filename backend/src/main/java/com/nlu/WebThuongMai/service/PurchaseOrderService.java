@@ -69,7 +69,7 @@ public class PurchaseOrderService {
                 .map(mapper::toPurchaseOrderResponse)
                 .collect(Collectors.toList());
     }
-
+    @Transactional
     public PurchaseOrderResponse getPurchaseOrderById(long orderId) {
         return mapper.toPurchaseOrderResponse(repository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND)));
@@ -84,7 +84,10 @@ public class PurchaseOrderService {
             order.getPurchaseOrderItems().forEach(item ->
                     inventoryService.exportInventory(item.getProduct().getId(), item.getQuantity()));
         }
-
+        if(order.getStatus() == PurchaseStatus.CANCELLED){
+            throw new AppException(ErrorCode.CANNOT_UPDATE_CANCELLED_ORDER);
+        }
+        order.setStatus(PurchaseStatus.CANCELLED);
         repository.delete(order);
         return true;
     }
@@ -107,6 +110,9 @@ public class PurchaseOrderService {
             order.getPurchaseOrderItems().forEach(item -> {
                 inventoryService.exportInventory(item.getProduct().getId(), item.getQuantity());
             });
+        }
+        if(order.getStatus() == PurchaseStatus.CANCELLED){
+            throw new AppException(ErrorCode.CANNOT_UPDATE_CANCELLED_ORDER);
         }
         // hũy nhập hàng khi chưa xác nhận nhập hàng
         order.setStatus(request.getStatus());

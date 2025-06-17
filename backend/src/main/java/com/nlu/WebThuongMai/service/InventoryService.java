@@ -1,12 +1,18 @@
 package com.nlu.WebThuongMai.service;
 
+import com.nlu.WebThuongMai.dto.response.productResp.InventoryResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
+import com.nlu.WebThuongMai.mapper.InventoryMapper;
 import com.nlu.WebThuongMai.model.Inventory;
 import com.nlu.WebThuongMai.model.Product;
 import com.nlu.WebThuongMai.repository.InventoryRepository;
 import com.nlu.WebThuongMai.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class InventoryService {
     private final InventoryRepository repository;
+    private final InventoryMapper mapper;
     private final ProductRepository productRepository;
 
 
@@ -85,5 +92,12 @@ public class InventoryService {
             throw new AppException(ErrorCode.PRODUCT_NOT_FOUND_IN_STOCK);
         }
         return inventory;
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Transactional
+    public Page<InventoryResponse> getAllInventory(Pageable pageable) {
+        Specification<Inventory> specification = Specification.where(null);
+        return mapper.toPageInventory(repository.findAll(specification,pageable));
     }
 }
