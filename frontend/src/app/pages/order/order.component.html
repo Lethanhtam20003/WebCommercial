@@ -1,2 +1,49 @@
-<router-outlet> </router-outlet>
-oke
+<div class="container my-4">
+	<h2 class="mb-4">Đơn hàng của tôi</h2>
+
+	<div *ngFor="let order of orders" class="order-card mb-4 p-3 shadow-sm border rounded">
+		<div class="d-flex justify-content-between align-items-center mb-2">
+			<div>
+				<strong>Mã đơn hàng:</strong> #{{ order.id }}
+			</div>
+			<div>
+				<span class="badge bg-primary text-uppercase">
+			{{ getStatusLabel(order.status) }}
+		</span>
+			</div>
+		</div>
+
+		<div *ngFor="let item of order.orderItems" class="d-flex mb-2">
+			<img [src]="item.productImage" class="product-img me-3" alt="ảnh sản phẩm" />
+			<div class="flex-grow-1">
+				<div class="fw-semibold">{{ item.productName }}</div>
+				<div>Số lượng: {{ item.quantity }}</div>
+			</div>
+			<div class="text-end fw-semibold">
+				{{ item.price | currency: 'VND' }}
+			</div>
+		</div>
+
+		<div class="d-flex justify-content-end border-top pt-2 mt-2">
+			<div>
+				<div *ngIf="order.coupon">
+					<span class="text-muted small">Đã áp dụng mã: </span><strong>{{ order.coupon.code }}</strong>
+				</div>
+				<div>Tạm tính: {{ order.totalPrice || 0 | currency: 'VND' }}</div>
+				<div class="text-danger fw-bold">Thanh toán: {{ order.discountedPrice | currency: 'VND' }}</div>
+			</div>
+		</div>
+
+		<div class="d-flex justify-content-end mt-3">
+	<button class="btn btn-outline-danger btn-sm me-2" (click)="cancelOrder(order.id)">Hủy đơn</button>
+	<button
+		class="btn btn-success btn-sm"
+		*ngIf="order.status === 'PENDING'"
+		(click)="payOrder(order.id)"
+	>
+		Thanh toán
+	</button>
+</div>
+
+	</div>
+</div>

@@ -84,6 +84,13 @@ const protectedRoutes: Routes = [
 		canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
 	},
+	{
+		path: RouteLink.orderRoute,
+		loadComponent: () =>
+			import('./pages/order/order.component').then(m => m.OrderComponent),
+		canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
+	}
 ];
 
 /**

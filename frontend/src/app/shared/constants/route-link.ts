@@ -19,7 +19,7 @@ export const RouteLink = {
   /**
    * order route
    */
-  orderRoute: 'order',
+  orderRoute: 'orders',
   checkoutRoute: 'checkout',
   orderSuccessRoute: 'order-success',
   allRoute: 'all',

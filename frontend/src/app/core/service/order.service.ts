@@ -46,9 +46,19 @@ export class OrderService {
 			request
 		);
 	}
-	checkoutOrder(orderRequest: OrderCreateRequest): Observable<ApiResponse<OrderResponse>> {
+	checkoutOrder(
+		orderRequest: OrderCreateRequest
+	): Observable<ApiResponse<OrderResponse>> {
+		return this.http.post<ApiResponse<OrderResponse>>(
+			URL_API.checkoutOrder,
+			orderRequest
+		);
+	}
 
-		return this.http.post<ApiResponse<OrderResponse>>(URL_API.checkoutOrder, orderRequest);
-
+	cancelOrder(orderId: number): Observable<ApiResponse<OrderResponse>> {
+		return this.http.put<ApiResponse<OrderResponse>>(
+			`${URL_API.getOrders}/${orderId}/cancel`,
+			{}
+		);
 	}
 }

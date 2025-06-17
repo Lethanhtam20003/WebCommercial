@@ -193,6 +193,7 @@ public class OrderService {
     }
 
     @PreAuthorize("hasAuthority('USER')")
+    @Transactional(readOnly = true)
     public Page<OrderResponse> getOrdersById(Long userId, Pageable pageable) {
         Page<Order> orders = repository.findOrdersByUserId(userId, pageable);
 
