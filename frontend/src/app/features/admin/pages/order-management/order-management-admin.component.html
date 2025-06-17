@@ -7,7 +7,10 @@
 	<order-list
 		[orders]="orders"
 		[columns]="adminOrderColumns"
+		[currentPage]="currentPage"
+		[totalPages]="totalPages"
 		(viewOrder)="onViewOrder($event)"
+		(pageChanged)="onPageChange($event)"
 	></order-list>
 </div>
 

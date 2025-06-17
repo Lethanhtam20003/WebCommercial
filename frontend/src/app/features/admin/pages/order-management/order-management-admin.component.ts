@@ -27,6 +27,8 @@ import { OrderFilterComponent } from '../../../../shared/components/order-filter
 export class OrderManagementComponent implements OnInit {
 	private filter$ = new BehaviorSubject<Partial<GetAllOrdersAdminRequest>>({});
 	orders: OrderResponse[] = [];
+	currentPage = 1;
+	totalPages = 1;
 	selectedOrder: OrderResponse | null = null;
 	/**
 	 * Cấu hình các cột hiển thị trong bảng danh sách đơn hàng.
@@ -50,6 +52,10 @@ export class OrderManagementComponent implements OnInit {
 	];
 	constructor(private orderService: OrderService) {}
 	ngOnInit(): void {
+		this.loadOrders();
+	}
+
+	loadOrders(): void {
 		this.filter$
 			.pipe(
 				switchMap(filter =>
@@ -60,6 +66,7 @@ export class OrderManagementComponent implements OnInit {
 				this.orders = res.result.content || [];
 			});
 	}
+
 	/**
 	 * Xử lý khi người dùng chọn xem chi tiết một đơn hàng.
 	 * Nếu đơn hàng đã có trong danh sách, set vào `selectedOrder`.
@@ -83,5 +90,9 @@ export class OrderManagementComponent implements OnInit {
 	}
 	onFilterChanged(newFilter: Partial<GetAllOrdersAdminRequest>): void {
 		this.filter$.next(newFilter);
+	}
+	onPageChange(page: number) {
+		this.currentPage = page;
+		this.loadOrders();
 	}
 }

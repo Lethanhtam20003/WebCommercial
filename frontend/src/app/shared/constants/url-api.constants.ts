@@ -24,4 +24,5 @@ export const URL_API = {
 		'http://localhost:8080/api/v1/promotions/active-promotions',
 	promotionUrl: 'http://localhost:8080/api/v1/promotions',
 	userFilterAdmin: 'http://localhost:8080/api/v1/users/admin/filter',
+  categoryFilter: 'http://localhost:8080/api/v1/category/admin/filter'
 } as const;
