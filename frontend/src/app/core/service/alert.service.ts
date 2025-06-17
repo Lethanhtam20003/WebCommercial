@@ -82,7 +82,7 @@ export class AlertService {
 	loading(
 		message: string,
 		title: string,
-		timer = 3000,
+		timer = 1000,
 		timerProgressBar: boolean = true,
 		allowOutsideClick: boolean = false
 	): Promise<any | null> {

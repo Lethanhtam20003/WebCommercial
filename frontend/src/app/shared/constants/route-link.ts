@@ -19,7 +19,9 @@ export const RouteLink = {
   /**
    * order route
    */
-  orderRoute: 'orders',
+  orderRoute: 'order',
+  checkoutRoute: 'checkout',
+  orderSuccessRoute: 'order-success',
   allRoute: 'all',
   pendingRoute: 'pending',
   shippedRoute: 'shipped',

@@ -66,7 +66,7 @@ export class CartComponent implements OnInit {
 		// 	ResponseMessage.navigatingToOrderPagePleaseWaitAMinute,
 		// 	ResponseMessage.navigateToOrderPage
 		// );
-		this.router.navigate([RouteLink.orderRoute], {
+		this.router.navigate([RouteLink.checkoutRoute], {
 			state: { cartItems: this.cartItems },
 		});
 	}

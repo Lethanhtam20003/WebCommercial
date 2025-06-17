@@ -78,9 +78,9 @@ const protectedRoutes: Routes = [
 		data: { showHeader: true, showFooter: true },
 	},
 	{
-		path: RouteLink.orderRoute,
+		path: RouteLink.checkoutRoute,
 		loadComponent: () =>
-			import('./pages/order/order.component').then(m => m.OrderComponent),
+			import('./features/order/checkout/checkout.component').then(m => m.CheckoutComponent),
 		canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
 	},
@@ -129,6 +129,19 @@ const categoryRoutes: Routes = [
 	},
 ];
 
+const orderRoutes: Routes = [
+	{
+		path: 'checkout',
+		loadComponent: () =>
+			import('./features/order/checkout/checkout.component').then(
+				m => m.CheckoutComponent
+			),
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+	},
+];
 /**
  * Routes chính của ứng dụng
  */

@@ -7,6 +7,7 @@ import { OrderFilterRequest } from '../models/request/order/order-filter-request
 import { OrderResponse } from '../models/response/order/order-response.interface';
 import { Page } from '../models/response/page-response.interface';
 import { ApiResponse } from './../models/api-response.model';
+import { OrderCreateRequest } from '../models/request/order/OrderCreateRequest';
 
 @Injectable({
 	providedIn: 'root',
@@ -44,5 +45,10 @@ export class OrderService {
 			`${URL_API.getOrdersAdmin}`,
 			request
 		);
+	}
+	checkoutOrder(orderRequest: OrderCreateRequest): Observable<ApiResponse<OrderResponse>> {
+
+		return this.http.post<ApiResponse<OrderResponse>>(URL_API.checkoutOrder, orderRequest);
+
 	}
 }
