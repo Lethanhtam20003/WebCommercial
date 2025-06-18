@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { OrderService } from '../../core/service/order.service';
 import { OrderResponse } from '../../core/models/response/order/order-response.interface';
 import { PageResponse } from '../../core/models/response/product-response/product-response/page-response.interface';
@@ -11,7 +11,7 @@ import { AlertService } from '../../core/service/alert.service';
 
 @Component({
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, RouterModule, RouterLink],
 	selector: 'app-order',
 	templateUrl: './order.component.html',
 	styleUrl: './order.component.scss',

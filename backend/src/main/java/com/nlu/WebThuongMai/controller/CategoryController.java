@@ -1,14 +1,13 @@
 package com.nlu.WebThuongMai.controller;
 
+import com.nlu.WebThuongMai.dto.request.productReq.CategoryUpdateRequest;
+import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.productResp.CategoryResponse;
 import com.nlu.WebThuongMai.service.CategoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +29,16 @@ public class CategoryController {
     public CategoryResponse getById( @PathVariable("id") long id){
         return categoryService.getCategoryById(id);
     }
+
+    @PutMapping("/{id}")
+    public ApiResponse<CategoryResponse> updateCategory(
+            @PathVariable Long id,
+            @RequestBody CategoryUpdateRequest request
+    ) {
+        CategoryResponse updated = categoryService.updateCategory(id, request);
+        return ApiResponse.<CategoryResponse>builder()
+                .result(updated).build();
+    }
+
 
 }

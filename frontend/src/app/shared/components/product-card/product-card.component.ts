@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ProductResponse } from '../../../core/models/response/product-response/productResponse';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CartService } from '../../../core/service/cart/cart.service';
 import { AlertService } from '../../../core/service/alert.service';
 
@@ -20,7 +20,8 @@ export class ProductCardComponent  {
 
   constructor(
     private cartService: CartService,
-    private alertService: AlertService
+	private alertService: AlertService,
+	private router: Router
   ) { }
 
 /**
@@ -37,9 +38,8 @@ export class ProductCardComponent  {
 	 * Thêm sản phẩm vào danh sách yêu thích
 	 * @param product Sản phẩm được chọn
 	 */
-	addToWishlist(): void {
-		console.log('Đã thêm vào danh sách yêu thích:', this.product.name);
-		// Thêm logic xử lý thêm vào danh sách yêu thích
+	buy(): void {
+		this.router.navigate(['/checkout/'+this.product.id]);
 	}
 
 }

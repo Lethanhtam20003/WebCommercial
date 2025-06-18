@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AlertService } from '../../../core/service/alert.service';
 import { CartItem } from '../../../core/models/response/cart/cart-response.interface';
@@ -37,10 +37,20 @@ export class CheckoutComponent implements OnInit {
 		private userService: UserService,
 		private coupons: CouponService,
 		private orderService: OrderService,
-		private cartService: CartService
+		private cartService: CartService,
+		private route: ActivatedRoute,
+		
 	) {
 		const nav = this.router.getCurrentNavigation();
 		this.cartItems = nav?.extras?.state?.['cartItems'] || [];
+
+		// if(this.cartItems.length === 0){
+		// 	const id = this.route.snapshot.paramMap.get('id');
+		// 	console.log(id);
+		// 	this.cartItems = 
+ 
+		// }
+		
 		this.updateTotal();
 	}
 	ngOnInit(): void {
@@ -99,10 +109,7 @@ export class CheckoutComponent implements OnInit {
 					next: res => {
 						if (res.code === 200) {
 							this.cartService.clearCart();
-							this.router.navigate([this.RouteLink.orderSuccessRoute],{
-								state : { order: res.result }
-							}
-
+							this.router.navigate(['order-detail',res.result.id]
 						);
 						}
 					},

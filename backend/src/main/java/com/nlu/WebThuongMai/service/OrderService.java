@@ -196,7 +196,6 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Page<OrderResponse> getOrdersById(Long userId, Pageable pageable) {
         Page<Order> orders = repository.findOrdersByUserId(userId, pageable);
-
         return orders.map(mapper::toOrderResponse);
     }
 
@@ -254,5 +253,11 @@ public class OrderService {
             return mapper.toOrderResponse(order);
         });
         return responsePage;
+    }
+
+    @Transactional
+    public OrderResponse getById(long id){
+        Order order = repository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        return mapper.toOrderResponse(order);
     }
 }

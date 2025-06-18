@@ -28,6 +28,10 @@ export const RouteLink = {
   deliveredRoute: 'delivered',
   canceledRoute: 'canceled',
   couponRoute: 'coupon-list',
+  orderDetailRoute: 'order-detail/:id',
+  payment: 'payment',
+
+
 
   /**
    * product

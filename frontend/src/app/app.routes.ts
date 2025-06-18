@@ -85,12 +85,38 @@ const protectedRoutes: Routes = [
 		data: { showHeader: true, showFooter: true },
 	},
 	{
+		path: RouteLink.checkoutRoute+'/:id',
+		loadComponent: () =>
+			import('./features/order/checkout/checkout.component').then(m => m.CheckoutComponent),
+		canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
+	},
+	{
 		path: RouteLink.orderRoute,
 		loadComponent: () =>
 			import('./pages/order/order.component').then(m => m.OrderComponent),
 		canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
-	}
+	},
+	{
+		path: RouteLink.orderDetailRoute,
+		loadComponent: () =>
+			import('./features/order/order-detail/order-detail.component').then(
+				m => m.OrderDetailComponent
+			),
+			canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
+	},
+	{
+		path: RouteLink.payment+'/:id',
+		loadComponent: () =>
+			import('./features/order/payment/payment.component').then(
+				m => m.PaymentComponent
+			),
+			canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
+	},
+
 ];
 
 /**
