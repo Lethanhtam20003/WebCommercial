@@ -19,8 +19,8 @@ public class PurchaseOrderController {
     /* *
      * Tạo mới một hóa đơn
      */
-    @PostMapping()
-    public ApiResponse<PurchaseOrderResponse> createPurchaseOrder(@RequestParam long supplierId, @RequestBody PurchaseOrderCreatetionRequest request) {
+    @PostMapping("/{supplierId}")
+    public ApiResponse<PurchaseOrderResponse> createPurchaseOrder(@PathVariable long supplierId, @RequestBody PurchaseOrderCreatetionRequest request) {
         return ApiResponse.<PurchaseOrderResponse>builder()
                 .result(purchaseOrderService.createPurchaseOrder(supplierId, request))
                 .build();

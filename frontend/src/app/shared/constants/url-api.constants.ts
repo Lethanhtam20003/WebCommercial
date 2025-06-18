@@ -24,5 +24,9 @@ export const URL_API = {
 		'http://localhost:8080/api/v1/promotions/active-promotions',
 	promotionUrl: 'http://localhost:8080/api/v1/promotions',
 	userFilterAdmin: 'http://localhost:8080/api/v1/users/admin/filter',
-  categoryFilter: 'http://localhost:8080/api/v1/category/admin/filter'
+	categoryFilter: 'http://localhost:8080/api/v1/category/admin/filter',
+	getAllCouponsAdmin: 'http://localhost:8080/api/v1/coupons/admin',
+	purchaseOrders: 'http://localhost:8080/api/v1/purchase-orders',
+	suppliers: 'http://localhost:8080/api/v1/supplier',
+	inventory: 'http://localhost:8080/api/v1/inventory',
 } as const;

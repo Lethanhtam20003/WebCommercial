@@ -67,6 +67,8 @@ export class ProductService {
 				next: response => {
 					if (response.code === 200 && response.result) {
 						this.pageProductsObject.next(response.result);
+						console.log(response.result);
+						
 					}
 				},
 				error: error => {

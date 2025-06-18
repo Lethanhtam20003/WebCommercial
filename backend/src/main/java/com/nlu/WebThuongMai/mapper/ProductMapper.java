@@ -6,7 +6,6 @@ import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.model.Category;
 import com.nlu.WebThuongMai.model.Product;
 import com.nlu.WebThuongMai.model.ProductImage;
-import com.nlu.WebThuongMai.model.ProductStatistic;
 import org.mapstruct.*;
 import org.springframework.data.domain.Page;
 

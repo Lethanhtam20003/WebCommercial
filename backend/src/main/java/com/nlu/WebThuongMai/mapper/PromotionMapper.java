@@ -5,6 +5,7 @@ import com.nlu.WebThuongMai.dto.response.promotion.PromotionAdminResponse;
 import com.nlu.WebThuongMai.dto.response.promotion.PromotionResponse;
 import com.nlu.WebThuongMai.model.Promotion;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -16,5 +17,6 @@ public interface PromotionMapper {
 
     List<PromotionResponse> promotionToPromotionResp(List<Promotion> promotions);
 
+    @Mapping(target = "promotion.id", ignore = true)
     Promotion promotionRequestToPromotion(PromotionRequest request);
 }

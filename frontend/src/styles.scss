@@ -12,6 +12,8 @@
 
 @use 'sass:color';
 
+@use 'styles/ng_select_theme.scss';
+
 :root {
 	--primary-color: #141d22;
 	/* Màu chủ đạo */

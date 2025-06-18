@@ -62,12 +62,29 @@ const inventoryManagementRoutes: Routes = [
 				data: routeData,
 			},
 			{
-				path: 'create-inventory',
+				path: 'create',
 				loadComponent: () =>
 					import(
 						'./components/inventory-management/Import-inventory/Import-inventory.component'
 					).then(m => m.ImportInventoryComponent),
 				data: routeData,
+			},
+			{
+				path: 'view/:id',
+				loadComponent: () =>
+					import(
+						'./components/inventory-management/purchase-order-detail/purchase-order-detail.component'
+					).then(m => m.PurchaseOrderDetailComponent),
+				data: routeData,
+			},
+			{
+				path: 'inventory',
+				loadComponent: () =>
+					import(
+						'./components/inventory-management/inventory-list/inventory-list.component'
+					).then(m => m.InventoryListComponent),
+				data: routeData,
+
 			},
 			{
 				path: '',
