@@ -64,6 +64,7 @@ public class OrderService {
                 .user(user)
                 .status(OrderStatus.PENDING)
                 .note(request.getNote())
+                .address(request.getAddress())
                 .createdDate(request.getCreatedDate())
                 .build();
         // tính tổng tiền
@@ -75,7 +76,9 @@ public class OrderService {
 
             BigDecimal itemPrice = BigDecimal.valueOf(product.getPrice())
                     .multiply(BigDecimal.valueOf(item.getQuantity()));
+
             totalPrice.updateAndGet(t -> t.add(itemPrice));
+
             if (!inventoryService.hasEnoughStock(product.getId(), item.getQuantity())) {
                 throw new AppException(ErrorCode.PRODUCT_NOT_ENOUGH_IN_STOCK);
             }
@@ -89,11 +92,17 @@ public class OrderService {
         }).collect(Collectors.toSet());
 
         order.setOrderItems(orderItems);
+        order.setTotalPrice(totalPrice.get());
 
         // tính mã giảm giá
-        BigDecimal discountedPrice = couponService.applyCouponIfPresent(totalPrice.get(), request.getCoupon());
+        if (request.getCoupon() != null) {
+            couponService.getCouponByCode(request.getCoupon().getCode());
+            BigDecimal discountedPrice = couponService.applyCouponIfPresent(totalPrice.get(), request.getCoupon());
+            order.setDiscountedPrice(discountedPrice);
+        }else {
+            order.setDiscountedPrice(totalPrice.get());
+        }
 
-        order.setDiscountedPrice(discountedPrice);
         return mapper.toOrderResponse(repository.save(order));
     }
 

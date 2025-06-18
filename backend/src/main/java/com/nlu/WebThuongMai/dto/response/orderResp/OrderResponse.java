@@ -28,4 +28,5 @@ public class OrderResponse {
     LocalDateTime createdDate;
     CouponResponse coupon;
     Set<OrderItemResponse> orderItems;
+    String address;
 }

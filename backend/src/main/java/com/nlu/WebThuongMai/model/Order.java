@@ -1,6 +1,8 @@
 package com.nlu.WebThuongMai.model;
 
 import com.nlu.WebThuongMai.enums.OrderStatus;
+import com.nlu.WebThuongMai.enums.PaymentOrderStatus;
+import com.nlu.WebThuongMai.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -66,6 +68,10 @@ public class Order {
      * Ghi chú cho đơn hàng
      */
     String note;
+    /**
+     * địa chỉ giao hàng
+     */
+    String address;
 
     /**
      * Thời điểm tạo đơn hàng, tự động cập nhật
@@ -87,6 +93,15 @@ public class Order {
      */
     @ManyToOne
     @JoinColumn(name = "coupon_id")
-    private Coupon coupon;
+     Coupon coupon;
+
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+     Payment payment;
+
+    @Enumerated(EnumType.STRING)
+    PaymentOrderStatus paymentStatus;
+
+
 
 }
