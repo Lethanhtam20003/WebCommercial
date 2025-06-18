@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { OrderStatus } from '../enum/order-status.enum';
 import { OrderResponse } from '../models/response/order/order-response.interface';
 import { CouponResponse } from '../models/response/coupon/coupon-response.interface';
+import { UserStatus } from '../enum/user-status.enum';
+import { CouponType } from '../enum/coupon-type.enum';
 
 @Injectable({
 	providedIn: 'root',
@@ -96,6 +98,35 @@ export class UtitlyService {
 				return status;
 		}
 	}
+
+  mapUserStatusToVietnamese(status: UserStatus | string): string {
+    switch (status) {
+			case 'PENDING':
+			case 'pending':
+				return 'Chờ phê duyệt';
+			case 'ACTIVE':
+			case 'active':
+				return 'Còn hoạt động';
+			case 'BANNED':
+			case 'banned':
+				return 'Đã bị cấm';
+			default:
+				return status;
+		}
+  }
+
+  mapCouponTypeToVietnamese(type: CouponType | string): string {
+    switch (type) {
+      case 'PERCENTAGE':
+      case 'percentage':
+        return 'Phần trăm';
+      case 'AMOUNT':
+      case 'amount':
+        return 'Giá cố định';
+      default:
+        return type;
+    }
+  }
 
 	getCellValue(row: any, key: string): any {
 		if (!row || !key) return '-';

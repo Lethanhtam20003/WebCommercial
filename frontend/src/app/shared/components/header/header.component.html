@@ -169,17 +169,18 @@
 										>{{ label.logOut }}</a
 									>
 								</li>
-								<li *ngIf="(user$ | async)?.role?.includes('ADMIN')">
-									<a
-										class="dropdown-item"
-										[routerLink]="route.adminRoute"
-										[class.non-bg-color]="isPressed.admin"
-										(mousedown)="onPress('admin')"
-										(mouseup)="onRelease('admin')"
-										(mouseleave)="onRelease('admin')"
-										>{{ label.adminPage }}</a
-									>
-								</li>
+								<ng-container *ngIf="user$ | async as user">
+									<li *ngIf="user.role?.includes('ADMIN')">
+										<a
+											class="dropdown-item"
+											[routerLink]="route.adminRoute"
+											(mousedown)="onPress('admin')"
+											(mouseup)="onRelease('admin')"
+											(mouseleave)="onRelease('admin')"
+											>{{ label.adminPage }}</a
+										>
+									</li>
+								</ng-container>
 							</ul>
 						</div>
 					</ng-template>

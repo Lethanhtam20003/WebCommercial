@@ -27,15 +27,18 @@ export class CouponService {
 		);
 	}
 
-  getAllCouponsForAdmin(
+	getAllCouponsForAdmin(
 		request: GetAllCouponRequest
 	): Observable<ApiResponse<Page<AdminCouponResponse>>> {
 		const params = new HttpParams()
 			.set('page', request.page.toString())
 			.set('size', request.size.toString());
 
-		return this.http.get<ApiResponse<Page<AdminCouponResponse>>>(
-			URL_API.getAllCouponsAdmin,
+		const { page, size, ...filter } = request;
+
+		return this.http.post<ApiResponse<Page<AdminCouponResponse>>>(
+			URL_API.getAllCouponsFilterAdmin,
+      filter,
 			{ params }
 		);
 	}

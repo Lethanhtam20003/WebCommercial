@@ -1,9 +1,6 @@
 package com.nlu.WebThuongMai.controller;
 
-import com.nlu.WebThuongMai.dto.request.userReq.UserChangePasswordRequest;
-import com.nlu.WebThuongMai.dto.request.userReq.UserCreationRequest;
-import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateInfoRequest;
-import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateRequest;
+import com.nlu.WebThuongMai.dto.request.userReq.*;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.userResp.UserChangePasswordResponse;
 import com.nlu.WebThuongMai.dto.response.userResp.UserInforResponse;
@@ -13,6 +10,9 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -128,6 +128,18 @@ public class UserController {
     ApiResponse<UserChangePasswordResponse> updateUserPassword(@PathVariable long userId, @Valid @RequestBody UserChangePasswordRequest request) {
         return ApiResponse.<UserChangePasswordResponse>builder()
                 .result(userService.updateUserPassword(userId, request))
+                .build();
+    }
+
+    @PostMapping("admin/filter")
+    ApiResponse<Page<UserInforResponse>> getAllUsersFilterAdmin(
+            @RequestBody() UserFilterAdminRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ApiResponse.<Page<UserInforResponse>>builder()
+                .result(userService.getUsersFiltered(request, pageable))
                 .build();
     }
 }

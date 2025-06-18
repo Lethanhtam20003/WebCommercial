@@ -1,9 +1,6 @@
 package com.nlu.WebThuongMai.service;
 
-import com.nlu.WebThuongMai.dto.request.userReq.UserChangePasswordRequest;
-import com.nlu.WebThuongMai.dto.request.userReq.UserCreationRequest;
-import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateInfoRequest;
-import com.nlu.WebThuongMai.dto.request.userReq.UserUpdateRequest;
+import com.nlu.WebThuongMai.dto.request.userReq.*;
 import com.nlu.WebThuongMai.dto.response.userResp.UserChangePasswordResponse;
 import com.nlu.WebThuongMai.dto.response.userResp.UserInforResponse;
 import com.nlu.WebThuongMai.dto.response.userResp.UserResponse;
@@ -15,17 +12,24 @@ import com.nlu.WebThuongMai.mapper.UserInfoMapper;
 import com.nlu.WebThuongMai.mapper.UserMapper;
 import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.repository.UserRepository;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -205,5 +209,43 @@ public class UserService {
     public User findUserByUsername(@NotNull String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Page<UserInforResponse> getUsersFiltered(UserFilterAdminRequest request, Pageable pageable) {
+        Specification<User> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (StringUtils.hasText(request.getUsername())) {
+                predicates.add(cb.like(cb.lower(root.get("username")), "%" + request.getUsername().toLowerCase() + "%"));
+            }
+
+            if (StringUtils.hasText(request.getEmail())) {
+                predicates.add(cb.like(cb.lower(root.get("email")), "%" + request.getEmail().toLowerCase() + "%"));
+            }
+
+            if (StringUtils.hasText(request.getPhone())) {
+                predicates.add(cb.like(cb.lower(root.get("phone")), "%" + request.getPhone().toLowerCase() + "%"));
+            }
+
+            if (StringUtils.hasText(request.getStatus())) {
+                predicates.add(cb.equal(root.get("status"), request.getStatus()));
+            }
+
+            if (StringUtils.hasText(request.getAuthProvider())) {
+                predicates.add(cb.equal(root.get("authProvider"), request.getAuthProvider()));
+            }
+
+            if (request.getCreatedAt() != null) {
+                LocalDateTime from = request.getCreatedAt().atStartOfDay();
+                LocalDateTime to = request.getCreatedAt().plusDays(1).atStartOfDay(); // ngày hôm sau
+                predicates.add(cb.between(root.get("createdAt"), from, to));
+            }
+
+            predicates.add(cb.equal(root.get("role"), Role.USER));
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return userRepository.findAll(spec, pageable).map(userMapper::toUserInforResponse);
     }
 }

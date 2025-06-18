@@ -1,12 +1,12 @@
 package com.nlu.WebThuongMai.service;
 
+import com.nlu.WebThuongMai.dto.request.couponReq.CouponFilterAdminRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.couponResp.AdminCouponResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
 import com.nlu.WebThuongMai.enums.CouponType;
-import com.nlu.WebThuongMai.enums.Role;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.dto.response.couponResp.GetAllCouponResponse;
@@ -14,20 +14,23 @@ import com.nlu.WebThuongMai.mapper.CouponMapper;
 import com.nlu.WebThuongMai.model.Coupon;
 import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.repository.CouponRepository;
-import com.nlu.WebThuongMai.repository.UserRepository;
+import jakarta.persistence.criteria.Predicate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -135,6 +138,47 @@ public class CouponService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public Page<AdminCouponResponse> getAllAdminCoupons(Pageable pageable) {
         Page<Coupon> couponPage = repository.findAll(pageable);
+        return couponPage.map(mapper::toAdminCouponResponse);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Page<AdminCouponResponse> getCouponsFilter(CouponFilterAdminRequest request, Pageable pageable) {
+        Specification<Coupon> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (StringUtils.hasText(request.getCode())) {
+                predicates.add(cb.like(cb.lower(root.get("code")), "%" + request.getCode().toLowerCase() + "%"));
+            }
+
+            if (request.getStatus() != null) {
+                predicates.add(cb.equal(root.get("status"), request.getStatus()));
+            }
+
+            if (request.getMinDiscount() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("discount"), request.getMinDiscount()));
+            }
+
+            if (request.getCreatedAt() != null) {
+                LocalDateTime start = request.getCreatedAt().atStartOfDay();
+                predicates.add(cb.greaterThanOrEqualTo(root.get("createdAt"), start));
+            }
+
+            if (request.getMinPrice() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("minPrice"), request.getMinPrice()));
+            }
+
+            if (request.getPriceCondition() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("priceCondition"), request.getPriceCondition()));
+            }
+
+            if (request.getType() != null) {
+                predicates.add(cb.equal(root.get("type"), request.getType()));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Page<Coupon> couponPage = repository.findAll(spec, pageable);
         return couponPage.map(mapper::toAdminCouponResponse);
     }
 }

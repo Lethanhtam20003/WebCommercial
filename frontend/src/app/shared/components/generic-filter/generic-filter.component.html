@@ -1,0 +1,76 @@
+<form
+	#formRef="ngForm"
+	(ngSubmit)="onSubmit()"
+	class="row g-3 p-3 bg-light rounded shadow-sm filter-width"
+>
+	<ng-container *ngFor="let field of fields">
+		<div class="col-md-2" [ngSwitch]="field.type">
+			<label class="form-label">{{ field.label }}</label>
+
+			<!-- Text / Number / Date -->
+			<input
+				*ngSwitchCase="'text'"
+				type="text"
+				class="form-control"
+				[(ngModel)]="formValues[field.name]"
+				[name]="field.name"
+				[placeholder]="field.placeholder || ''"
+			/>
+
+			<input
+				*ngSwitchCase="'number'"
+				type="number"
+				class="form-control"
+				[(ngModel)]="formValues[field.name]"
+				[name]="field.name"
+				[placeholder]="field.placeholder || ''"
+			/>
+
+			<input
+				*ngSwitchCase="'date'"
+				type="date"
+				class="form-control"
+				[(ngModel)]="formValues[field.name]"
+				[name]="field.name"
+			/>
+
+			<!-- Select -->
+			<select
+				*ngSwitchCase="'select'"
+				class="form-select"
+				[(ngModel)]="formValues[field.name]"
+				[name]="field.name"
+			>
+				<option [value]="''">-- {{ field.label }} --</option>
+				<option *ngFor="let opt of field.options" [value]="opt.value">
+					{{ opt.label }}
+				</option>
+			</select>
+		</div>
+	</ng-container>
+
+	<!-- Buttons -->
+	<div id="actions" class="col-md-2 d-flex gap-2 align-items-end">
+		<button
+			type="submit"
+			class="btn btn-primary primary-color-button w-100"
+			[class.pressed]="pressedButton === 'filter'"
+			(mousedown)="onPress('filter')"
+			(mouseup)="onRelease('filter')"
+			(mouseleave)="onRelease('filter')"
+		>
+			Lọc
+		</button>
+		<button
+			type="button"
+			class="btn btn-secondary primary-white-color-black-background-button w-100"
+			[class.pressed]="pressedButton === 'remove' "
+			(mousedown)="onPress('remove')"
+			(mouseup)="onRelease('remove')"
+			(mouseleave)="onRelease('remove')"
+			(click)="onClear()"
+		>
+			Xóa
+		</button>
+	</div>
+</form>

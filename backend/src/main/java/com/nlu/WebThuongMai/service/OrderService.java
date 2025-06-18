@@ -192,6 +192,7 @@ public class OrderService {
         return orders.map(mapper::toOrderResponse);
     }
 
+    @Transactional
     @PreAuthorize("hasAuthority('USER')")
     @Transactional(readOnly = true)
     public Page<OrderResponse> getOrdersById(Long userId, Pageable pageable) {

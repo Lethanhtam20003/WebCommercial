@@ -1,5 +1,42 @@
-<pre>
-  Quản lý danh mục (Category Management)
-Thêm, sửa, xoá danh mục.
-Gán sản phẩm vào danh mục.
-</pre>
+<app-generic-filter
+	[fields]="field"
+	(filterChanged)="onFilterChanged($event)"
+></app-generic-filter>
+
+<table class="table table-bordered table-hover text-center mt-3">
+	<thead class="table-dark">
+		<tr>
+			<th style="width: 50px;">#</th>
+			<th style="width: 100px;">Ảnh đại diện</th>
+			<th style="width: 150px;">Tên danh mục</th>
+			<th>Mô tả</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let category of categories; let i = index">
+			<td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+			<td>
+				<img
+					[src]="category.imageUrl || ''"
+					alt="Ảnh danh mục"
+					width="60"
+					height="60"
+					style="object-fit: cover; border-radius: 8px"
+				/>
+			</td>
+			<td>{{ category.name }}</td>
+			<td>{{ category.description }}</td>
+		</tr>
+
+		<tr *ngIf="categories.length === 0">
+			<td colspan="4" class="text-muted">Không có dữ liệu phù hợp.</td>
+		</tr>
+	</tbody>
+</table>
+
+<app-pagination
+	class="mt-3 d-flex justify-content-center"
+	[currentPage]="currentPage"
+	[totalPages]="totalPages"
+	(pageChange)="onPageChange($event)"
+></app-pagination>

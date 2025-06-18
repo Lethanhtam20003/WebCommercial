@@ -17,9 +17,16 @@ export const URL_API = {
     getOrderDetails: 'http://localhost:8080/api/v1/order-items',
     getOrdersAdmin: 'http://localhost:8080/api/v1/orders/filter/admin',
     getAllCouponsUser: 'http://localhost:8080/api/v1/coupons/user',
+	getAllCouponsFilterAdmin: 'http://localhost:8080/api/v1/coupons/admin/filter',
+	checkRoleAdmin: 'http://localhost:8080/api/v1/auth/checkRoleAdmin',
+	promotionFilter: 'http://localhost:8080/api/v1/promotions/filter',
+	avtivePromotionUrl:
+		'http://localhost:8080/api/v1/promotions/active-promotions',
+	promotionUrl: 'http://localhost:8080/api/v1/promotions',
+	userFilterAdmin: 'http://localhost:8080/api/v1/users/admin/filter',
+	categoryFilter: 'http://localhost:8080/api/v1/category/admin/filter',
+	
     getAllCouponsAdmin: 'http://localhost:8080/api/v1/coupons/admin',
-    checkRoleAdmin: 'http://localhost:8080/api/v1/auth/checkRoleAdmin',
-    promotionUrl:  'http://localhost:8080/api/v1/promotions',
     purchaseOrders: 'http://localhost:8080/api/v1/purchase-orders',
     suppliers: 'http://localhost:8080/api/v1/supplier',
     inventory: 'http://localhost:8080/api/v1/inventory',
