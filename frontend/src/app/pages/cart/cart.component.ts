@@ -6,10 +6,11 @@ import { AlertService } from '../../core/service/alert.service';
 import { Router } from '@angular/router';
 import { RouteLink } from '../../shared/constants/route-link';
 import { CartService } from '../../core/service/cart/cart.service';
+import { CartItemComponent } from '../../features/cart/cartItem/cartItem.component';
 
 @Component({
 	standalone: true,
-	imports: [CommonModule, FormsModule],
+	imports: [CommonModule, FormsModule, CartItemComponent],
 	selector: 'app-cart',
 	templateUrl: './cart.component.html',
 	styleUrls: ['./cart.component.scss'],
@@ -17,6 +18,7 @@ import { CartService } from '../../core/service/cart/cart.service';
 export class CartComponent implements OnInit {
 	cartItems: CartItem[] = [];
 	total: number = 0;
+	isSelectAll: boolean = false;
 
 	constructor(
 		private alert: AlertService,
@@ -31,64 +33,61 @@ export class CartComponent implements OnInit {
 		});
 	}
 
-	updateTotal(): void {
-		this.total = this.cartItems.reduce(
-			(sum, item) => sum + item.price * item.quantity,
-			0
-		);
+	updateQuantity(event: { productId: number; quantity: number }) {
+		const item = this.cartItems.find(i => i.ProductId === event.productId);
+		if (item) {
+			item.quantity = event.quantity;
+		}
 	}
 
-	// updateQuantity(item: CartItem) {
-	// 	if (item.quantity <= 0){
-	// 		item.quantity = 1;
-	// 	}
-	// }
+
+	updateTotal(): void {
+		this.total = this.cartItems
+			.filter(item => item.isSelected)
+			.reduce((sum, item) => sum + item.price * item.quantity, 0);
+			console.log("oke"+this.cartItems.filter(item => item.isSelected))
+	}
+	
+	removeItem(productId: number) {
+		this.cartItems = this.cartItems.filter(i => i.ProductId !== productId);
+		this.cartService.removeFromCart(productId);
+		this.updateTotal();
+	}
 
 	getTotal(): number {
-		return this.cartItems.reduce(
+		return this.cartItems.
+		filter(item => item.isSelected).
+		reduce(
 			(total, item) => total + item.price * item.quantity,
 			0
 		);
 	}
 
-	removeItem(item: CartItem) {
-		this.cartItems = this.cartItems.filter(i => i.ProductId !== item.ProductId);
-		this.cartService.removeFromCart(item.ProductId);
+	toggleSelectAll(): void {
+		this.cartItems = this.cartItems.map(item => ({
+			...item,
+			isSelected: this.isSelectAll,
+		}));
+		this.updateTotal();
 	}
-
-	clearCart(): void {
-		this.cartItems = [];
-		this.total = 0;
+	updateSelectAllStatus(): void {
+		this.isSelectAll = this.cartItems.every(item => item.isSelected);
 	}
-
+	/**
+	 * thanh toan
+	 */
 	order() {
-		// this.alert.loading(
-		// 	ResponseMessage.navigatingToOrderPagePleaseWaitAMinute,
-		// 	ResponseMessage.navigateToOrderPage
-		// );
+		const selectedItems = this.cartItems.filter(item => item.isSelected);
+
 		this.router.navigate([RouteLink.checkoutRoute], {
-			state: { cartItems: this.cartItems },
+			state: { cartItems: selectedItems },
 		});
 	}
 
-	increaseQuantity(item: CartItem) {
-		item.quantity++;
-		this.cartService.updateQuantity(item.ProductId, item.quantity);
-		this.updateTotal();
-	}
-
-	decreaseQuantity(item: CartItem) {
-		if (item.quantity > 1) {
-			item.quantity--;
-			this.cartService.updateQuantity(item.ProductId, item.quantity);
-			this.updateTotal();
-		}
-	}
 	/**
 	 * thực hiện ấn thả đổi màu
 	 */
 	buttonStates: { [couponId: number]: boolean } = {};
-
 
 	onPress(couponId: number): void {
 		this.buttonStates[couponId] = true;

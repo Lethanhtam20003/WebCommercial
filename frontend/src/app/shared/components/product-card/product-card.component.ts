@@ -6,32 +6,32 @@ import { CartService } from '../../../core/service/cart/cart.service';
 import { AlertService } from '../../../core/service/alert.service';
 
 @Component({
-  standalone: true,
-  imports:[CommonModule, RouterModule],
-  selector: 'app-product-card',
-  templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.scss']
+	standalone: true,
+	imports: [CommonModule, RouterModule],
+	selector: 'app-product-card',
+	templateUrl: './product-card.component.html',
+	styleUrls: ['./product-card.component.scss'],
 })
-export class ProductCardComponent  {
-@Input() product!: ProductResponse;
+export class ProductCardComponent {
+	@Input() product!: ProductResponse;
 
-  @Output() addToCartEvent = new EventEmitter<ProductResponse>();
-  @Output() addToWishlistEvent = new EventEmitter<ProductResponse>();
+	@Output() addToCartEvent = new EventEmitter<ProductResponse>();
+	@Output() addToWishlistEvent = new EventEmitter<ProductResponse>();
 
-  constructor(
-    private cartService: CartService,
-	private alertService: AlertService,
-	private router: Router
-  ) { }
+	constructor(
+		private cartService: CartService,
+		private alertService: AlertService,
+		private router: Router
+	) {}
 
-/**
+	/**
 	 * Thêm sản phẩm vào giỏ hàng
 	 * @param product Sản phẩm được chọn
 	 */
 	addToCart(): void {
 		console.log('Đã thêm vào giỏ hàng:', this.product.name);
-    this.cartService.addToCart(this.product.id);
-    this.alertService.success('Đã thêm vào giỏ hàng');
+		this.cartService.addToCart(this.product.id);
+		this.alertService.success('Đã thêm vào giỏ hàng');
 	}
 
 	/**
@@ -39,7 +39,6 @@ export class ProductCardComponent  {
 	 * @param product Sản phẩm được chọn
 	 */
 	buy(): void {
-		this.router.navigate(['/checkout/'+this.product.id]);
+		this.router.navigate(['/checkout/' + this.product.id]);
 	}
-
 }

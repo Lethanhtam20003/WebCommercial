@@ -26,6 +26,7 @@ export class CartService implements OnInit {
 					price: Number(respons.result.price),
 					quantity: cartInLocal[Number(productId) ],
 					productImg: respons.result.images[0],
+					isSelected: true,
 				};
 				this.cartItemsSubject.next([...this.cartItemsSubject.value, cartItem]);
 			});
