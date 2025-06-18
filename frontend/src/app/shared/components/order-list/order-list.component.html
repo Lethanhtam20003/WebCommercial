@@ -18,8 +18,9 @@
 						{{ utility.getCellValue(order, col.key) | date: 'dd/MM/yyyy' }}
 					</ng-container>
 					<ng-container *ngSwitchCase="'currency'">
-						{{ utility.getCellValue(order, col.key) | currency: 'VND' }}
+						{{ utility.getCellValue(order, col.key) || 0 | currency: 'VND' }}
 					</ng-container>
+
 					<ng-container *ngSwitchCase="'status'">
 						<span
 							class="badge"
@@ -52,7 +53,7 @@
 </table>
 
 <app-pagination
-  [currentPage]="currentPage"
-  [totalPages]="totalPages"
-  (pageChange)="onPageChanged($event)"
+	[currentPage]="currentPage"
+	[totalPages]="totalPages"
+	(pageChange)="onPageChanged($event)"
 ></app-pagination>

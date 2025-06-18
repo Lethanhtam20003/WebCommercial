@@ -38,19 +38,10 @@ export class CheckoutComponent implements OnInit {
 		private coupons: CouponService,
 		private orderService: OrderService,
 		private cartService: CartService,
-		private route: ActivatedRoute,
-		
+		private route: ActivatedRoute
 	) {
 		const nav = this.router.getCurrentNavigation();
 		this.cartItems = nav?.extras?.state?.['cartItems'] || [];
-
-		// if(this.cartItems.length === 0){
-		// 	const id = this.route.snapshot.paramMap.get('id');
-		// 	console.log(id);
-		// 	this.cartItems = 
- 
-		// }
-		
 		this.updateTotal();
 	}
 	ngOnInit(): void {
@@ -59,20 +50,6 @@ export class CheckoutComponent implements OnInit {
 			console.log(this.user);
 			this.address = this.mapAdress(res);
 		});
-	}
-	mapAdress(user: UserProfile): AddressResponse | null {
-		if (!user) {
-			return null;
-		}
-		if (!user.address) {
-			return null;
-		}
-
-		return {
-			recipientName: user.fullName || '',
-			phoneNumber: user.phone || '',
-			address: user.address,
-		};
 	}
 
 	updateTotal(): void {
@@ -93,6 +70,7 @@ export class CheckoutComponent implements OnInit {
 					userId: this.user.id,
 					note: '',
 					createdDate: new Date().toISOString(),
+					address: this.address?.address ?? '',
 					orderItems: this.cartItems.map(item => {
 						return {
 							productId: item.ProductId,
@@ -109,37 +87,44 @@ export class CheckoutComponent implements OnInit {
 					next: res => {
 						if (res.code === 200) {
 							this.cartService.clearCart();
-							this.router.navigate(['order-detail',res.result.id]
-						);
+							this.router.navigate(['order-detail', res.result.id]);
 						}
 					},
 					error: err => {
 						this.alert.error(err.error.message);
 					},
 				});
-
-
 			});
 	}
 	cancelOrder() {
 		this.router.navigate(['/home']);
 	}
 
-	buttonStates: { [key: number]: boolean } = {};
-
-	onPress(id: number) {
-		this.buttonStates[id] = true;
-	}
-
-	onRelease(id: number) {
-		this.buttonStates[id] = false;
-	}
 	editAddress() {
-		if (this.address?.address) {
-			// thay doi dia chi
-		} else {
-			// them dia chi
+		this.alert.changeAddress().then(res => {
+			if (res) {
+				console.log(res.isConfirmed);
+				if (res.isConfirmed) {
+					this.user.address = res.value?.fullAddress ?? null;
+					this.address = this.mapAdress(this.user);	
+				}
+			}
+		});
+	}
+
+	mapAdress(user: UserProfile): AddressResponse | null {
+		if (!user) {
+			return null;
 		}
+		if (!user.address) {
+			return null;
+		}
+
+		return {
+			recipientName: user.fullName || '',
+			phoneNumber: user.phone || '',
+			address: user.address,
+		};
 	}
 
 	couponCode = '';
@@ -170,6 +155,16 @@ export class CheckoutComponent implements OnInit {
 			this.discount = 0;
 			alert('Mã giảm giá không hợp lệ.');
 		}
+	}
+
+	buttonStates: { [key: number]: boolean } = {};
+
+	onPress(id: number) {
+		this.buttonStates[id] = true;
+	}
+
+	onRelease(id: number) {
+		this.buttonStates[id] = false;
 	}
 }
 export interface AddressResponse {

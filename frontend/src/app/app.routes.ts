@@ -108,7 +108,7 @@ const protectedRoutes: Routes = [
 		data: { showHeader: true, showFooter: true },
 	},
 	{
-		path: RouteLink.payment+'/:id',
+		path: RouteLink.payment,
 		loadComponent: () =>
 			import('./features/order/payment/payment.component').then(
 				m => m.PaymentComponent

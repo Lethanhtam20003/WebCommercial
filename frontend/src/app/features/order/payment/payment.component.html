@@ -1,10 +1,10 @@
 <div class="checkout-container">
   <h2>Xác nhận đơn hàng</h2>
 
-  <form [formGroup]="checkoutForm" (ngSubmit)="submitOrder()">
+  
     <div class="form-group">
       <label>Địa chỉ nhận hàng</label>
-      <input type="text" formControlName="address" placeholder="Nhập địa chỉ nhận hàng" />
+      <input type="text" formControlName="address" placeholder="Nhập địa chỉ nhận hàng" value="{{order.address}}" >
     </div>
 
     <div class="form-group">
@@ -15,18 +15,8 @@
     <div class="payment-methods">
       <h3>Phương thức thanh toán</h3>
 
-      <div class="payment-option" [class.selected]="paymentMethod === 'COD'" (click)="selectPayment('COD')">
-        <input type="radio" name="payment" [checked]="paymentMethod === 'COD'" />
-        <span>Thanh toán khi nhận hàng (COD)</span>
-      </div>
-
-      <div class="payment-option" [class.selected]="paymentMethod === 'VNPAY'" (click)="selectPayment('VNPAY')">
-        <input type="radio" name="payment" [checked]="paymentMethod === 'VNPAY'" />
-        <span>Thanh toán qua VNPAY</span>
-        <img src="https://vnpay.vn/assets/img/vnpay_logo.png" alt="VNPAY" height="30" style="margin-left: 10px;" />
-      </div>
-    </div>
+      
 
     <button type="submit" [disabled]="checkoutForm.invalid">Đặt hàng</button>
-  </form>
+ 
 </div>

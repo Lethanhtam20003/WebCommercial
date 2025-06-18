@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { CartService } from '../../../core/service/cart/cart.service';
 import { AlertService } from '../../../core/service/alert.service';
+import { RouteLink } from '../../constants/route-link';
+import { CartItem } from '../../../core/models/response/cart/cart-response.interface';
 
 @Component({
 	standalone: true,
@@ -39,6 +41,16 @@ export class ProductCardComponent {
 	 * @param product Sản phẩm được chọn
 	 */
 	buy(): void {
-		this.router.navigate(['/checkout/' + this.product.id]);
+		const cartItem: CartItem[] = [{
+			ProductId: this.product.id,
+			name: this.product.name,
+			productImg: this.product.images[0],
+			quantity: 1,
+			price: Number(this.product.price),
+		}];
+
+		this.router.navigate([RouteLink.checkoutRoute], {
+			state: { cartItems: cartItem },
+		});
 	}
 }

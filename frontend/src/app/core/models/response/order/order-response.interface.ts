@@ -13,4 +13,5 @@ export interface OrderResponse {
 	orderItems: OrderDetailResponse[];
 	userId?: string;
 	userName?: string;
+	address: String;
 }
