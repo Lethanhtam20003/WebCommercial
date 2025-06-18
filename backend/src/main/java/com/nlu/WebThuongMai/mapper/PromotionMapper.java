@@ -17,6 +17,7 @@ public interface PromotionMapper {
 
     List<PromotionResponse> promotionToPromotionResp(List<Promotion> promotions);
 
-    @Mapping(target = "promotion.id", ignore = true)
+    @Mapping(target = "promotionId", ignore = true)
+    @Mapping(target = "products", ignore = true)
     Promotion promotionRequestToPromotion(PromotionRequest request);
 }
