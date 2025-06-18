@@ -4,7 +4,6 @@ import { AdminComponent } from './admin.component';
 import { ProductManagementComponent } from './pages/product-management/product-management.component';
 import { InventoryManagementComponent } from './pages/inventory-management/inventory-management.component';
 import { OrderManagementComponent } from './pages/order-management/order-management-admin.component';
-import { OrderListTabComponent } from '../order/order-list-tab/order-list-tab.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { CouponsManagementComponent } from './pages/coupons-management/coupons-management.component';
 
@@ -102,48 +101,10 @@ const inventoryManagementRoutes: Routes = [
 const orderManagementRoutes: Routes = [
 	{
 		path: 'order-management',
-		component: OrderManagementComponent,
-		children: [
-			{
-				path: 'order-list',
-				component: OrderListTabComponent,
-				data: {
-					showHeader: false,
-					showFooter: false,
-				},
-			},
-			// {
-			// 	path: 'payment-list',
-			// 	loadComponent: () =>
-			// 		import('../payment-list/payment-list.component').then(
-			// 			m => m.PaymentListComponent
-			// 		),
-			// 	data: {
-			// 		showHeader: false,
-			// 		showFooter: false,
-			// 	},
-			// },
-			{
-				path: 'refund-list',
-				loadComponent: () =>
-					import('../refund-list/refund-list.component').then(
-						m => m.RefundListComponent
-					),
-				data: {
-					showHeader: false,
-					showFooter: false,
-				},
-			},
-			{
-				path: '',
-				redirectTo: 'order-list',
-				pathMatch: 'full',
-				data: {
-					showHeader: false,
-					showFooter: false,
-				},
-			},
-		],
+		loadComponent: () =>
+			import('./pages/order-management/order-management-admin.component').then(
+				m => m.OrderManagementComponent
+			),
 		data: {
 			showHeader: false,
 			showFooter: false,
@@ -176,7 +137,7 @@ const reviewManagementRoutes: Routes = [
 const couponsManagementRoutes: Routes = [
 	{
 		path: 'coupons-management',
-    component: CouponsManagementComponent,
+		component: CouponsManagementComponent,
 		data: {
 			showHeader: false,
 			showFooter: false,

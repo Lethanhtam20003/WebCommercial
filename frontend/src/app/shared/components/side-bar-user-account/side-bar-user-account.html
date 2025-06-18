@@ -60,13 +60,13 @@
 				data-bs-target="#dashboard-collapse"
 				aria-expanded="false"
 			>
-        <a
+				<a
 					[routerLink]="'/' + routes.userRoute + '/' + routes.orderRoute"
 					[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.orderRoute) }"
 					class="text-decoration-none text-secondary"
 					style="font-size: 15px"
 				>
-					{{label.order}}
+					{{this.utility.capitalize(label.order)}}
 				</a>
 			</button>
 		</li>

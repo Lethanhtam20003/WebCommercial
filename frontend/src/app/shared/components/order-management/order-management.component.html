@@ -1,4 +1,17 @@
-<ng-container *ngIf="orders$ | async as orders">
+<div class="vh-100">
+<ng-container *ngIf="selectedOrder$ | async as order">
+	<ng-container *ngIf="safeSelectedOrderItems$ | async as items">
+		<order-detail
+			[order]="order"
+			[orderItems]="items"
+			(back)="onBack()"
+		></order-detail>
+	</ng-container>
+</ng-container>
+
+<ng-container
+	*ngIf="(selectedOrder$ | async) === null && (orders$ | async) as orders"
+>
 	<h2 class="mb-4">Quản lý đơn hàng</h2>
 	<order-list
 		[orders]="orders"
@@ -6,15 +19,4 @@
 		(viewOrder)="onViewOrder($event)"
 	></order-list>
 </ng-container>
-
-<ng-template #detailTemplate>
-	<ng-container *ngIf="selectedOrder$ | async as order">
-		<ng-container *ngIf="safeSelectedOrderItems$ | async as items">
-			<order-detail
-				[order]="order"
-				[orderItems]="items"
-				(back)="onBack()"
-			></order-detail>
-		</ng-container>
-	</ng-container>
-</ng-template>
+</div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
 	BehaviorSubject,
+	combineLatest,
 	filter,
 	map,
 	Observable,
@@ -22,6 +23,9 @@ import { UtitlyService } from '../../../core/service/utility.service';
 import { ErrorMessageConstants } from '../../constants/error-message.constants';
 import { LabelConstants } from '../../constants/label.constants';
 import { OrderListColumn } from '../order-list/order-list-column.interface';
+import { OrderService } from '../../../core/service/order.service';
+import { ApiResponse } from '../../../core/models/api-response.model';
+import { Page } from '../../../core/models/response/page-response.interface';
 
 @Component({
 	standalone: false,
@@ -69,46 +73,59 @@ export class OrderManangementComponent implements OnInit {
 		private userStateService: UserStateService,
 		private alert: AlertService,
 		private utility: UtitlyService,
-		private orderStateService: OrderStateService,
+		private orderService: OrderService,
 		private orderDetailService: OrderDetailService
 	) {}
 	ngOnInit(): void {
 		this.userStateService.loadUserFromStorageOrAPI();
 
-		this.userStateService.user$
+		const user$ = this.userStateService.user$.pipe(
+			filter(user => !!user),
+			take(1)
+		);
+
+		const status$ = this.route.paramMap.pipe(
+			map(params => params.get('status') || 'all'),
+			tap(status => this.status$.next(status))
+		);
+
+		combineLatest([user$, status$])
 			.pipe(
-				filter(user => !!user),
-				take(1),
-				tap(user => {
-					this.route.paramMap.subscribe(params => {
-						const paramStatus = params.get('status') || 'all';
-						this.status$.next(paramStatus);
-					});
-				}),
-				switchMap(user => this.status$),
-				switchMap(status => {
-					const currentUser = this.userStateService.currentUser;
-					if (!currentUser?.id) {
+				switchMap(([user, status]) => {
+					if (!user?.id) {
 						this.alert.error(ErrorMessageConstants.userNotExisted);
 						return of([]);
 					}
 
-					if (status === 'all') {
-						this.orderStateService.loadOrdersForUser(currentUser.id);
-					} else {
-						const request: OrderFilterRequest = {
-							userId: currentUser.id,
-							status: this.utility.mapStatusToBackend(status) as OrderStatus,
-							page: 0,
-							size: 10,
-						};
-						this.orderStateService.loadOrdersByStatus(request);
-					}
+					const request: OrderFilterRequest = {
+						userId: user.id,
+						status: this.utility.mapStatusToBackend(status) as OrderStatus,
+						page: 0,
+						size: 10,
+					};
 
-					return of(null);
+					const result$ =
+						status === 'all'
+							? this.orderService.getAllOrdersUser(user.id)
+							: this.orderService.getOrdersByStatus(request);
+
+					return result$.pipe(
+						map(
+							(res: ApiResponse<Page<OrderResponse>>) =>
+								res?.result?.content ?? []
+						)
+					);
 				})
 			)
-			.subscribe();
+			.subscribe({
+				next: orders => {
+					this.orders$ = of(orders); // ⬅ Lưu lại để dùng trong template
+				},
+				error: err => {
+					console.error('❌ Lỗi khi load orders:', err);
+					this.orders$ = of([]);
+				},
+			});
 	}
 
 	onStatusClick(key: string) {

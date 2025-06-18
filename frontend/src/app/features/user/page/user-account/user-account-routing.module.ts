@@ -6,8 +6,8 @@ import { LabelConstants } from '../../../../shared/constants/label.constants';
 import { RouteLink } from '../../../../shared/constants/route-link';
 import { UserProfileComponent } from '../../../../shared/components/user-profile/user-profile.component';
 import { ChangePasswordComponent } from '../../../../shared/components/change-password/change-password.component';
-import { OrderManagementComponent } from '../../../admin/pages/order-management/order-management-admin.component';
 import { CouponListComponent } from '../../../../shared/components/coupon-list/coupon-list.component';
+import { OrderManangementComponent } from '../../../../shared/components/order-management/order-management.component';
 
 export const userAccountRoutes: Routes = [
 	{
@@ -31,14 +31,14 @@ export const userAccountRoutes: Routes = [
 				title: LabelConstants.changePassword,
 				canActivate: [AuthGuard],
 			},
+			// {
+			// 	path: RouteLink.orderRoute,
+			// 	redirectTo: `${RouteLink.orderRoute}/${RouteLink.allRoute}`,
+			// 	pathMatch: 'full',
+			// },
 			{
 				path: RouteLink.orderRoute,
-				redirectTo: `${RouteLink.orderRoute}/${RouteLink.allRoute}`,
-				pathMatch: 'full',
-			},
-			{
-				path: `${RouteLink.orderRoute}/:status`,
-				component: OrderManagementComponent,
+				component: OrderManangementComponent,
 				title: LabelConstants.order,
 				canActivate: [AuthGuard],
 			},

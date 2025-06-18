@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.controller;
 
+import com.nlu.WebThuongMai.dto.request.couponReq.CouponFilterAdminRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
@@ -12,13 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 import com.nlu.WebThuongMai.dto.response.couponResp.GetAllCouponResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -117,14 +115,15 @@ public class CouponController {
                 .build();
     }
 
-    @GetMapping("/admin")
+    @PostMapping("/admin/filter")
     public ApiResponse<Page<AdminCouponResponse>> getAllCouponAdmin(
+            @RequestBody() CouponFilterAdminRequest request,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ApiResponse.<Page<AdminCouponResponse>>builder()
-                .result(service.getAllAdminCoupons(pageable))
+                .result(service.getCouponsFilter(request, pageable))
                 .build();
     }
 }

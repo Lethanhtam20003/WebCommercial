@@ -10,6 +10,7 @@ import com.nlu.WebThuongMai.dto.response.authenticationResp.AuthenticationRespon
 import com.nlu.WebThuongMai.dto.response.authenticationResp.IntrospectResponse;
 import com.nlu.WebThuongMai.enums.AuthProvider;
 import com.nlu.WebThuongMai.enums.Role;
+import com.nlu.WebThuongMai.enums.UserStatus;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.model.InvalidatedToken;
@@ -85,6 +86,7 @@ public class AuthenticationService {
                 .phone(request.getPhone() == null ? null : request.getPhone())
                 .authProvider(AuthProvider.LOCAL)
                 .role(Role.USER)
+                .status(UserStatus.ACTIVE.toString())
                 .build();
         userRepository.save(user);
         log.info("Register user successfully");
