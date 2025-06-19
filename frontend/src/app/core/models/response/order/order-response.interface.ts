@@ -1,4 +1,5 @@
 import { OrderStatus } from '../../../enum/order-status.enum';
+import { PaymentStatus } from '../../../enum/PaymentStatus';
 import { CouponResponse } from '../coupon/coupon-response.interface';
 import { OrderDetailResponse } from './order-item-response.interface';
 
@@ -13,4 +14,6 @@ export interface OrderResponse {
 	orderItems: OrderDetailResponse[];
 	userId?: string;
 	userName?: string;
+	address: String;
+	paymentStatus :PaymentStatus;
 }

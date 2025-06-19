@@ -1,0 +1,17 @@
+.product-list-scroll {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.product-item {
+  padding: 1rem;
+  max-height: 100px;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}

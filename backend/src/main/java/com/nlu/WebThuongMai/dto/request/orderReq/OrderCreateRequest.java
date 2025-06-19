@@ -19,6 +19,7 @@ public class OrderCreateRequest {
     long userId;
     String note;
     LocalDateTime createdDate;
+    String address;
     Set<OrderItemRequest> orderItems;
     CouponRequest coupon;
 }

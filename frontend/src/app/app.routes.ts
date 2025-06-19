@@ -72,18 +72,51 @@ const protectedRoutes: Routes = [
 	},
 	{
 		path: RouteLink.cartRoute,
-		loadChildren: () =>
-			import('./features/user/page/cart/cart.module').then(m => m.CartModule),
+		loadComponent: () =>
+			import('./pages/cart/cart.component').then(m => m.CartComponent),
+		canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
+	},
+	{
+		path: RouteLink.checkoutRoute,
+		loadComponent: () =>
+			import('./features/order/checkout/checkout.component').then(m => m.CheckoutComponent),
+		canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
+	},
+	{
+		path: RouteLink.checkoutRoute+'/:id',
+		loadComponent: () =>
+			import('./features/order/checkout/checkout.component').then(m => m.CheckoutComponent),
 		canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
 	},
 	{
 		path: RouteLink.orderRoute,
-		loadChildren: () =>
-			import('./features/user/page/order/order.module').then(m => m.OrderModule),
+		loadComponent: () =>
+			import('./pages/order/order.component').then(m => m.OrderComponent),
 		canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
 	},
+	{
+		path: RouteLink.orderDetailRoute,
+		loadComponent: () =>
+			import('./features/order/order-detail/order-detail.component').then(
+				m => m.OrderDetailComponent
+			),
+			canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
+	},
+	{
+		path: RouteLink.payment,
+		loadComponent: () =>
+			import('./features/order/payment/payment.component').then(
+				m => m.PaymentComponent
+			),
+			canActivate: [AuthGuard],
+		data: { showHeader: true, showFooter: true },
+	},
+
 ];
 
 /**
@@ -103,7 +136,9 @@ const errorRouter: Routes = [
 		},
 	},
 ];
-
+/**
+ * 
+ */
 const productRoutes: Routes = [
 	{
 		path: 'product',
@@ -115,6 +150,9 @@ const productRoutes: Routes = [
 		},
 	},
 ];
+/**
+ * 
+ */
 const categoryRoutes: Routes = [
 	{
 		path: 'categories/:id',
@@ -128,7 +166,48 @@ const categoryRoutes: Routes = [
 		},
 	},
 ];
+/**
+ * 
+ */
+const orderRoutes: Routes = [
+	{
+		path: 'checkout',
+		loadComponent: () =>
+			import('./features/order/checkout/checkout.component').then(
+				m => m.CheckoutComponent
+			),
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+	},
+];
+const paymentRoutes: Routes = [
+	{
+		path: 'payment-success',
+		loadComponent: () => 
+			import('./features/payment/payment-success/payment-success.component').then(
+				m => m.PaymentSuccessComponent
+				),
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
 
+
+	},
+	{
+		path: 'payment-cancel',
+		loadComponent: () =>
+			import('./features/payment/payment-cancel/payment-cancel.component').then(
+				m => m.PaymentCancelComponent
+			),
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+	}
+]
 /**
  * Routes chính của ứng dụng
  */
@@ -143,6 +222,8 @@ export const routes: Routes = [
 	...productRoutes,
 	...categoryRoutes,
 	...errorRouter,
+	...paymentRoutes,
+
 	{
 		path: 'product/:id',
 		loadComponent: () =>

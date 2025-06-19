@@ -1,0 +1,69 @@
+.cart-item-row {
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid #eee;
+	padding: 10px 0;
+	gap: 10px;
+
+	input[type='checkbox'] {
+    margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	.product-detail {
+		display: flex;
+		align-items: center;
+		flex: 2;
+		gap: 10px;
+
+		img {
+			width: 60px;
+			height: 60px;
+			object-fit: cover;
+		}
+
+		.product-name {
+			font-weight: 500;
+			display: -webkit-box;
+			-webkit-line-clamp: 3; /* Giới hạn 3 dòng */
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			word-break: break-word;
+			line-height: 1.4;
+			max-height: calc(1.4em * 3); /* chiều cao tối đa cho 3 dòng */
+		}
+	}
+
+	.product-price,
+	.product-total {
+		flex: 1;
+		font-weight: bold;
+		color: #f53d2d;
+		text-align: center;
+	}
+
+	.quantity-controls {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+
+		button {
+			width: 28px;
+			height: 28px;
+			border: 1px solid #ccc;
+			background: #fff;
+			cursor: pointer;
+		}
+	}
+
+	.remove-btn {
+		flex: 0.5;
+		background: transparent;
+		border: none;
+		color: red;
+		cursor: pointer;
+	}
+}

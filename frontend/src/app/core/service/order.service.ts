@@ -7,11 +7,13 @@ import { OrderFilterRequest } from '../models/request/order/order-filter-request
 import { OrderResponse } from '../models/response/order/order-response.interface';
 import { Page } from '../models/response/page-response.interface';
 import { ApiResponse } from './../models/api-response.model';
+import { OrderCreateRequest } from '../models/request/order/OrderCreateRequest';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class OrderService {
+  
 	constructor(private http: HttpClient) {}
 
 	getOrdersByStatus(
@@ -45,4 +47,23 @@ export class OrderService {
 			request
 		);
 	}
+	checkoutOrder(
+		orderRequest: OrderCreateRequest
+	): Observable<ApiResponse<OrderResponse>> {
+		return this.http.post<ApiResponse<OrderResponse>>(
+			URL_API.checkoutOrder,
+			orderRequest
+		);
+	}
+
+	cancelOrder(orderId: number): Observable<ApiResponse<OrderResponse>> {
+		return this.http.put<ApiResponse<OrderResponse>>(
+			`${URL_API.getOrders}/${orderId}/cancel`,
+			{}
+		);
+	}
+	getOrderDetail(orderId: number): Observable<ApiResponse<OrderResponse>> {
+	return this.http.get<ApiResponse<OrderResponse>>(URL_API.getOrders + '/' +(orderId));
+}
+
 }

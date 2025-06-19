@@ -5,13 +5,16 @@ import { ProductResponse } from '../../../core/models/response/product-response/
 import { RouterLink } from '@angular/router';
 import { PageResponse } from '../../../core/models/response/product-response/product-response/page-response.interface';
 import { ProductFilter } from '../../../core/models/request/filter/productFilter';
+import { ProductCardComponent } from '../../../shared/components/product-card/product-card.component';
+import { Product } from '../../admin/models/Product';
 
 @Component({
 	standalone: true,
+
 	selector: 'app-product-list',
 	templateUrl: './product-list.component.html',
 	styleUrls: ['./product-list.component.scss'],
-	imports: [NgIf, NgFor, RouterLink, CommonModule],
+	imports: [NgIf, NgFor, CommonModule, ProductCardComponent],
 })
 export class ProductListComponent implements OnInit {
 	@Input() productFilter!: ProductFilter;
@@ -39,25 +42,7 @@ export class ProductListComponent implements OnInit {
 			this.productService.fetchProducts(this.productFilter);
 		}
 	}
-	/**
-	 * Thêm sản phẩm vào giỏ hàng
-	 * @param product Sản phẩm được chọn
-	 */
-	addToCart(product: any): void {
-		console.log(this.pageProducts);
-
-		console.log('Đã thêm vào giỏ hàng:', product.name);
-		// Thêm logic xử lý thêm vào giỏ hàng ở đây
-	}
-
-	/**
-	 * Thêm sản phẩm vào danh sách yêu thích
-	 * @param product Sản phẩm được chọn
-	 */
-	addToWishlist(product: any): void {
-		console.log('Đã thêm vào danh sách yêu thích:', product.name);
-		// Thêm logic xử lý thêm vào danh sách yêu thích
-	}
+	
 	showPagination() {
 		return this.pageProducts && this.pageProducts.page.totalPages > 1;
 	}

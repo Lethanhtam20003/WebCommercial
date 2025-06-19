@@ -1,0 +1,47 @@
+<div class="container custom-container mt-2 vh-100 cart-container">
+	<h2 class="my-4 cart-title text-center">Giỏ hàng</h2>
+
+	<div *ngIf="cartItems.length === 0" class="alert alert-info">
+		Giỏ hàng của bạn đang trống.
+	</div>
+
+	<div *ngIf="cartItems.length > 0">
+		<div class="cart-header">
+			<input
+				type="checkbox"
+				[(ngModel)]="isSelectAll"
+				(change)="toggleSelectAll()"
+			/>
+			<span class="mx-5">Sản phẩm</span>
+			<span class="mx-5"> </span>
+			<span class="mx-5">Đơn giá</span>
+			<span class="mx-5">Số lượng</span>
+			<span class="mx-5">Thành tiền</span>
+			<span></span>
+		</div>
+
+		<!-- Danh sách sản phẩm -->
+		<app-cartItem
+			*ngFor="let item of cartItems"
+			[item]="item"
+			(quantityChanged)="updateQuantity($event)"
+			(removed)="removeItem($event)"
+			(selectionChanged)="updateSelectAllStatus()"
+		></app-cartItem>
+
+		<div class="text-end mt-4">
+			<h4 class="mb-3">Tổng cộng: {{ getTotal() | currency: 'VND' }}</h4>
+			<button
+				class="btn primary-color-button btn-lg"
+				(click)="order()"
+				(pointerdown)="onPress(999)"
+				(pointerup)="onRelease(999)"
+				(touchstart)="onPress(999)"
+				(touchend)="onRelease(999)"
+				[class.pressed]="buttonStates[999]"
+			>
+				Đặt hàng
+			</button>
+		</div>
+	</div>
+</div>

@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
+import { firstValueFrom } from 'rxjs';
+import { AddressService } from './AddressService.service';
 @Injectable({
 	providedIn: 'root',
 })
 export class AlertService {
+	constructor(private addressService: AddressService) {}
+
 	private swal = Swal.mixin({
 		confirmButtonText: 'OK',
 		cancelButtonText: 'Hủy',
@@ -82,20 +86,22 @@ export class AlertService {
 	loading(
 		message: string,
 		title: string,
-		timer = 3000,
+		timer = 1000,
 		timerProgressBar: boolean = true,
 		allowOutsideClick: boolean = false
 	): Promise<any | null> {
-		return this.swal.fire({
-			title,
-			html: message,
-			timer,
-			timerProgressBar: timerProgressBar,
-			allowOutsideClick: allowOutsideClick,
-			didOpen: () => {
-				this.swal.showLoading(this.swal.getConfirmButton());
-			},
-		}).then(result => (result.isConfirmed ? result.value : null));
+		return this.swal
+			.fire({
+				title,
+				html: message,
+				timer,
+				timerProgressBar: timerProgressBar,
+				allowOutsideClick: allowOutsideClick,
+				didOpen: () => {
+					this.swal.showLoading(this.swal.getConfirmButton());
+				},
+			})
+			.then(result => (result.isConfirmed ? result.value : null));
 	}
 
 	/**
@@ -115,28 +121,121 @@ export class AlertService {
 			.then(result => (result.isConfirmed ? result.value : null));
 	}
 
-  /**
-   * Hiển thị một hộp thoại thông tin với các tùy chọn xác nhận, từ chối hoặc hủy.
-   *
-   * @param title - Tiêu đề của hộp thoại.
-   * @param confirmButtonText - Nội dung nút xác nhận.
-   * @param showDenyButton - Có hiển thị nút từ chối hay không (mặc định là false).
-   * @param showCancelButton - Có hiển thị nút hủy hay không (mặc định là false).
-   * @returns Một Promise trả về `result.value` nếu người dùng bấm xác nhận, ngược lại trả về null.
-   */
+	/**
+	 * Hiển thị một hộp thoại thông tin với các tùy chọn xác nhận, từ chối hoặc hủy.
+	 *
+	 * @param title - Tiêu đề của hộp thoại.
+	 * @param confirmButtonText - Nội dung nút xác nhận.
+	 * @param showDenyButton - Có hiển thị nút từ chối hay không (mặc định là false).
+	 * @param showCancelButton - Có hiển thị nút hủy hay không (mặc định là false).
+	 * @returns Một Promise trả về `result.value` nếu người dùng bấm xác nhận, ngược lại trả về null.
+	 */
 	info(
 		title: string,
 		confirmButtonText: string,
 		showDenyButton: boolean = false,
 		showCancelButton: boolean = false
 	): Promise<any | null> {
-		return this.swal.fire({
-			title,
-			showDenyButton,
-			showCancelButton,
-			confirmButtonText,
-			denyButtonText: `Don't save`,
-		}).then(result => (result.isConfirmed ? result.value : null));
+		return this.swal
+			.fire({
+				title,
+				showDenyButton,
+				showCancelButton,
+				confirmButtonText,
+				denyButtonText: `Don't save`,
+			})
+			.then(result => (result.isConfirmed ? result.value : null));
 	}
-	constructor() {}
+
+	async changeAddress() {
+		const provinces = await firstValueFrom(this.addressService.getProvinces());
+		const provinceOptions = provinces
+			.map(p => `<option value="${p.code}">${p.name}</option>`)
+			.join('');
+
+		return this.swal
+			.fire({
+				title: 'Thay đổi địa chỉ',
+				html: `
+				<input id="detail" class="swal2-input" placeholder="Số nhà, tên đường" />
+				<select id="province" class="swal2-select">
+					<option disabled selected>Chọn tỉnh/thành phố</option>
+					${provinceOptions}
+				</select>
+				<select id="district" class="swal2-select">
+					<option disabled selected>Chọn quận/huyện</option>
+				</select>
+				<select id="ward" class="swal2-select">
+					<option disabled selected>Chọn phường/xã</option>
+				</select>
+			`,
+				showCancelButton: true,
+				confirmButtonText: 'Xác nhận',
+				didOpen: () => {
+					const provinceSelect = document.getElementById(
+						'province'
+					) as HTMLSelectElement;
+					const districtSelect = document.getElementById(
+						'district'
+					) as HTMLSelectElement;
+					const wardSelect = document.getElementById(
+						'ward'
+					) as HTMLSelectElement;
+
+					provinceSelect.addEventListener('change', async () => {
+						const provinceCode = +provinceSelect.value;
+						const provinceData = await firstValueFrom(
+							this.addressService.getDistricts(provinceCode)
+						);
+						const districtOptions = provinceData.districts
+							.map((d: any) => `<option value="${d.code}">${d.name}</option>`)
+							.join('');
+						districtSelect.innerHTML =
+							`<option disabled selected>Chọn quận/huyện</option>` +
+							districtOptions;
+						wardSelect.innerHTML = `<option disabled selected>Chọn phường/xã</option>`;
+					});
+
+					districtSelect.addEventListener('change', async () => {
+						const districtCode = +districtSelect.value;
+						const districtData = await firstValueFrom(
+							this.addressService.getWards(districtCode)
+						);
+						const wardOptions = districtData.wards
+							.map((w: any) => `<option value="${w.code}">${w.name}</option>`)
+							.join('');
+						wardSelect.innerHTML =
+							`<option disabled selected>Chọn phường/xã</option>` + wardOptions;
+					});
+				},
+				preConfirm: () => {
+					const detail = (
+						document.getElementById('detail') as HTMLInputElement
+					)?.value?.trim();
+					const province = (
+						document.getElementById('province') as HTMLSelectElement
+					)?.selectedOptions[0]?.text;
+					const district = (
+						document.getElementById('district') as HTMLSelectElement
+					)?.selectedOptions[0]?.text;
+					const ward = (document.getElementById('ward') as HTMLSelectElement)
+						?.selectedOptions[0]?.text;
+
+					if (!detail || !province || !district || !ward) {
+						this.swal.showValidationMessage(
+							'Vui lòng nhập đầy đủ thông tin địa chỉ'
+						);
+						return;
+					}
+
+					return {
+						detail,
+						province,
+						district,
+						ward,
+						fullAddress: `${detail}, ${ward}, ${district}, ${province}`,
+					};
+				},
+			})
+	}
 }

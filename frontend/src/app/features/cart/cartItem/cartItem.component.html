@@ -1,0 +1,27 @@
+<div class="cart-item-row">
+  <input
+  type="checkbox"
+  [(ngModel)]="item.isSelected"
+	(change)="onSelectionChange()"
+/>
+
+
+  <div class="product-detail">
+    <img [src]="item.productImg" alt="product image" />
+    <span class="product-name">{{ item.name }}</span>
+  </div>
+
+  <div class="product-price">{{ item.price | currency: 'VND' }}</div>
+
+  <div class="quantity-controls">
+    <button (click)="decreaseQuantity()">−</button>
+    <span>{{ item.quantity }}</span>
+    <button (click)="increaseQuantity()">+</button>
+  </div>
+
+  <div class="product-total">
+    {{ item.price * item.quantity | currency: 'VND' }}
+  </div>
+
+  <button class="remove-btn" (click)="removeItem()">Xóa</button>
+</div>
