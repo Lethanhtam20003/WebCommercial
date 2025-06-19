@@ -10,10 +10,11 @@ import { PurchaseStatus } from '../../../core/enum/PurchaseStatus';
 import { OrderStatus } from '../../../core/enum/order-status.enum';
 import { FormsModule } from '@angular/forms';
 import { PaymentService } from '../../../core/service/cart/payment.service';
+import { PaymentStatus } from '../../../core/enum/PaymentStatus';
 
 @Component({
 	standalone: true,
-	imports: [CommonModule, RouterLink, FormsModule ],
+	imports: [CommonModule, FormsModule],
 	selector: 'app-order-detail',
 	templateUrl: './order-detail.component.html',
 	styleUrls: ['./order-detail.component.scss'],
@@ -24,6 +25,8 @@ export class OrderDetailComponent implements OnInit {
 	user!: UserProfile;
 	note: string = '';
 	PurchaseStatus = PurchaseStatus;
+	PaymentStatus = PaymentStatus;
+
 
 
 	constructor(

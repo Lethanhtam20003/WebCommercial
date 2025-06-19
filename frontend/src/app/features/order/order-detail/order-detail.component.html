@@ -129,7 +129,7 @@
 							</p>
 						</div>
 
-						<div *ngIf="orderDetail.status === 'PENDING'" class="mt-3">
+						<div *ngIf="orderDetail.paymentStatus !== PaymentStatus.PAID" class="mt-3">
 							<button class="btn btn-success" (click)="payment()">
 								Thanh toán
 							</button>

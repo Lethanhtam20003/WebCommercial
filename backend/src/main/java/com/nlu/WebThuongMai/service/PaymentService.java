@@ -20,9 +20,9 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class PaymentService {
-    OrderService orderService;
     PaymentRepository paymentRepository;
     OrderRepository orderRepository;
+    PayPalService payPalService;
 
 
     @Transactional
@@ -39,12 +39,11 @@ public class PaymentService {
 
             Payment entity = Payment.builder()
                     .paypalOrderId(result.get("id").toString())
-                    .amount(amount)
+                    .amount(payPalService.VNDtoUSD(amount))
                     .status(PaymentStatus.COMPLETED)
                     .paymentMethod(PaymentMethod.PAYPAL)
                     .currency(CurrencyType.USD)
                     .build();
-            log.info("Payment entity: {}", entity);
 
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
@@ -53,7 +52,6 @@ public class PaymentService {
             entity.setUser(order.getUser());
 
             order.setPayment(entity);
-            order.setStatus(OrderStatus.CONFIRMED);
             order.setPaymentStatus(PaymentOrderStatus.PAID);
 
             log.info("Order sau khi cập nhật: {}", order);

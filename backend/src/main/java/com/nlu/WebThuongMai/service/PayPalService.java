@@ -51,7 +51,7 @@ public class PayPalService {
         return extractApprovalUrl(response);
     }
 
-    private BigDecimal VNDtoUSD(BigDecimal vndAmount) {
+    public BigDecimal VNDtoUSD(BigDecimal vndAmount) {
         BigDecimal exchangeRate = BigDecimal.valueOf(24000); // Tỷ giá cố định
         return vndAmount.divide(exchangeRate, 2, RoundingMode.HALF_UP);
     }
