@@ -60,6 +60,18 @@ export class CheckoutComponent implements OnInit {
 	}
 
 	confirmOrder() {
+		if(!this.address){
+			this.alert.warning("Vui lòng nhập địa chỉ nhận hàng");
+			return;
+		}
+		if(!this.user.phone){
+			this.alert.warning("Vui lòng nhập số điện thoại");
+			return;
+		}
+		if(!this.user.fullName){
+			this.alert.warning("Vui lòng nhập tên người nhận");
+			return;
+		}
 		this.alert
 			.loading(
 				'Hệ thống đang tạo đơn hàng, vui lòng đợi một chút',

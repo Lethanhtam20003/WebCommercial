@@ -3,10 +3,12 @@ package com.nlu.WebThuongMai.service;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductCreatetionRequest;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductFilterRequest;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
+import com.nlu.WebThuongMai.enums.ProductStatus;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.mapper.ProductMapper;
 import com.nlu.WebThuongMai.model.Category;
+import com.nlu.WebThuongMai.model.Inventory;
 import com.nlu.WebThuongMai.model.Product;
 import com.nlu.WebThuongMai.model.ProductStatistic;
 import com.nlu.WebThuongMai.repository.ProductRepository;
@@ -49,6 +51,22 @@ public class ProductService {
 
     public Page<ProductResponse> getAllProduct(ProductFilterRequest filter, Pageable pageable) {
         Specification<Product> spec = Specification.where(null);
+
+        spec = spec.and((root, query, cb) -> {
+            Join<Product, Inventory> inventoryJoin = root.join("inventories");
+            return cb.gt(inventoryJoin.get("quantity"), 0);
+        });
+
+        // Nếu không truyền filter.status thì mặc định là ACTIVE
+        if (filter.getStatus() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("status"), filter.getStatus())
+            );
+        } else {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("status"), ProductStatus.ACTIVE)
+            );
+        }
 
         if (filter.getName() != null && !filter.getName().isEmpty()) {
             spec = spec.and((root, query, cb) ->
@@ -102,4 +120,6 @@ public class ProductService {
         return productRepository.findByIdWithAllRelations(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
     }
+
+
 }
