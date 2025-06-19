@@ -7,6 +7,7 @@ import { CouponResponse } from '../models/response/coupon/coupon-response.interf
 import { URL_API } from '../../shared/constants/url-api.constants';
 import { Observable } from 'rxjs';
 import { AdminCouponResponse } from '../models/response/coupon/admin-coupon-response.interface';
+import { CouponCreateRequest } from '../models/request/coupon/coupon-create-request.interface';
 
 @Injectable({
 	providedIn: 'root',
@@ -42,4 +43,10 @@ export class CouponService {
 			{ params }
 		);
 	}
+
+  createCoupon(request: CouponCreateRequest): Observable<ApiResponse<CouponResponse>> {
+    console.log(request);
+
+    return this.http.post<ApiResponse<CouponResponse>>(URL_API.coupon, request);
+  }
 }

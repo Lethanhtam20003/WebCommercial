@@ -86,16 +86,18 @@ export class AlertService {
 		timerProgressBar: boolean = true,
 		allowOutsideClick: boolean = false
 	): Promise<any | null> {
-		return this.swal.fire({
-			title,
-			html: message,
-			timer,
-			timerProgressBar: timerProgressBar,
-			allowOutsideClick: allowOutsideClick,
-			didOpen: () => {
-				this.swal.showLoading(this.swal.getConfirmButton());
-			},
-		}).then(result => (result.isConfirmed ? result.value : null));
+		return this.swal
+			.fire({
+				title,
+				html: message,
+				timer,
+				timerProgressBar: timerProgressBar,
+				allowOutsideClick: allowOutsideClick,
+				didOpen: () => {
+					this.swal.showLoading(this.swal.getConfirmButton());
+				},
+			})
+			.then(result => (result.isConfirmed ? result.value : null));
 	}
 
 	/**
@@ -115,28 +117,186 @@ export class AlertService {
 			.then(result => (result.isConfirmed ? result.value : null));
 	}
 
-  /**
-   * Hiển thị một hộp thoại thông tin với các tùy chọn xác nhận, từ chối hoặc hủy.
-   *
-   * @param title - Tiêu đề của hộp thoại.
-   * @param confirmButtonText - Nội dung nút xác nhận.
-   * @param showDenyButton - Có hiển thị nút từ chối hay không (mặc định là false).
-   * @param showCancelButton - Có hiển thị nút hủy hay không (mặc định là false).
-   * @returns Một Promise trả về `result.value` nếu người dùng bấm xác nhận, ngược lại trả về null.
-   */
+	/**
+	 * Hiển thị một hộp thoại thông tin với các tùy chọn xác nhận, từ chối hoặc hủy.
+	 *
+	 * @param title - Tiêu đề của hộp thoại.
+	 * @param confirmButtonText - Nội dung nút xác nhận.
+	 * @param showDenyButton - Có hiển thị nút từ chối hay không (mặc định là false).
+	 * @param showCancelButton - Có hiển thị nút hủy hay không (mặc định là false).
+	 * @returns Một Promise trả về `result.value` nếu người dùng bấm xác nhận, ngược lại trả về null.
+	 */
 	info(
 		title: string,
 		confirmButtonText: string,
 		showDenyButton: boolean = false,
 		showCancelButton: boolean = false
 	): Promise<any | null> {
-		return this.swal.fire({
-			title,
-			showDenyButton,
-			showCancelButton,
-			confirmButtonText,
-			denyButtonText: `Don't save`,
-		}).then(result => (result.isConfirmed ? result.value : null));
+		return this.swal
+			.fire({
+				title,
+				showDenyButton,
+				showCancelButton,
+				confirmButtonText,
+				denyButtonText: `Don't save`,
+			})
+			.then(result => (result.isConfirmed ? result.value : null));
 	}
+
+	async showForm(
+		title: string,
+		fields: ModalInputField[]
+	): Promise<Record<string, string | File> | null> {
+		const formHtml = fields
+			.map(f => {
+				if (f.type === 'textarea') {
+					return `
+            <div class="mb-3 text-start">
+              <label class="form-label fw-semibold">${f.label}</label>
+              <textarea id="${f.name}" class="form-control" placeholder="${f.placeholder || ''}" rows="3">${f.value || ''}</textarea>
+            </div>
+        `;
+				} else if (f.type === 'file') {
+					return `
+            <div class="mb-3 text-start">
+              <label class="form-label fw-semibold">${f.label}</label>
+              <input type="file" id="${f.name}" class="form-control" ${f.required ? 'required' : ''} />
+              <img id="preview-${f.name}" class="img-thumbnail mt-2 d-none" style="max-height: 150px;" />
+            </div>
+          `;
+				} else if (f.type === 'datetime-local') {
+					return `
+            <div class="mb-3 text-start">
+              <label class="form-label fw-semibold">${f.label}</label>
+              <input
+                type="datetime-local"
+                id="${f.name}"
+                class="form-control"
+                value="${f.value || ''}"
+                ${f.required ? 'required' : ''}
+              />
+            </div>
+          `;
+				} else if (f.type === 'select') {
+					const optionsHtml = (f.options || [])
+						.map(o => `<option value="${o.value}">${o.label}</option>`)
+						.join('');
+
+					return `
+            <div class="mb-3 text-start">
+              <label class="form-label fw-semibold">${f.label}</label>
+              <select id="${f.name}" class="form-select" ${f.required ? 'required' : ''}>
+                <option value="" disabled selected hidden>-- Chọn --</option>
+                ${optionsHtml}
+              </select>
+            </div>
+          `;
+				} else {
+					return `
+            <div class="mb-3 text-start">
+              <label class="form-label fw-semibold">${f.label}</label>
+              <input
+                type="${f.type || 'text'}"
+                id="${f.name}"
+                class="form-control"
+                placeholder="${f.placeholder || ''}"
+                value="${f.value || ''}"
+                ${f.required ? 'required' : ''}
+              />
+            </div>
+        `;
+				}
+			})
+			.join('');
+
+		setTimeout(() => {
+			fields.forEach(f => {
+				if (f.type === 'file') {
+					const input = document.getElementById(f.name) as HTMLInputElement;
+					const preview = document.getElementById(
+						`preview-${f.name}`
+					) as HTMLImageElement;
+
+					if (input && preview) {
+						input.addEventListener('change', () => {
+							const file = input.files?.[0];
+							if (file) {
+								const reader = new FileReader();
+								reader.onload = () => {
+									preview.src = reader.result as string;
+									preview.style.display = 'block';
+								};
+								reader.readAsDataURL(file);
+							}
+						});
+					}
+				}
+			});
+		}, 0);
+
+		const result: Record<string, string | File> = {};
+
+		const { isConfirmed } = await Swal.fire({
+			title,
+			html: formHtml,
+			focusConfirm: false,
+			showCancelButton: true,
+			confirmButtonText: 'Lưu',
+			cancelButtonText: 'Hủy',
+			preConfirm: () => {
+				for (const f of fields) {
+					if (f.type === 'file') {
+						const input = document.getElementById(f.name) as HTMLInputElement;
+						const file = input?.files?.[0];
+
+						if (f.required && !file) {
+							Swal.showValidationMessage(`Trường "${f.label}" là bắt buộc`);
+							return null;
+						}
+
+						if (file) {
+							result[f.name] = file;
+						}
+					} else {
+						const val = (
+							document.getElementById(f.name) as
+								| HTMLInputElement
+								| HTMLTextAreaElement
+						)?.value.trim();
+
+						if (f.required && !val) {
+							Swal.showValidationMessage(`Trường "${f.label}" là bắt buộc`);
+							return null;
+						}
+
+						result[f.name] = val || '';
+					}
+				}
+
+				return result;
+			},
+		});
+
+		return isConfirmed ? result : null;
+	}
+
 	constructor() {}
+}
+
+export interface ModalInputField {
+	name: string;
+	label: string;
+	type?:
+		| 'text'
+		| 'number'
+		| 'email'
+		| 'password'
+		| 'file'
+		| 'textarea'
+		| 'datetime-local'
+		| 'select';
+	required?: boolean;
+	placeholder?: string;
+	value?: string;
+	options?: { label: string; value: string }[]; // chỉ dùng khi type là 'select'
 }

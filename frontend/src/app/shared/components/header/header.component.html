@@ -61,7 +61,7 @@
 							href="#"
 							class="nav-link px-2 text-secondary"
 							(click)="goHome()"
-							>{{ label.home }}</a
+							>{{ 'home' | translate }}</a
 						>
 					</li>
 					<li>
@@ -69,39 +69,66 @@
 							href="#"
 							class="nav-link px-2 text-white"
 							[routerLink]="route.product"
-							>{{ label.product }}</a
+							>{{ 'product' | translate }}</a
 						>
 					</li>
 					<li>
-						<a href="#" class="nav-link px-2 text-white">{{ label.sport }}</a>
-					</li>
-					<li>
 						<a href="#" class="nav-link px-2 text-white">{{
-							label.badminton
+							'sport' | translate
 						}}</a>
 					</li>
 					<li>
 						<a href="#" class="nav-link px-2 text-white">{{
-							label.pickleball
+							'badminton' | translate
+						}}</a>
+					</li>
+					<li>
+						<a href="#" class="nav-link px-2 text-white">{{
+							'pickleball' | translate
 						}}</a>
 					</li>
 				</ul>
 
 				<form
-					class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
+					class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-2"
 					[formGroup]="searchForm"
 					(ngSubmit)="onSearch()"
 				>
 					<input
 						type="search"
 						class="form-control form-control-dark text-white"
-						[placeholder]="label.searchProduct"
+						[placeholder]="'searchProduct' | translate"
 						formControlName="searchInput"
 						aria-label="Search"
 					/>
 				</form>
+
+				<div class="dropdown me-lg-2">
+					<button
+						class="btn btn-outline-secondary dropdown-toggle border border-white text-white"
+						type="button"
+						data-bs-toggle="dropdown"
+						aria-expanded="false"
+					>
+						{{ currentLang === 'vi' ? '🇻🇳 Tiếng Việt' : '🇺🇸 English' }}
+					</button>
+
+					<ul class="dropdown-menu dropdown-menu-end">
+						<li>
+							<a class="dropdown-item" (click)="switchLang('vi')">
+								🇻🇳 Tiếng Việt
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item" (click)="switchLang('en')">
+								🇺🇸 English
+							</a>
+						</li>
+					</ul>
+				</div>
+
 				<div class="me-2">
-					<div class="action-buttons d-flex gap-3">
+					<div class="action-buttons d-flex gap-2">
 						<a
 							[routerLink]="'/' + route.cartRoute"
 							class="btn btn-outline-primary d-flex align-items-center gap-2"
@@ -125,14 +152,14 @@
 							class="btn btn-outline-light me-2"
 							[routerLink]="route.loginRoute"
 						>
-							{{ label.logIn }}
+							{{ 'logIn' | translate }}
 						</button>
 						<button
 							type="button"
 							class="btn btn-primary"
 							[routerLink]="route.registerRoute"
 						>
-							{{ label.register }}
+							{{ 'register' | translate }}
 						</button>
 					</ng-container>
 					<ng-template #notLogIn>
@@ -144,7 +171,7 @@
 								data-bs-toggle="dropdown"
 								aria-expanded="false"
 							>
-								{{ label.userAccount }}
+								{{ 'userAccount' | translate }}
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 								<li>
@@ -155,7 +182,7 @@
 										(mouseup)="onRelease('myAccount')"
 										(mouseleave)="onRelease('myAccount')"
 										[routerLink]="route.userRoute + '/' + route.profileRoute"
-										>{{ label.myAccount }}</a
+										>{{ 'myAccount' | translate }}</a
 									>
 								</li>
 								<li>
@@ -166,7 +193,7 @@
 										(mousedown)="onPress('logout')"
 										(mouseup)="onRelease('logout')"
 										(mouseleave)="onRelease('logout')"
-										>{{ label.logOut }}</a
+										> {{ 'logOut' | translate }}</a
 									>
 								</li>
 								<ng-container *ngIf="user$ | async as user">
@@ -177,7 +204,7 @@
 											(mousedown)="onPress('admin')"
 											(mouseup)="onRelease('admin')"
 											(mouseleave)="onRelease('admin')"
-											>{{ label.adminPage }}</a
+											>{{ 'adminPage' | translate }}</a
 										>
 									</li>
 								</ng-container>

@@ -1,7 +1,19 @@
+<div class="d-flex align-items-center mb-3">
+	<button class="btn btn-outline-primary" (click)="toggleFilter()">
+		<i class="bi bi-funnel"></i> Lọc
+	</button>
+
+	<button class="btn btn-primary ms-2" (click)="openCreateCoupon()">
+		<i class="bi bi-plus"></i> Thêm mã giảm giá
+	</button>
+</div>
+
 <app-generic-filter
+	*ngIf="showFilter"
 	[fields]="fields"
 	(filterChanged)="onFilterChanged($event)"
-></app-generic-filter>
+/>
+
 <div class="table-responsive">
 	<table class="table table-striped table-bordered text-center">
 		<thead class="table-dark">
@@ -52,4 +64,4 @@
 	[currentPage]="currentPage"
 	[totalPages]="totalPages"
 	(pageChange)="onPageChange($event)"
-></app-pagination>
+/>

@@ -8,6 +8,7 @@ import { CategoriesAdminFilterRequest } from '../../../core/models/request/categ
 import { Page } from '../../../core/models/response/page-response.interface';
 import { CategoriesAdminFilterResponse } from '../../../core/models/response/category/categories-admin-filter-response.interface';
 import { ApiResponse } from '../../../core/models/api-response.model';
+import { CreateCategoryRequest } from '../../../core/models/request/category/create-category-request.interface';
 
 @Injectable({
 	providedIn: 'root',
@@ -24,16 +25,19 @@ export class CategoryService {
 	filterCategories(
 		request: CategoriesAdminFilterRequest
 	): Observable<ApiResponse<Page<CategoriesAdminFilterResponse>>> {
-    const params = new HttpParams()
-          .set('page', request.page.toString())
-          .set('size', request.size.toString());
+		const params = new HttpParams()
+			.set('page', request.page.toString())
+			.set('size', request.size.toString());
 
-        const { page, size, ...filter } = request;
+		const { page, size, ...filter } = request;
 
 		return this.http.post<ApiResponse<Page<CategoriesAdminFilterResponse>>>(
 			URL_API.categoryFilter,
 			filter,
 			{ params }
 		);
+	}
+	createCategory(category: CreateCategoryRequest): Observable<ApiResponse<category>> {
+		return this.http.post<ApiResponse<category>>(URL_API.createCategory, category);
 	}
 }

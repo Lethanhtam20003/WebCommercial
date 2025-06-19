@@ -6,6 +6,7 @@ import { PromotionResponse } from '../models/response/promotions/promotion-respo
 import { URL_API } from '../../shared/constants/url-api.constants';
 import { Page } from '../models/response/page-response.interface';
 import { GetAllPromotionAdminRequest } from '../models/request/promotion/get-all-promotion-admin-request.interface';
+import { formatDate } from '@angular/common';
 
 @Injectable({
 	providedIn: 'root',
@@ -22,15 +23,26 @@ export class PromotionService {
 	getAllPromotionsFilter(
 		request: GetAllPromotionAdminRequest
 	): Observable<ApiResponse<Page<PromotionResponse>>> {
-		const params = new HttpParams()
-			.set('page', request.page.toString())
-			.set('size', request.size.toString());
-
 		const { page, size, ...body } = request;
+
+		// Format date nếu là object Date
+		const formattedBody = {
+			...body,
+			startDateFrom: body.startDateFrom
+				? formatDate(body.startDateFrom, 'yyyy-MM-dd', 'en-US')
+				: null,
+			endDateTo: body.endDateTo
+				? formatDate(body.endDateTo, 'yyyy-MM-dd', 'en-US')
+				: null,
+		};
+
+		const params = new HttpParams()
+			.set('page', page.toString())
+			.set('size', size.toString());
 
 		return this.http.post<ApiResponse<Page<PromotionResponse>>>(
 			URL_API.promotionFilter,
-			body,
+			formattedBody,
 			{ params }
 		);
 	}

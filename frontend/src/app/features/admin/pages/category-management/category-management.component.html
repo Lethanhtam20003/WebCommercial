@@ -1,14 +1,28 @@
-<app-generic-filter
-	[fields]="field"
-	(filterChanged)="onFilterChanged($event)"
-></app-generic-filter>
+<div class="d-flex align-items-center mb-3">
+  <button class="btn btn-outline-primary" (click)="toggleFilter()">
+    <i class="bi bi-funnel"></i> Lọc
+  </button>
+
+  <button class="btn btn-primary ms-2" (click)="openAddCategory()">
+    <i class="bi bi-plus"></i> Thêm danh mục
+  </button>
+</div>
+
+<div class="flex-grow-1" style="min-width: 250px">
+	<app-generic-filter
+    *ngIf="showFilter"
+		[fields]="field"
+		(filterChanged)="onFilterChanged($event)"
+	/>
+</div>
+
 
 <table class="table table-bordered table-hover text-center mt-3">
 	<thead class="table-dark">
 		<tr>
-			<th style="width: 50px;">#</th>
-			<th style="width: 100px;">Ảnh đại diện</th>
-			<th style="width: 150px;">Tên danh mục</th>
+			<th style="width: 50px">#</th>
+			<th style="width: 100px">Ảnh đại diện</th>
+			<th style="width: 150px">Tên danh mục</th>
 			<th>Mô tả</th>
 		</tr>
 	</thead>

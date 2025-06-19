@@ -12,6 +12,8 @@ import { FilterField } from '../../../../shared/components/generic-filter/generi
 import { GenericFilterComponent } from '../../../../shared/components/generic-filter/generic-filter.component';
 import { CouponType } from '../../../../core/enum/coupon-type.enum';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
+import { CouponCreateRequest } from '../../../../core/models/request/coupon/coupon-create-request.interface';
+import { CouponStatus } from '../../../../core/enum/coupon-status.enum';
 
 @Component({
 	selector: 'app-coupons-management',
@@ -28,6 +30,7 @@ export class CouponsManagementComponent implements OnInit {
 	currentPage = 1;
 	totalPages = 1;
 	pageSize = 10;
+	showFilter = false;
 	fields: FilterField[] = [
 		{
 			name: 'code',
@@ -62,7 +65,7 @@ export class CouponsManagementComponent implements OnInit {
 			label: 'Giảm giá theo',
 			type: 'select',
 			options: [
-				{ label: 'Phần trăm (%)', value: 'PERCENTAGE' },
+				{ label: 'Phần trăm (%)', value: CouponType.PERCENTAGE as string },
 				{ label: 'Giá cố định', value: CouponType.AMOUNT as string },
 			],
 		},
@@ -117,5 +120,94 @@ export class CouponsManagementComponent implements OnInit {
 	onPageChange(newPage: number) {
 		this.currentPage = newPage;
 		this.loadCoupons();
+	}
+
+	toggleFilter() {
+		this.showFilter = !this.showFilter;
+	}
+
+	async openCreateCoupon() {
+		const data = await this.alert.showForm('Thêm mã giảm giá', [
+			{ label: 'Mã coupon', name: 'code', required: true },
+			{
+				label: 'Phần trăm giảm (%)',
+				name: 'discount',
+				type: 'number',
+				required: true,
+			},
+			{ label: 'Mô tả', name: 'description', type: 'textarea', required: true },
+			{
+				label: 'Số lượt sử dụng tối đa',
+				name: 'limitUsers',
+				type: 'number',
+				required: true,
+			},
+			{
+				label: 'Ngày hết hạn (YYYY-MM-DDTHH:mm)',
+				name: 'expirationDate',
+				type: 'datetime-local',
+				required: true,
+			},
+			{
+				label: 'Loại (Phần trăm (%), Giá cố định)',
+				name: 'type',
+				type: 'select',
+				required: true,
+				options: [
+					{ label: 'Phần trăm (%)', value: CouponType.PERCENTAGE as string },
+					{ label: 'Giá cố định', value: CouponType.AMOUNT as string },
+				],
+			},
+			{
+				label: 'Giá điều kiện (nếu có)',
+				name: 'priceCondition',
+				type: 'number',
+				required: true,
+			},
+			{
+				label: 'Giá tối thiểu',
+				name: 'minPrice',
+				type: 'number',
+				required: true,
+			},
+		]);
+
+		if (!data) return;
+
+		try {
+			let rawDiscount = parseFloat(data['discount'] as string);
+			const discount = rawDiscount >= 1 ? rawDiscount / 100 : rawDiscount;
+
+			const request: CouponCreateRequest = {
+				code: data['code'] as string,
+				discount,
+				description: data['description'] as string,
+				limitUsers: parseInt(data['limitUsers'] as string),
+				createdAt: new Date().toISOString().split('.')[0],
+				expirationDate: new Date(
+					data['expirationDate'] as string
+				).toISOString().split('.')[0],
+				status: CouponStatus.ACTIVE,
+				type: data['type'] as CouponType,
+				priceCondition: parseFloat(data['priceCondition'] as string),
+				minPrice: parseFloat(data['minPrice'] as string),
+			};
+
+			console.log(`Request: ${JSON.stringify(request)}`);
+
+			this.couponService.createCoupon(request).subscribe({
+				next: res => {
+          this.alert.success('Tạo má giảm giá thành công');
+					console.log('✅ Tạo mã giảm giá thành công:', res.result);
+					this.loadCoupons(); // hàm reload lại danh sách coupon
+				},
+				error: err => {
+					console.error('❌ Lỗi khi tạo mã giảm giá:', err);
+					this.alert.error('Tạo mã giảm giá thất bại');
+				},
+			});
+		} catch (err) {
+			this.alert.error('Dữ liệu không hợp lệ, vui lòng kiểm tra lại');
+		}
 	}
 }

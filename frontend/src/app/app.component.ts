@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import {
+	ActivatedRoute,
+	NavigationEnd,
+	Router,
+	RouterOutlet,
+} from '@angular/router';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { NgIf } from '@angular/common';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { HeaderComponent } from './shared/components/header/header.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-root',
@@ -13,12 +19,13 @@ import { HeaderComponent } from './shared/components/header/header.component';
 		SocialLoginModule,
 		NgIf,
 		FooterComponent,
+		HeaderComponent,
 	],
 	standalone: true,
 	template: `
 		<app-header *ngIf="showHeader"></app-header>
 		<router-outlet></router-outlet>
-    	<app-footer *ngIf="showFooter"></app-footer>
+		<app-footer *ngIf="showFooter"></app-footer>
 	`,
 	styles: ``,
 })
@@ -29,7 +36,13 @@ export class AppComponent {
 	/*
 	 * @describe: listening event from NavigationEnd to update current url
 	 * */
-	constructor( private router: Router) {
+	constructor(
+		private router: Router,
+		private translate: TranslateService
+	) {
+		const savedLang = localStorage.getItem('lang') || 'vi';
+		translate.setDefaultLang('vi');
+		translate.use(savedLang);
 	}
 
 	/*
@@ -42,10 +55,10 @@ export class AppComponent {
 		this.router.events.subscribe(event => {
 			if (event instanceof NavigationEnd) {
 				const data = this.getDeepestRouteData(this.router.routerState.root);
-				this.showHeader = data['showHeader'] !== false;  // default true
-				this.showFooter = data['showFooter'] !== false;  // default true
+				this.showHeader = data['showHeader'] !== false; // default true
+				this.showFooter = data['showFooter'] !== false; // default true
 			}
-    });
+		});
 	}
 	/*
 	 * @describe: get the deepest route data
