@@ -27,7 +27,7 @@ public class PayPalService {
     @Value("${paypal.secret}")
     private String secret;
 
-    @Value("${paypal.api.base-url}")
+    @Value("${paypal.api-base-url}")
     private String baseUrl;
 
 
@@ -74,6 +74,7 @@ public class PayPalService {
         return Map.of(
                 "intent", "CAPTURE",
                 "purchase_units", List.of(Map.of(
+                        "description", "Đơn hàng mua sản phẩm tại Web Thương Mại",
                         "amount", Map.of(
                                 "currency_code", "USD",
                                 "value", amount.toString()
@@ -81,7 +82,8 @@ public class PayPalService {
                 )),
                 "application_context", Map.of(
                         "return_url", "http://localhost:4200/payment-success",
-                        "cancel_url", "http://localhost:4200/payment-cancel"
+                        "cancel_url", "http://localhost:4200/payment-cancel",
+                        "user_action", "PAY_NOW"
                 )
         );
     }

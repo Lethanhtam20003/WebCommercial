@@ -6,6 +6,7 @@ import com.nlu.WebThuongMai.service.PaymentService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/payments")
 @RequiredArgsConstructor
@@ -35,14 +37,15 @@ public class PaymentController {
     }
 
     @PostMapping("/confirm")
-    public ResponseEntity<String> confirm(@RequestParam String token, @RequestParam Long orderId) {
+    public ApiResponse<String> confirm(@RequestParam String token, @RequestParam Long orderId) {
         Map<String, Object> result = payPalService.captureOrder(token);
 
         Map purchaseUnit = ((List<Map>) result.get("purchase_units")).get(0);
         Map paymentCapture = ((List<Map>) ((Map) purchaseUnit.get("payments")).get("captures")).get(0);
-
         paymentService.confirmPayment(orderId, paymentCapture, result);
-        return ResponseEntity.ok("Payment confirmed");
+        return ApiResponse.<String>builder()
+                .result("Thanh toán thành công")
+                .build();
     }
 
 

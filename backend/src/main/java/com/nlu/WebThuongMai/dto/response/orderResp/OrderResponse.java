@@ -3,6 +3,7 @@ package com.nlu.WebThuongMai.dto.response.orderResp;
 import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
 import com.nlu.WebThuongMai.enums.OrderStatus;
 import com.nlu.WebThuongMai.dto.response.orderResp.OrderItemResponse;
+import com.nlu.WebThuongMai.enums.PaymentOrderStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +30,5 @@ public class OrderResponse {
     CouponResponse coupon;
     Set<OrderItemResponse> orderItems;
     String address;
+    PaymentOrderStatus paymentStatus;
 }

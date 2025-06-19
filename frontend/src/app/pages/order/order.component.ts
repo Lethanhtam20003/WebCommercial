@@ -47,7 +47,7 @@ export class OrderComponent implements OnInit {
 		});
 	}
 	payOrder(id: number) {
-		this.router.navigate(['/payment', id]);
+		this.router.navigate(['/payment']);
 	}
 
 	getStatusLabel(status: OrderStatus): string {

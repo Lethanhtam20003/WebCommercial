@@ -8,10 +8,12 @@ import { UserService } from '../../../core/service/user.service';
 import { UserProfile } from '../../../core/models/response/user/user-profile-response.model';
 import { PurchaseStatus } from '../../../core/enum/PurchaseStatus';
 import { OrderStatus } from '../../../core/enum/order-status.enum';
+import { FormsModule } from '@angular/forms';
+import { PaymentService } from '../../../core/service/cart/payment.service';
 
 @Component({
 	standalone: true,
-	imports: [CommonModule, RouterLink],
+	imports: [CommonModule, RouterLink, FormsModule ],
 	selector: 'app-order-detail',
 	templateUrl: './order-detail.component.html',
 	styleUrls: ['./order-detail.component.scss'],
@@ -20,13 +22,17 @@ export class OrderDetailComponent implements OnInit {
 	orderDetail!: OrderResponse;
 	orderId!: number;
 	user!: UserProfile;
+	note: string = '';
+	PurchaseStatus = PurchaseStatus;
+
 
 	constructor(
 		private orderService: OrderService,
 		private route: ActivatedRoute,
 		private router: Router,
 		private alertService: AlertService,
-		private userService: UserService
+		private userService: UserService,
+		private paymentService: PaymentService
 	) {}
 
 	ngOnInit() {
@@ -72,8 +78,6 @@ export class OrderDetailComponent implements OnInit {
 	}
 
 	payment() {
-		this.router.navigate(['/payment'], {
-			state: { order: this.orderDetail },
-		});
+		this.paymentService.payment(this.orderDetail);
 	}
 }

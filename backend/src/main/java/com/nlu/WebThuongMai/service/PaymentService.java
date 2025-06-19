@@ -26,25 +26,44 @@ public class PaymentService {
 
 
     @Transactional
-    public void confirmPayment(Long orderId, Map paymentCapture, Map<String, Object> result) {
-        Payment entity = Payment.builder()
-                .paymentId(result.get("id").toString())
-                .amount(new BigDecimal(((Map) paymentCapture.get("amount")).get("value").toString()))
-                .status(PaymentStatus.valueOf(paymentCapture.get("status").toString()))
-                .paymentMethod(PaymentMethod.PAYPAL)
-                .currency(CurrencyType.USD)
-                .build();
+    public void confirmPayment(Long orderId, Map<String, Object> paymentCapture, Map<String, Object> result) {
+        try {
+            Object amountObj = paymentCapture.get("amount");
+            if (!(amountObj instanceof Map)) {
+                throw new IllegalArgumentException("Cấu trúc 'amount' không hợp lệ");
+            }
 
-        // Gán đơn hàng
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
+            Map<?, ?> amountMap = (Map<?, ?>) amountObj;
+            BigDecimal amount = new BigDecimal(amountMap.get("value").toString());
 
-        entity.setOrder(order);
-        order.setPayment(entity);
-        order.setStatus(OrderStatus.CONFIRMED); // hoặc PAID
-        order.setPaymentStatus(PaymentOrderStatus.PAID);
 
-        // Lưu Payment
-        paymentRepository.save(entity);
+            Payment entity = Payment.builder()
+                    .paypalOrderId(result.get("id").toString())
+                    .amount(amount)
+                    .status(PaymentStatus.COMPLETED)
+                    .paymentMethod(PaymentMethod.PAYPAL)
+                    .currency(CurrencyType.USD)
+                    .build();
+            log.info("Payment entity: {}", entity);
+
+            Order order = orderRepository.findById(orderId)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
+
+            entity.setOrder(order);
+            entity.setUser(order.getUser());
+
+            order.setPayment(entity);
+            order.setStatus(OrderStatus.CONFIRMED);
+            order.setPaymentStatus(PaymentOrderStatus.PAID);
+
+            log.info("Order sau khi cập nhật: {}", order);
+            orderRepository.save(order);
+            paymentRepository.save(entity);
+
+        } catch (Exception e) {
+            log.error("Lỗi khi xác nhận thanh toán: {}", e.getMessage(), e);
+            throw new RuntimeException("Lỗi xác nhận thanh toán: " + e.getMessage());
+        }
     }
+
 }

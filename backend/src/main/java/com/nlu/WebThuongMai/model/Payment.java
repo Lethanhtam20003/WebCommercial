@@ -27,7 +27,7 @@ public class Payment {
     Long id;
     @Column(nullable = false, unique = true)
 
-    String paymentId;       // ID từ PayPal
+    String paypalOrderId;       // ID từ PayPal
 
     @ManyToOne(fetch = FetchType.LAZY)
             @JoinColumn(name = "user_id")
@@ -41,7 +41,7 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
             @Builder.Default
-    PaymentStatus status = PaymentStatus.CREATED;          // CREATED, APPROVED, COMPLETED, FAILED
+    PaymentStatus status = PaymentStatus.PENDING;          // CREATED, APPROVED, COMPLETED, FAILED
     BigDecimal amount;
 
     @Enumerated(EnumType.STRING)

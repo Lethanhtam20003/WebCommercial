@@ -31,6 +31,10 @@ export const URL_API = {
     suppliers: 'http://localhost:8080/api/v1/supplier',
     inventory: 'http://localhost:8080/api/v1/inventory',
     checkoutOrder: 'http://localhost:8080/api/v1/orders/create',
+    createPayment: 'http://localhost:8080/api/v1/payments/create',
+    confirmPayment: 'http://localhost:8080/api/v1/payments/confirm',
+
+
 
 
 } as const;

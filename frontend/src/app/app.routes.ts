@@ -136,7 +136,9 @@ const errorRouter: Routes = [
 		},
 	},
 ];
-
+/**
+ * 
+ */
 const productRoutes: Routes = [
 	{
 		path: 'product',
@@ -148,6 +150,9 @@ const productRoutes: Routes = [
 		},
 	},
 ];
+/**
+ * 
+ */
 const categoryRoutes: Routes = [
 	{
 		path: 'categories/:id',
@@ -161,7 +166,9 @@ const categoryRoutes: Routes = [
 		},
 	},
 ];
-
+/**
+ * 
+ */
 const orderRoutes: Routes = [
 	{
 		path: 'checkout',
@@ -175,6 +182,32 @@ const orderRoutes: Routes = [
 		},
 	},
 ];
+const paymentRoutes: Routes = [
+	{
+		path: 'payment-success',
+		loadComponent: () => 
+			import('./features/payment/payment-success/payment-success.component').then(
+				m => m.PaymentSuccessComponent
+				),
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+
+
+	},
+	{
+		path: 'payment-cancel',
+		loadComponent: () =>
+			import('./features/payment/payment-cancel/payment-cancel.component').then(
+				m => m.PaymentCancelComponent
+			),
+		data: {
+			showHeader: true,
+			showFooter: true,
+		},
+	}
+]
 /**
  * Routes chính của ứng dụng
  */
@@ -189,6 +222,8 @@ export const routes: Routes = [
 	...productRoutes,
 	...categoryRoutes,
 	...errorRouter,
+	...paymentRoutes,
+
 	{
 		path: 'product/:id',
 		loadComponent: () =>
