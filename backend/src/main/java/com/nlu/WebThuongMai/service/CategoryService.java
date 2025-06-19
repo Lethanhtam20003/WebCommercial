@@ -1,6 +1,7 @@
 package com.nlu.WebThuongMai.service;
 
 import com.nlu.WebThuongMai.dto.request.categoryReq.CategoriesAdminFilterRequest;
+import com.nlu.WebThuongMai.dto.request.categoryReq.CreateCategoryRequest;
 import com.nlu.WebThuongMai.dto.response.productResp.CategoryResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
@@ -74,6 +75,22 @@ public class CategoryService {
 
         return categoryRepository.findAll(spec, pageable)
                 .map(categoryMapper::toCategoryResponse);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public CategoryResponse createNewCategory(CreateCategoryRequest request) {
+        if (categoryRepository.existsByNameIgnoreCase(request.getName())) {
+            throw new IllegalArgumentException("Tên danh mục đã tồn tại");
+        }
+
+        Category newCategory = Category.builder()
+                .name(request.getName())
+                .imageUrl(request.getImageUrl())
+                .description(request.getDescription())
+                .build();
+
+        Category saved = categoryRepository.save(newCategory);
+        return categoryMapper.toCategoryResponse(saved);
     }
 
 }

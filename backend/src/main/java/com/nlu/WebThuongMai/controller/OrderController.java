@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.controller;
 
+import com.nlu.WebThuongMai.dto.request.PageRequest.PaginationRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.GetAllOrderAdminRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.OrderCreateRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.OrderUpdateRequest;
@@ -8,6 +9,8 @@ import com.nlu.WebThuongMai.dto.request.orderReq.OrderFilterRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.service.OrderService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -97,12 +100,13 @@ class OrderController {
 
     // tìm kiếm đơn hàng theo tên
 
-    @PreAuthorize("hasAuthority('USER')")
+
     @GetMapping()
     public ApiResponse<Page<OrderResponse>> getOrdersForUser(
-            @RequestParam Long userId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @Valid @RequestParam Long userId,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size) {
+
         Pageable pageable = PageRequest.of(page, size);
         return ApiResponse.<Page<OrderResponse>>builder()
                 .result(service.getOrdersById(userId, pageable))
@@ -111,9 +115,11 @@ class OrderController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping()
-    public ApiResponse<Page<OrderResponse>> getOrdersByUserIdAndStatus(@RequestBody OrderFilterRequest orderFilterRequest) {
+    public ApiResponse<Page<OrderResponse>> getOrdersByUserIdAndStatus(
+            @Valid @RequestBody OrderFilterRequest request
+    ) {
         return ApiResponse.<Page<OrderResponse>>builder()
-                .result(service.findOrdersByUserIdAndStatus(orderFilterRequest))
+                .result(service.findOrdersByUserIdAndStatus(request))
                 .build();
     }
 
@@ -127,11 +133,9 @@ class OrderController {
      */
     @PostMapping("/filter/admin")
     public ApiResponse<Page<OrderResponse>> getAdminOrders(
-            @RequestBody GetAllOrderAdminRequest request,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @Valid @RequestBody GetAllOrderAdminRequest request) {
         return ApiResponse.<Page<OrderResponse>>builder()
-                .result(service.filterOrdersByAdmin(request, page, size))
+                .result(service.filterOrdersByAdmin(request))
                 .build();
     }
 }

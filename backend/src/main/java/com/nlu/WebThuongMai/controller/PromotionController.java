@@ -53,14 +53,14 @@ public class PromotionController {
 
     @PostMapping("/filter")
     public ApiResponse<Page<PromotionAdminResponse>> filterPromotionAdmin(
-            @RequestBody(required = false) FilterPromotionRequest request,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @Valid @RequestBody(required = false) FilterPromotionRequest request
     ) {
         if (request == null) {
-            request = new FilterPromotionRequest(); // gán default nếu không có gì
+            request = new FilterPromotionRequest();
         }
-        Pageable pageable = PageRequest.of(page, size);
+
+        request.setDefaultSortField("promotionId");
+        Pageable pageable = request.toPageable();
         return ApiResponse.<Page<PromotionAdminResponse>>builder()
                 .result(service.filterPromotionsByAdmin(request, pageable))
                 .build();

@@ -117,7 +117,7 @@ public class CouponController {
 
     @PostMapping("/admin/filter")
     public ApiResponse<Page<AdminCouponResponse>> getAllCouponAdmin(
-            @RequestBody() CouponFilterAdminRequest request,
+            @Valid @RequestBody() CouponFilterAdminRequest request,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
