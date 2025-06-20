@@ -4,7 +4,7 @@ import { ProductService } from '../../../core/service/product.service';
 import { ProductResponse } from '../../../core/models/response/product-response/productResponse';
 import { PageResponse } from '../../../core/models/response/product-response/product-response/page-response.interface';
 import { ProductFilter } from '../../../core/models/request/filter/productFilter';
-import { ProductCardComponent } from '../../../shared/components/product-card/product-card.component';
+import { ProductCardComponent } from '../product-card/product-card.component';
 
 @Component({
 	standalone: true,

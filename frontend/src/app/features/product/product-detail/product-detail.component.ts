@@ -8,10 +8,11 @@ import { CartItem } from '../../../core/models/response/cart/cart-response.inter
 import { RouteLink } from '../../../shared/constants/route-link';
 import { AlertService } from '../../../core/service/alert.service';
 import { CartService } from '../../../core/service/cart/cart.service';
+import { ListProductReferentComponent } from '../list-product-referent/list-product-referent.component';
 
 @Component({
 	standalone: true,
-	imports: [NgFor, CommonModule],
+	imports: [NgFor, CommonModule,ListProductReferentComponent],
 	selector: 'app-product-detail',
 	templateUrl: './product-detail.component.html',
 	styleUrls: ['./product-detail.component.scss'],

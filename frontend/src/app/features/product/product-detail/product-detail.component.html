@@ -60,55 +60,66 @@
 				</button>
 			</div>
 
-			<button class="btn btn-danger btn-lg mt-2"
-			(click)="addToCart()"
-			>
+			<button class="btn btn-danger btn-lg mt-2" (click)="addToCart()">
 				<i class="bi bi-bag"></i> Thêm vào giỏ hàng
 			</button>
-			<button class="btn btn-warning btn-lg mt-2 ms-5 "
-			(click)="buy()"
-			>
-				<i class="bi bi-cart-plus "></i> mua 
+			<button class="btn btn-warning btn-lg mt-2 ms-5" (click)="buy()">
+				<i class="bi bi-cart-plus"></i> mua
 			</button>
 		</div>
 	</div>
 	<div class="product-detail" *ngIf="productDescription">
-  <div *ngIf="productDescription.usage">
-    <h4>Công dụng</h4>
-    <p>{{ productDescription.usage }}</p>
-  </div>
+		<div *ngIf="productDescription.usage">
+			<h4>Công dụng</h4>
+			<p>{{ productDescription.usage }}</p>
+		</div>
 
-  <div *ngIf="productDescription.style">
-    <h4>Kiểu dáng</h4>
-    <p>{{ productDescription.style }}</p>
-  </div>
+		<div *ngIf="productDescription.style">
+			<h4>Kiểu dáng</h4>
+			<p>{{ productDescription.style }}</p>
+		</div>
 
-  <div *ngIf="productDescription.highlights && productDescription.highlights.length > 0">
-    <h4>Đặc điểm nổi bật</h4>
-    <ul>
-      <li *ngFor="let item of productDescription.highlights">{{ item }}</li>
-    </ul>
-  </div>
+		<div
+			*ngIf="
+				productDescription.highlights &&
+				productDescription.highlights.length > 0
+			"
+		>
+			<h4>Đặc điểm nổi bật</h4>
+			<ul>
+				<li *ngFor="let item of productDescription.highlights">{{ item }}</li>
+			</ul>
+		</div>
 
-  <div *ngIf="productDescription.specifications.material || productDescription.specifications.colors || productDescription.specifications.sizes">
-    <h4>Thông số kỹ thuật</h4>
-    <ul>
-      <li *ngIf="productDescription.specifications.material">
-        <strong>Chất liệu:</strong> {{ productDescription.specifications.material }}
-      </li>
-      <li *ngIf="productDescription.specifications.colors">
-        <strong>Màu sắc:</strong> {{ productDescription.specifications.colors }}
-      </li>
-      <li *ngIf="productDescription.specifications.sizes">
-        <strong>Kích thước:</strong> {{ productDescription.specifications.sizes }}
-      </li>
-    </ul>
-  </div>
+		<div
+			*ngIf="
+				productDescription.specifications.material ||
+				productDescription.specifications.colors ||
+				productDescription.specifications.sizes
+			"
+		>
+			<h4>Thông số kỹ thuật</h4>
+			<ul>
+				<li *ngIf="productDescription.specifications.material">
+					<strong>Chất liệu:</strong>
+					{{ productDescription.specifications.material }}
+				</li>
+				<li *ngIf="productDescription.specifications.colors">
+					<strong>Màu sắc:</strong>
+					{{ productDescription.specifications.colors }}
+				</li>
+				<li *ngIf="productDescription.specifications.sizes">
+					<strong>Kích thước:</strong>
+					{{ productDescription.specifications.sizes }}
+				</li>
+			</ul>
+		</div>
 
-  <div *ngIf="productDescription.moreInfo">
-    <h4>Thông tin thêm</h4>
-    <p>{{ productDescription.moreInfo }}</p>
-  </div>
-</div>
-
+		<div *ngIf="productDescription.moreInfo">
+			<h4>Thông tin thêm</h4>
+			<p>{{ productDescription.moreInfo }}</p>
+		</div>
+	</div>
+	<app-list-product-referent [categoryId]="product.categories[0].id">
+	</app-list-product-referent>
 </div>

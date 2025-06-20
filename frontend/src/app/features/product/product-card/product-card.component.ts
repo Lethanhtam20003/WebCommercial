@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { CartService } from '../../../core/service/cart/cart.service';
 import { AlertService } from '../../../core/service/alert.service';
-import { RouteLink } from '../../constants/route-link';
+import { RouteLink } from '../../../shared/constants/route-link';
 import { CartItem } from '../../../core/models/response/cart/cart-response.interface';
 import { nameTolabel } from '../../../core/utils/product-name.parser';
 import { ProductLabel } from '../../../core/models/response/product-response/ProductLabel';
