@@ -441,7 +441,7 @@ export class AlertService {
 			text: message,
 			icon: 'success', // hoặc 'error', 'warning', 'info'
 			showConfirmButton: false,
-			timer: 3000, // hiển thị trong 3 giây
+			timer: 2000, // hiển thị trong 2 giây
 			timerProgressBar: true,
 			toast: true,
 			position: 'top-end', // hiển thị ở góc trên bên phải
