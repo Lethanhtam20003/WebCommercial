@@ -135,13 +135,10 @@ public class UserController {
     @PostMapping("admin/filter")
     ApiResponse<Page<UserInforResponse>> getAllUsersFilterAdmin(
             @Valid
-            @RequestBody() UserFilterAdminRequest request,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestBody() UserFilterAdminRequest request
     ) {
-        Pageable pageable = PageRequest.of(page, size);
         return ApiResponse.<Page<UserInforResponse>>builder()
-                .result(userService.getUsersFiltered(request, pageable))
+                .result(userService.getUsersFiltered(request, request.toPageable()))
                 .build();
     }
 }

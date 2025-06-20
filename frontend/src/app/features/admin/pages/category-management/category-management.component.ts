@@ -179,7 +179,7 @@ export class CategoryManagementComponent implements OnInit {
 	async openEditCategory(category: CategoriesAdminFilterResponse) {
 		const data = await this.alert.showForm(
 			'Cập nhật danh mục',
-			this.buildCategoryFormFields()
+			this.buildCategoryFormFields(category)
 		);
 
 		if (!data) return;

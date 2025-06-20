@@ -58,9 +58,14 @@ export class OrderManagementComponent implements OnInit {
 	loadOrders(): void {
 		this.filter$
 			.pipe(
-				switchMap(filter =>
-					this.orderService.getOrdersAdmin({ ...filter, page: 0, size: 10 })
-				)
+				switchMap(filter => {
+					const fullFilter = {
+						...filter,
+						page: this.currentPage - 1,
+						size: 10,
+					};
+					return this.orderService.getOrdersAdmin(fullFilter);
+				})
 			)
 			.subscribe((res: ApiResponse<Page<OrderResponse>>) => {
 				this.orders = res.result.content || [];

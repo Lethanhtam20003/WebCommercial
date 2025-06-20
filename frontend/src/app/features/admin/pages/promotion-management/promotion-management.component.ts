@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PromotionAdminResponse } from '../../../../core/models/response/promotions/promotion-admin-response.interface';
 import { PromotionService } from '../../../../core/service/promotion.service';
-import { catchError, of } from 'rxjs';
+import { catchError, firstValueFrom, of } from 'rxjs';
 import { Page } from '../../../../core/models/response/page-response.interface';
 import { ApiResponse } from '../../../../core/models/api-response.model';
 import { PromotionResponse } from '../../../../core/models/response/promotions/promotion-response.interface';
@@ -13,6 +13,8 @@ import { FilterField } from '../../../../shared/components/generic-filter/generi
 import { AlertService } from '../../../../core/service/alert.service';
 import { CreatePromotionRequest } from '../../../../core/models/response/promotions/create-promotion-request.interface';
 import { CloudinaryUploadService } from '../../service/cloudinary-upload.service';
+import { ProductService } from '../../../../core/service/product.service';
+import { AdminProductService } from '../../service/admin-product.service';
 
 @Component({
 	selector: 'app-promotion-management',
@@ -57,7 +59,8 @@ export class PromotionManagementComponent implements OnInit {
 	constructor(
 		private promotionService: PromotionService,
 		private alert: AlertService,
-		private cloudinary: CloudinaryUploadService
+		private cloudinary: CloudinaryUploadService,
+		private adminProductService: AdminProductService
 	) {}
 	ngOnInit(): void {
 		this.loadPromotions();
@@ -156,6 +159,21 @@ export class PromotionManagementComponent implements OnInit {
 		clearInterval(this.countdownInterval);
 	}
 
+	// private async getProductOptions() {
+	// 	try {
+	// 		const res = await firstValueFrom(
+	// 			this.adminProductService.getAll({ page: 0, size: 300 })
+	// 		);
+	// 		return res.content.map(p => ({
+	// 			label: p.name,
+	// 			value: p.id.toString(),
+	// 		}));
+	// 	} catch (err) {
+	// 		this.alert.error('Lỗi khi tải danh sách sản phẩm');
+	// 		return [];
+	// 	}
+	// }
+
 	async openCreatePromotion() {
 		const data = await this.alert.showForm('Thêm khuyến mãi', [
 			{ label: 'Tên khuyến mãi', name: 'name', required: true },
@@ -164,6 +182,13 @@ export class PromotionManagementComponent implements OnInit {
 				name: 'discountPercent',
 				type: 'number',
 				required: true,
+			},
+			{
+				label: 'Từ ngày',
+				name: 'startDate',
+				type: 'datetime-local',
+				value: new Date().toISOString().slice(0, 16), // chuẩn input datetime-local
+				required: false,
 			},
 			{
 				label: 'Ngày kết thúc (YYYY-MM-DDTHH:mm)',
@@ -183,6 +208,13 @@ export class PromotionManagementComponent implements OnInit {
 				type: 'file',
 				required: true,
 			},
+			// {
+			// 	label: 'Sản phẩm áp dụng',
+			// 	name: 'productIds',
+			// 	type: 'multiselect',
+			// 	required: true,
+			// 	options: await this.getProductOptions(),
+			// },
 		]);
 
 		if (!data) return;
@@ -215,7 +247,9 @@ export class PromotionManagementComponent implements OnInit {
 			const request: CreatePromotionRequest = {
 				name: data['name'] as string,
 				discountPercent,
-				startDate: new Date().toISOString().split('.')[0],
+				startDate: new Date(data['startDate'] as string)
+					.toISOString()
+					.split('.')[0],
 				endDate: new Date(data['endDate'] as string)
 					.toISOString()
 					.split('.')[0],

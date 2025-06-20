@@ -82,22 +82,13 @@ export class UserService {
 	}
 
 	getAllUsersAdmin(
-		request: GetAllUserAdminRequest
-	): Observable<ApiResponse<Page<UserResponse>>> {
-		const params = new HttpParams()
-			.set('page', request.page.toString())
-			.set('size', request.size.toString());
-
-		const { page, size, ...body } = request;
-
-		return this.http.post<ApiResponse<Page<UserResponse>>>(
-			URL_API.userFilterAdmin,
-			body,
-			{
-				params,
-			}
-		);
-	}
+	request: GetAllUserAdminRequest
+): Observable<ApiResponse<Page<UserResponse>>> {
+	return this.http.post<ApiResponse<Page<UserResponse>>>(
+		URL_API.userFilterAdmin,
+		request
+	);
+}
 
 	banUser(userId: number): Observable<ApiResponse<UserResponse>> {
 		return this.http.delete<ApiResponse<UserResponse>>(

@@ -150,7 +150,7 @@ export class AlertService {
 	async showForm(
 		title: string,
 		fields: ModalInputField[]
-	): Promise<Record<string, string | File> | null> {
+	): Promise<Record<string, string | string[] | File> | null> {
 		const formHtml = fields
 			.map(f => {
 				if (f.type === 'textarea') {
@@ -195,6 +195,20 @@ export class AlertService {
               </select>
             </div>
           `;
+				} else if (f.type === 'multiselect') {
+					const optionsHtml = (f.options || [])
+						.map(o => `<option value="${o.value}">${o.label}</option>`)
+						.join('');
+
+					return `
+		<div class="mb-3 text-start">
+			<label class="form-label fw-semibold">${f.label}</label>
+			<select id="${f.name}" class="form-select" multiple ${f.required ? 'required' : ''}>
+				${optionsHtml}
+			</select>
+			<small class="text-muted">Giữ Ctrl (hoặc Cmd) để chọn nhiều mục</small>
+		</div>
+	`;
 				} else {
 					return `
             <div class="mb-3 text-start">
@@ -238,7 +252,7 @@ export class AlertService {
 			});
 		}, 0);
 
-		const result: Record<string, string | File> = {};
+		const result: Record<string, string | string[] | File> = {};
 
 		const { isConfirmed } = await this.swal.fire({
 			title,
@@ -264,20 +278,38 @@ export class AlertService {
 							result[f.name] = file;
 						}
 					} else {
-						const val = (
-							document.getElementById(f.name) as
-								| HTMLInputElement
-								| HTMLTextAreaElement
-						)?.value.trim();
-
-						if (f.required && !val) {
-							this.swal.showValidationMessage(
-								`Trường "${f.label}" là bắt buộc`
+						if (f.type === 'multiselect') {
+							const select = document.getElementById(
+								f.name
+							) as HTMLSelectElement;
+							const selectedOptions = Array.from(select.selectedOptions).map(
+								opt => opt.value
 							);
-							return null;
-						}
 
-						result[f.name] = val || '';
+							if (f.required && selectedOptions.length === 0) {
+								this.swal.showValidationMessage(
+									`Trường "${f.label}" là bắt buộc`
+								);
+								return null;
+							}
+
+							result[f.name] = selectedOptions;
+						} else {
+							const val = (
+								document.getElementById(f.name) as
+									| HTMLInputElement
+									| HTMLTextAreaElement
+							)?.value.trim();
+
+							if (f.required && !val) {
+								this.swal.showValidationMessage(
+									`Trường "${f.label}" là bắt buộc`
+								);
+								return null;
+							}
+
+							result[f.name] = val || '';
+						}
 					}
 				}
 
@@ -460,7 +492,8 @@ export interface ModalInputField {
 		| 'file'
 		| 'textarea'
 		| 'datetime-local'
-		| 'select';
+		| 'select'
+		| 'multiselect';
 	required?: boolean;
 	placeholder?: string;
 	value?: string;

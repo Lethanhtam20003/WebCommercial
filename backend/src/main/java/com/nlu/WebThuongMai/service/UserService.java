@@ -177,7 +177,6 @@ public class UserService {
      * @return UserInforResponse chứa thông tin người dùng sau khi cập nhật
      * @throws AppException nếu người dùng không tồn tại
      */
-    @PreAuthorize("hasAuthority('USER')")
     public UserInforResponse updateMyUserInfo(long userId, UserUpdateInfoRequest request) {
         User u = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
