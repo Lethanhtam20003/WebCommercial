@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode(callSuper = true)
 public class OrderFilterRequest extends PaginationRequest {
     @Min(value = 1, message = "User ID phải >= 1")
     Long userId;

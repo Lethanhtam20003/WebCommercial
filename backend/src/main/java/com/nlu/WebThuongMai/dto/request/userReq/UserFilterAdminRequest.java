@@ -15,6 +15,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode(callSuper = true)
+
 public class UserFilterAdminRequest extends PaginationRequest {
     String username;
     String email;

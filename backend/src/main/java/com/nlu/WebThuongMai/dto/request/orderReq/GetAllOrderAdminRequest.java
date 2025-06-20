@@ -19,6 +19,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode(callSuper = true)
 public class GetAllOrderAdminRequest extends PaginationRequest {
     OrderStatus status;
 

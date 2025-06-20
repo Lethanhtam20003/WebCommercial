@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode(callSuper = true)
 public class FilterPromotionRequest extends PaginationRequest {
     @Size(min = 1, max = 100, message = "Tên khuyến mãi tối đa 100 ký tự")
     String name;
