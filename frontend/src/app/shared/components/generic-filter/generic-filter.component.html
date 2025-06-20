@@ -1,56 +1,60 @@
 <form
 	#formRef="ngForm"
 	(ngSubmit)="onSubmit()"
-	class="row g-3 p-3 bg-light rounded shadow-sm filter-width"
+	class="row align-items-end g-3 p-3 bg-light rounded shadow-sm"
 >
-	<ng-container *ngFor="let field of fields">
-		<div class="col-md-2" [ngSwitch]="field.type">
-			<label class="form-label">{{ field.label }}</label>
+	<div class="col-md-10">
+    <div class="row g-3">
+      <ng-container *ngFor="let field of fields">
+        <div class="col-md-6" [ngSwitch]="field.type"> <!-- mỗi input chiếm 1/2 hàng -->
+          <label class="form-label">{{ field.label }}</label>
 
-			<!-- Text / Number / Date -->
-			<input
-				*ngSwitchCase="'text'"
-				type="text"
-				class="form-control"
-				[(ngModel)]="formValues[field.name]"
-				[name]="field.name"
-				[placeholder]="field.placeholder || ''"
-			/>
+          <!-- Text / Number / Date -->
+          <input
+            *ngSwitchCase="'text'"
+            type="text"
+            class="form-control"
+            [(ngModel)]="formValues[field.name]"
+            [name]="field.name"
+            [placeholder]="field.placeholder || ''"
+          />
 
-			<input
-				*ngSwitchCase="'number'"
-				type="number"
-				class="form-control"
-				[(ngModel)]="formValues[field.name]"
-				[name]="field.name"
-				[placeholder]="field.placeholder || ''"
-			/>
+          <input
+            *ngSwitchCase="'number'"
+            type="number"
+            class="form-control"
+            [(ngModel)]="formValues[field.name]"
+            [name]="field.name"
+            [placeholder]="field.placeholder || ''"
+          />
 
-			<input
-				*ngSwitchCase="'date'"
-				type="date"
-				class="form-control"
-				[(ngModel)]="formValues[field.name]"
-				[name]="field.name"
-			/>
+          <input
+            *ngSwitchCase="'date'"
+            type="date"
+            class="form-control"
+            [(ngModel)]="formValues[field.name]"
+            [name]="field.name"
+          />
 
-			<!-- Select -->
-			<select
-				*ngSwitchCase="'select'"
-				class="form-select"
-				[(ngModel)]="formValues[field.name]"
-				[name]="field.name"
-			>
-				<option [value]="''">-- {{ field.label }} --</option>
-				<option *ngFor="let opt of field.options" [value]="opt.value">
-					{{ opt.label }}
-				</option>
-			</select>
-		</div>
-	</ng-container>
+          <!-- Select -->
+          <select
+            *ngSwitchCase="'select'"
+            class="form-select"
+            [(ngModel)]="formValues[field.name]"
+            [name]="field.name"
+          >
+            <option [value]="''">-- {{ field.label }} --</option>
+            <option *ngFor="let opt of field.options" [value]="opt.value">
+              {{ opt.label }}
+            </option>
+          </select>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 
 	<!-- Buttons -->
-	<div id="actions" class="col-md-2 d-flex gap-2 align-items-end">
+	<div id="actions" class="col-md-2 d-flex justify-content-end gap-2">
 		<button
 			type="submit"
 			class="btn btn-primary primary-color-button w-100"
@@ -64,7 +68,7 @@
 		<button
 			type="button"
 			class="btn btn-secondary primary-white-color-black-background-button w-100"
-			[class.pressed]="pressedButton === 'remove' "
+			[class.pressed]="pressedButton === 'remove'"
 			(mousedown)="onPress('remove')"
 			(mouseup)="onRelease('remove')"
 			(mouseleave)="onRelease('remove')"

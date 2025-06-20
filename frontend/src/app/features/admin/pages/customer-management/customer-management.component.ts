@@ -10,6 +10,7 @@ import { UtitlyService } from '../../../../core/service/utility.service';
 import { FilterField } from '../../../../shared/components/generic-filter/generic-filter-field.interface';
 import { GenericFilterComponent } from '../../../../shared/components/generic-filter/generic-filter.component';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
+import { AlertService } from '../../../../core/service/alert.service';
 
 @Component({
 	selector: 'app-customer-management',
@@ -23,6 +24,7 @@ export class CustomerManagementComponent implements OnInit {
 	private pageSize: number = 10;
 	filterValues: Record<string, any> = {};
 	protected totalPages = 1;
+	showFilter = false;
 
 	fields: FilterField[] = [
 		{ name: 'username', label: 'Username', type: 'text' },
@@ -57,7 +59,8 @@ export class CustomerManagementComponent implements OnInit {
 
 	constructor(
 		private userService: UserService,
-		protected utility: UtitlyService
+		protected utility: UtitlyService,
+    private alert: AlertService,
 	) {}
 
 	ngOnInit() {
@@ -114,5 +117,29 @@ export class CustomerManagementComponent implements OnInit {
 	onPageChange(page: number): void {
 		this.currentPage = page;
 		this.loadUsers();
+	}
+
+	toggleFilter() {
+		this.showFilter = !this.showFilter;
+	}
+
+	banUser(user: UserResponse): void {
+		this.alert
+			.confirm(`Bạn có chắc chắn muốn xóa người dùng "${user.fullName}" không?`)
+			.then(confirmed => {
+				if (!confirmed) return;
+
+				// Gọi API xoá user
+				this.userService.banUser(user.id).subscribe({
+					next: () => {
+						this.alert.success('Đã xóa người dùng');
+						this.loadUsers(); // hoặc reload lại danh sách nếu có hàm load
+					},
+					error: err => {
+						console.error('❌ Lỗi khi xóa người dùng:', err);
+						this.alert.error('Xóa người dùng thất bại');
+					},
+				});
+			});
 	}
 }

@@ -1,0 +1,45 @@
+<div *ngIf="show" class="modal">
+	<div class="modal-content">
+		<h2>{{ title }}</h2>
+		<form [formGroup]="form" (ngSubmit)="submit()">
+			<ng-container *ngFor="let field of fields">
+				<label>{{ field.label }}</label>
+
+				<!-- Text / Number -->
+				<input
+					*ngIf="field.type === 'text' || field.type === 'number'"
+					[type]="field.type"
+					[formControlName]="field.name"
+				/>
+				<div
+					*ngIf="form.get(field.name)?.touched && form.get(field.name)?.invalid"
+				>
+					Trường này không được để trống
+				</div>
+
+				<!-- Textarea -->
+				<textarea
+					*ngIf="field.type === 'textarea'"
+					[formControlName]="field.name"
+				></textarea>
+
+				<!-- Select -->
+				<select *ngIf="field.type === 'select'" [formControlName]="field.name">
+					<option *ngFor="let opt of field.options" [value]="opt">
+						{{ opt }}
+					</option>
+				</select>
+
+				<!-- Date -->
+				<input
+					*ngIf="field.type === 'date'"
+					type="date"
+					[formControlName]="field.name"
+				/>
+			</ng-container>
+
+			<button type="submit">Lưu</button>
+			<button type="button" (click)="close()">Hủy</button>
+		</form>
+	</div>
+</div>

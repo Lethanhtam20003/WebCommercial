@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LabelConstants } from '../../../shared/constants/label.constants';
 import {
 	FormBuilder,
@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { AlertService } from '../../../core/service/alert.service';
 import { CloudinaryUploadService } from '../../../features/admin/service/cloudinary-upload.service';
 import { UserStateService } from '../../../core/service/state/user-state.service';
-import { Subject, takeUntil, timeout } from 'rxjs';
+import { Subject, Subscription, takeUntil, timeout } from 'rxjs';
 import { UserProfile } from '../../../core/models/response/user/user-profile-response.model';
 import { UtitlyService } from '../../../core/service/utility.service';
 import { UserUpdateRequest } from '../../../core/models/request/user/user-update-request.inteface';
@@ -22,22 +22,20 @@ import { ResponseMessage } from '../../constants/response-message.constants';
 import { UserService } from '../../../core/service/user.service';
 import { Gender } from '../../../core/enum/gender.enum';
 import { AuthService } from '../../../core/service/auth.service';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'user-profile',
 	providers: [CloudinaryUploadService],
-  standalone: false,
+	standalone: false,
 	templateUrl: './user-profile.component.html',
-	// styleUrl: './user-profile.component.scss',
 	styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
 	updateInformationForm!: FormGroup;
-	protected readonly label = LabelConstants;
 	protected readonly gender = Gender;
-	protected readonly errorMessage = ErrorMessageConstants;
-	protected readonly responseMessage = ResponseMessage;
 	private destroy$ = new Subject<void>();
+	private langChangeSubscription: Subscription;
 	currentUser: UserProfile | null = null;
 
 	constructor(
@@ -47,9 +45,18 @@ export class UserProfileComponent implements OnInit {
 		private userState: UserStateService,
 		protected utility: UtitlyService,
 		private userService: UserService,
-	) {}
+    private translate: TranslateService,
+		private cdr: ChangeDetectorRef
+	) {
+    this.langChangeSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      console.log('UserProfile: Language changed to:', event.lang);
+      console.log('Current "userProfile" translation:', this.translate.instant('userProfile'));
+      this.cdr.detectChanges();
+    });
+  }
 
 	ngOnInit(): void {
+		console.log('UserProfile: Initial language:', this.translate.currentLang);
 		this.userState.loadUserFromStorageOrAPI();
 
 		this.userState.user$.pipe(takeUntil(this.destroy$)).subscribe({
@@ -90,7 +97,7 @@ export class UserProfileComponent implements OnInit {
 						address: user.address ?? '',
 						phoneNum: user.phone ?? '',
 						birthday: this.utility.convertIsoToDdMmYyyy(user.birthday ?? ''),
-						gender: user.gender ?? this.label.male,
+						gender: user.gender ?? this.gender.MALE,
 					});
 				}
 			},
@@ -106,21 +113,21 @@ export class UserProfileComponent implements OnInit {
 
 			if (this.updateInformationForm.get('gender')?.hasError('required')) {
 				this.alert.error(
-					ErrorMessageConstants.genderIsNotEmpty + '!',
-					ErrorMessageConstants.meetAnError
+					this.translate.instant('errorMessage.genderIsNotEmpty'),
+          this.translate.instant('errorMessage.meetAnError')
 				);
 			}
 			return;
 		}
 
 		if (!this.currentUser) {
-			this.alert.error(ErrorMessageConstants.currentUserIsunidentified);
+			this.alert.error(this.translate.instant('errorMessage.currentUserIsunidentified'));
 			return;
 		}
 
 		this.alert.loading(
-			this.label.pleaseWaitAMinute,
-			this.label.onWorkingProcess
+			this.translate.instant('pleaseWaitAMinute'),
+      this.translate.instant('onWorkingProcess')
 		);
 
 		const formValue = this.updateInformationForm.value;
@@ -147,10 +154,10 @@ export class UserProfileComponent implements OnInit {
 					// ✅ Cập nhật frontend state để phản ánh ngay
 					this.userState.updateUserInfo(updatedUser.result);
 					this.userState.fetchUserInfo();
-					this.alert.success(this.responseMessage.updateUserSuccess);
+					this.alert.success(this.translate.instant('responseMessage.updateUserSuccess'));
 				},
 				error: () => {
-					this.alert.error(this.errorMessage.errorInUpdateUserInfo);
+					this.alert.error(this.translate.instant('errorMessage.errorInUpdateUserInfo'));
 				},
 			});
 	}
@@ -165,8 +172,8 @@ export class UserProfileComponent implements OnInit {
 
 		if (file.size > maxSizeInBytes) {
 			this.alert.error(
-				ErrorMessageConstants.imageIsOversized + '!',
-				ErrorMessageConstants.cannotUploadImage
+				this.translate.instant('errorMessage.imageIsOversized'),
+        this.translate.instant('errorMessage.cannotUploadImage')
 			);
 
 			this.updateInformationForm.patchValue({ profileImage: null });
@@ -175,8 +182,8 @@ export class UserProfileComponent implements OnInit {
 
 		if (!allowedTypes.includes(file.type)) {
 			this.alert.error(
-				ErrorMessageConstants.imageIsNotInAllowedType + '!',
-				ErrorMessageConstants.cannotUploadImage
+				this.translate.instant('errorMessage.imageIsNotInAllowedType'),
+        this.translate.instant('errorMessage.cannotUploadImage')
 			);
 
 			this.updateInformationForm.patchValue({ profileImage: null });
@@ -191,8 +198,8 @@ export class UserProfileComponent implements OnInit {
 			})
 			.catch(err => {
 				this.alert.error(
-					ErrorMessageConstants.errorInUploadImagePleaseTryAgain,
-					ErrorMessageConstants.cannotUploadImage
+					this.translate.instant('errorMessage.errorInUploadImagePleaseTryAgain'),
+          this.translate.instant('errorMessage.cannotUploadImage')
 				);
 			});
 	}
@@ -248,14 +255,3 @@ interface UserProfileFormFields {
 	birthday: FormControl<string>;
 	gender: FormControl<string>;
 }
-
-// interface UserUpdateFormFields {
-// 	password: FormControl<string | null>;
-// 	birthday: FormControl<string | null>;
-// 	avatar: FormControl<string | null>;
-// 	gender: FormControl<string | null>;
-// 	email: FormControl<string | null>;
-// 	phone: FormControl<string | null>;
-// 	address: FormControl<string | null>;
-// 	status: FormControl<string | null>;
-// }

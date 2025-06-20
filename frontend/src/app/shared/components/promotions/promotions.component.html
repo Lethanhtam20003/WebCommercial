@@ -1,38 +1,40 @@
 <div class="d-flex flex-row flex-wrap gap-3 justify-content-center">
-	<div class="card mb-3 coupon-card" *ngFor="let promotion of promotions">
-		<div class="card-body">
-			<div class="d-flex justify-content-between align-items-center mb-2">
-				<h5 class="card-title text-start mb-0">{{ promotion.name }}</h5>
-				<span class="badge bg-danger" *ngIf="!promotion.saved">{{
-					promotion.remainingTime
-				}}</span>
-				<span class="badge bg-success" *ngIf="promotion.saved">Đã lưu</span>
-			</div>
-			<p class="card-text text-start text-muted mb-1">
-				{{ promotion.description }}
-			</p>
-			<p class="card-text text-start small text-secondary">
-				Giảm {{ promotion.discountPercent }}%
-			</p>
-			<div class="text-start">
-				<button
-					class="btn btn-sm primary-color-button"
-					[disabled]="promotion.saved || promotion.expired"
-					(click)="saveCoupon(promotion)"
-					(mousedown)="onPress(promotion.promotionId)"
-					(mouseup)="onRelease(promotion.promotionId)"
-					(mouseleave)="onRelease(promotion.promotionId)"
-					[class.pressed]="buttonStates[promotion.promotionId]"
-				>
-					{{
-						promotion.saved
-							? 'Đã lưu'
-							: promotion.expired
-								? 'Hết hạn'
-								: 'Lưu coupon'
-					}}
-				</button>
-			</div>
-		</div>
-	</div>
+  <div class="card mb-3 coupon-card" *ngFor="let coupon of coupons">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="card-title text-start mb-0">{{ coupon.code }}</h5>
+        <span class="badge bg-danger" *ngIf="!coupon.saved">
+          {{ coupon.remainingTime }}
+        </span>
+        <span class="badge bg-success" *ngIf="coupon.saved">
+          {{ 'promotion.saved' | translate }}
+        </span>
+      </div>
+      <p class="card-text text-start text-muted mb-1">
+        {{ coupon.description }}
+      </p>
+      <p class="card-text text-start small text-secondary">
+        {{ 'promotion.discount' | translate: { percent: coupon.discount } }}
+      </p>
+      <div class="text-start">
+        <button
+          class="btn btn-sm primary-color-button"
+          [disabled]="coupon.saved || coupon.expired"
+          (click)="saveCoupon(coupon)"
+          (mousedown)="onPress(coupon.id)"
+          (mouseup)="onRelease(coupon.id)"
+          (mouseleave)="onRelease(coupon.id)"
+          [class.pressed]="buttonStates[coupon.id]"
+        >
+          {{
+            coupon.saved
+              ? ('promotion.saved' | translate)
+              : coupon.expired
+                ? ('promotion.expired' | translate)
+                : ('promotion.save' | translate)
+          }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -177,7 +177,7 @@ export class CheckoutComponent implements OnInit {
 			{
 				id: 1,
 				code: 'SALE20',
-				discountPercentage: 20,
+				discount: 20,
 				description: '',
 				expirationDate: '2025-12-31',
 			},
@@ -189,7 +189,7 @@ export class CheckoutComponent implements OnInit {
 		);
 		if (found) {
 			this.selectedCoupon = found;
-			this.discount = (this.total * found.discountPercentage) / 100;
+			this.discount = (this.total * found.discount) / 100;
 		} else {
 			this.selectedCoupon = null;
 			this.discount = 0;

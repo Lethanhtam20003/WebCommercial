@@ -4,6 +4,8 @@ import com.nlu.WebThuongMai.dto.request.promotion.FilterPromotionRequest;
 import com.nlu.WebThuongMai.dto.request.promotion.PromotionRequest;
 import com.nlu.WebThuongMai.dto.response.promotion.PromotionAdminResponse;
 import com.nlu.WebThuongMai.dto.response.promotion.PromotionResponse;
+import com.nlu.WebThuongMai.enums.exception.ErrorCode;
+import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.mapper.PromotionMapper;
 import com.nlu.WebThuongMai.model.Promotion;
 import com.nlu.WebThuongMai.repository.PromotionRepository;
@@ -75,27 +77,19 @@ public class PromotionService {
         }
 
         // Lọc theo ngày bắt đầu
-        if (request.getStartDateFrom() != null && !request.getStartDateFrom().trim().isEmpty()) {
-            try {
-                LocalDate startDate = LocalDate.parse(request.getStartDateFrom().trim());
-                spec = spec.and((root, query, cb) ->
-                        cb.greaterThanOrEqualTo(root.get("startDate"), startDate)
-                );
-            } catch (DateTimeParseException ignored) {
-                // Nếu sai format thì bỏ qua filter này
-            }
+        if (request.getStartDateFrom() != null) {
+            LocalDate startDate = request.getStartDateFrom();
+            spec = spec.and((root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("startDate"), startDate)
+            );
         }
 
         // Lọc theo ngày kết thúc
-        if (request.getEndDateTo() != null && !request.getEndDateTo().trim().isEmpty()) {
-            try {
-                LocalDate endDate = LocalDate.parse(request.getEndDateTo().trim());
-                spec = spec.and((root, query, cb) ->
-                        cb.lessThanOrEqualTo(root.get("endDate"), endDate.atTime(23, 59, 59))
-                );
-            } catch (DateTimeParseException ignored) {
-                // Bỏ qua nếu format sai
-            }
+        if (request.getEndDateTo() != null) {
+            LocalDateTime endDate = request.getEndDateTo().atTime(23, 59, 59);
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("endDate"), endDate)
+            );
         }
 
         // Lọc theo giá trị giảm giá tối thiểu
@@ -112,5 +106,14 @@ public class PromotionService {
 
         Page<Promotion> pageResult = repo.findAll(spec, pageable);
         return pageResult.map(mapper::promotionToPromotionAdminResp);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public PromotionAdminResponse softDeletePromotion(Long promotionId) {
+        Promotion promotion = repo.findById(promotionId)
+                .orElseThrow(() -> new AppException(ErrorCode.PROMOTION_NOT_FOUND));
+
+        promotion.setDescription("đã xoá");
+        return mapper.promotionToPromotionAdminResp(repo.save(promotion));
     }
 }

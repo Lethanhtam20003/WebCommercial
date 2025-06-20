@@ -7,18 +7,32 @@ import {
 	ReactiveFormsModule,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { distinctUntilChanged, filter, map, Observable, Subject, takeUntil } from 'rxjs';
+import {
+	distinctUntilChanged,
+	filter,
+	map,
+	Observable,
+	Subject,
+	takeUntil,
+} from 'rxjs';
 import { LabelConstants } from '../../../shared/constants/label.constants';
 import { RouteLink } from '../../../shared/constants/route-link';
 import { AuthService } from '../../../core/service/auth.service';
 import { UserStateService } from '../../../core/service/state/user-state.service';
 import { UserProfile } from '../../../core/models/response/user/user-profile-response.model';
 import { Role } from '../../../core/enum/role.enum';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-header',
 	standalone: true,
-	imports: [RouterModule, FormsModule, ReactiveFormsModule, CommonModule],
+	imports: [
+		RouterModule,
+		FormsModule,
+		ReactiveFormsModule,
+		CommonModule,
+		TranslateModule,
+	],
 	templateUrl: './header.component.html',
 	styleUrls: ['./header.component.scss'],
 })
@@ -37,14 +51,21 @@ export class HeaderComponent implements OnInit {
 	protected user$!: Observable<UserProfile | null>;
 	protected isAdmin$!: Observable<boolean>;
 	protected user: UserProfile | null = null;
+	currentLang = 'vi';
 
 	constructor(
 		private fb: FormBuilder,
 		// private http: HttpClient,
 		private router: Router,
 		private authService: AuthService,
-		private userStateService: UserStateService
-	) {}
+		private userStateService: UserStateService,
+		private translate: TranslateService
+	) {
+		translate.addLangs(['vi', 'en']);
+		const savedLang = localStorage.getItem('lang') || 'vi';
+		this.currentLang = savedLang;
+		translate.use(savedLang);
+	}
 
 	ngOnInit(): void {
 		this.searchForm = this.fb.group({
@@ -52,11 +73,11 @@ export class HeaderComponent implements OnInit {
 		});
 		this.isLoggedIn$ = this.authService.isLoggedIn$;
 		this.user$ = this.userStateService.user$;
-    this.userStateService.fetchUserInfo();
+		this.userStateService.fetchUserInfo();
 
 		this.isAdmin$ = this.user$.pipe(
 			map(user => user?.role === 'ADMIN'),
-      distinctUntilChanged(),
+			distinctUntilChanged(),
 			filter(Boolean)
 		);
 
@@ -117,5 +138,11 @@ export class HeaderComponent implements OnInit {
 	ngOnDestroy(): void {
 		this.destroy$.next();
 		this.destroy$.complete();
+	}
+
+	switchLang(lang: string) {
+		this.currentLang = lang;
+		this.translate.use(lang);
+		localStorage.setItem('lang', lang);
 	}
 }

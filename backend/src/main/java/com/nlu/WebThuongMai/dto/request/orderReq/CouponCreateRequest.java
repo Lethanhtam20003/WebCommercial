@@ -30,8 +30,8 @@ public class CouponCreateRequest {
     @Min(value = 1, message = "LIMIT_USERS_COUPONS_MUST_BE_POSITIVE")
     int limitUsers;
     @NotNull(message = "FIELD_CAN_NOT_BE_NULL")
-    @Future(message = "EXPIRATION_DATE_COUPONS_MUST_BE_IN_FUTURE")
     LocalDateTime createdAt;
+    @Future(message = "EXPIRATION_DATE_COUPONS_MUST_BE_IN_FUTURE")
     @NotNull(message = "FIELD_CAN_NOT_BE_NULL")
     LocalDateTime expirationDate;
     @NotNull(message = "FIELD_CAN_NOT_BE_NULL")

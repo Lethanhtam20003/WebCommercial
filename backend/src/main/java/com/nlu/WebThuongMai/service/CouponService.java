@@ -3,9 +3,11 @@ package com.nlu.WebThuongMai.service;
 import com.nlu.WebThuongMai.dto.request.couponReq.CouponFilterAdminRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponRequest;
-import com.nlu.WebThuongMai.dto.request.orderReq.CouponUpdateRequest;
+import com.nlu.WebThuongMai.dto.request.couponReq.CouponUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.couponResp.AdminCouponResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
+import com.nlu.WebThuongMai.dto.response.userResp.UserResponse;
+import com.nlu.WebThuongMai.enums.CouponStatus;
 import com.nlu.WebThuongMai.enums.CouponType;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
@@ -14,6 +16,7 @@ import com.nlu.WebThuongMai.mapper.CouponMapper;
 import com.nlu.WebThuongMai.model.Coupon;
 import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.repository.CouponRepository;
+import com.nlu.WebThuongMai.repository.UserRepository;
 import jakarta.persistence.criteria.Predicate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 
@@ -44,6 +48,7 @@ public class CouponService {
     CouponRepository repository;
     CouponMapper mapper;
     UserService userService;
+    UserRepository userRepo;
 
 
     public CouponResponse createCoupon(CouponCreateRequest request) {
@@ -64,6 +69,7 @@ public class CouponService {
                 .orElseThrow(() -> new AppException(ErrorCode.COUPON_NOT_FOUND)));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CouponResponse updateCoupon(long couponId, CouponUpdateRequest request) {
         Coupon coupon = repository.findById(couponId)
                 .orElseThrow(() -> new AppException(ErrorCode.COUPON_NOT_FOUND));
@@ -79,10 +85,12 @@ public class CouponService {
         return mapper.toCouponResponse(repository.save(coupon));
     }
 
-    public Boolean deleteCoupon(long couponId) {
-        var coupon = repository.findById(couponId).orElseThrow(() -> new AppException(ErrorCode.COUPON_NOT_FOUND));
-        repository.deleteById(couponId);
-        return true;
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public CouponResponse deleteCoupon(long couponId) {
+        Coupon coupon = repository.findById(couponId).orElseThrow(() -> new AppException(ErrorCode.COUPON_NOT_FOUND));
+        coupon.setStatus(CouponStatus.DELETED);
+
+        return mapper.toCouponResponse(repository.save(coupon));
     }
 
     public CouponResponse getCouponByCode(String code) {
@@ -106,7 +114,6 @@ public class CouponService {
         return total.subtract(discountAmount).max(BigDecimal.ZERO);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     public Page<GetAllCouponResponse> getAllCoupons(Pageable pageable) {
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
@@ -180,5 +187,33 @@ public class CouponService {
 
         Page<Coupon> couponPage = repository.findAll(spec, pageable);
         return couponPage.map(mapper::toAdminCouponResponse);
+    }
+
+    public List<GetAllCouponResponse> getTop5Coupons() {
+        var coupons = repository.findTop5ByOrderByExpirationDateDesc();
+        return mapper.toGetAllCouponResponseList(coupons);
+    }
+
+
+    @Transactional
+    public void saveCoupon(Long userId, String couponCode) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        Optional<Coupon> coupon = repository.findByCode(couponCode);
+
+
+        if (user.getCoupons() != null && Arrays.asList(user.getCoupons().split(";")).contains(couponCode)) {
+            throw new IllegalStateException("Bạn đã lưu mã này rồi");
+        }
+
+        String newCoupons = user.getCoupons() == null || user.getCoupons().isEmpty()
+                ? couponCode
+                : user.getCoupons() + "," + couponCode;
+
+        user.setCoupons(newCoupons);
+        user.setUpdated_at(LocalDateTime.now());
+
+        userRepo.save(user);
     }
 }

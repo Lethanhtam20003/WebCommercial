@@ -2,7 +2,7 @@ package com.nlu.WebThuongMai.controller;
 
 import com.nlu.WebThuongMai.dto.request.couponReq.CouponFilterAdminRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
-import com.nlu.WebThuongMai.dto.request.orderReq.CouponUpdateRequest;
+import com.nlu.WebThuongMai.dto.request.couponReq.CouponUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.AdminCouponResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
@@ -17,6 +17,8 @@ import com.nlu.WebThuongMai.dto.response.couponResp.GetAllCouponResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -98,8 +100,8 @@ public class CouponController {
      * @return Kết quả xóa mã giảm giá
      */
     @DeleteMapping("/{couponId}")
-    public ApiResponse<Boolean> deleteCoupon(@PathVariable long couponId) {
-        return ApiResponse.<Boolean>builder()
+    public ApiResponse<CouponResponse> deleteCoupon(@PathVariable long couponId) {
+        return ApiResponse.<CouponResponse>builder()
                 .result(service.deleteCoupon(couponId))
                 .build();
     }
@@ -117,13 +119,31 @@ public class CouponController {
 
     @PostMapping("/admin/filter")
     public ApiResponse<Page<AdminCouponResponse>> getAllCouponAdmin(
-            @RequestBody() CouponFilterAdminRequest request,
+            @Valid @RequestBody() CouponFilterAdminRequest request,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ApiResponse.<Page<AdminCouponResponse>>builder()
                 .result(service.getCouponsFilter(request, pageable))
+                .build();
+    }
+
+    @GetMapping("/top5")
+    public ApiResponse<List<GetAllCouponResponse>> getTop5Coupons() {
+        return ApiResponse.<List<GetAllCouponResponse>>builder()
+                .result(service.getTop5Coupons())
+                .build();
+    }
+
+    @PostMapping("/save")
+    public ApiResponse<String> saveCoupon(
+            @RequestParam String couponCode,
+            @RequestParam Long userId
+    ) {
+        service.saveCoupon(userId, couponCode);
+        return ApiResponse.<String>builder()
+                .result("Lưu     mã giảm giá thành công")
                 .build();
     }
 }

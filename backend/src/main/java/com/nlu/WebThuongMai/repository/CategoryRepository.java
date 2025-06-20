@@ -15,4 +15,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
     @Override
     @NotNull
     List<Category> findAll();
+
+    boolean existsByNameIgnoreCase(String name);
 }

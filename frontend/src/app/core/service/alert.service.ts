@@ -147,28 +147,156 @@ export class AlertService {
 			.then(result => (result.isConfirmed ? result.value : null));
 	}
 
-	notification(message: string) {
-		this.swal.fire({
-			text: message,
-			icon: 'success', // hoặc 'error', 'warning', 'info'
-			showConfirmButton: false,
-			timer: 3000, // hiển thị trong 3 giây
-			timerProgressBar: true,
-			toast: true,
-			position: 'top-end', // hiển thị ở góc trên bên phải
+	async showForm(
+		title: string,
+		fields: ModalInputField[]
+	): Promise<Record<string, string | File> | null> {
+		const formHtml = fields
+			.map(f => {
+				if (f.type === 'textarea') {
+					return `
+            <div class="mb-3 text-start">
+              <label class="form-label fw-semibold">${f.label}</label>
+              <textarea id="${f.name}" class="form-control" placeholder="${f.placeholder || ''}" rows="3">${f.value || ''}</textarea>
+            </div>
+        `;
+				} else if (f.type === 'file') {
+					return `
+            <div class="mb-3 text-start">
+              <label class="form-label fw-semibold">${f.label}</label>
+              <input type="file" id="${f.name}" class="form-control" ${f.required ? 'required' : ''} />
+              <img id="preview-${f.name}" class="img-thumbnail mt-2 d-none" style="max-height: 150px;" />
+            </div>
+          `;
+				} else if (f.type === 'datetime-local') {
+					return `
+            <div class="mb-3 text-start">
+              <label class="form-label fw-semibold">${f.label}</label>
+              <input
+                type="datetime-local"
+                id="${f.name}"
+                class="form-control"
+                value="${f.value || ''}"
+                ${f.required ? 'required' : ''}
+              />
+            </div>
+          `;
+				} else if (f.type === 'select') {
+					const optionsHtml = (f.options || [])
+						.map(o => `<option value="${o.value}">${o.label}</option>`)
+						.join('');
+
+					return `
+            <div class="mb-3 text-start">
+              <label class="form-label fw-semibold">${f.label}</label>
+              <select id="${f.name}" class="form-select" ${f.required ? 'required' : ''}>
+                <option value="" disabled selected hidden>-- Chọn --</option>
+                ${optionsHtml}
+              </select>
+            </div>
+          `;
+				} else {
+					return `
+            <div class="mb-3 text-start">
+              <label class="form-label fw-semibold">${f.label}</label>
+              <input
+                type="${f.type || 'text'}"
+                id="${f.name}"
+                class="form-control"
+                placeholder="${f.placeholder || ''}"
+                value="${f.value || ''}"
+                ${f.required ? 'required' : ''}
+              />
+            </div>
+        `;
+				}
+			})
+			.join('');
+
+		setTimeout(() => {
+			fields.forEach(f => {
+				if (f.type === 'file') {
+					const input = document.getElementById(f.name) as HTMLInputElement;
+					const preview = document.getElementById(
+						`preview-${f.name}`
+					) as HTMLImageElement;
+
+					if (input && preview) {
+						input.addEventListener('change', () => {
+							const file = input.files?.[0];
+							if (file) {
+								const reader = new FileReader();
+								reader.onload = () => {
+									preview.src = reader.result as string;
+									preview.style.display = 'block';
+								};
+								reader.readAsDataURL(file);
+							}
+						});
+					}
+				}
+			});
+		}, 0);
+
+		const result: Record<string, string | File> = {};
+
+		const { isConfirmed } = await this.swal.fire({
+			title,
+			html: formHtml,
+			focusConfirm: false,
+			showCancelButton: true,
+			confirmButtonText: 'Lưu',
+			cancelButtonText: 'Hủy',
+			preConfirm: () => {
+				for (const f of fields) {
+					if (f.type === 'file') {
+						const input = document.getElementById(f.name) as HTMLInputElement;
+						const file = input?.files?.[0];
+
+						if (f.required && !file) {
+							this.swal.showValidationMessage(
+								`Trường "${f.label}" là bắt buộc`
+							);
+							return null;
+						}
+
+						if (file) {
+							result[f.name] = file;
+						}
+					} else {
+						const val = (
+							document.getElementById(f.name) as
+								| HTMLInputElement
+								| HTMLTextAreaElement
+						)?.value.trim();
+
+						if (f.required && !val) {
+							this.swal.showValidationMessage(
+								`Trường "${f.label}" là bắt buộc`
+							);
+							return null;
+						}
+
+						result[f.name] = val || '';
+					}
+				}
+
+				return result;
+			},
 		});
+
+		return isConfirmed ? result : null;
 	}
-
 	async changeAddress() {
-	const provinces = await firstValueFrom(this.addressService.getProvinces());
-	const provinceOptions = provinces
-		.map(p => `<option value="${p.code}">${p.name}</option>`)
-		.join('');
+		const provinces = await firstValueFrom(this.addressService.getProvinces());
+		const provinceOptions = provinces
+			.map(p => `<option value="${p.code}">${p.name}</option>`)
+			.join('');
 
-	return this.swal.fire({
-		title: 'Thay đổi địa chỉ',
-		width: '80rem',
-		html: `
+		return this.swal.fire({
+			title: 'Thay đổi địa chỉ',
+			width: '80rem',
+			html: `
 			<style>
 				.flex-row {
 					display: flex;
@@ -225,56 +353,116 @@ export class AlertService {
 				<input id="detail" class="swal2-input" placeholder="Số nhà, tên đường" />
 			</div>
 		`,
-		showCancelButton: true,
-		confirmButtonText: 'Xác nhận',
-		didOpen: () => {
-			const provinceSelect = document.getElementById('province') as HTMLSelectElement;
-			const districtSelect = document.getElementById('district') as HTMLSelectElement;
-			const wardSelect = document.getElementById('ward') as HTMLSelectElement;
+			showCancelButton: true,
+			confirmButtonText: 'Xác nhận',
+			didOpen: () => {
+				const provinceSelect = document.getElementById(
+					'province'
+				) as HTMLSelectElement;
+				const districtSelect = document.getElementById(
+					'district'
+				) as HTMLSelectElement;
+				const wardSelect = document.getElementById('ward') as HTMLSelectElement;
 
-			provinceSelect.addEventListener('change', async () => {
-				const provinceCode = +provinceSelect.value;
-				const provinceData = await firstValueFrom(this.addressService.getDistricts(provinceCode));
-				const districtOptions = provinceData.districts
-					.map((d: any) => `<option value="${d.code}">${d.name}</option>`)
-					.join('');
-				districtSelect.innerHTML = `<option disabled selected>Chọn quận/huyện</option>` + districtOptions;
-				wardSelect.innerHTML = `<option disabled selected>Chọn phường/xã</option>`;
-			});
+				provinceSelect.addEventListener('change', async () => {
+					const provinceCode = +provinceSelect.value;
+					const provinceData = await firstValueFrom(
+						this.addressService.getDistricts(provinceCode)
+					);
+					const districtOptions = provinceData.districts
+						.map((d: any) => `<option value="${d.code}">${d.name}</option>`)
+						.join('');
+					districtSelect.innerHTML =
+						`<option disabled selected>Chọn quận/huyện</option>` +
+						districtOptions;
+					wardSelect.innerHTML = `<option disabled selected>Chọn phường/xã</option>`;
+				});
 
-			districtSelect.addEventListener('change', async () => {
-				const districtCode = +districtSelect.value;
-				const districtData = await firstValueFrom(this.addressService.getWards(districtCode));
-				const wardOptions = districtData.wards
-					.map((w: any) => `<option value="${w.code}">${w.name}</option>`)
-					.join('');
-				wardSelect.innerHTML = `<option disabled selected>Chọn phường/xã</option>` + wardOptions;
-			});
-		},
-		preConfirm: () => {
-			const fullName = (document.getElementById('fullName') as HTMLInputElement)?.value?.trim();
-			const phoneNumber = (document.getElementById('phoneNumber') as HTMLInputElement)?.value?.trim();
-			const detail = (document.getElementById('detail') as HTMLInputElement)?.value?.trim();
-			const province = (document.getElementById('province') as HTMLSelectElement)?.selectedOptions[0]?.text;
-			const district = (document.getElementById('district') as HTMLSelectElement)?.selectedOptions[0]?.text;
-			const ward = (document.getElementById('ward') as HTMLSelectElement)?.selectedOptions[0]?.text;
+				districtSelect.addEventListener('change', async () => {
+					const districtCode = +districtSelect.value;
+					const districtData = await firstValueFrom(
+						this.addressService.getWards(districtCode)
+					);
+					const wardOptions = districtData.wards
+						.map((w: any) => `<option value="${w.code}">${w.name}</option>`)
+						.join('');
+					wardSelect.innerHTML =
+						`<option disabled selected>Chọn phường/xã</option>` + wardOptions;
+				});
+			},
+			preConfirm: () => {
+				const fullName = (
+					document.getElementById('fullName') as HTMLInputElement
+				)?.value?.trim();
+				const phoneNumber = (
+					document.getElementById('phoneNumber') as HTMLInputElement
+				)?.value?.trim();
+				const detail = (
+					document.getElementById('detail') as HTMLInputElement
+				)?.value?.trim();
+				const province = (
+					document.getElementById('province') as HTMLSelectElement
+				)?.selectedOptions[0]?.text;
+				const district = (
+					document.getElementById('district') as HTMLSelectElement
+				)?.selectedOptions[0]?.text;
+				const ward = (document.getElementById('ward') as HTMLSelectElement)
+					?.selectedOptions[0]?.text;
 
-			if (!fullName || !phoneNumber || !detail || !province || !district || !ward) {
-				this.swal.showValidationMessage('Vui lòng nhập đầy đủ thông tin người nhận và địa chỉ');
-				return;
-			}
+				if (
+					!fullName ||
+					!phoneNumber ||
+					!detail ||
+					!province ||
+					!district ||
+					!ward
+				) {
+					this.swal.showValidationMessage(
+						'Vui lòng nhập đầy đủ thông tin người nhận và địa chỉ'
+					);
+					return;
+				}
 
-			return {
-				fullName,
-				phoneNumber,
-				detail,
-				province,
-				district,
-				ward,
-				fullAddress: `${detail}, ${ward}, ${district}, ${province}`,
-			};
-		},
-	});
+				return {
+					fullName,
+					phoneNumber,
+					detail,
+					province,
+					district,
+					ward,
+					fullAddress: `${detail}, ${ward}, ${district}, ${province}`,
+				};
+			},
+		});
+	}
+
+	notification(message: string) {
+		this.swal.fire({
+			text: message,
+			icon: 'success', // hoặc 'error', 'warning', 'info'
+			showConfirmButton: false,
+			timer: 3000, // hiển thị trong 3 giây
+			timerProgressBar: true,
+			toast: true,
+			position: 'top-end', // hiển thị ở góc trên bên phải
+		});
+	}
 }
 
+export interface ModalInputField {
+	name: string;
+	label: string;
+	type?:
+		| 'text'
+		| 'number'
+		| 'email'
+		| 'password'
+		| 'file'
+		| 'textarea'
+		| 'datetime-local'
+		| 'select';
+	required?: boolean;
+	placeholder?: string;
+	value?: string;
+	options?: { label: string; value: string }[]; // chỉ dùng khi type là 'select'
 }

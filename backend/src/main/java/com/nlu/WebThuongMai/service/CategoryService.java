@@ -2,6 +2,8 @@ package com.nlu.WebThuongMai.service;
 
 import com.nlu.WebThuongMai.dto.request.productReq.CategoryUpdateRequest;
 import com.nlu.WebThuongMai.dto.request.categoryReq.CategoriesAdminFilterRequest;
+import com.nlu.WebThuongMai.dto.request.categoryReq.CreateCategoryRequest;
+import com.nlu.WebThuongMai.dto.request.categoryReq.UpdateCategoryRequest;
 import com.nlu.WebThuongMai.dto.response.productResp.CategoryResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
@@ -69,6 +71,7 @@ public class CategoryService {
 
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public Page<CategoryResponse> filterCategories(CategoriesAdminFilterRequest request, Pageable pageable) {
         Specification<Category> spec = (root, query, cb) -> {
@@ -89,4 +92,30 @@ public class CategoryService {
                 .map(categoryMapper::toCategoryResponse);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public CategoryResponse createNewCategory(CreateCategoryRequest request) {
+        if (categoryRepository.existsByNameIgnoreCase(request.getName())) {
+            throw new IllegalArgumentException("Tên danh mục đã tồn tại");
+        }
+
+        Category newCategory = Category.builder()
+                .name(request.getName())
+                .imageUrl(request.getImageUrl())
+                .description(request.getDescription())
+                .build();
+
+        Category saved = categoryRepository.save(newCategory);
+        return categoryMapper.toCategoryResponse(saved);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public CategoryResponse softDeleteCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(ErrorCode.CATEGORY_NOT_FOUND + " with id: " + id));
+
+        category.setDescription("đã xoá");
+        Category saved = categoryRepository.save(category);
+
+        return categoryMapper.toCategoryResponse(saved);
+    }
 }
