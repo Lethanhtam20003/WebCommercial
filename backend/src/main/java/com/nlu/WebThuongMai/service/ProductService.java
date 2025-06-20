@@ -2,16 +2,15 @@ package com.nlu.WebThuongMai.service;
 
 import com.nlu.WebThuongMai.dto.request.productReq.ProductCreatetionRequest;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductFilterRequest;
+import com.nlu.WebThuongMai.dto.request.productReq.ProductUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
 import com.nlu.WebThuongMai.enums.ProductStatus;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.mapper.ProductMapper;
-import com.nlu.WebThuongMai.model.Category;
-import com.nlu.WebThuongMai.model.Inventory;
-import com.nlu.WebThuongMai.model.Product;
-import com.nlu.WebThuongMai.model.ProductStatistic;
+import com.nlu.WebThuongMai.model.*;
 import com.nlu.WebThuongMai.repository.ProductRepository;
+import com.nlu.WebThuongMai.repository.PromotionRepository;
 import jakarta.persistence.criteria.Join;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Service xử lý các chức năng liên quan đến sản phẩm.
@@ -38,6 +40,7 @@ import java.util.Arrays;
 public class ProductService {
     ProductRepository productRepository;
     ProductMapper productMapper;
+    PromotionRepository promotionRepository;
 
     public ProductResponse createProduct(ProductCreatetionRequest request) {
         log.info("Create product: {}", request);
@@ -132,5 +135,26 @@ public class ProductService {
     }
 
 
+    public ProductResponse updateProduct(long id, ProductUpdateRequest request) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        product.setName(request.getName());
+        product.setPrice(request.getPrice());
+        product.setDescription(request.getDescription());
+        product.setStatus(ProductStatus.valueOf(request.getStatus()));
+
+        // Xử lý promotions: chỉ giữ duy nhất 1 khuyến mãi được chọn
+        product.getPromotions().clear(); // Xoá các khuyến mãi cũ
+
+        if (request.getPromotionId() != null) {
+            Promotion promotion = promotionRepository.findById(request.getPromotionId())
+                    .orElseThrow(() -> new AppException(ErrorCode.PROMOTION_NOT_FOUND));
+            product.getPromotions().add(promotion); // Thêm mới khuyến mãi
+        }
+
+        productRepository.save(product);
+        return productMapper.toProductResponse(product);
+    }
 
 }

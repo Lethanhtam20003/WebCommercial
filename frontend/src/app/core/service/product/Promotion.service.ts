@@ -13,4 +13,5 @@ export class PromotionService {
   getAll(): Observable<ApiResponse<PromotionResponse[]>> {
     return this.http.get<ApiResponse<PromotionResponse[]>>(URL_API.promotionUrl);
   }
+  
 }

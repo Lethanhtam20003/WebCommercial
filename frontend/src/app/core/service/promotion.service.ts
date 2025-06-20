@@ -56,4 +56,8 @@ export class PromotionService {
 			`${URL_API.promotionUrl}/${promotionId}`
 		);
 	}
+
+	applyPromotionToproduct(promotionId: number, listId: number[]) {
+		this.http.put(`${URL_API.promotionUrl}/${promotionId}`, listId);
+	}
 }

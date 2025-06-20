@@ -56,6 +56,12 @@
 			</td>
 			<td>
 				<!-- Nút xoá khuyến mãi -->
+				 <button
+					class="btn btn-sm btn-warning m-2 "
+					(click)="applyPromotion(promo.promotionId)"
+				>
+					<i class="bi bi-tag-fill"></i>
+				</button>
 				<button
 					class="btn btn-sm btn-danger"
 					(click)="deletePromotion(promo.promotionId)"

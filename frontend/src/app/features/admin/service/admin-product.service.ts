@@ -13,6 +13,7 @@ import { PageRequest } from '../models/request/pageRequest.interface';
 	providedIn: AdminModule,
 })
 export class AdminProductService {
+	
 	private pageProductsObject = new Subject<PageResponse<ProductResponse>>();
 	pageProducts$ = this.pageProductsObject.asObservable();
 	constructor(private http: HttpClient) {}
@@ -63,4 +64,8 @@ export class AdminProductService {
 	getProductById(id: number): Observable<ApiResponse<ProductResponse>> {
 		return this.http.get<ApiResponse<ProductResponse>>(`${URL_API.productsUrl}/${id}`);
 	}
+
+updateProduct(id: number, request: any) {
+  return this.http.put<any>(`${URL_API.productsUrl}/${id}`, request);
+}
 }
