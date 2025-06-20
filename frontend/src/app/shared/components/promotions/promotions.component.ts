@@ -3,6 +3,7 @@ import { PromotionResponse } from '../../../core/models/response/promotions/prom
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { interval, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { CouponResponse } from '../../../core/models/response/coupon/coupon-response.interface';
 
 @Component({
 	selector: 'app-promotions',
@@ -11,7 +12,7 @@ import { CommonModule } from '@angular/common';
 	styleUrl: './promotions.component.scss',
 })
 export class PromotionsComponent {
-	@Input() promotions: PromotionResponse[] = [];
+	@Input() coupons: CouponResponse[] = [];
 	buttonStates: { [couponId: string]: boolean } = {};
 	private intervalSub?: Subscription;
 	private langChangeSub?: Subscription;
@@ -33,11 +34,12 @@ export class PromotionsComponent {
 	}
 
 	private updateRemainingTimes(): void {
-		this.promotions = this.promotions.map(promotion => {
-			const diff = new Date(promotion.endDate).getTime() - Date.now();
+		this.coupons = this.coupons.map(coupon => {
+			const diff = new Date(coupon.expirationDate).getTime() - Date.now();
+
 			if (diff <= 0) {
 				return {
-					...promotion,
+					...coupon,
 					expired: true,
 					remainingTime: this.translate.instant('promotion.expired'),
 				};
@@ -47,7 +49,7 @@ export class PromotionsComponent {
 			const s = Math.floor((diff % 60000) / 1000);
 
 			return {
-				...promotion,
+				...coupon,
 				expired: false,
 				remainingTime: `${this.pad(m)}:${this.pad(s)}`,
 			};
@@ -58,16 +60,15 @@ export class PromotionsComponent {
 		return n < 10 ? '0' + n : '' + n;
 	}
 
-	saveCoupon(promotion: PromotionResponse) {
-		// Giả lập lưu coupon
-		promotion.saved = true;
+	saveCoupon(coupon: CouponResponse): void {
+		coupon.saved = true;
 	}
 
-	onPress(promotionId: number): void {
-		this.buttonStates[promotionId] = true;
+	onPress(couponId: number): void {
+		this.buttonStates[couponId] = true;
 	}
 
-	onRelease(promotionId: number): void {
-		this.buttonStates[promotionId] = false;
+	onRelease(couponId: number): void {
+		this.buttonStates[couponId] = false;
 	}
 }

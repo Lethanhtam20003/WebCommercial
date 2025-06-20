@@ -4,4 +4,8 @@ export interface CouponResponse {
 	discountPercentage: number;
 	description: string;
 	expirationDate: string;
+
+	expired?: boolean;
+	remainingTime?: string;
+	saved?: boolean;
 }

@@ -295,19 +295,64 @@ export class AlertService {
 
 		return this.swal.fire({
 			title: 'Thay đổi địa chỉ',
+			width: '80rem',
 			html: `
+			<style>
+				.flex-row {
+					display: flex;
+					gap: 8px;
+					margin-bottom: 8px;
+				}
+				.flex-row > div {
+					flex: 1;
+					display: flex;
+					flex-direction: column;
+				}
+				label {
+					font-size: 14px;
+					margin-bottom: 4px;
+					text-align: left;
+				}
+			</style>
+
+			<div class="flex-row">
+				<div>
+					<label for="fullName">Họ tên người nhận</label>
+					<input id="fullName" class="swal2-input" placeholder="Họ tên người nhận" />
+				</div>
+				<div>
+					<label for="phoneNumber">Số điện thoại</label>
+					<input id="phoneNumber" class="swal2-input" placeholder="Số điện thoại" />
+				</div>
+			</div>
+
+			<div class="flex-row">
+				<div>
+					<label for="province">Tỉnh/Thành phố</label>
+					<select id="province" class="swal2-select">
+						<option disabled selected>Chọn tỉnh/thành phố</option>
+						${provinceOptions}
+					</select>
+				</div>
+				<div>
+					<label for="district">Quận/Huyện</label>
+					<select id="district" class="swal2-select">
+						<option disabled selected>Chọn quận/huyện</option>
+					</select>
+				</div>
+				<div>
+					<label for="ward">Phường/Xã</label>
+					<select id="ward" class="swal2-select">
+						<option disabled selected>Chọn phường/xã</option>
+					</select>
+				</div>
+			</div>
+
+			<div style="margin-top: 10px;">
+				<label for="detail">Số nhà, tên đường</label>
 				<input id="detail" class="swal2-input" placeholder="Số nhà, tên đường" />
-				<select id="province" class="swal2-select">
-					<option disabled selected>Chọn tỉnh/thành phố</option>
-					${provinceOptions}
-				</select>
-				<select id="district" class="swal2-select">
-					<option disabled selected>Chọn quận/huyện</option>
-				</select>
-				<select id="ward" class="swal2-select">
-					<option disabled selected>Chọn phường/xã</option>
-				</select>
-			`,
+			</div>
+		`,
 			showCancelButton: true,
 			confirmButtonText: 'Xác nhận',
 			didOpen: () => {
@@ -346,6 +391,12 @@ export class AlertService {
 				});
 			},
 			preConfirm: () => {
+				const fullName = (
+					document.getElementById('fullName') as HTMLInputElement
+				)?.value?.trim();
+				const phoneNumber = (
+					document.getElementById('phoneNumber') as HTMLInputElement
+				)?.value?.trim();
 				const detail = (
 					document.getElementById('detail') as HTMLInputElement
 				)?.value?.trim();
@@ -358,14 +409,23 @@ export class AlertService {
 				const ward = (document.getElementById('ward') as HTMLSelectElement)
 					?.selectedOptions[0]?.text;
 
-				if (!detail || !province || !district || !ward) {
+				if (
+					!fullName ||
+					!phoneNumber ||
+					!detail ||
+					!province ||
+					!district ||
+					!ward
+				) {
 					this.swal.showValidationMessage(
-						'Vui lòng nhập đầy đủ thông tin địa chỉ'
+						'Vui lòng nhập đầy đủ thông tin người nhận và địa chỉ'
 					);
 					return;
 				}
 
 				return {
+					fullName,
+					phoneNumber,
 					detail,
 					province,
 					district,

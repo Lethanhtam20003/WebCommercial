@@ -18,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 
@@ -124,6 +126,13 @@ public class CouponController {
         Pageable pageable = PageRequest.of(page, size);
         return ApiResponse.<Page<AdminCouponResponse>>builder()
                 .result(service.getCouponsFilter(request, pageable))
+                .build();
+    }
+
+    @GetMapping("/top5")
+    public ApiResponse<List<GetAllCouponResponse>> getTop5Coupons() {
+        return ApiResponse.<List<GetAllCouponResponse>>builder()
+                .result(service.getTop5Coupons())
                 .build();
     }
 }

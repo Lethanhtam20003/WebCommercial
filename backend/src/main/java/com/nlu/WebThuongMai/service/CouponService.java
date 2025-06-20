@@ -185,4 +185,9 @@ public class CouponService {
         Page<Coupon> couponPage = repository.findAll(spec, pageable);
         return couponPage.map(mapper::toAdminCouponResponse);
     }
+
+    public List<GetAllCouponResponse> getTop5Coupons() {
+        var coupons = repository.findTop5ByOrderByExpirationDateDesc();
+        return mapper.toGetAllCouponResponseList(coupons);
+    }
 }
