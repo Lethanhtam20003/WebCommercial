@@ -67,16 +67,6 @@ public class CategoryController {
                 .build();
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<CategoryResponse> updateCategory(
-            @PathVariable Long id,
-            @Valid @RequestBody UpdateCategoryRequest request
-    ) {
-        return ApiResponse.<CategoryResponse>builder()
-                .result(categoryService.updateCategory(id, request))
-                .build();
-    }
-
     @DeleteMapping("/{id}")
     public ApiResponse<CategoryResponse> softDeleteCategory(@PathVariable Long id) {
         return ApiResponse.<CategoryResponse>builder()

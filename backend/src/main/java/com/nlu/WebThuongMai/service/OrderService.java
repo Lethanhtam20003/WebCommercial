@@ -212,7 +212,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Page<OrderResponse> filterOrdersByAdmin(GetAllOrderAdminRequest request, int page, int size) {
+    public Page<OrderResponse> filterOrdersByAdmin(GetAllOrderAdminRequest request) {
         // Xử lý logic default và ưu tiên
         LocalDate dateFrom = request.getCreatedDateFrom();
         LocalDate dateTo = request.getCreatedDateTo();

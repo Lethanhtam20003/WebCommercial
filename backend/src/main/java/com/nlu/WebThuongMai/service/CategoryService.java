@@ -71,6 +71,7 @@ public class CategoryService {
 
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public Page<CategoryResponse> filterCategories(CategoriesAdminFilterRequest request, Pageable pageable) {
         Specification<Category> spec = (root, query, cb) -> {
@@ -104,19 +105,6 @@ public class CategoryService {
                 .build();
 
         Category saved = categoryRepository.save(newCategory);
-        return categoryMapper.toCategoryResponse(saved);
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public CategoryResponse updateCategory(Long id, UpdateCategoryRequest request) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(ErrorCode.CATEGORY_NOT_FOUND + " with id: " + id));
-
-        category.setName(request.getName());
-        category.setImageUrl(request.getImageUrl());
-        category.setDescription(request.getDescription());
-
-        Category saved = categoryRepository.save(category);
         return categoryMapper.toCategoryResponse(saved);
     }
 
