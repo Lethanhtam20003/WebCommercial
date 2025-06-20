@@ -13,7 +13,6 @@ import { OrderCreateRequest } from '../models/request/order/OrderCreateRequest';
 	providedIn: 'root',
 })
 export class OrderService {
-  
 	constructor(private http: HttpClient) {}
 
 	getOrdersByStatus(
@@ -63,7 +62,8 @@ export class OrderService {
 		);
 	}
 	getOrderDetail(orderId: number): Observable<ApiResponse<OrderResponse>> {
-	return this.http.get<ApiResponse<OrderResponse>>(URL_API.getOrders + '/' +(orderId));
-}
-
+		return this.http.get<ApiResponse<OrderResponse>>(
+			URL_API.getOrders + '/' + orderId
+		);
+	}
 }

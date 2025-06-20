@@ -20,7 +20,7 @@
 			<tr>
 				<th>#</th>
 				<th>Mã</th>
-				<th>Phần trăm giảm</th>
+				<th>Chiết khấu</th>
 				<th>Mô tả</th>
 				<th>Giới hạn người dùng</th>
 				<th>Ngày tạo</th>
@@ -30,13 +30,13 @@
 				<th>Điều kiện giá</th>
 				<th>Giá tối thiểu</th>
 				<th>Thao tác</th>
-			</tr> 
+			</tr>
 		</thead>
 		<tbody>
 			<tr *ngFor="let coupon of coupons; index as i" [id]="coupon.id">
 				<td>{{ i + 1 }}</td>
 				<td>{{ coupon.code }}</td>
-				<td>{{ coupon.discount }}%</td>
+				<td>{{ coupon.discount }}</td>
 				<td>{{ coupon.description }}</td>
 				<td>{{ coupon.limitUsers }}</td>
 				<td>{{ coupon.createdAt | date: 'dd/MM/yyyy' }}</td>

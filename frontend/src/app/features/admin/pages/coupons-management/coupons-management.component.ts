@@ -148,7 +148,7 @@ export class CouponsManagementComponent implements OnInit {
 
 		fields.push(
 			{
-				label: 'Phần trăm giảm (%)',
+				label: 'Chiết khấu',
 				name: 'discount',
 				type: 'number',
 				value: coupon ? String(coupon.discount) : '',
@@ -230,7 +230,7 @@ export class CouponsManagementComponent implements OnInit {
 
 		try {
 			let rawDiscount = parseFloat(data['discount'] as string);
-			const discount = rawDiscount >= 1 ? rawDiscount / 100 : rawDiscount;
+			const discount = parseFloat(data['discount'] as string); 
 
 			const request: CouponCreateRequest = {
 				code: data['code'] as string,
@@ -274,7 +274,7 @@ export class CouponsManagementComponent implements OnInit {
 
 		const request: UpdateCouponRequest = {
 			id: coupon.id,
-			discount: parseFloat(data['discount'] as string) / 100,
+			discount: parseFloat(data['discount'] as string),
 			description: data['description'] as string,
 			limitUsers: parseInt(data['limitUsers'] as string),
 			expirationDate: new Date(data['expirationDate'] as string).toISOString(),

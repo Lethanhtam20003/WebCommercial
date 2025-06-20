@@ -251,7 +251,7 @@ public class OrderService {
         }
 
         // Ưu tiên sắp xếp: ngày tạo DESC > username ASC > totalPrice DESC > status ASC
-        request.setDefaultSortField("orderId");
+        request.setDefaultSortField("id");
         Pageable pageable = request.toPageable();
 
         Page<Order> orderPage = repository.findAll(spec, pageable);

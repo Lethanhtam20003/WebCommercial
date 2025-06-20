@@ -19,12 +19,12 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CouponFilterAdminRequest {
-    @Size(min = 3, max = 50, message = "Mã coupon phải từ 3 đến 50 ký tự")
     String code;
     CouponStatus status;
-    @DecimalMin(value = "0.0", inclusive = true, message = "Giảm giá tối thiểu phải >= 0")
+
     @DecimalMax(value = "100.0", inclusive = true, message = "Giảm giá tối đa là 100%")
     Double minDiscount;
+
     @PastOrPresent(message = "Ngày tạo phải là hôm nay hoặc trước đó")
     LocalDate createdAt;
 

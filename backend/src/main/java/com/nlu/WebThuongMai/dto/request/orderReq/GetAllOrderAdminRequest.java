@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.dto.request.orderReq;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nlu.WebThuongMai.dto.request.PageRequest.PaginationRequest;
 import com.nlu.WebThuongMai.enums.OrderStatus;
 import jakarta.validation.constraints.DecimalMin;
@@ -17,16 +18,14 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GetAllOrderAdminRequest extends PaginationRequest {
     OrderStatus status;
 
-    @Size(min = 3, max = 50, message = "Username phải có độ dài từ 3 đến 50 ký tự")
     String username;
 
-    @PastOrPresent(message = "Ngày bắt đầu không được lớn hơn hôm nay")
     LocalDate createdDateFrom;
 
-    @PastOrPresent(message = "Ngày kết thúc không được lớn hơn hôm nay")
     LocalDate createdDateTo;
 
     @DecimalMin(value = "0.0", inclusive = true, message = "Tổng tiền phải >= 0")

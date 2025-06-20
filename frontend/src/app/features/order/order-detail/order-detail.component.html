@@ -83,7 +83,7 @@
 			<p>
 				<strong>Mã:</strong> {{ orderDetail.coupon.code }}<br />
 				<strong>Giảm:</strong>
-				{{ orderDetail.coupon.discountPercentage }}%<br />
+				{{ orderDetail.coupon.discount }}%<br />
 				<strong>Mô tả:</strong> {{ orderDetail.coupon.description }}<br />
 				<strong>Hạn:</strong>
 				{{ orderDetail.coupon.expirationDate | date: 'dd/MM/yyyy' }}
@@ -124,7 +124,7 @@
 							<strong>Giảm giá:</strong>
 							{{
 								orderDetail.totalPrice *
-									(orderDetail.coupon?.discountPercentage ?? 0)
+									(orderDetail.coupon?.discount ?? 0)
 									| currency: 'VND' : 'symbol' : '1.0-0' : 'vi'
 							}}
 						</p>
