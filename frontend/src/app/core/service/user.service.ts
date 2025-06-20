@@ -16,6 +16,7 @@ import { GetAllUserAdminRequest } from '../models/request/user/get-all-user-requ
 })
 export class UserService {
 	constructor(private http: HttpClient) {}
+
 	getCurrentInfo(): Observable<UserProfile> {
 		return this.http.get<ApiResponse<UserProfile>>(URL_API.myInfo).pipe(
 			map(response => {
@@ -52,7 +53,12 @@ export class UserService {
 			request
 		);
 	}
-	updateUserForCheckout(user: UserProfile, username: string, phone: string, address: string): Observable<ApiResponse<UserResponse>> {
+	updateUserForCheckout(
+		user: UserProfile,
+		username: string,
+		phone: string,
+		address: string
+	): Observable<ApiResponse<UserResponse>> {
 		const userRequest: UserUpdateRequest = {
 			fullName: username,
 			phone: phone,
@@ -90,6 +96,12 @@ export class UserService {
 			{
 				params,
 			}
+		);
+	}
+
+	banUser(userId: number): Observable<ApiResponse<UserResponse>> {
+		return this.http.delete<ApiResponse<UserResponse>>(
+			`${URL_API.users}/${userId}`
 		);
 	}
 }

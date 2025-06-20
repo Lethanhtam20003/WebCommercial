@@ -7,7 +7,7 @@ export interface UserResponse {
 	username: string;
 
 	/**
-	 * Mật khẩu của người dùng 
+	 * Mật khẩu của người dùng
 	 */
 	password: string;
 
@@ -70,4 +70,5 @@ export interface UserResponse {
 	 * Thời điểm cập nhật gần nhất (ISO string)
 	 */
 	updated_at: string;
+	coupons: string;
 }
