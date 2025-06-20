@@ -58,4 +58,8 @@ export class CouponService {
   deleteCoupon(id: number): Observable<ApiResponse<CouponResponse>> {
     return this.http.delete<ApiResponse<CouponResponse>>(`${URL_API.coupon}/${id}`);
   }
+
+  getTop5Coupon(): Observable<ApiResponse<CouponResponse[]>> {
+    return this.http.get<ApiResponse<CouponResponse[]>>(URL_API.top5Coupon);
+  }
 }

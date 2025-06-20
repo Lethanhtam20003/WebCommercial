@@ -1,10 +1,16 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { PromotionResponse } from '../../../core/models/response/promotions/promotion-response.interface';
-import { PromotionService } from '../../../core/service/promotion.service';
-import { catchError, of, Subscription } from 'rxjs';
-import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { PromotionsComponent } from '../promotions/promotions.component';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  LangChangeEvent,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
+import { catchError, of, Subscription } from 'rxjs';
+import { CouponResponse } from '../../../core/models/response/coupon/coupon-response.interface';
+import { PromotionResponse } from '../../../core/models/response/promotions/promotion-response.interface';
+import { CouponService } from '../../../core/service/coupon.service';
+import { PromotionService } from '../../../core/service/promotion.service';
+import { PromotionsComponent } from '../promotions/promotions.component';
 
 @Component({
 	selector: 'app-promotion-list',
@@ -14,37 +20,43 @@ import { CommonModule } from '@angular/common';
 	styleUrl: './promotion-list.component.scss',
 })
 export class PromotionListComponent implements OnInit {
-	promotionCoupons: PromotionResponse[] = [];
+	couponList: CouponResponse[] = [];
 	private langChangeSubscription: Subscription;
 	constructor(
 		private promotionService: PromotionService,
+		private couponService: CouponService,
 		private translate: TranslateService,
-    private cdr: ChangeDetectorRef
+		private cdr: ChangeDetectorRef
 	) {
 		console.log('PromotionList: Initial language:', this.translate.currentLang);
-    this.langChangeSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      console.log('PromotionList: Language changed to:', event.lang);
-      console.log('PromotionList: Current "promotions" translation:', this.translate.instant('promotions'));
-      this.updatePromotionCoupons();
-      this.cdr.detectChanges(); // Buộc chạy change detection
-    });
+		this.langChangeSubscription = this.translate.onLangChange.subscribe(
+			(event: LangChangeEvent) => {
+				console.log('PromotionList: Language changed to:', event.lang);
+				console.log(
+					'PromotionList: Current "promotions" translation:',
+					this.translate.instant('promotions')
+				);
+				this.updateCouponList();
+				this.cdr.detectChanges(); // Buộc chạy change detection
+			}
+		);
 	}
 	ngOnInit(): void {
-    this.loadPromotions();
-  }
+		this.loadCoupons();
+	}
 
-	private loadPromotions(): void {
-		this.promotionService
-			.getActivePromotions()
+	private loadCoupons(): void {
+		this.couponService
+			.getTop5Coupon()
 			.pipe(
 				catchError(err => {
-					console.error('❌ Lỗi khi lấy danh sách khuyến mãi:', err);
+					console.error('❌ Lỗi khi lấy danh sách coupon:', err);
 					return of({ result: [] });
 				})
 			)
 			.subscribe(data => {
-				this.promotionCoupons = data.result.map(coupon => {
-					const endTimestamp = new Date(coupon.endDate).getTime();
+				this.couponList = data.result.map(coupon => {
+					const endTimestamp = new Date(coupon.expirationDate).getTime();
 					const remainingTime = this.getRemainingTime(endTimestamp);
 					const expired = endTimestamp <= Date.now();
 
@@ -58,21 +70,19 @@ export class PromotionListComponent implements OnInit {
 			});
 	}
 
-  private updatePromotionCoupons(): void {
-    // Cập nhật lại remainingTime cho các coupon hiện có
-    this.promotionCoupons = this.promotionCoupons.map(coupon => {
-      const endTimestamp = new Date(coupon.endDate).getTime();
-      const remainingTime = this.getRemainingTime(endTimestamp);
-      const expired = endTimestamp <= Date.now();
+	private updateCouponList(): void {
+		this.couponList = this.couponList.map(coupon => {
+			const endTimestamp = new Date(coupon.expirationDate).getTime();
+			const remainingTime = this.getRemainingTime(endTimestamp);
+			const expired = endTimestamp <= Date.now();
 
-      return {
-        ...coupon,
-        expired,
-        remainingTime,
-      };
-    });
-    console.log('Promotions updated with new language:', this.promotionCoupons);
-  }
+			return {
+				...coupon,
+				expired,
+				remainingTime,
+			};
+		});
+	}
 
 	getRemainingTime(expireAt: number): string {
 		const msLeft = expireAt - Date.now();
@@ -89,8 +99,8 @@ export class PromotionListComponent implements OnInit {
 		});
 	}
 
-  ngOnDestroy(): void {
-    // Hủy subscription để tránh rò rỉ bộ nhớ
-    this.langChangeSubscription.unsubscribe();
-  }
+	ngOnDestroy(): void {
+		// Hủy subscription để tránh rò rỉ bộ nhớ
+		this.langChangeSubscription.unsubscribe();
+	}
 }
