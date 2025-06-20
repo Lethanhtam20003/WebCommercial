@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.controller;
 
+import com.nlu.WebThuongMai.dto.request.productReq.CategoryUpdateRequest;
 import com.nlu.WebThuongMai.dto.request.categoryReq.CategoriesAdminFilterRequest;
 import com.nlu.WebThuongMai.dto.request.categoryReq.CreateCategoryRequest;
 import com.nlu.WebThuongMai.dto.request.categoryReq.UpdateCategoryRequest;
@@ -35,6 +36,17 @@ public class CategoryController {
     public CategoryResponse getById(@PathVariable("id") long id) {
         return categoryService.getCategoryById(id);
     }
+
+    @PutMapping("/{id}")
+    public ApiResponse<CategoryResponse> updateCategory(
+            @PathVariable Long id,
+            @RequestBody CategoryUpdateRequest request
+    ) {
+        CategoryResponse updated = categoryService.updateCategory(id, request);
+        return ApiResponse.<CategoryResponse>builder()
+                .result(updated).build();
+    }
+
 
     @PostMapping("/admin/filter")
     public ApiResponse<Page<CategoryResponse>> filterCategoriesAdmin(

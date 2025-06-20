@@ -48,6 +48,12 @@ spring:
             user-name-attribute: sub
 
 
+paypal:
+  client-id: AbZH_tuNUoZxL1L3ovMl6totaStMhkYLHBkrhAGa1AvAMzWkW2Lffck6wEDWKOIbLZT6FdN4yLqA5Zra
+  secret: EGoaH3MGXD8oEavZ-wnh-WhQWYQWZ5BBqecu8WpPDZizAI1p7J8sE96xmgNf-faElWXblNb0j0SVFJOi
+  api-base-url: https://api-m.sandbox.paypal.com
+
+
 logging:
   level:
     root: INFO

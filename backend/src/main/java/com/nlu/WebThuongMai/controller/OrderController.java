@@ -113,6 +113,13 @@ class OrderController {
                 .build();
     }
 
+    @GetMapping("/{orderId}")
+    public ApiResponse<OrderResponse> getOrdersById(@PathVariable long orderId) {
+        return ApiResponse.<OrderResponse>builder()
+                .result(service.getById(orderId))
+                .build();
+    }
+
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping()
     public ApiResponse<Page<OrderResponse>> getOrdersByUserIdAndStatus(

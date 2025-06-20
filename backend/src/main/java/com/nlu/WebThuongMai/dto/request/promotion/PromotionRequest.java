@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ValidDateRange
-public class PromotionRequest {
+public class    PromotionRequest {
     @NotBlank(message = "NAME_NOT_NULL")
     String name;
 

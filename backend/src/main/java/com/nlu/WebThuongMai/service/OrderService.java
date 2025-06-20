@@ -12,7 +12,6 @@ import com.nlu.WebThuongMai.model.Order;
 import com.nlu.WebThuongMai.model.OrderItem;
 import com.nlu.WebThuongMai.dto.request.orderReq.OrderFilterRequest;
 import com.nlu.WebThuongMai.repository.OrderRepository;
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -65,6 +64,7 @@ public class OrderService {
                 .user(user)
                 .status(OrderStatus.PENDING)
                 .note(request.getNote())
+                .address(request.getAddress())
                 .createdDate(request.getCreatedDate())
                 .build();
         // tính tổng tiền
@@ -76,7 +76,9 @@ public class OrderService {
 
             BigDecimal itemPrice = BigDecimal.valueOf(product.getPrice())
                     .multiply(BigDecimal.valueOf(item.getQuantity()));
+
             totalPrice.updateAndGet(t -> t.add(itemPrice));
+
             if (!inventoryService.hasEnoughStock(product.getId(), item.getQuantity())) {
                 throw new AppException(ErrorCode.PRODUCT_NOT_ENOUGH_IN_STOCK);
             }
@@ -90,11 +92,17 @@ public class OrderService {
         }).collect(Collectors.toSet());
 
         order.setOrderItems(orderItems);
+        order.setTotalPrice(totalPrice.get());
 
         // tính mã giảm giá
-        BigDecimal discountedPrice = couponService.applyCouponIfPresent(totalPrice.get(), request.getCoupon());
+        if (request.getCoupon() != null) {
+            couponService.getCouponByCode(request.getCoupon().getCode());
+            BigDecimal discountedPrice = couponService.applyCouponIfPresent(totalPrice.get(), request.getCoupon());
+            order.setDiscountedPrice(discountedPrice);
+        }else {
+            order.setDiscountedPrice(totalPrice.get());
+        }
 
-        order.setDiscountedPrice(discountedPrice);
         return mapper.toOrderResponse(repository.save(order));
     }
 
@@ -190,12 +198,13 @@ public class OrderService {
         orderFilterRequest.setDefaultSortField("orderId");
         Pageable pageable = orderFilterRequest.toPageable();
         Page<Order> orders = repository.findOrdersByUserIdAndStatus(orderFilterRequest.getUserId(), orderFilterRequest.getStatus(), pageable);
+
         return orders.map(mapper::toOrderResponse);
     }
 
-    @Transactional
     @PreAuthorize("hasAuthority('USER')")
-    public Page<OrderResponse> getOrdersById(Long userId,@Valid Pageable pageable) {
+    @Transactional(readOnly = true)
+    public Page<OrderResponse> getOrdersById(Long userId, Pageable pageable) {
         Page<Order> orders = repository.findOrdersByUserId(userId, pageable);
 
         return orders.map(mapper::toOrderResponse);
@@ -203,7 +212,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Page<OrderResponse> filterOrdersByAdmin(GetAllOrderAdminRequest request) {
+    public Page<OrderResponse> filterOrdersByAdmin(GetAllOrderAdminRequest request, int page, int size) {
         // Xử lý logic default và ưu tiên
         LocalDate dateFrom = request.getCreatedDateFrom();
         LocalDate dateTo = request.getCreatedDateTo();
@@ -251,5 +260,11 @@ public class OrderService {
             return mapper.toOrderResponse(order);
         });
         return responsePage;
+    }
+
+    @Transactional
+    public OrderResponse getById(long id){
+        Order order = repository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        return mapper.toOrderResponse(order);
     }
 }

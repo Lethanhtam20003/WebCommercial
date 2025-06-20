@@ -29,6 +29,9 @@ export const URL_API = {
 	purchaseOrders: 'http://localhost:8080/api/v1/purchase-orders',
 	suppliers: 'http://localhost:8080/api/v1/supplier',
 	inventory: 'http://localhost:8080/api/v1/inventory',
-  createCategory: 'http://localhost:8080/api/v1/category/admin/create',
-  coupon: 'http://localhost:8080/api/v1/coupons',
+	createCategory: 'http://localhost:8080/api/v1/category/admin/create',
+	coupon: 'http://localhost:8080/api/v1/coupons',
+	checkoutOrder: 'http://localhost:8080/api/v1/orders/create',
+	createPayment: 'http://localhost:8080/api/v1/payments/create',
+	confirmPayment: 'http://localhost:8080/api/v1/payments/confirm',
 } as const;

@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
+import { firstValueFrom } from 'rxjs';
+import { AddressService } from './AddressService.service';
 @Injectable({
 	providedIn: 'root',
 })
 export class AlertService {
+	constructor(private addressService: AddressService) {}
+
 	private swal = Swal.mixin({
 		confirmButtonText: 'OK',
 		cancelButtonText: 'Hủy',
@@ -82,7 +86,7 @@ export class AlertService {
 	loading(
 		message: string,
 		title: string,
-		timer = 3000,
+		timer = 1000,
 		timerProgressBar: boolean = true,
 		allowOutsideClick: boolean = false
 	): Promise<any | null> {
@@ -280,7 +284,94 @@ export class AlertService {
 		return isConfirmed ? result : null;
 	}
 
-	constructor() {}
+	async changeAddress() {
+		const provinces = await firstValueFrom(this.addressService.getProvinces());
+		const provinceOptions = provinces
+			.map(p => `<option value="${p.code}">${p.name}</option>`)
+			.join('');
+
+		return this.swal.fire({
+			title: 'Thay đổi địa chỉ',
+			html: `
+				<input id="detail" class="swal2-input" placeholder="Số nhà, tên đường" />
+				<select id="province" class="swal2-select">
+					<option disabled selected>Chọn tỉnh/thành phố</option>
+					${provinceOptions}
+				</select>
+				<select id="district" class="swal2-select">
+					<option disabled selected>Chọn quận/huyện</option>
+				</select>
+				<select id="ward" class="swal2-select">
+					<option disabled selected>Chọn phường/xã</option>
+				</select>
+			`,
+			showCancelButton: true,
+			confirmButtonText: 'Xác nhận',
+			didOpen: () => {
+				const provinceSelect = document.getElementById(
+					'province'
+				) as HTMLSelectElement;
+				const districtSelect = document.getElementById(
+					'district'
+				) as HTMLSelectElement;
+				const wardSelect = document.getElementById('ward') as HTMLSelectElement;
+
+				provinceSelect.addEventListener('change', async () => {
+					const provinceCode = +provinceSelect.value;
+					const provinceData = await firstValueFrom(
+						this.addressService.getDistricts(provinceCode)
+					);
+					const districtOptions = provinceData.districts
+						.map((d: any) => `<option value="${d.code}">${d.name}</option>`)
+						.join('');
+					districtSelect.innerHTML =
+						`<option disabled selected>Chọn quận/huyện</option>` +
+						districtOptions;
+					wardSelect.innerHTML = `<option disabled selected>Chọn phường/xã</option>`;
+				});
+
+				districtSelect.addEventListener('change', async () => {
+					const districtCode = +districtSelect.value;
+					const districtData = await firstValueFrom(
+						this.addressService.getWards(districtCode)
+					);
+					const wardOptions = districtData.wards
+						.map((w: any) => `<option value="${w.code}">${w.name}</option>`)
+						.join('');
+					wardSelect.innerHTML =
+						`<option disabled selected>Chọn phường/xã</option>` + wardOptions;
+				});
+			},
+			preConfirm: () => {
+				const detail = (
+					document.getElementById('detail') as HTMLInputElement
+				)?.value?.trim();
+				const province = (
+					document.getElementById('province') as HTMLSelectElement
+				)?.selectedOptions[0]?.text;
+				const district = (
+					document.getElementById('district') as HTMLSelectElement
+				)?.selectedOptions[0]?.text;
+				const ward = (document.getElementById('ward') as HTMLSelectElement)
+					?.selectedOptions[0]?.text;
+
+				if (!detail || !province || !district || !ward) {
+					this.swal.showValidationMessage(
+						'Vui lòng nhập đầy đủ thông tin địa chỉ'
+					);
+					return;
+				}
+
+				return {
+					detail,
+					province,
+					district,
+					ward,
+					fullAddress: `${detail}, ${ward}, ${district}, ${province}`,
+				};
+			},
+		});
+	}
 }
 
 export interface ModalInputField {

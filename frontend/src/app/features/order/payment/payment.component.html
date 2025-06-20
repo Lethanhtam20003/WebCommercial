@@ -1,0 +1,22 @@
+<div class="checkout-container">
+  <h2>Xác nhận đơn hàng</h2>
+
+  
+    <div class="form-group">
+      <label>Địa chỉ nhận hàng</label>
+      <input type="text" formControlName="address" placeholder="Nhập địa chỉ nhận hàng" value="{{order.address}}" >
+    </div>
+
+    <div class="form-group">
+      <label>Ghi chú</label>
+      <textarea formControlName="note" placeholder="Ghi chú đơn hàng (nếu có)"></textarea>
+    </div>
+
+    <div class="payment-methods">
+      <h3>Phương thức thanh toán</h3>
+
+      
+
+    <button type="submit" [disabled]="checkoutForm.invalid">Đặt hàng</button>
+ 
+</div>

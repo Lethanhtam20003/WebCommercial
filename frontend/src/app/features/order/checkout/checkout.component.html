@@ -1,0 +1,149 @@
+<div class="position-relative">
+	<div class="position-absolute top-0 start-0 m-3">
+		<h2>Thanh toán</h2>
+		<div class="d-flex justify-content-center">
+			<img
+				src="assets/images/shop/logo.png"
+				alt=""
+				class="img-fluid img-logo"
+			/>
+		</div>
+	</div>
+	<div class="container custom-container my-2 vh-100">
+		<section class="mb-1">
+			<div class="border rounded p-3 bg-light">
+				<div class="d-flex justify-content-between">
+					<!-- Địa chỉ -->
+					<div>
+						<p class="mb-1 fw-bold">Địa chỉ giao hàng:</p>
+						<div *ngIf="address">
+							{{ address.recipientName }}, {{ address.phoneNumber }} ,
+							{{ address.address }}
+							<p class="mb-0"></p>
+						</div>
+						<div *ngIf="!address">
+							<p class="text-danger fw-bold">chưa có địa chỉ giao hàng</p>
+						</div>
+					</div>
+
+					<!-- Nút thay đổi -->
+					<div class="ms-3">
+						<button
+							class="btn btn-outline-primary btn-sm"
+							(click)="editAddress()"
+						>
+							<div *ngIf="address">Thay đổi</div>
+							<div *ngIf="!address">Thêm</div>
+						</button>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Nếu giỏ hàng trống -->
+		<div *ngIf="cartItems.length === 0" class="alert alert-warning">
+			Không có sản phẩm nào trong đơn hàng.
+		</div>
+
+		<!-- Nếu có sản phẩm -->
+		<div *ngIf="cartItems.length > 0">
+			<!-- Bọc toàn bộ session trong card hoặc box có border -->
+			<div class="border rounded p-3 mb-4">
+				<!-- Tiêu đề -->
+				<h5 class="mb-3 border-bottom pb-2">Danh sách sản phẩm</h5>
+
+				<!-- Danh sách cuộn -->
+				<div class="product-scroll-wrapper">
+					<div
+						*ngFor="let item of cartItems"
+						class="row mb-3 align-items-center border-bottom pb-3"
+					>
+						<div class="col-auto">
+							<img
+								[src]="item.productImg"
+								alt="{{ item.name }}"
+								class="cart-img img-fluid rounded"
+							/>
+						</div>
+
+						<div class="col">
+							<div class="d-flex justify-content-between align-items-start">
+								<!-- Thông tin sản phẩm -->
+								<div class="me-3 pe-2">
+									<h5 class="mb-2">{{ item.name }}</h5>
+									<p class="mb-0">Số lượng: {{ item.quantity }}</p>
+									<p class="mb-0">Giá: {{ item.price | currency: 'VND' }}</p>
+								</div>
+
+								<!-- Tổng giá từng sản phẩm -->
+								<div class="text-end">
+									<strong>{{
+										item.quantity * item.price | currency: 'VND'
+									}}</strong>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<section class="container mt-4">
+			<div class="row">
+				<!-- Bên trái: Mã giảm giá -->
+				<div class="col-md-6">
+					<h5>Áp dụng mã giảm giá</h5>
+					<div class="mb-3 d-flex">
+						<input
+							type="text"
+							class="form-control me-2"
+							placeholder="Nhập mã giảm giá"
+							[(ngModel)]="couponCode"
+						/>
+						<button class="btn btn-outline-primary" (click)="applyCoupon()">
+							Áp dụng
+						</button>
+					</div>
+
+					<!-- Hiển thị danh sách coupon (nếu có) -->
+					<div *ngIf="selectedCoupon">
+						<div class="alert alert-info">
+							<strong>Mã: {{ selectedCoupon.code }}</strong
+							><br />
+							Giảm giá: {{ selectedCoupon.discountPercentage }}%<br />
+							Hết hạn: {{ selectedCoupon.expirationDate | date: 'dd/MM/yyyy' }}
+						</div>
+					</div>
+				</div>
+
+				<!-- Bên phải: Tổng tiền & xác nhận -->
+				<div class="col-md-6 text-end">
+					<h5 class="mb-3">Tổng cộng: {{ total | currency: 'VND' }}</h5>
+					<h6 class="mb-3 text-success" *ngIf="discount > 0">
+						Giảm giá: -{{ discount | currency: 'VND' }}
+					</h6>
+					<h4 class="mb-3">
+						Phải thanh toán: {{ total - discount | currency: 'VND' }}
+					</h4>
+
+					<div class="d-flex justify-content-end gap-2">
+						<button class="btn btn-danger btn-lg" (click)="cancelOrder()">
+							Hủy
+						</button>
+
+						<button
+							class="btn primary-color-button btn-lg"
+							(click)="confirmOrder()"
+							(pointerdown)="onPress(999)"
+							(pointerup)="onRelease(999)"
+							(touchstart)="onPress(999)"
+							(touchend)="onRelease(999)"
+							[class.pressed]="buttonStates[999]"
+						>
+							Xác nhận thanh toán
+						</button>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>

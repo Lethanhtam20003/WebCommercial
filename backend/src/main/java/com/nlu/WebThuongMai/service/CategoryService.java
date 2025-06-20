@@ -1,5 +1,6 @@
 package com.nlu.WebThuongMai.service;
 
+import com.nlu.WebThuongMai.dto.request.productReq.CategoryUpdateRequest;
 import com.nlu.WebThuongMai.dto.request.categoryReq.CategoriesAdminFilterRequest;
 import com.nlu.WebThuongMai.dto.request.categoryReq.CreateCategoryRequest;
 import com.nlu.WebThuongMai.dto.request.categoryReq.UpdateCategoryRequest;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -58,6 +60,17 @@ public class CategoryService {
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
     }
 
+    @Transactional
+    public CategoryResponse updateCategory(Long id, CategoryUpdateRequest request) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        category.setName(request.getName());
+        category.setDescription(request.getDescription());
+        category.setImageUrl(request.getImageUrl());
+
+        return categoryMapper.toCategoryResponse(categoryRepository.save(category));
+    }
     @PreAuthorize("hasAuthority('ADMIN')")
     public Page<CategoryResponse> filterCategories(CategoriesAdminFilterRequest request, Pageable pageable) {
         Specification<Category> spec = (root, query, cb) -> {

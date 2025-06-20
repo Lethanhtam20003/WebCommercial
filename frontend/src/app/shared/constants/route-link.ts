@@ -20,12 +20,18 @@ export const RouteLink = {
    * order route
    */
   orderRoute: 'orders',
+  checkoutRoute: 'checkout',
+  orderSuccessRoute: 'order-success',
   allRoute: 'all',
   pendingRoute: 'pending',
   shippedRoute: 'shipped',
   deliveredRoute: 'delivered',
   canceledRoute: 'canceled',
   couponRoute: 'coupon-list',
+  orderDetailRoute: 'order-detail/:id',
+  payment: 'payment',
+
+
 
   /**
    * product
