@@ -1,0 +1,65 @@
+<div class="product-wrapper rounded shadow-sm">
+	<div class="card h-100 text-center border-0 product-card">
+		<div class="position-relative">
+			<img
+				[src]="product.images[0]"
+				class="card-img-top p-3"
+				alt="{{ product.name }}"
+				[routerLink]="['/product', product.id]"
+			/>
+
+			<!-- Badge - Giới tính bên trái dưới -->
+			<span
+				*ngIf="productLabel?.gender"
+				class="position-absolute bottom-0 start-0 badge m-2 bg-info text-white"
+			>
+				{{ productLabel.gender }}
+			</span>
+
+			<!-- Badge - Hàng chính hãng bên phải dưới -->
+			<span
+				*ngIf="productLabel?.isOfficial"
+				class="position-absolute bottom-0 end-0 badge m-2 bg-success text-white"
+			>
+				Chính Hãng
+			</span>
+
+			<div class="hover-overlay">
+				<div class="d-flex justify-content-center gap-2">
+					<i
+						class="bi bi-bag btn-outline-dark btn-sm background-gradient"
+						(click)="addToCart()"
+						title="Thêm vào giỏ hàng"
+					></i>
+					<i
+						class="bi bi-cart cursor-pointer background-gradient"
+						(click)="buy()"
+						title="mua"
+					></i>
+				</div>
+			</div>
+			<span
+				*ngIf="product.name"
+				class="position-absolute top-0 end-0 badge m-2 text-uppercase"
+			>
+				{{ product.name }}
+			</span>
+		</div>
+		<div class="card-body" [routerLink]="['/product', product.id]">
+			<h6 class="card-title mb-1">{{ product.name }}</h6>
+			<p class="card-text">
+				<span *ngIf="product.promotions && product.promotions.length > 0">
+					<del class="text-muted"
+						>{{ product.price | number: '1.0-0' }} VND</del
+					>
+					<span class="text-danger fw-bold">
+						-{{ product.promotions[0].discountPercent }}%
+					</span>
+				</span>
+				<span *ngIf="!product.promotions || product.promotions.length === 0">
+					{{ product.price | number: '1.0-0' }} VND
+				</span>
+			</p>
+		</div>
+	</div>
+</div>

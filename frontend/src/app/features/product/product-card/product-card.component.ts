@@ -4,8 +4,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { CartService } from '../../../core/service/cart/cart.service';
 import { AlertService } from '../../../core/service/alert.service';
-import { RouteLink } from '../../constants/route-link';
+import { RouteLink } from '../../../shared/constants/route-link';
 import { CartItem } from '../../../core/models/response/cart/cart-response.interface';
+import { nameTolabel } from '../../../core/utils/product-name.parser';
+import { ProductLabel } from '../../../core/models/response/product-response/ProductLabel';
 
 @Component({
 	standalone: true,
@@ -14,26 +16,31 @@ import { CartItem } from '../../../core/models/response/cart/cart-response.inter
 	templateUrl: './product-card.component.html',
 	styleUrls: ['./product-card.component.scss'],
 })
-export class ProductCardComponent {
+export class ProductCardComponent implements OnInit {
 	@Input() product!: ProductResponse;
 
 	@Output() addToCartEvent = new EventEmitter<ProductResponse>();
 	@Output() addToWishlistEvent = new EventEmitter<ProductResponse>();
+
+
+	productLabel!: ProductLabel ;
+
 
 	constructor(
 		private cartService: CartService,
 		private alertService: AlertService,
 		private router: Router
 	) {}
+	ngOnInit(): void {
+		this.productLabel = nameTolabel(this.product.name, this.product.categories[0].name);
+	}
 
 	/**
 	 * Thêm sản phẩm vào giỏ hàng
 	 * @param product Sản phẩm được chọn
 	 */
 	addToCart(): void {
-		console.log('Đã thêm vào giỏ hàng:', this.product.name);
 		this.cartService.addToCart(this.product.id);
-		this.alertService.success('Đã thêm vào giỏ hàng');
 	}
 
 	/**
@@ -50,7 +57,9 @@ export class ProductCardComponent {
 		}];
 
 		this.router.navigate([RouteLink.checkoutRoute], {
-			state: { cartItems: cartItem },
+			state: { 
+				cartItems: cartItem,
+			 },
 		});
 	}
 }

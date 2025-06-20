@@ -52,6 +52,18 @@ export class UserService {
 			request
 		);
 	}
+	updateUserForCheckout(user: UserProfile, username: string, phone: string, address: string): Observable<ApiResponse<UserResponse>> {
+		const userRequest: UserUpdateRequest = {
+			fullName: username,
+			phone: phone,
+			address: address,
+		};
+
+		return this.http.put<ApiResponse<UserResponse>>(
+			`${URL_API.myInfo}/${user.id}`,
+			userRequest
+		);
+	}
 
 	changePasswordUser(
 		userId: number,

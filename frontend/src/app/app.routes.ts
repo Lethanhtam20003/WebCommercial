@@ -107,15 +107,7 @@ const protectedRoutes: Routes = [
 			canActivate: [AuthGuard],
 		data: { showHeader: true, showFooter: true },
 	},
-	{
-		path: RouteLink.payment,
-		loadComponent: () =>
-			import('./features/order/payment/payment.component').then(
-				m => m.PaymentComponent
-			),
-			canActivate: [AuthGuard],
-		data: { showHeader: true, showFooter: true },
-	},
+	
 
 ];
 

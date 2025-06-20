@@ -14,7 +14,7 @@ import { PaymentStatus } from '../../../core/enum/PaymentStatus';
 
 @Component({
 	standalone: true,
-	imports: [CommonModule, FormsModule],
+	imports: [CommonModule, FormsModule, RouterLink],
 	selector: 'app-order-detail',
 	templateUrl: './order-detail.component.html',
 	styleUrls: ['./order-detail.component.scss'],
@@ -26,8 +26,6 @@ export class OrderDetailComponent implements OnInit {
 	note: string = '';
 	PurchaseStatus = PurchaseStatus;
 	PaymentStatus = PaymentStatus;
-
-
 
 	constructor(
 		private orderService: OrderService,
@@ -66,9 +64,9 @@ export class OrderDetailComponent implements OnInit {
 	getStatus(): String {
 		switch (this.orderDetail.status) {
 			case OrderStatus.PENDING:
-				return 'Đang chờ xác nhận';
+				return 'chuẩn bị hàng';
 			case OrderStatus.CONFIRMED:
-				return 'Đã xác nhận';
+				return 'chấp nhận giao hàng';
 			case OrderStatus.SHIPPED:
 				return 'Đang vận chuyển';
 			case OrderStatus.DELIVERED:
@@ -79,6 +77,15 @@ export class OrderDetailComponent implements OnInit {
 				return 'Đang chờ xác nhận';
 		}
 	}
+	getStatusPayment(status: PaymentStatus): string {
+		switch (status) {
+			case PaymentStatus.PAID:
+				return 'Đã thanh toán';
+			default:
+				return 'Chưa thanh toán';
+		}
+	}
+	
 
 	payment() {
 		this.paymentService.payment(this.orderDetail);

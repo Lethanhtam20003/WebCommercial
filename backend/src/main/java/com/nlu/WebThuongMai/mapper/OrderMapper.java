@@ -1,21 +1,17 @@
 package com.nlu.WebThuongMai.mapper;
 
-import com.nlu.WebThuongMai.dto.response.orderResp.OrderResponse;
 import com.nlu.WebThuongMai.dto.response.orderResp.OrderItemResponse;
+import com.nlu.WebThuongMai.dto.response.orderResp.OrderResponse;
 import com.nlu.WebThuongMai.model.Order;
+import com.nlu.WebThuongMai.model.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-
-import com.nlu.WebThuongMai.model.OrderItem;
-import com.nlu.WebThuongMai.model.ProductImage;
-import org.mapstruct.*;
-
 import java.util.List;
-import java.util.Set;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {OrderItemMapper.class})
 public interface OrderMapper {
     /**
      * Chuyển đổi một Order sang OrderResponse
@@ -36,15 +32,6 @@ public interface OrderMapper {
      */
     List<OrderResponse> toOrderResponseList(List<Order> orders);
 
-    /**
-     * Chuyển đổi một OrderItem sang OrderItemResponse
-     *
-     * @param orderItem thực thể sản phẩm trong đơn hàng
-     * @return đối tượng phản hồi OrderItemResponse
-     */
-    @Mapping(source = "product.images", target = "productImage", qualifiedByName = "mapFirstImage")
-    @Mapping(source = "product.name", target = "productName")
-    OrderItemResponse toOrderItemResponse(OrderItem orderItem);
 
     /**
      * Chuyển đổi danh sách OrderItem sang danh sách OrderItemResponse
@@ -54,11 +41,4 @@ public interface OrderMapper {
      */
     List<OrderItemResponse> toOrderItemResponseList(List<OrderItem> items);
 
-    @Named("mapFirstImage")
-    static String mapFirstImage(Set<ProductImage> images) {
-        return images.stream()
-                .findFirst()
-                .map(ProductImage::getImage)
-                .orElse(null);
-    }
 }

@@ -8,6 +8,7 @@ import { ProductResponse } from '../models/response/product-response/productResp
 import { Page } from '../models/response/page-response.interface';
 import { PageResponse } from '../models/response/product-response/product-response/page-response.interface';
 import { ProductFilter } from '../models/request/filter/productFilter';
+import { ProductLabel } from '../models/response/product-response/ProductLabel';
 
 @Injectable({
 	providedIn: 'root',
@@ -68,7 +69,6 @@ export class ProductService {
 					if (response.code === 200 && response.result) {
 						this.pageProductsObject.next(response.result);
 						console.log(response.result);
-						
 					}
 				},
 				error: error => {
@@ -82,4 +82,6 @@ export class ProductService {
 			`${URL_API.productsUrl}/${id}`
 		);
 	}
+
+	
 }

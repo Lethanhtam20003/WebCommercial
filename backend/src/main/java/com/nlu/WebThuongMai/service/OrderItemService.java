@@ -1,6 +1,7 @@
 package com.nlu.WebThuongMai.service;
 
 import com.nlu.WebThuongMai.dto.response.orderResp.OrderItemResponse;
+import com.nlu.WebThuongMai.mapper.OrderItemMapper;
 import com.nlu.WebThuongMai.mapper.OrderMapper;
 import com.nlu.WebThuongMai.model.OrderItem;
 import com.nlu.WebThuongMai.repository.OrderItemRepository;
@@ -21,13 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class OrderItemService {
     OrderItemRepository orderItemRepository;
-    OrderMapper orderMapper;
+   OrderItemMapper orderItemMapper;
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('USER')")
     public Page<OrderItemResponse> getOrderItemByOrderId(Long orderId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<OrderItem> orderItemsPage = orderItemRepository.findByOrderId(orderId, pageable);
-        return orderItemsPage.map(orderMapper::toOrderItemResponse);
+        return orderItemsPage.map(orderItemMapper::toOrderItemResponse);
     }
 }

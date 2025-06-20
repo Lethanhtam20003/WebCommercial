@@ -1,0 +1,14 @@
+<div class="container p-4">
+	<h2 class="text-center mt-4">sản phẩm liên quan</h2>
+	<!-- Product Grid -->
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+		<!-- Item -->
+		
+		<app-product-card
+			*ngFor="let product of pageProducts?.content"
+			[product]="product"
+		></app-product-card>
+
+	
+	</div>
+</div>

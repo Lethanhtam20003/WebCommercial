@@ -147,95 +147,134 @@ export class AlertService {
 			.then(result => (result.isConfirmed ? result.value : null));
 	}
 
-	async changeAddress() {
-		const provinces = await firstValueFrom(this.addressService.getProvinces());
-		const provinceOptions = provinces
-			.map(p => `<option value="${p.code}">${p.name}</option>`)
-			.join('');
-
-		return this.swal
-			.fire({
-				title: 'Thay đổi địa chỉ',
-				html: `
-				<input id="detail" class="swal2-input" placeholder="Số nhà, tên đường" />
-				<select id="province" class="swal2-select">
-					<option disabled selected>Chọn tỉnh/thành phố</option>
-					${provinceOptions}
-				</select>
-				<select id="district" class="swal2-select">
-					<option disabled selected>Chọn quận/huyện</option>
-				</select>
-				<select id="ward" class="swal2-select">
-					<option disabled selected>Chọn phường/xã</option>
-				</select>
-			`,
-				showCancelButton: true,
-				confirmButtonText: 'Xác nhận',
-				didOpen: () => {
-					const provinceSelect = document.getElementById(
-						'province'
-					) as HTMLSelectElement;
-					const districtSelect = document.getElementById(
-						'district'
-					) as HTMLSelectElement;
-					const wardSelect = document.getElementById(
-						'ward'
-					) as HTMLSelectElement;
-
-					provinceSelect.addEventListener('change', async () => {
-						const provinceCode = +provinceSelect.value;
-						const provinceData = await firstValueFrom(
-							this.addressService.getDistricts(provinceCode)
-						);
-						const districtOptions = provinceData.districts
-							.map((d: any) => `<option value="${d.code}">${d.name}</option>`)
-							.join('');
-						districtSelect.innerHTML =
-							`<option disabled selected>Chọn quận/huyện</option>` +
-							districtOptions;
-						wardSelect.innerHTML = `<option disabled selected>Chọn phường/xã</option>`;
-					});
-
-					districtSelect.addEventListener('change', async () => {
-						const districtCode = +districtSelect.value;
-						const districtData = await firstValueFrom(
-							this.addressService.getWards(districtCode)
-						);
-						const wardOptions = districtData.wards
-							.map((w: any) => `<option value="${w.code}">${w.name}</option>`)
-							.join('');
-						wardSelect.innerHTML =
-							`<option disabled selected>Chọn phường/xã</option>` + wardOptions;
-					});
-				},
-				preConfirm: () => {
-					const detail = (
-						document.getElementById('detail') as HTMLInputElement
-					)?.value?.trim();
-					const province = (
-						document.getElementById('province') as HTMLSelectElement
-					)?.selectedOptions[0]?.text;
-					const district = (
-						document.getElementById('district') as HTMLSelectElement
-					)?.selectedOptions[0]?.text;
-					const ward = (document.getElementById('ward') as HTMLSelectElement)
-						?.selectedOptions[0]?.text;
-
-					if (!detail || !province || !district || !ward) {
-						this.swal.showValidationMessage(
-							'Vui lòng nhập đầy đủ thông tin địa chỉ'
-						);
-						return;
-					}
-
-					return {
-						detail,
-						province,
-						district,
-						ward,
-						fullAddress: `${detail}, ${ward}, ${district}, ${province}`,
-					};
-				},
-			})
+	notification(message: string) {
+		this.swal.fire({
+			text: message,
+			icon: 'success', // hoặc 'error', 'warning', 'info'
+			showConfirmButton: false,
+			timer: 3000, // hiển thị trong 3 giây
+			timerProgressBar: true,
+			toast: true,
+			position: 'top-end', // hiển thị ở góc trên bên phải
+		});
 	}
+
+	async changeAddress() {
+	const provinces = await firstValueFrom(this.addressService.getProvinces());
+	const provinceOptions = provinces
+		.map(p => `<option value="${p.code}">${p.name}</option>`)
+		.join('');
+
+	return this.swal.fire({
+		title: 'Thay đổi địa chỉ',
+		width: '80rem',
+		html: `
+			<style>
+				.flex-row {
+					display: flex;
+					gap: 8px;
+					margin-bottom: 8px;
+				}
+				.flex-row > div {
+					flex: 1;
+					display: flex;
+					flex-direction: column;
+				}
+				label {
+					font-size: 14px;
+					margin-bottom: 4px;
+					text-align: left;
+				}
+			</style>
+
+			<div class="flex-row">
+				<div>
+					<label for="fullName">Họ tên người nhận</label>
+					<input id="fullName" class="swal2-input" placeholder="Họ tên người nhận" />
+				</div>
+				<div>
+					<label for="phoneNumber">Số điện thoại</label>
+					<input id="phoneNumber" class="swal2-input" placeholder="Số điện thoại" />
+				</div>
+			</div>
+
+			<div class="flex-row">
+				<div>
+					<label for="province">Tỉnh/Thành phố</label>
+					<select id="province" class="swal2-select">
+						<option disabled selected>Chọn tỉnh/thành phố</option>
+						${provinceOptions}
+					</select>
+				</div>
+				<div>
+					<label for="district">Quận/Huyện</label>
+					<select id="district" class="swal2-select">
+						<option disabled selected>Chọn quận/huyện</option>
+					</select>
+				</div>
+				<div>
+					<label for="ward">Phường/Xã</label>
+					<select id="ward" class="swal2-select">
+						<option disabled selected>Chọn phường/xã</option>
+					</select>
+				</div>
+			</div>
+
+			<div style="margin-top: 10px;">
+				<label for="detail">Số nhà, tên đường</label>
+				<input id="detail" class="swal2-input" placeholder="Số nhà, tên đường" />
+			</div>
+		`,
+		showCancelButton: true,
+		confirmButtonText: 'Xác nhận',
+		didOpen: () => {
+			const provinceSelect = document.getElementById('province') as HTMLSelectElement;
+			const districtSelect = document.getElementById('district') as HTMLSelectElement;
+			const wardSelect = document.getElementById('ward') as HTMLSelectElement;
+
+			provinceSelect.addEventListener('change', async () => {
+				const provinceCode = +provinceSelect.value;
+				const provinceData = await firstValueFrom(this.addressService.getDistricts(provinceCode));
+				const districtOptions = provinceData.districts
+					.map((d: any) => `<option value="${d.code}">${d.name}</option>`)
+					.join('');
+				districtSelect.innerHTML = `<option disabled selected>Chọn quận/huyện</option>` + districtOptions;
+				wardSelect.innerHTML = `<option disabled selected>Chọn phường/xã</option>`;
+			});
+
+			districtSelect.addEventListener('change', async () => {
+				const districtCode = +districtSelect.value;
+				const districtData = await firstValueFrom(this.addressService.getWards(districtCode));
+				const wardOptions = districtData.wards
+					.map((w: any) => `<option value="${w.code}">${w.name}</option>`)
+					.join('');
+				wardSelect.innerHTML = `<option disabled selected>Chọn phường/xã</option>` + wardOptions;
+			});
+		},
+		preConfirm: () => {
+			const fullName = (document.getElementById('fullName') as HTMLInputElement)?.value?.trim();
+			const phoneNumber = (document.getElementById('phoneNumber') as HTMLInputElement)?.value?.trim();
+			const detail = (document.getElementById('detail') as HTMLInputElement)?.value?.trim();
+			const province = (document.getElementById('province') as HTMLSelectElement)?.selectedOptions[0]?.text;
+			const district = (document.getElementById('district') as HTMLSelectElement)?.selectedOptions[0]?.text;
+			const ward = (document.getElementById('ward') as HTMLSelectElement)?.selectedOptions[0]?.text;
+
+			if (!fullName || !phoneNumber || !detail || !province || !district || !ward) {
+				this.swal.showValidationMessage('Vui lòng nhập đầy đủ thông tin người nhận và địa chỉ');
+				return;
+			}
+
+			return {
+				fullName,
+				phoneNumber,
+				detail,
+				province,
+				district,
+				ward,
+				fullAddress: `${detail}, ${ward}, ${district}, ${province}`,
+			};
+		},
+	});
+}
+
 }

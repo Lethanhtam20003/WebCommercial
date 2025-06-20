@@ -33,7 +33,7 @@
 			<h4 class="mb-3">Tổng cộng: {{ getTotal() | currency: 'VND' }}</h4>
 			<button
 				class="btn primary-color-button btn-lg"
-				(click)="order()"
+				(click)="paymenthandler()"
 				(pointerdown)="onPress(999)"
 				(pointerup)="onRelease(999)"
 				(touchstart)="onPress(999)"

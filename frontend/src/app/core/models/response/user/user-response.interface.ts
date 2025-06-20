@@ -7,7 +7,7 @@ export interface UserResponse {
 	username: string;
 
 	/**
-	 * Mật khẩu của người dùng (nếu có trả về - KHÔNG nên dùng ở frontend)
+	 * Mật khẩu của người dùng 
 	 */
 	password: string;
 
