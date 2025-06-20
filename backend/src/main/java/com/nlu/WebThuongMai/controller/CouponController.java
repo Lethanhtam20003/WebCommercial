@@ -135,4 +135,15 @@ public class CouponController {
                 .result(service.getTop5Coupons())
                 .build();
     }
+
+    @PostMapping("/save")
+    public ApiResponse<String> saveCoupon(
+            @RequestParam String couponCode,
+            @RequestParam Long userId
+    ) {
+        service.saveCoupon(userId, couponCode);
+        return ApiResponse.<String>builder()
+                .result("Lưu     mã giảm giá thành công")
+                .build();
+    }
 }

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserInforResponse {
     long id;
     String username;
@@ -22,6 +21,7 @@ public class UserInforResponse {
     String email;
     String phone;
     String address;
+    String coupons;
     Role role;
     String status;
     String authProvider;
