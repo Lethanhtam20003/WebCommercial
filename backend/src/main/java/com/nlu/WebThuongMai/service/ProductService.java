@@ -3,10 +3,12 @@ package com.nlu.WebThuongMai.service;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductCreatetionRequest;
 import com.nlu.WebThuongMai.dto.request.productReq.ProductFilterRequest;
 import com.nlu.WebThuongMai.dto.response.productResp.ProductResponse;
+import com.nlu.WebThuongMai.enums.ProductStatus;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.mapper.ProductMapper;
 import com.nlu.WebThuongMai.model.Category;
+import com.nlu.WebThuongMai.model.Inventory;
 import com.nlu.WebThuongMai.model.Product;
 import com.nlu.WebThuongMai.model.ProductStatistic;
 import com.nlu.WebThuongMai.repository.ProductRepository;
@@ -18,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +52,23 @@ public class ProductService {
 
     public Page<ProductResponse> getAllProduct(ProductFilterRequest filter, Pageable pageable) {
         Specification<Product> spec = Specification.where(null);
+        if (!hasRole("ADMIN")) {
+            spec = spec.and((root, query, cb) -> {
+                Join<Product, Inventory> inventoryJoin = root.join("inventories");
+                return cb.gt(inventoryJoin.get("quantity"), 0);
+            });
+        }
+
+        // Nếu không truyền filter.status thì mặc định là ACTIVE
+        if (filter.getStatus() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("status"), filter.getStatus())
+            );
+        } else {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("status"), ProductStatus.ACTIVE)
+            );
+        }
 
         if (filter.getName() != null && !filter.getName().isEmpty()) {
             spec = spec.and((root, query, cb) ->
@@ -84,6 +104,7 @@ public class ProductService {
         return productMapper.toPageProductResponse(productRepository.findAll(spec,pageable));
     }
 
+
     public ProductResponse getProductById(long request) {
         return productMapper.toProductResponse(productRepository.findById(request)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND)));
@@ -102,4 +123,14 @@ public class ProductService {
         return productRepository.findByIdWithAllRelations(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
     }
+
+    private boolean hasRole(String role) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info(authentication.getAuthorities().stream().toList().toString());
+        return authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals(role));
+    }
+
+
+
 }

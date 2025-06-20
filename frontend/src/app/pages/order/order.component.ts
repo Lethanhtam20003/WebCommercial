@@ -8,6 +8,8 @@ import { UserService } from '../../core/service/user.service';
 import { CommonModule } from '@angular/common';
 import { OrderStatus } from '../../core/enum/order-status.enum';
 import { AlertService } from '../../core/service/alert.service';
+import { PaymentService } from '../../core/service/cart/payment.service';
+import { PaymentStatus } from '../../core/enum/PaymentStatus';
 
 @Component({
 	standalone: true,
@@ -20,12 +22,13 @@ export class OrderComponent implements OnInit {
 	
 	orders!: OrderResponse[];
 	idUser!: number;
-
+	PaymentStatus = PaymentStatus;
 	constructor(
 		private router: Router,
 		private orderService: OrderService,
 		private userService: UserService,
-		private alertService: AlertService
+		private alertService: AlertService,
+		private paymentService: PaymentService
 	) {}
 
 	ngOnInit(): void {
@@ -42,20 +45,19 @@ export class OrderComponent implements OnInit {
 
 	cancelOrder(id: number) {
 		this.orderService.cancelOrder(id).subscribe(() => {
-			this.orders = this.orders.filter(order => order.id !== id);
 			this.alertService.success('Hủy đơn hàng thành công!');
 		});
 	}
 	payOrder(id: number) {
-		this.router.navigate(['/payment']);
+		this.paymentService.payment(this.orders.find(order => order.id === id)!);
 	}
 
 	getStatusLabel(status: OrderStatus): string {
 		switch (status) {
 			case OrderStatus.PENDING:
-				return 'Chờ xác nhận';
+				return 'chuẩn bị hàng';
 			case OrderStatus.CONFIRMED:
-				return 'Đã xác nhận';
+				return 'chấp nhận giao hàng';
 			case OrderStatus.SHIPPED:
 				return 'Đang giao';
 			case OrderStatus.DELIVERED:
@@ -64,6 +66,14 @@ export class OrderComponent implements OnInit {
 				return 'Đã huỷ';
 			default:
 				return 'Không xác định';
+		}
+	}
+	getStatusPayment(status: PaymentStatus): string {
+		switch (status){
+			case PaymentStatus.PAID:
+				return 'Đã thanh toán';
+				default:
+				return 'Chưa thanh toán';
 		}
 	}
 }

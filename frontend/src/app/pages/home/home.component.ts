@@ -18,11 +18,10 @@ import { PromotionListComponent } from '../../shared/components/promotion-list/p
 	],
 	template: `
 		<app-banner></app-banner>
-    <app-promotion-list></app-promotion-list>
+		<app-promotion-list></app-promotion-list>
 		<app-user_catgory_list></app-user_catgory_list>
 		<app-OutstandingProductCatalog></app-OutstandingProductCatalog>
 		<app-product-list></app-product-list>
-		<!-- <app-product-list2></app-product-list2> -->
 	`,
 	styleUrl: './home.component.scss',
 })

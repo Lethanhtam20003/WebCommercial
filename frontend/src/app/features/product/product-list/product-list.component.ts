@@ -2,11 +2,9 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { ProductService } from '../../../core/service/product.service';
 import { ProductResponse } from '../../../core/models/response/product-response/productResponse';
-import { RouterLink } from '@angular/router';
 import { PageResponse } from '../../../core/models/response/product-response/product-response/page-response.interface';
 import { ProductFilter } from '../../../core/models/request/filter/productFilter';
-import { ProductCardComponent } from '../../../shared/components/product-card/product-card.component';
-import { Product } from '../../admin/models/Product';
+import { ProductCardComponent } from '../product-card/product-card.component';
 
 @Component({
 	standalone: true,

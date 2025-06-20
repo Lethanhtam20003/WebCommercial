@@ -240,7 +240,7 @@ export class AlertService {
 
 		const result: Record<string, string | File> = {};
 
-		const { isConfirmed } = await Swal.fire({
+		const { isConfirmed } = await this.swal.fire({
 			title,
 			html: formHtml,
 			focusConfirm: false,
@@ -254,7 +254,9 @@ export class AlertService {
 						const file = input?.files?.[0];
 
 						if (f.required && !file) {
-							Swal.showValidationMessage(`Trường "${f.label}" là bắt buộc`);
+							this.swal.showValidationMessage(
+								`Trường "${f.label}" là bắt buộc`
+							);
 							return null;
 						}
 
@@ -269,7 +271,9 @@ export class AlertService {
 						)?.value.trim();
 
 						if (f.required && !val) {
-							Swal.showValidationMessage(`Trường "${f.label}" là bắt buộc`);
+							this.swal.showValidationMessage(
+								`Trường "${f.label}" là bắt buộc`
+							);
 							return null;
 						}
 
@@ -283,7 +287,6 @@ export class AlertService {
 
 		return isConfirmed ? result : null;
 	}
-
 	async changeAddress() {
 		const provinces = await firstValueFrom(this.addressService.getProvinces());
 		const provinceOptions = provinces
@@ -370,6 +373,18 @@ export class AlertService {
 					fullAddress: `${detail}, ${ward}, ${district}, ${province}`,
 				};
 			},
+		});
+	}
+
+	notification(message: string) {
+		this.swal.fire({
+			text: message,
+			icon: 'success', // hoặc 'error', 'warning', 'info'
+			showConfirmButton: false,
+			timer: 3000, // hiển thị trong 3 giây
+			timerProgressBar: true,
+			toast: true,
+			position: 'top-end', // hiển thị ở góc trên bên phải
 		});
 	}
 }

@@ -7,8 +7,8 @@
 
 
   <div class="product-detail">
-    <img [src]="item.productImg" alt="product image" />
-    <span class="product-name">{{ item.name }}</span>
+    <img [src]="item.productImg" alt="product image"  [routerLink]="['/product', item.ProductId]"/>
+    <span class="product-name" [routerLink]="['/product', item.ProductId]">{{ item.name }}</span>
   </div>
 
   <div class="product-price">{{ item.price | currency: 'VND' }}</div>

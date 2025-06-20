@@ -13,9 +13,22 @@
 							{{ orderDetail.createdDate | date: 'dd/MM/yyyy HH:mm:ss' }}
 						</div>
 					</div>
-					<span class="badge bg-info text-dark text-uppercase">{{
-						getStatus()
-					}}</span>
+
+					<!-- Trạng thái thanh toán -->
+					<div class="text-end">
+						<div class="small text-muted">Trạng thái thanh toán</div>
+						<span class="badge bg-info text-dark text-uppercase">
+							{{ getStatusPayment(orderDetail.paymentStatus) }}
+						</span>
+					</div>
+
+					<!-- Trạng thái đơn hàng -->
+					<div class="text-end ms-3">
+						<div class="small text-muted">Trạng thái đơn hàng</div>
+						<span class="badge bg-info text-dark text-uppercase">
+							{{ getStatus() }}
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -46,6 +59,7 @@
 				style="max-height: 100px; overflow: hidden"
 			>
 				<img
+					 [routerLink]="'/product/' + item.productId"
 					[src]="item.productImage"
 					class="img-thumbnail me-3"
 					width="80"
@@ -53,8 +67,8 @@
 					style="object-fit: cover"
 				/>
 				<div class="flex-grow-1">
-					<div>{{ item.productName }}</div>
-					<div class="text-muted">Số lượng: {{ item.quantity }}</div>
+					<div  [routerLink]="'/product/' + item.productId">{{ item.productName }}</div>
+					<div class="text-muted">Số lượng: {{ item.quantity }} </div>
 				</div>
 				<div class="text-end fw-bold">
 					{{ item.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi' }}
@@ -82,12 +96,15 @@
 			<!-- Ghi chú bên trái -->
 			<div class="col-md-6">
 				<label for="note" class="form-label fw-bold">Ghi chú:</label>
+
+				<!-- Nếu chưa thanh toán: cho phép nhập -->
 				<textarea
 					id="note"
 					class="form-control"
 					rows="5"
+					readonly="readonly"
 					[(ngModel)]="orderDetail.note"
-					placeholder="Nhập ghi chú cho đơn hàng..."
+					placeholder="Không có ghi chú."
 				></textarea>
 			</div>
 
@@ -129,7 +146,10 @@
 							</p>
 						</div>
 
-						<div *ngIf="orderDetail.paymentStatus !== PaymentStatus.PAID" class="mt-3">
+						<div
+							*ngIf="orderDetail.paymentStatus !== PaymentStatus.PAID"
+							class="mt-3"
+						>
 							<button class="btn btn-success" (click)="payment()">
 								Thanh toán
 							</button>

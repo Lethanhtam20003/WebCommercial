@@ -11,9 +11,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
 import { AlertService } from '../../../core/service/alert.service';
 import { CartService } from '../../../core/service/cart/cart.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
-	imports: [CommonModule, FormsModule],
+	imports: [CommonModule, FormsModule, RouterLink],
 	selector: 'app-cartItem',
 	templateUrl: './cartItem.component.html',
 	styleUrls: ['./cartItem.component.scss'],
@@ -21,7 +22,7 @@ import { CartService } from '../../../core/service/cart/cart.service';
 export class CartItemComponent implements OnInit {
 	constructor(
 		private cartServide: CartService,
-		private alert: AlertService
+		private alert: AlertService,
 	) {}
 	ngOnInit(): void {
 		console.log("itemt"+this.item.isSelected);
