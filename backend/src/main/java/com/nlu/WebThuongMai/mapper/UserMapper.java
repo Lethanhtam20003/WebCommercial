@@ -39,5 +39,6 @@ public interface UserMapper {
         return (value == null || value.trim().isEmpty()) ? null : value;
     }
 
+    @Mapping(source = "coupons", target = "coupons")
     UserInforResponse toUserInforResponse(User user);
 }

@@ -35,4 +35,5 @@ export const URL_API = {
 	createPayment: 'http://localhost:8080/api/v1/payments/create',
 	confirmPayment: 'http://localhost:8080/api/v1/payments/confirm',
 	top5Coupon: 'http://localhost:8080/api/v1/coupons/top5',
+  saveCoupon: 'http://localhost:8080/api/v1/coupons/save'
 } as const;

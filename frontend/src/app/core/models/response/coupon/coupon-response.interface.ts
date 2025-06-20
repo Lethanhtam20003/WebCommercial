@@ -1,7 +1,7 @@
 export interface CouponResponse {
 	id: number;
 	code: string;
-	discountPercentage: number;
+	discount: number;
 	description: string;
 	expirationDate: string;
 

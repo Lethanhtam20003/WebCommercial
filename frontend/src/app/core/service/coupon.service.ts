@@ -40,26 +40,46 @@ export class CouponService {
 
 		return this.http.post<ApiResponse<Page<AdminCouponResponse>>>(
 			URL_API.getAllCouponsFilterAdmin,
-      filter,
+			filter,
 			{ params }
 		);
 	}
 
-  createCoupon(request: CouponCreateRequest): Observable<ApiResponse<CouponResponse>> {
-    console.log(request);
+	createCoupon(
+		request: CouponCreateRequest
+	): Observable<ApiResponse<CouponResponse>> {
+		console.log(request);
 
-    return this.http.post<ApiResponse<CouponResponse>>(URL_API.coupon, request);
-  }
+		return this.http.post<ApiResponse<CouponResponse>>(URL_API.coupon, request);
+	}
 
-  updateCoupon(request: UpdateCouponRequest): Observable<ApiResponse<CouponResponse>> {
-    return this.http.put<ApiResponse<CouponResponse>>(`${URL_API.coupon}/${request.id}`, request);
-  }
+	updateCoupon(
+		request: UpdateCouponRequest
+	): Observable<ApiResponse<CouponResponse>> {
+		return this.http.put<ApiResponse<CouponResponse>>(
+			`${URL_API.coupon}/${request.id}`,
+			request
+		);
+	}
 
-  deleteCoupon(id: number): Observable<ApiResponse<CouponResponse>> {
-    return this.http.delete<ApiResponse<CouponResponse>>(`${URL_API.coupon}/${id}`);
-  }
+	deleteCoupon(id: number): Observable<ApiResponse<CouponResponse>> {
+		return this.http.delete<ApiResponse<CouponResponse>>(
+			`${URL_API.coupon}/${id}`
+		);
+	}
 
-  getTop5Coupon(): Observable<ApiResponse<CouponResponse[]>> {
-    return this.http.get<ApiResponse<CouponResponse[]>>(URL_API.top5Coupon);
-  }
+	getTop5Coupon(): Observable<ApiResponse<CouponResponse[]>> {
+		return this.http.get<ApiResponse<CouponResponse[]>>(URL_API.top5Coupon);
+	}
+
+	saveCoupon(
+		couponCode: string,
+		userId: number
+	): Observable<ApiResponse<string>> {
+		return this.http.post<ApiResponse<string>>(URL_API.saveCoupon, null, {
+			params: new HttpParams()
+				.set('couponCode', couponCode)
+				.set('userId', userId.toString()),
+		});
+	}
 }

@@ -1,9 +1,14 @@
-import { Component, Input } from '@angular/core';
+import { PurchaseItem } from './../../../core/models/request/importManagement/PurchaseItem';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PromotionResponse } from '../../../core/models/response/promotions/promotion-response.interface';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { interval, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CouponResponse } from '../../../core/models/response/coupon/coupon-response.interface';
+import { CouponService } from '../../../core/service/coupon.service';
+import { AlertService } from '../../../core/service/alert.service';
+import { UserService } from '../../../core/service/user.service';
+import { UserProfile } from '../../../core/models/response/user/user-profile-response.model';
 
 @Component({
 	selector: 'app-promotions',
@@ -11,13 +16,22 @@ import { CouponResponse } from '../../../core/models/response/coupon/coupon-resp
 	templateUrl: './promotions.component.html',
 	styleUrl: './promotions.component.scss',
 })
-export class PromotionsComponent {
+export class PromotionsComponent implements OnInit {
 	@Input() coupons: CouponResponse[] = [];
+	@Input() userId?: number;
+	@Output() couponSaved = new EventEmitter<string>(); // string là couponCode
+
 	buttonStates: { [couponId: string]: boolean } = {};
 	private intervalSub?: Subscription;
 	private langChangeSub?: Subscription;
+	user: UserProfile | null = null;
 
-	constructor(private translate: TranslateService) {}
+	constructor(
+		private translate: TranslateService,
+		private couponService: CouponService,
+		private alert: AlertService,
+		private userService: UserService
+	) {}
 
 	ngOnInit(): void {
 		this.updateRemainingTimes();
@@ -61,7 +75,19 @@ export class PromotionsComponent {
 	}
 
 	saveCoupon(coupon: CouponResponse): void {
-		coupon.saved = true;
+		if (coupon.saved || !this.userId) return;
+
+		this.couponService.saveCoupon(coupon.code, this.userId).subscribe({
+			next: res => {
+				coupon.saved = true;
+				this.couponSaved.emit(coupon.code); // 👈 Emit về cha
+				this.alert.success('Đã lưu mã giảm giá');
+			},
+			error: err => {
+				this.alert.error('Không thể lưu mã này');
+				console.error(err);
+			},
+		});
 	}
 
 	onPress(couponId: number): void {

@@ -51,6 +51,8 @@ export interface UserProfile {
 	 */
 	role: string;
 
+  coupons: string;
+
 	/**
 	 * Phương thức xác thực của người dùng (ví dụ: 'LOCAL', 'GOOGLE', v.v.)
 	 */

@@ -85,11 +85,10 @@ public class UserController {
      * @return Kết quả xóa người dùng
      */
     @DeleteMapping("/{userId}")
-    ApiResponse<Boolean> deleteUser(@PathVariable long userId) {
-        userService.deleteUser(userId);
-        return ApiResponse.<Boolean>builder()
-                .message("user has been deleted")
-                .result(true)
+    ApiResponse<UserResponse> deleteUser(@PathVariable long userId) {
+        return ApiResponse.<UserResponse>builder()
+                .message("User has been banned")
+                .result(userService.banUser(userId))
                 .build();
     }
 

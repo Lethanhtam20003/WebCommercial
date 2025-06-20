@@ -83,6 +83,7 @@
   "shipped": "Shipped",
   "delivered": "Delivered",
   "canceled": "Canceled",
+  "order": "Orders",
   "invoice": "Invoice",
   "cart": "Cart",
   "promotion": {

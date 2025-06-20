@@ -10,6 +10,7 @@ import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.mapper.UserChangePasswordMapper;
 import com.nlu.WebThuongMai.mapper.UserInfoMapper;
 import com.nlu.WebThuongMai.mapper.UserMapper;
+import com.nlu.WebThuongMai.model.Coupon;
 import com.nlu.WebThuongMai.model.User;
 import com.nlu.WebThuongMai.repository.UserRepository;
 import jakarta.persistence.criteria.Predicate;
@@ -26,10 +27,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -134,8 +137,14 @@ public class UserService {
      * @param userId ID của người dùng cần xóa
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteUser(long userId) {
-        userRepository.deleteById(userId);
+    public UserResponse banUser(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User không tồn tại"));
+
+        user.setStatus("BANNED");
+        user.setUpdated_at(LocalDateTime.now());
+
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     /**
@@ -150,7 +159,9 @@ public class UserService {
         String name = context.getAuthentication().getName();
         User user = userRepository.findByUsername(name)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        return userInfoMapper.toUserResponse(user);
+        UserInforResponse dto = userMapper.toUserInforResponse(user);
+
+        return dto;
     }
 
     public User findUserById(@NotNull long userId) {
