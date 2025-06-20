@@ -65,4 +65,11 @@ public class PromotionController {
                 .result(service.filterPromotionsByAdmin(request, pageable))
                 .build();
     }
+
+    @DeleteMapping("/{promotionId}")
+    public ApiResponse<PromotionAdminResponse> deletePromotion(@PathVariable Long promotionId) {
+        return ApiResponse.<PromotionAdminResponse>builder()
+                .result(service.softDeletePromotion(promotionId))
+                .build();
+    }
 }

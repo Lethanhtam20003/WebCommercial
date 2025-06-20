@@ -2,6 +2,7 @@ package com.nlu.WebThuongMai.service;
 
 import com.nlu.WebThuongMai.dto.request.categoryReq.CategoriesAdminFilterRequest;
 import com.nlu.WebThuongMai.dto.request.categoryReq.CreateCategoryRequest;
+import com.nlu.WebThuongMai.dto.request.categoryReq.UpdateCategoryRequest;
 import com.nlu.WebThuongMai.dto.response.productResp.CategoryResponse;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
@@ -93,4 +94,27 @@ public class CategoryService {
         return categoryMapper.toCategoryResponse(saved);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public CategoryResponse updateCategory(Long id, UpdateCategoryRequest request) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(ErrorCode.CATEGORY_NOT_FOUND + " with id: " + id));
+
+        category.setName(request.getName());
+        category.setImageUrl(request.getImageUrl());
+        category.setDescription(request.getDescription());
+
+        Category saved = categoryRepository.save(category);
+        return categoryMapper.toCategoryResponse(saved);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public CategoryResponse softDeleteCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(ErrorCode.CATEGORY_NOT_FOUND + " with id: " + id));
+
+        category.setDescription("đã xoá");
+        Category saved = categoryRepository.save(category);
+
+        return categoryMapper.toCategoryResponse(saved);
+    }
 }

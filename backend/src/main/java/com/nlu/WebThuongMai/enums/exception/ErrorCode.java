@@ -67,8 +67,8 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(1052,"category not found",HttpStatus.NOT_FOUND),
     INVALID_QUANTITY(1053,"invalid quantity",HttpStatus.BAD_REQUEST),
     CANNOT_UPDATE_CANCELLED_ORDER(1054,"cannot update cancelled order",HttpStatus.BAD_REQUEST),
-    INVALID_STATUS_TRANSITION(1055,"invalid status transition",HttpStatus.BAD_REQUEST);
-
+    INVALID_STATUS_TRANSITION(1055,"invalid status transition",HttpStatus.BAD_REQUEST),
+    PROMOTION_NOT_FOUND(1056, "Promotion not found", HttpStatus.NOT_FOUND);
 
     int code;
     String message;

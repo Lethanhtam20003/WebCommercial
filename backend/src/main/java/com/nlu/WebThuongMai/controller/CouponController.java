@@ -2,7 +2,7 @@ package com.nlu.WebThuongMai.controller;
 
 import com.nlu.WebThuongMai.dto.request.couponReq.CouponFilterAdminRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
-import com.nlu.WebThuongMai.dto.request.orderReq.CouponUpdateRequest;
+import com.nlu.WebThuongMai.dto.request.couponReq.CouponUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.ApiResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.AdminCouponResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
@@ -98,8 +98,8 @@ public class CouponController {
      * @return Kết quả xóa mã giảm giá
      */
     @DeleteMapping("/{couponId}")
-    public ApiResponse<Boolean> deleteCoupon(@PathVariable long couponId) {
-        return ApiResponse.<Boolean>builder()
+    public ApiResponse<CouponResponse> deleteCoupon(@PathVariable long couponId) {
+        return ApiResponse.<CouponResponse>builder()
                 .result(service.deleteCoupon(couponId))
                 .build();
     }
