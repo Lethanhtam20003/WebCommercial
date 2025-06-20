@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: tam1442k3/web-backend:latest
     container_name: web-backend
     ports:
       - "8080:8080"
@@ -32,9 +30,7 @@ services:
       - fireKnightSportNetworks
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: tam1442k3/web-frontend:latest
     container_name: web-frontend
     ports:
       - "4200:80"
