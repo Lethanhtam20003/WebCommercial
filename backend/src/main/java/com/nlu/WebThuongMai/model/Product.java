@@ -83,6 +83,7 @@ public class Product {
     )
     Set<Promotion> promotions = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     Set<Inventory> inventories = new HashSet<>();
 
