@@ -1,4 +1,4 @@
-export interface PromotionRequest {
+export interface CreatePromotionRequest {
   name: string;
   discountPercent: number;
   startDate: string;

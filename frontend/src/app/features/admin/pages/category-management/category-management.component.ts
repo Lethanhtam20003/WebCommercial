@@ -12,8 +12,12 @@ import { GenericFilterComponent } from '../../../../shared/components/generic-fi
 import { DynamicFormModalComponentComponent } from '../../../../dynamic-form-modal-component/dynamic-form-modal-component.component';
 import { DynamicField } from '../../../../dynamic-form-modal-component/dynamic-field.interface';
 import { CreateCategoryRequest } from '../../../../core/models/request/category/create-category-request.interface';
-import { AlertService } from '../../../../core/service/alert.service';
+import {
+	AlertService,
+	ModalInputField,
+} from '../../../../core/service/alert.service';
 import { CloudinaryUploadService } from '../../service/cloudinary-upload.service';
+import { UpdateCategoryRequest } from '../../../../core/models/request/category/update-category-request.interface';
 
 @Component({
 	selector: 'app-category-management',
@@ -27,8 +31,7 @@ export class CategoryManagementComponent implements OnInit {
 	currentPage: number = 1;
 	pageSize: number = 10;
 	totalPages: number = 1;
-  showFilter = false;
-
+	showFilter = false;
 
 	field: FilterField[] = [
 		{ name: 'name', label: 'Tên danh mục', type: 'text' },
@@ -103,12 +106,36 @@ export class CategoryManagementComponent implements OnInit {
 		this.loadCategories();
 	}
 
+	private buildCategoryFormFields(
+		category?: CategoriesAdminFilterResponse
+	): ModalInputField[] {
+		return [
+			{
+				label: 'Tên danh mục',
+				name: 'name',
+				required: true,
+				value: category?.name || '',
+			},
+			{
+				label: 'Mô tả',
+				name: 'description',
+				type: 'textarea',
+				value: category?.description || '',
+			},
+			{
+				label: category ? 'Ảnh đại diện (nếu muốn thay)' : 'Ảnh đại diện',
+				name: 'imageUrl',
+				type: 'file',
+				required: !category, // bắt buộc khi tạo mới, không bắt khi cập nhật
+			},
+		];
+	}
+
 	async openAddCategory() {
-		const data = await this.alert.showForm('Thêm danh mục', [
-			{ label: 'Tên danh mục', name: 'name', required: true },
-			{ label: 'Mô tả', name: 'description', type: 'textarea' },
-			{ label: 'Ảnh đại diện', name: 'imageUrl', type: 'file', required: true },
-		]);
+		const data = await this.alert.showForm(
+			'Thêm danh mục',
+			this.buildCategoryFormFields()
+		);
 
 		if (!data) return;
 
@@ -147,5 +174,64 @@ export class CategoryManagementComponent implements OnInit {
 	}
 	toggleFilter() {
 		this.showFilter = !this.showFilter;
+	}
+
+	async openEditCategory(category: CategoriesAdminFilterResponse) {
+		const data = await this.alert.showForm(
+			'Cập nhật danh mục',
+			this.buildCategoryFormFields()
+		);
+
+		if (!data) return;
+
+		let imageUrl = category.imageUrl;
+		const imageFile = data['imageUrl'];
+
+		if (imageFile instanceof File) {
+			try {
+				imageUrl = await this.cloudinary.uploadImage(imageFile);
+			} catch (err) {
+				this.alert.error('Lỗi khi upload ảnh mới');
+				return;
+			}
+		}
+
+		const updateRequest: UpdateCategoryRequest = {
+			id: category.id,
+			name: data['name'] as string,
+			description: data['description'] as string,
+			imageUrl: imageUrl,
+		};
+
+		this.categoryService.updateCategory(updateRequest).subscribe({
+			next: res => {
+				this.alert.success('Cập nhật danh mục thành công');
+				this.loadCategories();
+			},
+			error: err => {
+				console.error('❌ Lỗi khi cập nhật danh mục:', err);
+				this.alert.error('Không thể cập nhật danh mục');
+			},
+		});
+	}
+
+	async confirmDeleteCategory(id: number) {
+		const confirmed = await this.alert.confirm(
+			'Bạn có chắc chắn muốn xóa danh mục này?',
+			'Xác nhận xóa'
+		);
+
+		if (!confirmed) return;
+
+		this.categoryService.deleteCategory(id).subscribe({
+			next: () => {
+				this.alert.success('Đã xóa danh mục thành công');
+				this.loadCategories();
+			},
+			error: err => {
+				console.error('❌ Lỗi khi xóa danh mục:', err);
+				this.alert.error('Không thể xóa danh mục');
+			},
+		});
 	}
 }

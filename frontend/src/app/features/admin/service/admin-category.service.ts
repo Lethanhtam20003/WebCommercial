@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { category } from '../../../core/models/response/product-response/category';
 import { Observable } from 'rxjs';
 import { URL_API } from '../../../shared/constants/url-api.constants';
-import { AdminModule } from '../admin.module';
 import { CategoriesAdminFilterRequest } from '../../../core/models/request/category/categories-admin-filter-request.interface';
 import { Page } from '../../../core/models/response/page-response.interface';
 import { CategoriesAdminFilterResponse } from '../../../core/models/response/category/categories-admin-filter-response.interface';
 import { ApiResponse } from '../../../core/models/api-response.model';
 import { CreateCategoryRequest } from '../../../core/models/request/category/create-category-request.interface';
+import { UpdateCategoryRequest } from '../../../core/models/request/category/update-category-request.interface';
 
 @Injectable({
 	providedIn: 'root',
@@ -40,4 +40,11 @@ export class CategoryService {
 	createCategory(category: CreateCategoryRequest): Observable<ApiResponse<category>> {
 		return this.http.post<ApiResponse<category>>(URL_API.createCategory, category);
 	}
+
+  updateCategory(category: UpdateCategoryRequest): Observable<ApiResponse<category>> {
+    return this.http.put<ApiResponse<category>>(`${URL_API.catogoryUrl}/${category.id}`, category);
+  }
+  deleteCategory(id: number): Observable<ApiResponse<category>> {
+    return this.http.delete<ApiResponse<category>>(`${URL_API.catogoryUrl}/${id}`);
+  }
 }

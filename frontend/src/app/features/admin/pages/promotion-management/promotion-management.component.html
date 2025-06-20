@@ -1,7 +1,18 @@
+<div class="d-flex align-items-center mb-3">
+	<button class="btn btn-outline-primary" (click)="toggleFilter()">
+		<i class="bi bi-funnel"></i> Lọc
+	</button>
+
+	<button class="btn btn-primary ms-2" (click)="openCreatePromotion()">
+		<i class="bi bi-plus"></i> Thêm khuyến mãi
+	</button>
+</div>
+
 <app-generic-filter
+	*ngIf="showFilter"
 	[fields]="promotionFilterFields"
 	(filterChanged)="onFilterChanged($event)"
-></app-generic-filter>
+/>
 
 <table class="table table-bordered table-hover align-middle text-center mt-3">
 	<thead class="table-dark">
@@ -13,10 +24,11 @@
 			<th scope="col">Đến ngày</th>
 			<th scope="col">Mô tả</th>
 			<th scope="col" style="width: 150px">Tình trạng</th>
+			<th scope="col" style="width: 80px">Thao tác</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr *ngFor="let promo of promotions">
+		<tr *ngFor="let promo of promotions" [id]="promo.promotionId">
 			<td>
 				<img
 					[src]="promo.image"
@@ -42,6 +54,15 @@
 					{{ promo.remainingTime }}
 				</div>
 			</td>
+			<td>
+				<!-- Nút xoá khuyến mãi -->
+				<button
+					class="btn btn-sm btn-danger"
+					(click)="deletePromotion(promo.promotionId)"
+				>
+					<i class="bi bi-trash"></i>
+				</button>
+			</td>
 		</tr>
 		<tr *ngIf="promotions.length === 0">
 			<td colspan="7" class="text-center text-muted py-4">
@@ -56,4 +77,4 @@
 	[currentPage]="currentPage"
 	[totalPages]="totalPages"
 	(pageChange)="onPageChange($event)"
-></app-pagination>
+/>

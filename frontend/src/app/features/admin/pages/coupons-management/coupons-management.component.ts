@@ -5,7 +5,10 @@ import { ApiResponse } from '../../../../core/models/api-response.model';
 import { GetAllCouponRequest } from '../../../../core/models/request/coupon/get-all-coupon-request.interface';
 import { AdminCouponResponse } from '../../../../core/models/response/coupon/admin-coupon-response.interface';
 import { Page } from '../../../../core/models/response/page-response.interface';
-import { AlertService } from '../../../../core/service/alert.service';
+import {
+	AlertService,
+	ModalInputField,
+} from '../../../../core/service/alert.service';
 import { CouponService } from '../../../../core/service/coupon.service';
 import { UtitlyService } from '../../../../core/service/utility.service';
 import { FilterField } from '../../../../shared/components/generic-filter/generic-filter-field.interface';
@@ -14,6 +17,8 @@ import { CouponType } from '../../../../core/enum/coupon-type.enum';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { CouponCreateRequest } from '../../../../core/models/request/coupon/coupon-create-request.interface';
 import { CouponStatus } from '../../../../core/enum/coupon-status.enum';
+import { UpdateCouponRequest } from '../../../../core/models/request/coupon/update-coupon-request.interface';
+import { CouponResponse } from '../../../../core/models/response/coupon/coupon-response.interface';
 
 @Component({
 	selector: 'app-coupons-management',
@@ -126,51 +131,100 @@ export class CouponsManagementComponent implements OnInit {
 		this.showFilter = !this.showFilter;
 	}
 
-	async openCreateCoupon() {
-		const data = await this.alert.showForm('Thêm mã giảm giá', [
-			{ label: 'Mã coupon', name: 'code', required: true },
+	getCouponFormFields(
+		mode: 'create' | 'edit',
+		coupon?: AdminCouponResponse
+	): ModalInputField[] {
+		const fields: ModalInputField[] = [];
+
+		if (mode === 'create') {
+			fields.push({
+				label: 'Mã coupon',
+				name: 'code',
+				value: coupon?.code ?? '',
+				required: true,
+			});
+		}
+
+		fields.push(
 			{
 				label: 'Phần trăm giảm (%)',
 				name: 'discount',
 				type: 'number',
+				value: coupon ? String(coupon.discount) : '',
 				required: true,
 			},
-			{ label: 'Mô tả', name: 'description', type: 'textarea', required: true },
+			{
+				label: 'Mô tả',
+				name: 'description',
+				type: 'textarea',
+				value: coupon?.description ?? '',
+				required: true,
+			},
 			{
 				label: 'Số lượt sử dụng tối đa',
 				name: 'limitUsers',
 				type: 'number',
+				value: coupon ? String(coupon.limitUsers) : '',
 				required: true,
 			},
 			{
-				label: 'Ngày hết hạn (YYYY-MM-DDTHH:mm)',
+				label: 'Ngày hết hạn',
 				name: 'expirationDate',
 				type: 'datetime-local',
+				value: coupon?.expirationDate ?? '',
 				required: true,
 			},
 			{
-				label: 'Loại (Phần trăm (%), Giá cố định)',
+				label: 'Loại',
 				name: 'type',
 				type: 'select',
+				value: coupon?.type ?? '',
 				required: true,
 				options: [
-					{ label: 'Phần trăm (%)', value: CouponType.PERCENTAGE as string },
-					{ label: 'Giá cố định', value: CouponType.AMOUNT as string },
+					{ label: 'Phần trăm (%)', value: 'PERCENTAGE' },
+					{ label: 'Giá cố định', value: 'AMOUNT' },
 				],
 			},
 			{
-				label: 'Giá điều kiện (nếu có)',
+				label: 'Giá điều kiện',
 				name: 'priceCondition',
 				type: 'number',
+				value: coupon ? String(coupon.priceCondition) : '',
 				required: true,
 			},
 			{
 				label: 'Giá tối thiểu',
 				name: 'minPrice',
 				type: 'number',
+				value: coupon ? String(coupon.minPrice) : '',
 				required: true,
-			},
-		]);
+			}
+		);
+
+		if (mode === 'edit') {
+			fields.push({
+				label: 'Trạng thái',
+				name: 'status',
+				type: 'select',
+				required: true,
+				value: coupon?.status ?? 'ACTIVE',
+				options: [
+					{ label: 'Có thể sử dụng', value: 'ACTIVE' },
+					{ label: 'Không thể sử dụng', value: 'INACTIVE' },
+					{ label: 'Đã xóa', value: 'DELETED' },
+				],
+			});
+		}
+
+		return fields;
+	}
+
+	async openCreateCoupon() {
+		const data = await this.alert.showForm(
+			'Thêm mã giảm giá',
+			this.getCouponFormFields('create')
+		);
 
 		if (!data) return;
 
@@ -184,9 +238,9 @@ export class CouponsManagementComponent implements OnInit {
 				description: data['description'] as string,
 				limitUsers: parseInt(data['limitUsers'] as string),
 				createdAt: new Date().toISOString().split('.')[0],
-				expirationDate: new Date(
-					data['expirationDate'] as string
-				).toISOString().split('.')[0],
+				expirationDate: new Date(data['expirationDate'] as string)
+					.toISOString()
+					.split('.')[0],
 				status: CouponStatus.ACTIVE,
 				type: data['type'] as CouponType,
 				priceCondition: parseFloat(data['priceCondition'] as string),
@@ -197,7 +251,7 @@ export class CouponsManagementComponent implements OnInit {
 
 			this.couponService.createCoupon(request).subscribe({
 				next: res => {
-          this.alert.success('Tạo má giảm giá thành công');
+					this.alert.success('Tạo má giảm giá thành công');
 					console.log('✅ Tạo mã giảm giá thành công:', res.result);
 					this.loadCoupons(); // hàm reload lại danh sách coupon
 				},
@@ -209,5 +263,54 @@ export class CouponsManagementComponent implements OnInit {
 		} catch (err) {
 			this.alert.error('Dữ liệu không hợp lệ, vui lòng kiểm tra lại');
 		}
+	}
+	async openEditCoupon(coupon: AdminCouponResponse) {
+		const data = await this.alert.showForm(
+			'Cập nhật mã giảm giá',
+			this.getCouponFormFields('edit', coupon)
+		);
+
+		if (!data) return;
+
+		const request: UpdateCouponRequest = {
+			id: coupon.id,
+			discount: parseFloat(data['discount'] as string) / 100,
+			description: data['description'] as string,
+			limitUsers: parseInt(data['limitUsers'] as string),
+			expirationDate: new Date(data['expirationDate'] as string).toISOString(),
+			type: data['type'] as CouponType,
+			priceCondition: parseFloat(data['priceCondition'] as string),
+			minPrice: parseFloat(data['minPrice'] as string),
+			status: data['status'] as CouponStatus,
+		};
+
+		this.couponService.updateCoupon(request).subscribe({
+			next: () => {
+				this.alert.success('Cập nhật mã giảm giá thành công');
+				this.loadCoupons();
+			},
+			error: err => {
+				console.error('❌ Lỗi khi cập nhật mã:', err);
+				this.alert.error('Không thể cập nhật mã giảm giá');
+			},
+		});
+	}
+	async confirmDeleteCoupon(id: number) {
+		const confirmed = await this.alert.confirm(
+			'Bạn có chắc muốn xóa mã giảm giá này?'
+		);
+
+		if (!confirmed) return;
+
+		this.couponService.deleteCoupon(id).subscribe({
+			next: () => {
+				this.alert.success('Xóa mã giảm giá thành công');
+				this.loadCoupons();
+			},
+			error: err => {
+				console.error('❌ Lỗi khi xóa coupon:', err);
+				this.alert.error('Không thể xóa mã giảm giá');
+			},
+		});
 	}
 }

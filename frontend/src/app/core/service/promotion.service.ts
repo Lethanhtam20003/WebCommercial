@@ -7,6 +7,7 @@ import { URL_API } from '../../shared/constants/url-api.constants';
 import { Page } from '../models/response/page-response.interface';
 import { GetAllPromotionAdminRequest } from '../models/request/promotion/get-all-promotion-admin-request.interface';
 import { formatDate } from '@angular/common';
+import { CreatePromotionRequest } from '../models/response/promotions/create-promotion-request.interface';
 
 @Injectable({
 	providedIn: 'root',
@@ -23,27 +24,36 @@ export class PromotionService {
 	getAllPromotionsFilter(
 		request: GetAllPromotionAdminRequest
 	): Observable<ApiResponse<Page<PromotionResponse>>> {
-		const { page, size, ...body } = request;
-
-		// Format date nếu là object Date
-		const formattedBody = {
-			...body,
-			startDateFrom: body.startDateFrom
-				? formatDate(body.startDateFrom, 'yyyy-MM-dd', 'en-US')
-				: null,
-			endDateTo: body.endDateTo
-				? formatDate(body.endDateTo, 'yyyy-MM-dd', 'en-US')
-				: null,
+		const formattedRequest: GetAllPromotionAdminRequest = {
+			...request,
+			startDateFrom: request.startDateFrom
+				? formatDate(request.startDateFrom, 'yyyy-MM-dd', 'en-US')
+				: undefined,
+			endDateTo: request.endDateTo
+				? formatDate(request.endDateTo, 'yyyy-MM-dd', 'en-US')
+				: undefined,
 		};
-
-		const params = new HttpParams()
-			.set('page', page.toString())
-			.set('size', size.toString());
 
 		return this.http.post<ApiResponse<Page<PromotionResponse>>>(
 			URL_API.promotionFilter,
-			formattedBody,
-			{ params }
+			formattedRequest
+		);
+	}
+
+	createPromotion(
+		request: CreatePromotionRequest
+	): Observable<ApiResponse<PromotionResponse>> {
+		return this.http.post<ApiResponse<PromotionResponse>>(
+			URL_API.promotionUrl,
+			request
+		);
+	}
+
+	deletePromotion(
+		promotionId: number
+	): Observable<ApiResponse<PromotionResponse>> {
+		return this.http.delete<ApiResponse<PromotionResponse>>(
+			`${URL_API.promotionUrl}/${promotionId}`
 		);
 	}
 }

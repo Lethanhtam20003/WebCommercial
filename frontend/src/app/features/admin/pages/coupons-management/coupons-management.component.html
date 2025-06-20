@@ -29,10 +29,11 @@
 				<th>Giảm giá theo</th>
 				<th>Điều kiện giá</th>
 				<th>Giá tối thiểu</th>
-			</tr>
+				<th>Thao tác</th>
+			</tr> 
 		</thead>
 		<tbody>
-			<tr *ngFor="let coupon of coupons; index as i">
+			<tr *ngFor="let coupon of coupons; index as i" [id]="coupon.id">
 				<td>{{ i + 1 }}</td>
 				<td>{{ coupon.code }}</td>
 				<td>{{ coupon.discount }}%</td>
@@ -55,7 +56,28 @@
 				<td>{{ this.utility.mapCouponTypeToVietnamese(coupon.type) }}</td>
 				<td>{{ coupon.priceCondition | number: '1.0-0' }}</td>
 				<td>{{ coupon.minPrice | number: '1.0-0' }}</td>
+        <td>
+				<!-- Nút sửa -->
+				<button
+					class="btn btn-sm btn-warning me-1"
+					(click)="openEditCoupon(coupon)"
+				>
+					<i class="bi bi-pencil-square"></i>
+				</button>
+
+				<!-- Nút xóa -->
+				<button
+					class="btn btn-sm btn-danger"
+					(click)="confirmDeleteCoupon(coupon.id)"
+				>
+					<i class="bi bi-trash"></i>
+				</button>
+			</td>
+
 			</tr>
+      <tr *ngIf="coupons.length === 0">
+			<td colspan="12" class="text-muted">Không có mã giảm giá nào.</td>
+		</tr>
 		</tbody>
 	</table>
 </div>
