@@ -45,15 +45,20 @@ export class UserProfileComponent implements OnInit {
 		private userState: UserStateService,
 		protected utility: UtitlyService,
 		private userService: UserService,
-    private translate: TranslateService,
+		private translate: TranslateService,
 		private cdr: ChangeDetectorRef
 	) {
-    this.langChangeSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      console.log('UserProfile: Language changed to:', event.lang);
-      console.log('Current "userProfile" translation:', this.translate.instant('userProfile'));
-      this.cdr.detectChanges();
-    });
-  }
+		this.langChangeSubscription = this.translate.onLangChange.subscribe(
+			(event: LangChangeEvent) => {
+				console.log('UserProfile: Language changed to:', event.lang);
+				console.log(
+					'Current "userProfile" translation:',
+					this.translate.instant('userProfile')
+				);
+				this.cdr.detectChanges();
+			}
+		);
+	}
 
 	ngOnInit(): void {
 		console.log('UserProfile: Initial language:', this.translate.currentLang);
@@ -114,20 +119,22 @@ export class UserProfileComponent implements OnInit {
 			if (this.updateInformationForm.get('gender')?.hasError('required')) {
 				this.alert.error(
 					this.translate.instant('errorMessage.genderIsNotEmpty'),
-          this.translate.instant('errorMessage.meetAnError')
+					this.translate.instant('errorMessage.meetAnError')
 				);
 			}
 			return;
 		}
 
 		if (!this.currentUser) {
-			this.alert.error(this.translate.instant('errorMessage.currentUserIsunidentified'));
+			this.alert.error(
+				this.translate.instant('errorMessage.currentUserIsunidentified')
+			);
 			return;
 		}
 
 		this.alert.loading(
 			this.translate.instant('pleaseWaitAMinute'),
-      this.translate.instant('onWorkingProcess')
+			this.translate.instant('onWorkingProcess')
 		);
 
 		const formValue = this.updateInformationForm.value;
@@ -154,10 +161,14 @@ export class UserProfileComponent implements OnInit {
 					// ✅ Cập nhật frontend state để phản ánh ngay
 					this.userState.updateUserInfo(updatedUser.result);
 					this.userState.fetchUserInfo();
-					this.alert.success(this.translate.instant('responseMessage.updateUserSuccess'));
+					this.alert.success(
+						this.translate.instant('responseMessage.updateUserSuccess')
+					);
 				},
 				error: () => {
-					this.alert.error(this.translate.instant('errorMessage.errorInUpdateUserInfo'));
+					this.alert.error(
+						this.translate.instant('errorMessage.errorInUpdateUserInfo')
+					);
 				},
 			});
 	}
@@ -173,7 +184,7 @@ export class UserProfileComponent implements OnInit {
 		if (file.size > maxSizeInBytes) {
 			this.alert.error(
 				this.translate.instant('errorMessage.imageIsOversized'),
-        this.translate.instant('errorMessage.cannotUploadImage')
+				this.translate.instant('errorMessage.cannotUploadImage')
 			);
 
 			this.updateInformationForm.patchValue({ profileImage: null });
@@ -183,7 +194,7 @@ export class UserProfileComponent implements OnInit {
 		if (!allowedTypes.includes(file.type)) {
 			this.alert.error(
 				this.translate.instant('errorMessage.imageIsNotInAllowedType'),
-        this.translate.instant('errorMessage.cannotUploadImage')
+				this.translate.instant('errorMessage.cannotUploadImage')
 			);
 
 			this.updateInformationForm.patchValue({ profileImage: null });
@@ -198,8 +209,10 @@ export class UserProfileComponent implements OnInit {
 			})
 			.catch(err => {
 				this.alert.error(
-					this.translate.instant('errorMessage.errorInUploadImagePleaseTryAgain'),
-          this.translate.instant('errorMessage.cannotUploadImage')
+					this.translate.instant(
+						'errorMessage.errorInUploadImagePleaseTryAgain'
+					),
+					this.translate.instant('errorMessage.cannotUploadImage')
 				);
 			});
 	}

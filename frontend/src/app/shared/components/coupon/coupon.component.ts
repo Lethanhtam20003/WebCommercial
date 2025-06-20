@@ -5,7 +5,7 @@ import { CouponResponse } from '../../../core/models/response/coupon/coupon-resp
 @Component({
 	selector: 'coupon',
 	standalone: true,
-  imports: [CommonModule],
+	imports: [CommonModule],
 	templateUrl: './coupon.component.html',
 })
 export class CouponComponent {
