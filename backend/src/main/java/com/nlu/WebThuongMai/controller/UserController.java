@@ -70,7 +70,7 @@ public class UserController {
      * @return Thông tin người dùng sau khi cập nhật
      */
     @PutMapping("/{userId}")
-    ApiResponse<UserResponse> updateUser(@PathVariable long userId, @RequestBody UserUpdateRequest request) {
+        ApiResponse<UserResponse> updateUser(@PathVariable long userId, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();
