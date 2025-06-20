@@ -26,10 +26,13 @@ export class CheckoutComponent implements OnInit {
 	RouteLink = RouteLink;
 	private user!: UserProfile;
 	cartItems: CartItem[] = [];
+	isCard: boolean = false;
 	total: number = 0;
 	address: AddressResponse | null = null;
 
 	orderCreateRequest!: OrderCreateRequest;
+	note: string = '';
+
 
 	constructor(
 		private router: Router,
@@ -42,6 +45,8 @@ export class CheckoutComponent implements OnInit {
 	) {
 		const nav = this.router.getCurrentNavigation();
 		this.cartItems = nav?.extras?.state?.['cartItems'] || [];
+		this.isCard = nav?.extras?.state?.['isCard'] || false;
+		console.log("0",this.isCard);
 		this.updateTotal();
 	}
 	ngOnInit(): void {
@@ -60,16 +65,16 @@ export class CheckoutComponent implements OnInit {
 	}
 
 	confirmOrder() {
-		if(!this.address){
-			this.alert.warning("Vui lòng nhập địa chỉ nhận hàng");
+		if (!this.address) {
+			this.alert.warning('Vui lòng nhập địa chỉ nhận hàng');
 			return;
 		}
-		if(!this.user.phone){
-			this.alert.warning("Vui lòng nhập số điện thoại");
+		if (!this.user.phone) {
+			this.alert.warning('Vui lòng nhập số điện thoại');
 			return;
 		}
-		if(!this.user.fullName){
-			this.alert.warning("Vui lòng nhập tên người nhận");
+		if (!this.user.fullName) {
+			this.alert.warning('Vui lòng nhập tên người nhận');
 			return;
 		}
 		this.alert
@@ -80,7 +85,7 @@ export class CheckoutComponent implements OnInit {
 			.then(() => {
 				this.orderCreateRequest = {
 					userId: this.user.id,
-					note: '',
+					note: this.note,
 					createdDate: new Date().toISOString(),
 					address: this.address?.address ?? '',
 					orderItems: this.cartItems.map(item => {
@@ -94,12 +99,16 @@ export class CheckoutComponent implements OnInit {
 						? { code: this.selectedCoupon.code }
 						: undefined,
 				};
-				console.log(this.orderCreateRequest);
 				this.orderService.checkoutOrder(this.orderCreateRequest).subscribe({
 					next: res => {
 						if (res.code === 200) {
-							this.cartService.clearCart();
 							this.router.navigate(['order-detail', res.result.id]);
+							if (this.isCard) {
+								console.log(this.cartItems.map(item => item.ProductId))
+								this.cartService.removeCartThenCheckout(
+									this.cartItems.map(item => item.ProductId)
+								);
+							}
 						}
 					},
 					error: err => {
@@ -117,8 +126,27 @@ export class CheckoutComponent implements OnInit {
 			if (res) {
 				console.log(res.isConfirmed);
 				if (res.isConfirmed) {
-					this.user.address = res.value?.fullAddress ?? null;
-					this.address = this.mapAdress(this.user);	
+					this.user.address = res.value?.fullAddress ?? this.user.address;
+					this.user.phone = res.value?.phoneNumber ?? this.user.phone;
+					this.user.fullName = res.value?.fullName ?? this.user.fullName;
+					this.address = this.mapAdress(this.user);
+					this.userService
+						.updateUserForCheckout(
+							this.user,
+							this.user.fullName ?? '',
+							this.user.phone ?? '',
+							this.user.address ?? ''
+						)
+						.subscribe({
+							next: res => {
+								if (res.code === 200) {
+									this.alert.notification('Cập nhật địa chỉ thành công');
+								}
+							},
+							error: err => {
+								this.alert.error(err.error.message);
+							},
+						});
 				}
 			}
 		});
@@ -178,6 +206,13 @@ export class CheckoutComponent implements OnInit {
 	onRelease(id: number) {
 		this.buttonStates[id] = false;
 	}
+
+	tabs = [
+		{ key: 'coupon', label: 'Mã giảm giá' },
+		{ key: 'note', label: 'Ghi chú' },
+	];
+
+	selectedTab = 'coupon';
 }
 export interface AddressResponse {
 	recipientName: string;

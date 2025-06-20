@@ -18,7 +18,7 @@ import { CartItemComponent } from '../../features/cart/cartItem/cartItem.compone
 export class CartComponent implements OnInit {
 	cartItems: CartItem[] = [];
 	total: number = 0;
-	isSelectAll: boolean = false;
+	isSelectAll: boolean = true;
 
 	constructor(
 		private alert: AlertService,
@@ -38,6 +38,7 @@ export class CartComponent implements OnInit {
 		if (item) {
 			item.quantity = event.quantity;
 		}
+		this.cartService.updateQuantity(event.productId, event.quantity);
 	}
 
 
@@ -76,11 +77,13 @@ export class CartComponent implements OnInit {
 	/**
 	 * thanh toan
 	 */
-	order() {
+	paymenthandler() {
 		const selectedItems = this.cartItems.filter(item => item.isSelected);
 
 		this.router.navigate([RouteLink.checkoutRoute], {
-			state: { cartItems: selectedItems },
+			state: { cartItems: selectedItems,
+				isCard: true,
+			 },
 		});
 	}
 

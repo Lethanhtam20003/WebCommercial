@@ -40,9 +40,7 @@ export class ProductCardComponent implements OnInit {
 	 * @param product Sản phẩm được chọn
 	 */
 	addToCart(): void {
-		console.log('Đã thêm vào giỏ hàng:', this.product.name);
 		this.cartService.addToCart(this.product.id);
-		this.alertService.success('Đã thêm vào giỏ hàng');
 	}
 
 	/**
@@ -59,7 +57,9 @@ export class ProductCardComponent implements OnInit {
 		}];
 
 		this.router.navigate([RouteLink.checkoutRoute], {
-			state: { cartItems: cartItem },
+			state: { 
+				cartItems: cartItem,
+			 },
 		});
 	}
 }

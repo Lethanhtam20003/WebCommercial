@@ -13,16 +13,15 @@ import { User_catgory_listComponent } from '../../features/category/user_catgory
 		ProductListComponent,
 		OutstandingProductCatalogComponent,
 		BannerModule,
-    PromotionListModule,
-    User_catgory_listComponent
+		PromotionListModule,
+		User_catgory_listComponent,
 	],
 	template: `
 		<app-banner></app-banner>
-    <app-promotion-list></app-promotion-list>
+		<app-promotion-list></app-promotion-list>
 		<app-user_catgory_list></app-user_catgory_list>
 		<app-OutstandingProductCatalog></app-OutstandingProductCatalog>
 		<app-product-list></app-product-list>
-		<!-- <app-product-list2></app-product-list2> -->
 	`,
 	styleUrl: './home.component.scss',
 })

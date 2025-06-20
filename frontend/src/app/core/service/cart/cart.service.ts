@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CartItem } from '../../models/response/cart/cart-response.interface';
 import { ProductService } from '../product.service';
+import { AlertService } from '../alert.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -13,7 +14,10 @@ export class CartService implements OnInit {
 
 	private readonly CART_KEY = 'cart';
 
-	constructor(private productService: ProductService) {}
+	constructor(
+		private productService: ProductService,
+		private alertService: AlertService,
+	) {}
 	ngOnInit(): void {}
 	fetchCart(): void {
 		this.cartItemsSubject.next([]);
@@ -39,6 +43,7 @@ export class CartService implements OnInit {
 	getCart(): Record<number, number> {
 		const cartJson = localStorage.getItem(this.CART_KEY);
 		return cartJson ? JSON.parse(cartJson) : {};
+		
 	}
 
 	/**
@@ -55,6 +60,7 @@ export class CartService implements OnInit {
 		const cart = this.getCart();
 		cart[productId] = (cart[productId] || 0) + quantity;
 		this.saveCart(cart);
+		this.alertService.notification('Đã thêm vào giỏ hàng');
 	}
 
 	/**
@@ -76,6 +82,14 @@ export class CartService implements OnInit {
 		} else {
 			cart[productId] = quantity;
 		}
+		this.saveCart(cart);
+	}
+
+	removeCartThenCheckout(productIds: number[]): void {
+		const cart = this.getCart();
+		productIds.forEach(productId => {
+			delete cart[productId];
+		});
 		this.saveCart(cart);
 	}
 
