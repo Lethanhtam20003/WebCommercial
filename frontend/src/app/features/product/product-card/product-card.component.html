@@ -1,6 +1,12 @@
 <div class="product-wrapper rounded shadow-sm">
 	<div class="card h-100 text-center border-0 product-card">
 		<div class="position-relative">
+			<span
+				class="fw-bold position-absolute top-0 end-0 badge m-2 bg-warning text-danger mt-5"
+				*ngIf="product.promotions && product.promotions.length > 0"
+			>
+				-{{ product.promotions[0].discountPercent }}%
+			</span>
 			<img
 				[src]="product.images[0]"
 				class="card-img-top p-3"
@@ -49,15 +55,21 @@
 			<h6 class="card-title mb-1">{{ product.name }}</h6>
 			<p class="card-text">
 				<span *ngIf="product.promotions && product.promotions.length > 0">
-					<del class="text-muted"
-						>{{ product.price | number: '1.0-0' }} VND</del
+					<del class="text-muted text-danger">
+						{{ product.price | number: '1.0-0' }} VND
+					</del>
+					<span
+						*ngIf="product.promotions"
+						class="text-decoration-underline ms-3"
 					>
-					<span class="text-danger fw-bold">
-						-{{ product.promotions[0].discountPercent }}%
+						{{ discountedPrice | number: '1.0-0' }} VND
 					</span>
 				</span>
-				<span *ngIf="!product.promotions || product.promotions.length === 0">
-					{{ product.price | number: '1.0-0' }} VND
+				<span
+					*ngIf="product.promotions.length === 0"
+					class="text-decoration-underline"
+				>
+					{{ discountedPrice | number: '1.0-0' }} VND
 				</span>
 			</p>
 		</div>

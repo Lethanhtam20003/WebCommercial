@@ -1,29 +1,52 @@
-<div class="container mt-4">
+<div class="container mt-4" *ngIf="product">
 	<h4 class="mb-3">Sửa thông tin sản phẩm</h4>
 
 	<form (ngSubmit)="updateProduct()" #productForm="ngForm" class="row g-3">
 		<!-- Tên sản phẩm -->
 		<div class="col-md-6">
 			<label class="form-label fw-semibold">Tên sản phẩm</label>
-			<input type="text" class="form-control" [(ngModel)]="product.name" name="name" required />
+			<input
+				type="text"
+				class="form-control"
+				[(ngModel)]="product.name"
+				name="name"
+				required
+			/>
 		</div>
 
 		<!-- Giá bán -->
 		<div class="col-md-3">
 			<label class="form-label fw-semibold">Giá bán</label>
-			<input type="number" class="form-control" [(ngModel)]="product.price" name="price" required />
+			<input
+				type="number"
+				class="form-control"
+				[(ngModel)]="product.price"
+				name="price"
+				required
+			/>
 		</div>
 
 		<!-- Giá nhập -->
 		<div class="col-md-3">
 			<label class="form-label fw-semibold">Giá nhập</label>
-			<input type="number" class="form-control" [(ngModel)]="product.price" name="costPrice" required />
+			<input
+				type="number"
+				class="form-control"
+				[(ngModel)]="product.price"
+				name="costPrice"
+				required
+			/>
 		</div>
 
 		<!-- Mô tả -->
 		<div class="col-12">
 			<label class="form-label fw-semibold">Mô tả</label>
-			<textarea rows="4" class="form-control" [(ngModel)]="product.description" name="description"></textarea>
+			<textarea
+				rows="4"
+				class="form-control"
+				[(ngModel)]="product.description"
+				name="description"
+			></textarea>
 		</div>
 
 		<!-- Danh mục -->
@@ -33,7 +56,7 @@
 				[items]="categoryList"
 				bindLabel="name"
 				bindValue="id"
-				[(model)]="product.categories"
+				[(model)]="categorySelect"
 				placeholder="Chọn danh mục"
 			/>
 		</div>
@@ -46,6 +69,7 @@
 				bindLabel="label"
 				bindValue="value"
 				[(model)]="product.status"
+				name="categorySelect"
 				placeholder="Chọn trạng thái"
 			/>
 		</div>
@@ -56,19 +80,31 @@
 			<app-custom-ng-select
 				[items]="promotionList"
 				bindLabel="name"
-				bindValue="id"
-				[(model)]="product.promotions"
+				bindValue="promotionId"
+				[(model)]="promotionSelect"
 				[clearable]="true"
 				placeholder="Chọn khuyến mãi"
 			/>
+			
 		</div>
 
 		<!-- Ảnh -->
 		<div class="col-12">
 			<label class="form-label fw-semibold">Ảnh sản phẩm</label>
-			<input type="file" class="form-control" (change)="onImageSelected($event)" multiple />
+			<input
+				type="file"
+				class="form-control"
+				(change)="onImageSelected($event)"
+				multiple
+			/>
 			<div class="mt-2 d-flex gap-2 flex-wrap">
-				<img *ngFor="let img of product.images" [src]="img" width="80" height="80" class="border rounded" />
+				<img
+					*ngFor="let img of product.images"
+					[src]="img"
+					width="80"
+					height="80"
+					class="border rounded"
+				/>
 			</div>
 		</div>
 

@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import {
+	Component,
+	ElementRef,
+	Input,
+	OnInit,
+	SimpleChanges,
+	ViewChild,
+} from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { ProductService } from '../../../core/service/product.service';
 import { ProductResponse } from '../../../core/models/response/product-response/productResponse';
@@ -40,7 +47,7 @@ export class ProductListComponent implements OnInit {
 			this.productService.fetchProducts(this.productFilter);
 		}
 	}
-	
+
 	showPagination() {
 		return this.pageProducts && this.pageProducts.page.totalPages > 1;
 	}
@@ -72,5 +79,13 @@ export class ProductListComponent implements OnInit {
 
 		this.productFilter.page = page;
 		this.productService.fetchProducts(this.productFilter);
+		setTimeout(() => {
+			this.productListContainer?.nativeElement.scrollIntoView({
+				behavior: 'smooth',
+				block: 'start',
+			});
+		}, 100); // chờ render DOM xong
 	}
+	@ViewChild('productListContainer')
+	productListContainer!: ElementRef<HTMLDivElement>;
 }

@@ -25,6 +25,7 @@ import { AdminProductService } from '../../service/admin-product.service';
 	styleUrls: ['./promotion-management.component.css'],
 })
 export class PromotionManagementComponent implements OnInit {
+
 	promotions: PromotionAdminResponse[] = [];
 	protected currentPage: number = 1;
 	private pageSize: number = 10;
@@ -297,4 +298,9 @@ export class PromotionManagementComponent implements OnInit {
 				});
 			});
 	}
+
+	applyPromotion(arg0: number) {
+
+		
+}
 }

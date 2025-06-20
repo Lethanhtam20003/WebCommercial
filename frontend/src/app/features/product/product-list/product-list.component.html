@@ -1,9 +1,21 @@
-<div class="container p-4">
-	<h2 class="text-center mt-4">Danh sách sản phẩm</h2>
+<div class="container" *ngIf="pageProducts">
+	<div *ngIf="!pageProducts?.content?.length" class="text-center my-5">
+		<!-- Icon -->
+		<div class="d-flex justify-content-center">
+			<i class="bi bi-box-seam" style="font-size: 4rem; color: #ccc"></i>
+		</div>
+
+		<!-- Thông báo -->
+		<h5 class="mt-3 text-muted">Không tìm thấy sản phẩm nào phù hợp.</h5>
+		<p class="text-secondary">
+			Vui lòng thử từ khóa khác hoặc lọc lại danh mục.
+		</p>
+	</div>
+
 	<!-- Product Grid -->
-	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" #productListContainer>
 		<!-- Item -->
-		
+
 		<app-product-card
 			*ngFor="let product of pageProducts?.content"
 			[product]="product"
@@ -19,7 +31,7 @@
 				<li
 					class="page-item"
 					*ngFor="let pageNum of getPageNumbers()"
-					[class.active]="pageNum === pageProducts?.page?.number"
+					[class.active]="pageNum === pageProducts.page.number"
 				>
 					<a class="page-link" (click)="goToPage(pageNum)">{{ pageNum + 1 }}</a>
 				</li>

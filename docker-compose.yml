@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: web-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/fireKnightSportDatabase
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+    networks:
+      - fireKnightSportNetworks
+
+  db:
+    image: bitnami/postgresql:latest
+    container_name: postgres-database
+    environment:
+      POSTGRES_DB: fireKnightSportDatabase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    volumes:
+      - fireKnightSportDatabase:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - fireKnightSportNetworks
+
+volumes:
+  fireKnightSportDatabase:
+
+networks:
+  fireKnightSportNetworks:

@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CategoryResponse } from '../../../core/models/response/product-response/CategoryResponse';
@@ -6,7 +6,7 @@ import { CategoryService } from '../../admin/service/admin-category.service';
 
 @Component({
 	standalone: true,
-	imports: [NgFor, RouterModule],
+	imports: [NgFor, RouterModule, NgFor,CommonModule],
 	selector: 'app-user_catgory_list',
 	templateUrl: './user_catgory_list.component.html',
 	styleUrls: ['./user_catgory_list.component.scss'],

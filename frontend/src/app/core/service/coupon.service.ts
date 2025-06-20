@@ -48,8 +48,6 @@ export class CouponService {
 	createCoupon(
 		request: CouponCreateRequest
 	): Observable<ApiResponse<CouponResponse>> {
-		console.log(request);
-
 		return this.http.post<ApiResponse<CouponResponse>>(URL_API.coupon, request);
 	}
 

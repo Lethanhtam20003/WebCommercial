@@ -106,18 +106,15 @@ export class AdminProductListComponent implements OnInit {
 		const min = this.filterMinPrice ?? 0;
 		const max = this.filterMaxPrice ?? Number.MAX_VALUE;
 
-		console.log(`Lọc giá từ ${min} đến ${max}`);
 		this.filterMap['minPrice'] = min;
 		this.filterMap['maxPrice'] = max;
 	}
 
 	applyCategoryFilter() {
-		console.log('Danh mục được chọn:', this.filterCategoryIds);
 		this.filterMap['categoryId'] = this.filterCategoryIds;
 		document.body.click();
 	}
 	applyProductStatusFilter() {
-		console.log('Danh mục được chọn:', this.productStatusSelected);
 		this.filterMap['status'] = this.productStatusSelected;
 	}
 

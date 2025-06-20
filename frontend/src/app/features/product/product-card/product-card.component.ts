@@ -24,7 +24,7 @@ export class ProductCardComponent implements OnInit {
 
 
 	productLabel!: ProductLabel ;
-
+ 	discountedPrice!: number;
 
 	constructor(
 		private cartService: CartService,
@@ -33,6 +33,10 @@ export class ProductCardComponent implements OnInit {
 	) {}
 	ngOnInit(): void {
 		this.productLabel = nameTolabel(this.product.name, this.product.categories[0].name);
+		this.discountedPrice = Number(this.product.price);
+		if(this.product.promotions.length > 0){
+			this.discountedPrice -= -Number(this.product.price) * (this.product.promotions[0].discountPercent / 100);;
+		}
 	}
 
 	/**

@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -72,4 +73,11 @@ public class PromotionController {
                 .result(service.softDeletePromotion(promotionId))
                 .build();
     }
+    @PutMapping("/{promotionId}")
+    public ApiResponse<PromotionAdminResponse> applyPromotion(@PathVariable Long promotionId,@RequestBody Set<Long> request) {
+        return ApiResponse.<PromotionAdminResponse>builder()
+                .result(service.applyPromotion(promotionId, request))
+                .build();
+    }
+
 }

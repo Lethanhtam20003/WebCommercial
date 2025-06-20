@@ -2,26 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CustomNgSelectComponent } from '../../../../../shared/components/custom-ng-select/custom-ng-select.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgModel } from '@angular/forms';
 import { ProductResponse } from '../../../../../core/models/response/product-response/productResponse';
 import { CategoryResponse } from '../../../../../core/models/response/product-response/CategoryResponse';
 import { PromotionResponse } from '../../../../../core/models/response/product-response/PromotionResponse';
-import { ProductService } from '../../../../../core/service/product.service';
 import { AdminProductService } from '../../../service/admin-product.service';
+import { PromotionService } from '../../../../../core/service/promotion.service';
+import { CategoryService } from '../../../service/admin-category.service';
 
 @Component({
-  standalone: true,
-  imports: [ CustomNgSelectComponent,CommonModule,FormsModule],
-  selector: 'app-admin-fix-product',
-  templateUrl: './admin-fix-product.component.html',
-  styleUrls: ['./admin-fix-product.component.scss']
+	standalone: true,
+	imports: [CustomNgSelectComponent, CommonModule, FormsModule],
+	selector: 'app-admin-fix-product',
+	templateUrl: './admin-fix-product.component.html',
+	styleUrls: ['./admin-fix-product.component.scss'],
 })
 export class AdminFixProductComponent implements OnInit {
-
- 
-  product!: ProductResponse;
+	product!: ProductResponse;
 
 	categoryList: CategoryResponse[] = [];
+	categorySelect: number | null = null;
+	promotionSelect: number | null = null;
 	statusOptions = [
 		{ value: 'ACTIVE', label: 'Hoạt động' },
 		{ value: 'INACTIVE', label: 'Ngừng hoạt động' },
@@ -29,9 +30,12 @@ export class AdminFixProductComponent implements OnInit {
 	];
 	promotionList: PromotionResponse[] = [];
 
-	constructor(private route: ActivatedRoute,
-    private productService: AdminProductService
-  ) {}
+	constructor(
+		private route: ActivatedRoute,
+		private productService: AdminProductService,
+		private promotionService: PromotionService,
+		private categoryService: CategoryService
+	) {}
 
 	ngOnInit(): void {
 		const productId = this.route.snapshot.params['id'];
@@ -41,18 +45,27 @@ export class AdminFixProductComponent implements OnInit {
 	}
 
 	loadProduct(id: number) {
-		this.productService.getProductById(id).subscribe((ApiResponse) => {
+		this.productService.getProductById(id).subscribe(ApiResponse => {
 			this.product = ApiResponse.result;
-      console.log(this.product)
+			this.categorySelect = this.product.categories[0].id;
+			this.promotionSelect = this.product.promotions[0].promotionId;
+
 		});
 	}
 
 	loadCategoryList() {
 		// TODO: Gọi API lấy danh sách danh mục
+		this.categoryService.getAll().subscribe(ApiResponse => {
+			this.categoryList = ApiResponse;
+		});
 	}
 
 	loadPromotionList() {
 		// TODO: Gọi API lấy danh sách khuyến mãi
+		this.promotionService.getActivePromotions().subscribe(ApiResponse => {
+			this.promotionList = ApiResponse.result;
+			console.log(this.promotionList);
+		});
 	}
 
 	onImageSelected(event: any) {
@@ -61,7 +74,27 @@ export class AdminFixProductComponent implements OnInit {
 	}
 
 	updateProduct() {
-		// TODO: Gửi dữ liệu cập nhật sản phẩm lên server
-	}
+		const productUpdateRequest = {
+			name: this.product.name,
+			description: this.product.description,
+			price: this.product.price,
+			status: this.product.status,
+			categoryId: this.categorySelect,
+			promotionId: this.promotionSelect,
+			images: this.product.images, // nếu là mảng string chứa URL ảnh
+		};
+		console.log(productUpdateRequest);
 
+		this.productService
+			.updateProduct(this.product.id, productUpdateRequest)
+			.subscribe({
+				next: res => {
+					console.log('Cập nhật thành công', res);
+					// Có thể hiển thị thông báo hoặc chuyển trang
+				},
+				error: err => {
+					console.error('Lỗi khi cập nhật sản phẩm', err);
+				},
+			});
+	}
 }

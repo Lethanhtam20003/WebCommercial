@@ -8,6 +8,7 @@ import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
 import com.nlu.WebThuongMai.mapper.PromotionMapper;
 import com.nlu.WebThuongMai.model.Promotion;
+import com.nlu.WebThuongMai.repository.ProductRepository;
 import com.nlu.WebThuongMai.repository.PromotionRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,6 +37,7 @@ import java.util.Optional;
 
 @Service
 public class PromotionService {
+    ProductRepository productRepo;
     PromotionRepository repo;
     PromotionMapper mapper;
 
@@ -114,6 +117,18 @@ public class PromotionService {
                 .orElseThrow(() -> new AppException(ErrorCode.PROMOTION_NOT_FOUND));
 
         promotion.setDescription("đã xoá");
+        return mapper.promotionToPromotionAdminResp(repo.save(promotion));
+    }
+
+    public PromotionAdminResponse applyPromotion(Long promotionId, Set<Long> request) {
+        Promotion promotion = repo.findById(promotionId)
+                .orElseThrow(() -> new AppException(ErrorCode.PROMOTION_NOT_FOUND));
+        for (Long productId : request) {
+            var pro = productRepo.findById(productId).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+            pro.getPromotions().add(promotion);
+            productRepo.save(pro);
+            promotion.getProducts().add(pro);
+        }
         return mapper.promotionToPromotionAdminResp(repo.save(promotion));
     }
 }
