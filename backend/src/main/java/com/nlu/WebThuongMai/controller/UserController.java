@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 
 @RestController
+@Validated
 @RequestMapping("/v1/users")
 public class UserController {
     UserService userService;
@@ -133,6 +135,7 @@ public class UserController {
 
     @PostMapping("admin/filter")
     ApiResponse<Page<UserInforResponse>> getAllUsersFilterAdmin(
+            @Valid
             @RequestBody() UserFilterAdminRequest request,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size

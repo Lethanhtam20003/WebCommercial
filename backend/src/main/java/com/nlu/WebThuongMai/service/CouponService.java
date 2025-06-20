@@ -3,9 +3,10 @@ package com.nlu.WebThuongMai.service;
 import com.nlu.WebThuongMai.dto.request.couponReq.CouponFilterAdminRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponCreateRequest;
 import com.nlu.WebThuongMai.dto.request.orderReq.CouponRequest;
-import com.nlu.WebThuongMai.dto.request.orderReq.CouponUpdateRequest;
+import com.nlu.WebThuongMai.dto.request.couponReq.CouponUpdateRequest;
 import com.nlu.WebThuongMai.dto.response.couponResp.AdminCouponResponse;
 import com.nlu.WebThuongMai.dto.response.couponResp.CouponResponse;
+import com.nlu.WebThuongMai.enums.CouponStatus;
 import com.nlu.WebThuongMai.enums.CouponType;
 import com.nlu.WebThuongMai.enums.exception.ErrorCode;
 import com.nlu.WebThuongMai.exception.AppException;
@@ -64,6 +65,7 @@ public class CouponService {
                 .orElseThrow(() -> new AppException(ErrorCode.COUPON_NOT_FOUND)));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CouponResponse updateCoupon(long couponId, CouponUpdateRequest request) {
         Coupon coupon = repository.findById(couponId)
                 .orElseThrow(() -> new AppException(ErrorCode.COUPON_NOT_FOUND));
@@ -79,10 +81,12 @@ public class CouponService {
         return mapper.toCouponResponse(repository.save(coupon));
     }
 
-    public Boolean deleteCoupon(long couponId) {
-        var coupon = repository.findById(couponId).orElseThrow(() -> new AppException(ErrorCode.COUPON_NOT_FOUND));
-        repository.deleteById(couponId);
-        return true;
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public CouponResponse deleteCoupon(long couponId) {
+        Coupon coupon = repository.findById(couponId).orElseThrow(() -> new AppException(ErrorCode.COUPON_NOT_FOUND));
+        coupon.setStatus(CouponStatus.DELETED);
+
+        return mapper.toCouponResponse(repository.save(coupon));
     }
 
     public CouponResponse getCouponByCode(String code) {

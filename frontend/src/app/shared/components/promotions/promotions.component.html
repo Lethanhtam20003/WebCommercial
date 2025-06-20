@@ -6,13 +6,18 @@
 				<span class="badge bg-danger" *ngIf="!promotion.saved">{{
 					promotion.remainingTime
 				}}</span>
-				<span class="badge bg-success" *ngIf="promotion.saved">Đã lưu</span>
+				<span class="badge bg-success" *ngIf="promotion.saved">{{
+					'promotion.saved' | translate
+				}}</span>
 			</div>
 			<p class="card-text text-start text-muted mb-1">
 				{{ promotion.description }}
 			</p>
 			<p class="card-text text-start small text-secondary">
-				Giảm {{ promotion.discountPercent }}%
+				{{
+					'promotion.discount'
+						| translate: { percent: promotion.discountPercent }
+				}}
 			</p>
 			<div class="text-start">
 				<button
@@ -26,10 +31,10 @@
 				>
 					{{
 						promotion.saved
-							? 'Đã lưu'
+							? ('promotion.saved' | translate)
 							: promotion.expired
-								? 'Hết hạn'
-								: 'Lưu coupon'
+								? ('promotion.expired' | translate)
+								: ('promotion.save' | translate)
 					}}
 				</button>
 			</div>

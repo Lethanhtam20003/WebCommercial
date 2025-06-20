@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { UserProfile } from '../../../core/models/response/user/user-profile-response.model';
 import { AlertService } from '../../../core/service/alert.service';
@@ -8,10 +8,13 @@ import { UtitlyService } from '../../../core/service/utility.service';
 import { ErrorMessageConstants } from '../../constants/error-message.constants';
 import { LabelConstants } from '../../constants/label.constants';
 import { RouteLink } from '../../constants/route-link';
+import { CapitalizePipe } from '../../pipes/capitalize';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule, NgClass } from '@angular/common';
 
 @Component({
 	selector: 'side-bar-user-account',
-  standalone: false,
+  imports: [CapitalizePipe, TranslateModule, CommonModule, NgClass, RouterLink],
 	styleUrl: './side-bar-user-account.scss',
 	templateUrl: './side-bar-user-account.html',
 })

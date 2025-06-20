@@ -3,8 +3,8 @@ import { RouterModule } from '@angular/router';
 import { ProductListComponent } from '../../features/product/product-list/product-list.component';
 import { OutstandingProductCatalogComponent } from '../../features/category/OutstandingProductCatalog/OutstandingProductCatalog.component';
 import { BannerModule } from '../../shared/components/banner/banner.module';
-import { PromotionListModule } from '../../shared/components/promotion-list/promotion-list.module';
 import { User_catgory_listComponent } from '../../features/category/user_catgory_list/user_catgory_list.component';
+import { PromotionListComponent } from '../../shared/components/promotion-list/promotion-list.component';
 @Component({
 	selector: 'app-home',
 	standalone: true,
@@ -13,8 +13,8 @@ import { User_catgory_listComponent } from '../../features/category/user_catgory
 		ProductListComponent,
 		OutstandingProductCatalogComponent,
 		BannerModule,
-		PromotionListModule,
-		User_catgory_listComponent,
+    PromotionListComponent,
+    User_catgory_listComponent
 	],
 	template: `
 		<app-banner></app-banner>

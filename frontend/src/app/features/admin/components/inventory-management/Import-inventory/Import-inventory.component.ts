@@ -10,7 +10,7 @@ import {
 	Validators,
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { CurrencyMaskModule } from 'ng2-currency-mask';
+// import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { SupplierResponse } from '../../../../../core/models/response/supplier-response/SupplierResponse';
 import { ProductService } from '../../../../../core/service/product.service';
 import { AdminSupplierService } from '../../../../../core/service/supplier/admin-supplier.service';
@@ -28,7 +28,7 @@ interface ProductItem {
 
 @Component({
 	standalone: true,
-	imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule,CurrencyMaskModule],
+	imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule],
 	selector: 'app-Import-inventory',
 	templateUrl: './Import-inventory.component.html',
 	styleUrls: ['./Import-inventory.component.scss'],
@@ -58,7 +58,7 @@ export class ImportInventoryComponent implements OnInit {
 		this.supplierService.fetchSuppliers();
 		this.supplierService.listSuppliers$.subscribe(
 			data => (this.suppliers = data)
-		); 
+		);
 
 		const productFilter: ProductFilter = {
 			page: 0,
@@ -79,20 +79,22 @@ export class ImportInventoryComponent implements OnInit {
 
 	addItem(): void {
 		const group = this.fb.group({
-		productId: [null, Validators.required],
-		quantity: [1, [Validators.required, Validators.min(1)]],
-		unitPrice: [0, [Validators.required, Validators.min(0)]],
-	});
+			productId: [null, Validators.required],
+			quantity: [1, [Validators.required, Validators.min(1)]],
+			unitPrice: [0, [Validators.required, Validators.min(0)]],
+		});
 
-	// Khi chọn productId thì gán giá tự động
-	group.get('productId')!.valueChanges.subscribe(productId => {
-		const selectedProduct = this.products.find(p => p.id === productId);
-		if (selectedProduct) {
-			group.get('unitPrice')!.setValue(Number(selectedProduct.price) ?? 0, { emitEvent: false });
-		}
-	});
+		// Khi chọn productId thì gán giá tự động
+		group.get('productId')!.valueChanges.subscribe(productId => {
+			const selectedProduct = this.products.find(p => p.id === productId);
+			if (selectedProduct) {
+				group
+					.get('unitPrice')!
+					.setValue(Number(selectedProduct.price) ?? 0, { emitEvent: false });
+			}
+		});
 
-	this.items.push(group);
+		this.items.push(group);
 	}
 
 	removeItem(index: number): void {
@@ -114,21 +116,17 @@ export class ImportInventoryComponent implements OnInit {
 		const formData = this.purchaseForm.value;
 		formData.totalPrice = this.totalPrice;
 		console.log(formData);
-		
-		this.purchaseService.createPurchaseOrder(formData).subscribe(
-			{
-				next: res => {
-					this.purchaseForm.reset();
-					this.items.clear();
-					this.addItem();
-					this.alertService.success('Tạo đơn hàng thành công');
-				},
-				error: err => {
-					console.error('Lỗi khi tạo đơn hàng:', err);
-				},
-			}
-		)
 
+		this.purchaseService.createPurchaseOrder(formData).subscribe({
+			next: res => {
+				this.purchaseForm.reset();
+				this.items.clear();
+				this.addItem();
+				this.alertService.success('Tạo đơn hàng thành công');
+			},
+			error: err => {
+				console.error('Lỗi khi tạo đơn hàng:', err);
+			},
+		});
 	}
-	
 }

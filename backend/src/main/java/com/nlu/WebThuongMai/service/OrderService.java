@@ -195,7 +195,8 @@ public class OrderService {
 
     @PreAuthorize("hasAuthority('USER')")
     public Page<OrderResponse> findOrdersByUserIdAndStatus(OrderFilterRequest orderFilterRequest) {
-        Pageable pageable = PageRequest.of(orderFilterRequest.getPage(), orderFilterRequest.getSize());
+        orderFilterRequest.setDefaultSortField("orderId");
+        Pageable pageable = orderFilterRequest.toPageable();
         Page<Order> orders = repository.findOrdersByUserIdAndStatus(orderFilterRequest.getUserId(), orderFilterRequest.getStatus(), pageable);
 
         return orders.map(mapper::toOrderResponse);
@@ -205,6 +206,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Page<OrderResponse> getOrdersById(Long userId, Pageable pageable) {
         Page<Order> orders = repository.findOrdersByUserId(userId, pageable);
+
         return orders.map(mapper::toOrderResponse);
     }
 
@@ -249,12 +251,8 @@ public class OrderService {
         }
 
         // Ưu tiên sắp xếp: ngày tạo DESC > username ASC > totalPrice DESC > status ASC
-        Pageable pageable = PageRequest.of(page, size, Sort.by(
-                Sort.Order.desc("createdDate"),
-                Sort.Order.asc("user.username"),
-                Sort.Order.desc("totalPrice"),
-                Sort.Order.asc("status")
-        ));
+        request.setDefaultSortField("orderId");
+        Pageable pageable = request.toPageable();
 
         Page<Order> orderPage = repository.findAll(spec, pageable);
         Page<OrderResponse> responsePage = orderPage.map(order -> {

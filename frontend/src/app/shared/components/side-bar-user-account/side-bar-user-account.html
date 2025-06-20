@@ -17,7 +17,7 @@
 				style="font-size: 15px"
 			>
 				<i class="bi bi-pencil-fill me-1"></i>
-				{{label.updateUserProfile}}
+				{{ 'updateUserProfile' | translate }}
 			</a>
 		</div>
 	</div>
@@ -29,7 +29,7 @@
 				data-bs-target="#home-collapse"
 				aria-expanded="true"
 			>
-				{{label.myAccount}}
+				{{ 'myAccount' | translate }}
 			</button>
 			<div class="collapse show" id="home-collapse">
 				<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -39,16 +39,18 @@
 							class="link-dark rounded"
 							[routerLink]="'/' + routes.userRoute + '/' + routes.profileRoute"
 							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.profileRoute) }"
-							>{{label.userProfile}}</a
 						>
+							{{ 'userProfile' | translate }}
+						</a>
 					</li>
 					<li *ngIf="!isOAuthProvider()">
 						<a
 							class="link-dark rounded"
 							[routerLink]="'/' + routes.userRoute + '/' + routes.changePasswordRoute"
 							[ngClass]="{ active: isActive('/' + routes.userRoute + '/' + routes.changePasswordRoute) }"
-							>{{label.changePassword}}</a
 						>
+							{{ 'changePassword' | translate }}
+						</a>
 					</li>
 				</ul>
 			</div>
@@ -66,7 +68,7 @@
 					class="text-decoration-none text-secondary"
 					style="font-size: 15px"
 				>
-					{{this.utility.capitalize(label.order)}}
+					{{ 'order' | translate | capitalize }}
 				</a>
 			</button>
 		</li>
@@ -83,7 +85,7 @@
 					class="text-decoration-none text-secondary"
 					style="font-size: 15px"
 				>
-					{{label.couponList}}
+					{{ 'couponList' | translate }}
 				</a>
 			</button>
 		</li>

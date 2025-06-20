@@ -12,10 +12,11 @@ import { CouponComponent } from '../../../../shared/components/coupon/coupon.com
 import { OrderManangementComponent } from '../../../../shared/components/order-management/order-management.component';
 import { OrderListComponent } from '../../../../shared/components/order-list/order-list.component';
 import { OrderDetailComponent } from '../../../../shared/components/order-detail/order-detail.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { CapitalizePipe } from '../../../../shared/pipes/capitalize';
 
 @NgModule({
 	declarations: [
-		SideBarUserAccount,
 		UserProfileComponent,
 		ChangePasswordComponent,
 		OrderManangementComponent,
@@ -33,6 +34,8 @@ import { OrderDetailComponent } from '../../../../shared/components/order-detail
 		CouponComponent,
 		OrderListComponent,
 		OrderDetailComponent,
+    TranslateModule,
+    SideBarUserAccount,
 	],
 })
 export class UserAccountModule {}
