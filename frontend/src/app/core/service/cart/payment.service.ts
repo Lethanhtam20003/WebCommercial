@@ -36,7 +36,7 @@ export class PaymentService {
 			.subscribe({
 				next: res => {
 					const approvalLink = res.result;
-					this.alertService.success(approvalLink);
+					// this.alertService.success(approvalLink);
 					window.location.href = approvalLink;
 				},
 				error: err => {
